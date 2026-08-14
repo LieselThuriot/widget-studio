@@ -169,7 +169,7 @@ export const sampleWidget: Widget = {
       label: 'Open',
       method: 'get',
       url: '/brief',
-      style: 'solid',
+      style: 'outline',
     },
   ],
 };

@@ -227,12 +227,12 @@ img {
   cursor: pointer;
 }
 .action-button.solid {
-  border: 0;
+  border: 1px solid #151515;
   background: #151515;
   color: #fff;
 }
 .action-button.outline {
   border: 1px solid #737373;
-  background: transparent;
+  background: #fff;
   color: #151515;
 }
