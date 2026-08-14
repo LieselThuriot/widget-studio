@@ -3,7 +3,11 @@
 }
 .editor-canvas {
   position: relative;
+  cursor: grab;
   user-select: none;
+}
+.editor-canvas.is-dragging {
+  cursor: grabbing;
 }
 widget-renderer {
   pointer-events: none;
@@ -12,6 +16,12 @@ widget-renderer {
 :host ::ng-deep widget-renderer .icon-button,
 :host ::ng-deep widget-renderer .action-button {
   pointer-events: auto;
+}
+:host ::ng-deep widget-renderer .action-button {
+  cursor: grab;
+}
+:host ::ng-deep .editor-canvas.is-dragging widget-renderer .action-button {
+  cursor: grabbing;
 }
 .editor-grid {
   position: absolute;
@@ -29,7 +39,6 @@ widget-renderer {
   border: 1px solid transparent;
   border-radius: 5px;
   pointer-events: none;
-  cursor: grab;
   touch-action: none;
   user-select: none;
 }
