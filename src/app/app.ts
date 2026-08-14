@@ -14,7 +14,13 @@ export class App {
   protected readonly widget = signal<Widget>(structuredClone(sampleWidget));
   protected readonly selectedId = signal<string | null>('headline');
   protected readonly selectedElement = computed(() => this.widget().elements.find((element) => element.id === this.selectedId()) ?? null);
-  protected readonly modelJson = computed(() => JSON.stringify(this.widget(), null, 2));
+  protected readonly modelJson = computed(() => {
+    const { elements, ...publicWidget } = this.widget();
+    return JSON.stringify({
+      ...publicWidget,
+      elements: elements.map(({ id: _id, ...element }) => element),
+    }, null, 2);
+  });
   protected readonly palette = [
     { type: 'text' as const, label: 'Text', icon: 'T', description: 'Formatted content' },
     { type: 'image' as const, label: 'Image', icon: '▧', description: 'Remote image' },
