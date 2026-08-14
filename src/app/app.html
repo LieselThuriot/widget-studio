@@ -27,6 +27,7 @@
       <div class="canvas-toolbar"><span>Preview canvas</span><span class="dimensions">{{ widget().size === 'wide' ? '530' : '265' }} × 245 px</span></div>
       <div class="canvas" (click)="selectWidget()" (dragover)="$event.preventDefault()" (drop)="dropElement($event)"><app-widget-renderer [widget]="widget()" [selectedId]="selectedId()" (widgetSelected)="selectWidget()" (elementSelected)="selectElement($event)" (elementDeleted)="deleteElement($event)" (elementMoved)="moveElement($event)" (elementResized)="resizeElement($event)" (elementStackChanged)="changeStack($event)" (refreshRequested)="onRefresh()" (actionRequested)="onAction($event)" /></div>
       <div class="canvas-hint"><span>Ctrl</span> Hold Ctrl to show element boundaries <span class="hint-separator"></span> Hover the widget to reveal its controls</div>
+      <section class="model-panel"><div class="model-heading"><div><p class="eyebrow">Output contract</p><h2>Widget model</h2></div><span class="json-badge">JSON</span></div><pre>{{ modelJson() }}</pre></section>
     </section>
 
     <aside class="panel settings-panel" aria-label="Element settings">
@@ -66,5 +67,4 @@
     </aside>
   </div>
 
-  <section class="model-panel"><div class="model-heading"><div><p class="eyebrow">Output contract</p><h2>Widget model</h2></div><span class="json-badge">JSON</span></div><pre>{{ modelJson() }}</pre></section>
 </main>
