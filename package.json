@@ -4,9 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && ng build widget-renderer",
+    "build:app": "ng build widget",
+    "build:library": "ng build widget-renderer",
+    "pack:library": "npm pack ./dist/widget-renderer",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "format": "prettier --write \"src/**/*.{ts,css,html}\" \"projects/**/*.{ts,css,html}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,css,html}\" \"projects/**/*.{ts,css,html}\"",
+    "lint": "ng lint"
   },
   "private": true,
   "packageManager": "npm@12.0.2",
@@ -24,9 +30,14 @@
     "@angular/build": "^22.1.4",
     "@angular/cli": "^22.1.4",
     "@angular/compiler-cli": "^22.1.0",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "22.1.0",
+    "eslint": "^10.6.0",
     "jsdom": "^28.0.0",
+    "ng-packagr": "^22.1.1",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
+    "typescript-eslint": "8.62.1",
     "vitest": "^4.0.8"
   }
 }

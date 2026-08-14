@@ -19,7 +19,7 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Compose a widget');
-    expect(compiled.querySelector('app-widget-renderer')).toBeTruthy();
+    expect(compiled.querySelector('app-editor-canvas')).toBeTruthy();
     expect(compiled.querySelector('.topbar-meta')).toBeNull();
   });
 
@@ -29,7 +29,7 @@ describe('App', () => {
     const contract = JSON.parse(
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
     ) as {
-      elements: Array<Record<string, unknown>>;
+      elements: Record<string, unknown>[];
     };
 
     expect(contract.elements.every((element) => !('id' in element))).toBe(true);
@@ -41,7 +41,7 @@ describe('App', () => {
     const contract = JSON.parse(
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
     ) as {
-      elements: Array<Record<string, unknown>>;
+      elements: Record<string, unknown>[];
     };
     const textElements = contract.elements.filter((element) => element['type'] === 'text');
 

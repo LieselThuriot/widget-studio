@@ -56,3 +56,15 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the `providedIn: 'root'` option for singleton services
 - Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
 - Use the `inject()` function instead of constructor injection
+
+## Formatting
+
+- Use Prettier for TypeScript, CSS, and Angular HTML templates. There are currently no JavaScript source files.
+- Run `npm run format` after making code changes.
+- Run `npm run format:check` before considering the changes complete.
+
+## Linting
+
+- Use Angular ESLint for TypeScript and Angular HTML templates.
+- Run `npm run lint` after making code changes.
+- Run `npm run lint` before considering the changes complete.

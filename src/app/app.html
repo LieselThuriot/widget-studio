@@ -1,6 +1,6 @@
 <main class="workspace">
   <header class="topbar">
-    <div class="brand-mark">W</div>
+    <div class="brand-mark">WS</div>
     <div>
       <p class="eyebrow">Widget studio</p>
       <h1>Compose a widget</h1>
@@ -13,14 +13,25 @@
         <div>
           <p class="eyebrow">Building blocks</p>
           <h2>Elements</h2>
-        </div><span class="count">{{ widget().elements.length }}</span>
+        </div>
+        <span class="count">{{ widget().elements.length }}</span>
       </div>
       <p class="helper">Drag components into the canvas, or click to add them.</p>
       <div class="palette-list">
         @for (item of palette; track item.type) {
-        <button class="palette-item" type="button" draggable="true" (dragstart)="dragStart($event, item.type)"
-          (click)="addElement(item.type)"><span class="palette-icon">{{ item.icon }}</span><span><strong>{{ item.label
-              }}</strong><small>{{ item.description }}</small></span><span class="add">+</span></button>
+          <button
+            class="palette-item"
+            type="button"
+            draggable="true"
+            (dragstart)="dragStart($event, item.type)"
+            (click)="addElement(item.type)"
+          >
+            <span class="palette-icon">{{ item.icon }}</span
+            ><span
+              ><strong>{{ item.label }}</strong
+              ><small>{{ item.description }}</small></span
+            ><span class="add">+</span>
+          </button>
         }
       </div>
       <div class="panel-divider"></div>
@@ -28,39 +39,81 @@
         <div>
           <p class="eyebrow">On canvas</p>
           <h2>Layers</h2>
-        </div><button type="button" class="clear-layers" [disabled]="!widget().elements.length"
-          (click)="clearLayers()">Clear all</button>
+        </div>
+        <button
+          type="button"
+          class="clear-layers"
+          [disabled]="!widget().elements.length"
+          (click)="clearLayers()"
+        >
+          Clear all
+        </button>
       </div>
       <div class="layer-list">
         @for (element of widget().elements; track element.id) {
-        <div class="layer" draggable="true" [class.selected]="element.id === selectedId()"
-          (dragstart)="layerDragStart($event, element.id)" (dragover)="$event.preventDefault()"
-          (drop)="reorderLayer($event, element.id)"><button type="button" class="layer-select"
-            (click)="selectElement(element.id)"><span class="layer-grip" aria-hidden="true">⋮⋮</span><span>{{
-              element.type === 'text' ? 'T' : element.type === 'image' ? '▧' : '↗' }}</span>{{ element.type === 'text' ?
-            element.text : element.type === 'image' ? element.alt : element.label }}</button><button type="button"
-            class="layer-delete" aria-label="Delete layer" (click)="deleteElement(element.id)">x</button></div>
+          <div
+            class="layer"
+            draggable="true"
+            [class.selected]="element.id === selectedId()"
+            (dragstart)="layerDragStart($event, element.id)"
+            (dragover)="$event.preventDefault()"
+            (drop)="reorderLayer($event, element.id)"
+          >
+            <button type="button" class="layer-select" (click)="selectElement(element.id)">
+              <span class="layer-grip" aria-hidden="true">⋮⋮</span
+              ><span>{{
+                element.type === 'text' ? 'T' : element.type === 'image' ? '▧' : '↗'
+              }}</span
+              >{{
+                element.type === 'text'
+                  ? element.text
+                  : element.type === 'image'
+                    ? element.alt
+                    : element.label
+              }}</button
+            ><button
+              type="button"
+              class="layer-delete"
+              aria-label="Delete layer"
+              (click)="deleteElement(element.id)"
+            >
+              x
+            </button>
+          </div>
         }
       </div>
     </aside>
 
     <section class="canvas-area" aria-label="Widget preview">
-      <div class="canvas-toolbar"><span>Preview canvas</span><span class="dimensions">{{ widget().size === 'wide' ?
-          '530' : '265' }} × 245 px</span></div>
-      <div class="canvas" (click)="selectWidget()" (dragover)="$event.preventDefault()" (drop)="dropElement($event)">
-        <app-widget-renderer [widget]="widget()" [selectedId]="selectedId()" (widgetSelected)="selectWidget()"
-          (elementSelected)="selectElement($event)" (elementDeleted)="deleteElement($event)"
-          (elementMoved)="moveElement($event)" (elementResized)="resizeElement($event)"
-          (elementStackChanged)="changeStack($event)" (refreshRequested)="onRefresh()"
-          (actionRequested)="onAction($event)" /></div>
-      <div class="canvas-hint"><span>Ctrl</span> Hold Ctrl to show element boundaries <span
-          class="hint-separator"></span> Hover the widget to reveal its controls</div>
+      <div class="canvas-toolbar">
+        <span>Preview canvas</span
+        ><span class="dimensions">{{ widget().size === 'wide' ? '530' : '265' }} × 245 px</span>
+      </div>
+      <div class="canvas" (dragover)="$event.preventDefault()" (drop)="dropElement($event)">
+        <app-editor-canvas
+          [widget]="widget()"
+          [selectedId]="selectedId()"
+          (widgetSelected)="selectWidget()"
+          (elementSelected)="selectElement($event)"
+          (elementDeleted)="deleteElement($event)"
+          (elementMoved)="moveElement($event)"
+          (elementResized)="resizeElement($event)"
+          (elementStackChanged)="changeStack($event)"
+          (refreshRequested)="onRefresh()"
+          (actionRequested)="onAction($event)"
+        />
+      </div>
+      <div class="canvas-hint">
+        <span>Ctrl</span> Hold Ctrl to show element boundaries
+        <span class="hint-separator"></span> Hover the widget to reveal its controls
+      </div>
       <section class="model-panel">
         <div class="model-heading">
           <div>
             <p class="eyebrow">Output contract</p>
             <h2>Widget model</h2>
-          </div><span class="json-badge">JSON</span>
+          </div>
+          <span class="json-badge">JSON</span>
         </div>
         <pre>{{ modelJson() }}</pre>
       </section>
@@ -74,207 +127,614 @@
         </div>
       </div>
       @if (selectedElement(); as element) {
-      <div class="selected-chip"><span class="chip-icon">{{ element.type === 'text' ? 'T' : element.type === 'image' ?
-          '▧' : '↗' }}</span><span>{{ element.type | titlecase }}</span></div>
-      @if (element.type === 'text') {
-      <label>Content<textarea [value]="element.text"
-          (input)="updateSelected({ text: $any($event.target).value })">{{ element.text }}</textarea></label>
-      <div class="formatting-tools" aria-label="Text formatting"><button type="button"
-          [class.active]="element.style.fontWeight >= 600" aria-label="Toggle bold"
-          (click)="updateSelected({ style: { ...element.style, fontWeight: element.style.fontWeight >= 600 ? 400 : 700 } })"><strong>B</strong></button><button
-          type="button" [class.active]="element.style.italic" aria-label="Toggle italic"
-          (click)="updateSelected({ style: { ...element.style, italic: !element.style.italic } })"><em>I</em></button><button
-          type="button" [class.active]="element.style.underline" aria-label="Toggle underline"
-          (click)="updateSelected({ style: { ...element.style, underline: !element.style.underline } })"><u>U</u></button><button
-          type="button" [class.active]="element.style.strikethrough" aria-label="Toggle strikethrough"
-          (click)="updateSelected({ style: { ...element.style, strikethrough: !element.style.strikethrough } })"><s>S</s></button>
-      </div>
-      <label>Size<input type="number" [value]="element.style.fontSize"
-          (input)="updateSelected($any({ style: { ...element.style, fontSize: +$any($event.target).value } }))"></label>
-      <div class="text-layout-settings"><label>Horizontal alignment<select [value]="element.style.align"
-            (change)="updateSelected({ style: { ...element.style, align: $any($event.target).value } })">
-            <option value="left">Left</option>
-            <option value="center">Center</option>
-            <option value="right">Right</option>
-          </select></label><label class="toggle-row"><span>Wrap text</span><input type="checkbox"
-            [checked]="element.style.wrap"
-            (change)="updateSelected({ style: { ...element.style, wrap: $any($event.target).checked } })"><span
-            class="toggle"></span></label></div>
-      <app-color-picker label="Color" [value]="element.style.color"
-        (changed)="updateSelected({ style: { ...element.style, color: $event } })" />
-      } @else if (element.type === 'image') {
-      <label>Image source URL or base64 data<textarea [value]="element.source"
-          (input)="updateSelected({ source: $any($event.target).value })"></textarea></label>
-      <label>Alt text<input [value]="element.alt" (input)="updateSelected({ alt: $any($event.target).value })"></label>
-      <label>Corner radius (px)<input type="number" min="0" [value]="element.radius"
-          (input)="updateRadius(+$any($event.target).value)"></label>
-      <app-color-picker label="Overlay color" [value]="element.overlayColor" [clearable]="true" [withAlpha]="true"
-        (changed)="updateSelected({ overlayColor: $event })" (cleared)="updateSelected({ overlayColor: undefined })" />
-      <label>Fit<select [value]="element.fit" (change)="updateSelected({ fit: $any($event.target).value })">
-          <option value="cover">Cover</option>
-          <option value="contain">Contain</option>
-          <option value="fill">Fill</option>
-        </select></label>
-      <div class="anchor-field"><span>Anchor</span>
-        <div class="anchor-control" role="group" aria-label="Image anchor"><button type="button"
-            [class.active]="element.anchor === 'top left'" aria-label="Top left"
-            (click)="updateSelected({ anchor: 'top left' })">↖</button><button type="button"
-            [class.active]="element.anchor === 'top center'" aria-label="Top center"
-            (click)="updateSelected({ anchor: 'top center' })">↑</button><button type="button"
-            [class.active]="element.anchor === 'top right'" aria-label="Top right"
-            (click)="updateSelected({ anchor: 'top right' })">↗</button><button type="button"
-            [class.active]="element.anchor === 'center left'" aria-label="Center left"
-            (click)="updateSelected({ anchor: 'center left' })">←</button><button type="button"
-            [class.active]="element.anchor === 'center'" aria-label="Center"
-            (click)="updateSelected({ anchor: 'center' })">•</button><button type="button"
-            [class.active]="element.anchor === 'center right'" aria-label="Center right"
-            (click)="updateSelected({ anchor: 'center right' })">→</button><button type="button"
-            [class.active]="element.anchor === 'bottom left'" aria-label="Bottom left"
-            (click)="updateSelected({ anchor: 'bottom left' })">↙</button><button type="button"
-            [class.active]="element.anchor === 'bottom center'" aria-label="Bottom center"
-            (click)="updateSelected({ anchor: 'bottom center' })">↓</button><button type="button"
-            [class.active]="element.anchor === 'bottom right'" aria-label="Bottom right"
-            (click)="updateSelected({ anchor: 'bottom right' })">↘</button></div>
-      </div>
-      } @else {
-      <label>Label<input [value]="element.label" (input)="updateSelected({ label: $any($event.target).value })"></label>
-      <div class="field-row"><label>Method<select [value]="element.method"
-            (change)="updateSelected({ method: $any($event.target).value })">
-            <option value="get">GET</option>
-            <option value="post">POST</option>
-          </select></label><label>Style<select [value]="element.style"
-            (change)="updateSelected({ style: $any($event.target).value })">
-            <option value="solid">Solid</option>
-            <option value="outline">Outline</option>
-          </select></label></div>
-      <label>Request URL<input [value]="element.url"
-          (input)="updateSelected({ url: $any($event.target).value })"></label>
-      }
-      @if (element.type !== 'image') {
-      <div class="anchor-field"><span>Anchor</span>
-        <div class="anchor-control" role="group" aria-label="Element anchor"><button type="button"
-            [class.active]="element.anchor === 'top left'" aria-label="Top left"
-            (click)="updateSelected({ anchor: 'top left' })">↖</button><button type="button"
-            [class.active]="element.anchor === 'top center'" aria-label="Top center"
-            (click)="updateSelected({ anchor: 'top center' })">↑</button><button type="button"
-            [class.active]="element.anchor === 'top right'" aria-label="Top right"
-            (click)="updateSelected({ anchor: 'top right' })">↗</button><button type="button"
-            [class.active]="element.anchor === 'center left'" aria-label="Center left"
-            (click)="updateSelected({ anchor: 'center left' })">←</button><button type="button"
-            [class.active]="element.anchor === 'center'" aria-label="Center"
-            (click)="updateSelected({ anchor: 'center' })">•</button><button type="button"
-            [class.active]="element.anchor === 'center right'" aria-label="Center right"
-            (click)="updateSelected({ anchor: 'center right' })">→</button><button type="button"
-            [class.active]="element.anchor === 'bottom left'" aria-label="Bottom left"
-            (click)="updateSelected({ anchor: 'bottom left' })">↙</button><button type="button"
-            [class.active]="element.anchor === 'bottom center'" aria-label="Bottom center"
-            (click)="updateSelected({ anchor: 'bottom center' })">↓</button><button type="button"
-            [class.active]="element.anchor === 'bottom right'" aria-label="Bottom right"
-            (click)="updateSelected({ anchor: 'bottom right' })">↘</button></div>
-      </div>
-      }
-      <label class="toggle-row"><span><strong>Sensitive content</strong><small>Blur until the eye control is
-            used</small></span><input type="checkbox" [checked]="element.sensitive"
-          (change)="updateSelected({ sensitive: $any($event.target).checked })"><span class="toggle"></span></label>
-      <div class="placement">
-        <p class="eyebrow">Grid placement</p>
-        <div class="field-row"><label>Row<input type="number" min="1" [max]="widget().rows.length"
-              [value]="element.row + 1"
-              (input)="updatePosition('row', +$any($event.target).value)"></label><label>Column<input type="number"
-              min="1" [max]="widget().columns.length" [value]="element.column + 1"
-              (input)="updatePosition('column', +$any($event.target).value)"></label></div>
-        <div class="field-row"><label>Row span<input type="number" min="1" [max]="widget().rows.length - element.row"
-              [value]="element.rowSpan"
-              (input)="updateSpan('rowSpan', +$any($event.target).value)"></label><label>Column span<input type="number"
-              min="1" [max]="widget().columns.length - element.column" [value]="element.columnSpan"
-              (input)="updateSpan('columnSpan', +$any($event.target).value)"></label></div>
-      </div>
-      } @else {
-      <div class="widget-settings">
-        <div class="selected-chip"><span class="chip-icon">W</span><span>Widget</span><span class="chip-id">{{
-            widget().size === 'wide' ? '530' : '265' }} × 245</span></div>
-        <section class="widget-setting-section">
-           <div class="widget-setting-section-heading"><span class="eyebrow">Grid</span><span class="summary-value">{{ widget().rows.length }} rows · {{
-                widget().columns.length }} columns</span></div><label>Widget size<select [value]="widget().size"
-              (change)="updateWidget({ size: $any($event.target).value })">
-              <option value="square">Square · 265 × 245</option>
-              <option value="wide">Wide · 530 × 245</option>
-            </select></label>
-          <p class="eyebrow track-heading">Rows <button type="button" class="small-add" (click)="addTrack('rows')">+
-              Add</button></p>@for (track of widget().rows; track $index) {<div class="track-row"><input type="number"
-              min="1" [value]="track.size"
-              (input)="updateTrack('rows', $index, { size: +$any($event.target).value })"><select [value]="track.unit"
-              (change)="updateTrack('rows', $index, { unit: $any($event.target).value })">
-              <option value="star">Star</option>
-              <option value="pixel">Pixel</option>
-              <option value="auto">Auto</option>
-            </select><button type="button" (click)="removeTrack('rows', $index)" aria-label="Remove row">×</button>
-          </div>}<p class="eyebrow track-heading">Columns <button type="button" class="small-add"
-              (click)="addTrack('columns')">+ Add</button></p>@for (track of widget().columns; track $index) {<div
-            class="track-row"><input type="number" min="1" [value]="track.size"
-              (input)="updateTrack('columns', $index, { size: +$any($event.target).value })"><select
-              [value]="track.unit" (change)="updateTrack('columns', $index, { unit: $any($event.target).value })">
-              <option value="star">Star</option>
-              <option value="pixel">Pixel</option>
-              <option value="auto">Auto</option>
-            </select><button type="button" (click)="removeTrack('columns', $index)"
-              aria-label="Remove column">×</button></div>}
-         </section>
-        <section class="widget-setting-section">
-           <div class="widget-setting-section-heading"><span class="eyebrow">Background</span><span class="summary-value">{{ widget().background.image ?
-               'Image' : widget().background.color }}</span></div><app-color-picker label="Color"
-            [value]="widget().background.color" [clearable]="true"
-            (changed)="updateWidget({ background: { ...widget().background, color: $event } })"
-            (cleared)="updateWidget({ background: { ...widget().background, color: undefined } })" /><app-color-picker
-            label="Overlay color" [value]="widget().background.overlayColor" [clearable]="true" [withAlpha]="true"
-            (changed)="updateWidget({ background: { ...widget().background, overlayColor: $event } })"
-            (cleared)="updateWidget({ background: { ...widget().background, overlayColor: undefined } })" /><label>Image
-            URL or base64 data<textarea [value]="widget().background.image || ''"
-              (input)="updateWidget({ background: { ...widget().background, image: $any($event.target).value } })"></textarea></label><label>Size<select
-              [value]="widget().background.size"
-              (change)="updateWidget({ background: { ...widget().background, size: $any($event.target).value } })">
+        <div class="selected-chip">
+          <span class="chip-icon">{{
+            element.type === 'text' ? 'T' : element.type === 'image' ? '▧' : '↗'
+          }}</span
+          ><span>{{ element.type | titlecase }}</span>
+        </div>
+        @if (element.type === 'text') {
+          <label
+            >Content<textarea
+              [value]="element.text"
+              (input)="updateSelected({ text: $any($event.target).value })"
+              >{{ element.text }}</textarea>
+          </label>
+          <div class="formatting-tools" aria-label="Text formatting">
+            <button
+              type="button"
+              [class.active]="element.style.fontWeight >= 600"
+              aria-label="Toggle bold"
+              (click)="
+                updateSelected({
+                  style: {
+                    ...element.style,
+                    fontWeight: element.style.fontWeight >= 600 ? 400 : 700,
+                  },
+                })
+              "
+            >
+              <strong>B</strong></button
+            ><button
+              type="button"
+              [class.active]="element.style.italic"
+              aria-label="Toggle italic"
+              (click)="
+                updateSelected({ style: { ...element.style, italic: !element.style.italic } })
+              "
+            >
+              <em>I</em></button
+            ><button
+              type="button"
+              [class.active]="element.style.underline"
+              aria-label="Toggle underline"
+              (click)="
+                updateSelected({ style: { ...element.style, underline: !element.style.underline } })
+              "
+            >
+              <u>U</u></button
+            ><button
+              type="button"
+              [class.active]="element.style.strikethrough"
+              aria-label="Toggle strikethrough"
+              (click)="
+                updateSelected({
+                  style: { ...element.style, strikethrough: !element.style.strikethrough },
+                })
+              "
+            >
+              <s>S</s>
+            </button>
+          </div>
+          <label
+            >Size<input
+              type="number"
+              [value]="element.style.fontSize"
+              (input)="
+                updateSelected(
+                  $any({ style: { ...element.style, fontSize: +$any($event.target).value } })
+                )
+              "
+          /></label>
+          <div class="text-layout-settings">
+            <label
+              >Horizontal alignment<select
+                [value]="element.style.align"
+                (change)="
+                  updateSelected({ style: { ...element.style, align: $any($event.target).value } })
+                "
+              >
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select></label
+            ><label class="toggle-row"
+              ><span>Wrap text</span
+              ><input
+                type="checkbox"
+                [checked]="element.style.wrap"
+                (change)="
+                  updateSelected({ style: { ...element.style, wrap: $any($event.target).checked } })
+                " /><span class="toggle"></span
+            ></label>
+          </div>
+          <app-color-picker
+            label="Color"
+            [value]="element.style.color"
+            (changed)="updateSelected({ style: { ...element.style, color: $event } })"
+          />
+        } @else if (element.type === 'image') {
+          <label
+            >Image source URL or base64 data<textarea
+              [value]="element.source"
+              (input)="updateSelected({ source: $any($event.target).value })"
+            ></textarea>
+          </label>
+          <label
+            >Alt text<input
+              [value]="element.alt"
+              (input)="updateSelected({ alt: $any($event.target).value })"
+          /></label>
+          <label
+            >Corner radius (px)<input
+              type="number"
+              min="0"
+              [value]="element.radius"
+              (input)="updateRadius(+$any($event.target).value)"
+          /></label>
+          <app-color-picker
+            label="Overlay color"
+            [value]="element.overlayColor"
+            [clearable]="true"
+            [withAlpha]="true"
+            (changed)="updateSelected({ overlayColor: $event })"
+            (cleared)="updateSelected({ overlayColor: undefined })"
+          />
+          <label
+            >Fit<select
+              [value]="element.fit"
+              (change)="updateSelected({ fit: $any($event.target).value })"
+            >
               <option value="cover">Cover</option>
               <option value="contain">Contain</option>
-              <option value="auto">Auto</option>
-            </select></label><label class="toggle-row"><span><strong>Repeat image</strong><small>Tile the background
-                image across the widget</small></span><input type="checkbox" [checked]="widget().background.repeat"
-              (change)="updateWidget({ background: { ...widget().background, repeat: $any($event.target).checked } })"><span
-              class="toggle"></span></label>
-          <div class="anchor-field"><span>Anchor</span>
-            <div class="anchor-control" role="group" aria-label="Background image anchor"><button type="button"
-                [class.active]="widget().background.anchor === 'top left'" aria-label="Top left"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'top left' } })">↖</button><button
-                type="button" [class.active]="widget().background.anchor === 'top center'" aria-label="Top center"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'top center' } })">↑</button><button
-                type="button" [class.active]="widget().background.anchor === 'top right'" aria-label="Top right"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'top right' } })">↗</button><button
-                type="button" [class.active]="widget().background.anchor === 'center left'" aria-label="Center left"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'center left' } })">←</button><button
-                type="button" [class.active]="widget().background.anchor === 'center'" aria-label="Center"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'center' } })">•</button><button
-                type="button" [class.active]="widget().background.anchor === 'center right'" aria-label="Center right"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'center right' } })">→</button><button
-                type="button" [class.active]="widget().background.anchor === 'bottom left'" aria-label="Bottom left"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'bottom left' } })">↙</button><button
-                type="button" [class.active]="widget().background.anchor === 'bottom center'" aria-label="Bottom center"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'bottom center' } })">↓</button><button
-                type="button" [class.active]="widget().background.anchor === 'bottom right'" aria-label="Bottom right"
-                (click)="updateWidget({ background: { ...widget().background, anchor: 'bottom right' } })">↘</button>
+              <option value="fill">Fill</option>
+            </select></label
+          >
+          <div class="anchor-field">
+            <span>Anchor</span>
+            <div class="anchor-control" role="group" aria-label="Image anchor">
+              <button
+                type="button"
+                [class.active]="element.anchor === 'top left'"
+                aria-label="Top left"
+                (click)="updateSelected({ anchor: 'top left' })"
+              >
+                ↖</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'top center'"
+                aria-label="Top center"
+                (click)="updateSelected({ anchor: 'top center' })"
+              >
+                ↑</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'top right'"
+                aria-label="Top right"
+                (click)="updateSelected({ anchor: 'top right' })"
+              >
+                ↗</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'center left'"
+                aria-label="Center left"
+                (click)="updateSelected({ anchor: 'center left' })"
+              >
+                ←</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'center'"
+                aria-label="Center"
+                (click)="updateSelected({ anchor: 'center' })"
+              >
+                •</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'center right'"
+                aria-label="Center right"
+                (click)="updateSelected({ anchor: 'center right' })"
+              >
+                →</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'bottom left'"
+                aria-label="Bottom left"
+                (click)="updateSelected({ anchor: 'bottom left' })"
+              >
+                ↙</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'bottom center'"
+                aria-label="Bottom center"
+                (click)="updateSelected({ anchor: 'bottom center' })"
+              >
+                ↓</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'bottom right'"
+                aria-label="Bottom right"
+                (click)="updateSelected({ anchor: 'bottom right' })"
+              >
+                ↘
+              </button>
             </div>
           </div>
-        </section>
-        <section class="widget-setting-section">
-           <div class="widget-setting-section-heading"><span class="eyebrow">Refresh</span><span class="summary-value">{{ widget().refresh.enabled ?
-               'Enabled' : 'Disabled' }}</span></div><label class="toggle-row"><span><strong>Refresh
-                control</strong><small>Show refresh in the hover toolbar</small></span><input type="checkbox"
-              [checked]="widget().refresh.enabled"
-              (change)="updateWidget({ refresh: { ...widget().refresh, enabled: $any($event.target).checked } })"><span
-              class="toggle"></span></label><label>Accessible label<input [value]="widget().refresh.label"
-              (input)="updateWidget({ refresh: { ...widget().refresh, label: $any($event.target).value } })"></label>
-        </section>
-      </div>
+        } @else {
+          <label
+            >Label<input
+              [value]="element.label"
+              (input)="updateSelected({ label: $any($event.target).value })"
+          /></label>
+          <div class="field-row">
+            <label
+              >Method<select
+                [value]="element.method"
+                (change)="updateSelected({ method: $any($event.target).value })"
+              >
+                <option value="get">GET</option>
+                <option value="post">POST</option>
+              </select></label
+            ><label
+              >Style<select
+                [value]="element.style"
+                (change)="updateSelected({ style: $any($event.target).value })"
+              >
+                <option value="solid">Solid</option>
+                <option value="outline">Outline</option>
+              </select></label
+            >
+          </div>
+          <label
+            >Request URL<input
+              [value]="element.url"
+              (input)="updateSelected({ url: $any($event.target).value })"
+          /></label>
+        }
+        @if (element.type !== 'image') {
+          <div class="anchor-field">
+            <span>Anchor</span>
+            <div class="anchor-control" role="group" aria-label="Element anchor">
+              <button
+                type="button"
+                [class.active]="element.anchor === 'top left'"
+                aria-label="Top left"
+                (click)="updateSelected({ anchor: 'top left' })"
+              >
+                ↖</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'top center'"
+                aria-label="Top center"
+                (click)="updateSelected({ anchor: 'top center' })"
+              >
+                ↑</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'top right'"
+                aria-label="Top right"
+                (click)="updateSelected({ anchor: 'top right' })"
+              >
+                ↗</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'center left'"
+                aria-label="Center left"
+                (click)="updateSelected({ anchor: 'center left' })"
+              >
+                ←</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'center'"
+                aria-label="Center"
+                (click)="updateSelected({ anchor: 'center' })"
+              >
+                •</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'center right'"
+                aria-label="Center right"
+                (click)="updateSelected({ anchor: 'center right' })"
+              >
+                →</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'bottom left'"
+                aria-label="Bottom left"
+                (click)="updateSelected({ anchor: 'bottom left' })"
+              >
+                ↙</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'bottom center'"
+                aria-label="Bottom center"
+                (click)="updateSelected({ anchor: 'bottom center' })"
+              >
+                ↓</button
+              ><button
+                type="button"
+                [class.active]="element.anchor === 'bottom right'"
+                aria-label="Bottom right"
+                (click)="updateSelected({ anchor: 'bottom right' })"
+              >
+                ↘
+              </button>
+            </div>
+          </div>
+        }
+        <label class="toggle-row"
+          ><span
+            ><strong>Sensitive content</strong
+            ><small>Blur until the eye control is used</small></span
+          ><input
+            type="checkbox"
+            [checked]="element.sensitive"
+            (change)="updateSelected({ sensitive: $any($event.target).checked })" /><span
+            class="toggle"
+          ></span
+        ></label>
+        <div class="placement">
+          <p class="eyebrow">Grid placement</p>
+          <div class="field-row">
+            <label
+              >Row<input
+                type="number"
+                min="1"
+                [max]="widget().rows.length"
+                [value]="element.row + 1"
+                (input)="updatePosition('row', +$any($event.target).value)" /></label
+            ><label
+              >Column<input
+                type="number"
+                min="1"
+                [max]="widget().columns.length"
+                [value]="element.column + 1"
+                (input)="updatePosition('column', +$any($event.target).value)"
+            /></label>
+          </div>
+          <div class="field-row">
+            <label
+              >Row span<input
+                type="number"
+                min="1"
+                [max]="widget().rows.length - element.row"
+                [value]="element.rowSpan"
+                (input)="updateSpan('rowSpan', +$any($event.target).value)" /></label
+            ><label
+              >Column span<input
+                type="number"
+                min="1"
+                [max]="widget().columns.length - element.column"
+                [value]="element.columnSpan"
+                (input)="updateSpan('columnSpan', +$any($event.target).value)"
+            /></label>
+          </div>
+        </div>
+      } @else {
+        <div class="widget-settings">
+          <div class="selected-chip">
+            <span class="chip-icon">W</span><span>Widget</span
+            ><span class="chip-id">{{ widget().size === 'wide' ? '530' : '265' }} × 245</span>
+          </div>
+          <section class="widget-setting-section">
+            <div class="widget-setting-section-heading">
+              <span class="eyebrow">Grid</span
+              ><span class="summary-value"
+                >{{ widget().rows.length }} rows · {{ widget().columns.length }} columns</span
+              >
+            </div>
+            <label
+              >Widget size<select
+                [value]="widget().size"
+                (change)="updateWidget({ size: $any($event.target).value })"
+              >
+                <option value="square">Square · 265 × 245</option>
+                <option value="wide">Wide · 530 × 245</option>
+              </select></label
+            >
+            <p class="eyebrow track-heading">
+              Rows <button type="button" class="small-add" (click)="addTrack('rows')">+ Add</button>
+            </p>
+            @for (track of widget().rows; track $index) {
+              <div class="track-row">
+                <input
+                  type="number"
+                  min="1"
+                  [value]="track.size"
+                  (input)="updateTrack('rows', $index, { size: +$any($event.target).value })"
+                /><select
+                  [value]="track.unit"
+                  (change)="updateTrack('rows', $index, { unit: $any($event.target).value })"
+                >
+                  <option value="star">Star</option>
+                  <option value="pixel">Pixel</option>
+                  <option value="auto">Auto</option></select
+                ><button
+                  type="button"
+                  (click)="removeTrack('rows', $index)"
+                  aria-label="Remove row"
+                >
+                  ×
+                </button>
+              </div>
+            }
+            <p class="eyebrow track-heading">
+              Columns
+              <button type="button" class="small-add" (click)="addTrack('columns')">+ Add</button>
+            </p>
+            @for (track of widget().columns; track $index) {
+              <div class="track-row">
+                <input
+                  type="number"
+                  min="1"
+                  [value]="track.size"
+                  (input)="updateTrack('columns', $index, { size: +$any($event.target).value })"
+                /><select
+                  [value]="track.unit"
+                  (change)="updateTrack('columns', $index, { unit: $any($event.target).value })"
+                >
+                  <option value="star">Star</option>
+                  <option value="pixel">Pixel</option>
+                  <option value="auto">Auto</option></select
+                ><button
+                  type="button"
+                  (click)="removeTrack('columns', $index)"
+                  aria-label="Remove column"
+                >
+                  ×
+                </button>
+              </div>
+            }
+          </section>
+          <section class="widget-setting-section">
+            <div class="widget-setting-section-heading">
+              <span class="eyebrow">Background</span
+              ><span class="summary-value">{{
+                widget().background.image ? 'Image' : widget().background.color
+              }}</span>
+            </div>
+            <app-color-picker
+              label="Color"
+              [value]="widget().background.color"
+              [clearable]="true"
+              (changed)="updateWidget({ background: { ...widget().background, color: $event } })"
+              (cleared)="updateWidget({ background: { ...widget().background, color: undefined } })"
+            /><app-color-picker
+              label="Overlay color"
+              [value]="widget().background.overlayColor"
+              [clearable]="true"
+              [withAlpha]="true"
+              (changed)="
+                updateWidget({ background: { ...widget().background, overlayColor: $event } })
+              "
+              (cleared)="
+                updateWidget({ background: { ...widget().background, overlayColor: undefined } })
+              "
+            /><label
+              >Image URL or base64 data<textarea
+                [value]="widget().background.image || ''"
+                (input)="
+                  updateWidget({
+                    background: { ...widget().background, image: $any($event.target).value },
+                  })
+                "
+              ></textarea></label
+            ><label
+              >Size<select
+                [value]="widget().background.size"
+                (change)="
+                  updateWidget({
+                    background: { ...widget().background, size: $any($event.target).value },
+                  })
+                "
+              >
+                <option value="cover">Cover</option>
+                <option value="contain">Contain</option>
+                <option value="auto">Auto</option>
+              </select></label
+            ><label class="toggle-row"
+              ><span
+                ><strong>Repeat image</strong
+                ><small>Tile the background image across the widget</small></span
+              ><input
+                type="checkbox"
+                [checked]="widget().background.repeat"
+                (change)="
+                  updateWidget({
+                    background: { ...widget().background, repeat: $any($event.target).checked },
+                  })
+                " /><span class="toggle"></span
+            ></label>
+            <div class="anchor-field">
+              <span>Anchor</span>
+              <div class="anchor-control" role="group" aria-label="Background image anchor">
+                <button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'top left'"
+                  aria-label="Top left"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'top left' } })
+                  "
+                >
+                  ↖</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'top center'"
+                  aria-label="Top center"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'top center' } })
+                  "
+                >
+                  ↑</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'top right'"
+                  aria-label="Top right"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'top right' } })
+                  "
+                >
+                  ↗</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'center left'"
+                  aria-label="Center left"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'center left' } })
+                  "
+                >
+                  ←</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'center'"
+                  aria-label="Center"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'center' } })
+                  "
+                >
+                  •</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'center right'"
+                  aria-label="Center right"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'center right' } })
+                  "
+                >
+                  →</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'bottom left'"
+                  aria-label="Bottom left"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'bottom left' } })
+                  "
+                >
+                  ↙</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'bottom center'"
+                  aria-label="Bottom center"
+                  (click)="
+                    updateWidget({
+                      background: { ...widget().background, anchor: 'bottom center' },
+                    })
+                  "
+                >
+                  ↓</button
+                ><button
+                  type="button"
+                  [class.active]="widget().background.anchor === 'bottom right'"
+                  aria-label="Bottom right"
+                  (click)="
+                    updateWidget({ background: { ...widget().background, anchor: 'bottom right' } })
+                  "
+                >
+                  ↘
+                </button>
+              </div>
+            </div>
+          </section>
+          <section class="widget-setting-section">
+            <div class="widget-setting-section-heading">
+              <span class="eyebrow">Refresh</span
+              ><span class="summary-value">{{
+                widget().refresh.enabled ? 'Enabled' : 'Disabled'
+              }}</span>
+            </div>
+            <label class="toggle-row"
+              ><span
+                ><strong>Refresh control</strong
+                ><small>Show refresh in the hover toolbar</small></span
+              ><input
+                type="checkbox"
+                [checked]="widget().refresh.enabled"
+                (change)="
+                  updateWidget({
+                    refresh: { ...widget().refresh, enabled: $any($event.target).checked },
+                  })
+                " /><span class="toggle"></span></label
+            ><label
+              >Accessible label<input
+                [value]="widget().refresh.label"
+                (input)="
+                  updateWidget({
+                    refresh: { ...widget().refresh, label: $any($event.target).value },
+                  })
+                "
+            /></label>
+          </section>
+        </div>
       }
     </aside>
   </div>
-
 </main>

@@ -1,21 +1,18 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WidgetRenderer } from './widget-renderer/widget-renderer';
+import { EditorCanvas } from './editor-canvas/editor-canvas';
 import { ColorPicker } from './color-picker/color-picker';
-import {
-  ButtonElement,
-  ImageElement,
-  TextElement,
-  Widget,
-  WidgetElement,
-  sampleWidget,
-} from './widget.model';
+import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from 'widget-renderer';
+import { sampleWidget } from './sample-widget';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, WidgetRenderer, ColorPicker],
+  imports: [CommonModule, EditorCanvas, ColorPicker],
   templateUrl: './app.html',
   styleUrl: './app.css',
+  host: {
+    '(document:click)': 'selectCanvasBackground($event)',
+  },
 })
 export class App {
   protected readonly widget = signal<Widget>(structuredClone(sampleWidget));
@@ -141,6 +138,11 @@ export class App {
   }
   protected selectWidget(): void {
     this.selectedId.set(null);
+  }
+  protected selectCanvasBackground(event: MouseEvent): void {
+    if (event.target instanceof HTMLElement && event.target.classList.contains('canvas')) {
+      this.selectWidget();
+    }
   }
   protected clearLayers(): void {
     this.widget.update((widget) => ({ ...widget, elements: [] }));

@@ -24,9 +24,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -66,6 +64,35 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html", "projects/**/*.ts", "projects/**/*.html"]
+          }
+        }
+      }
+    },
+    "widget-renderer": {
+      "projectType": "library",
+      "root": "projects/widget-renderer",
+      "sourceRoot": "projects/widget-renderer/src",
+      "prefix": "widget",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/widget-renderer/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/widget-renderer/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/widget-renderer/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
