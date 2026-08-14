@@ -110,6 +110,9 @@ h2 {
   gap: 20px;
   align-items: start;
 }
+.canvas-column {
+  min-width: 0;
+}
 .panel,
 .model-panel {
   background: #fff;

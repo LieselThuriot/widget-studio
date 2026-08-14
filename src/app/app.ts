@@ -1,31 +1,29 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EditorCanvas } from './editor-canvas/editor-canvas';
 import { ColorPicker } from './color-picker/color-picker';
-import {
-  ButtonElement,
-  ImageElement,
-  TextElement,
-  Widget,
-  WidgetElement,
-  WidgetRenderer,
-} from 'widget-renderer';
+import { StudioHeader } from './studio-header/studio-header';
+import { ElementPalette } from './element-palette/element-palette';
+import { LayerPanel } from './layer-panel/layer-panel';
+import { CanvasWorkspace } from './canvas-workspace/canvas-workspace';
+import { OutputContract } from './output-contract/output-contract';
+import { PreviewDialog } from './preview-dialog/preview-dialog';
+import { ActionAlert, EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
+import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from 'widget-renderer';
 import { sampleWidget } from './sample-widget';
-
-type ActionAlert =
-  | {
-      kind: 'action';
-      element: ButtonElement;
-      event: { type: string; target: string };
-    }
-  | {
-      kind: 'refresh';
-      label: string;
-    };
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, EditorCanvas, ColorPicker, WidgetRenderer],
+  imports: [
+    CommonModule,
+    ColorPicker,
+    StudioHeader,
+    ElementPalette,
+    LayerPanel,
+    CanvasWorkspace,
+    OutputContract,
+    PreviewDialog,
+    EventAlertDialog,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
   host: {
