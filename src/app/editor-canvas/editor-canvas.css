@@ -13,17 +13,14 @@ widget-renderer {
 :host ::ng-deep widget-renderer .action-button {
   pointer-events: auto;
 }
-:host ::ng-deep widget-renderer .widget-element:has(.action-button) {
-  z-index: 2;
-}
 .editor-grid {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 3;
   display: grid;
   gap: 8px;
   padding: 18px;
-  pointer-events: auto;
+  pointer-events: none;
 }
 .editor-element {
   position: relative;
@@ -31,7 +28,7 @@ widget-renderer {
   min-height: 0;
   border: 1px solid transparent;
   border-radius: 5px;
-  pointer-events: auto;
+  pointer-events: none;
   cursor: grab;
   touch-action: none;
   user-select: none;

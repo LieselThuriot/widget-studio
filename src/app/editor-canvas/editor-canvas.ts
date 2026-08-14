@@ -69,7 +69,7 @@ export class EditorCanvas {
   }
   protected pointerDown(event: PointerEvent): void {
     this.pointerDownElementId = null;
-    if ((event.target as HTMLElement).closest('.action-button, .icon-button')) return;
+    if ((event.target as HTMLElement).closest('.icon-button')) return;
     const element = this.elementFromEvent(event) ?? this.elementAtPoint(event);
     if (!element || event.button !== 0 || this.ctrlPressed()) return;
     this.pointerDownElementId = element.id;
