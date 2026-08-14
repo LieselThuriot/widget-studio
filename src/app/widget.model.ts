@@ -15,7 +15,7 @@ export interface GridTrack {
 export interface BackgroundConfig {
   image?: string;
   repeat: boolean;
-  color: string;
+  color?: string;
   size: 'cover' | 'contain' | 'auto';
   anchor: ImageAnchor;
   overlayColor?: string;

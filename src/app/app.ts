@@ -1,11 +1,12 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WidgetRenderer } from './widget-renderer/widget-renderer';
+import { ColorPicker } from './color-picker/color-picker';
 import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement, sampleWidget } from './widget.model';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, WidgetRenderer],
+  imports: [CommonModule, WidgetRenderer, ColorPicker],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

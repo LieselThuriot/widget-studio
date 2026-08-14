@@ -1,7 +1,7 @@
 <section class="widget-shell" tabindex="0" [class.show-guides]="ctrlPressed()" [class.is-dragging]="draggingId()" [style.width.px]="widgetWidth()" [style.height.px]="245"
   (click)="closeContextMenu()"
   (click)="selectWidget($event)" (pointermove)="moveDrag($event)" (pointerup)="endDrag()" (pointercancel)="endDrag()"
-  [style.background-color]="widget().background.color"
+  [style.background-color]="widget().background.color || 'transparent'"
   [style.background-image]="backgroundImage()"
   [style.background-size]="widget().background.size" [style.background-position]="widget().background.anchor" [style.background-repeat]="widget().background.repeat ? 'repeat' : 'no-repeat'">
   <div class="widget-overlay" [style.background-color]="widget().background.overlayColor || 'transparent'"></div>
