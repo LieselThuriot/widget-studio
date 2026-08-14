@@ -148,15 +148,6 @@ export class App {
     this.widget.update((widget) => ({ ...widget, elements: [] }));
     this.selectedId.set(null);
   }
-  protected deleteSelected(): void {
-    const id = this.selectedId();
-    if (!id) return;
-    this.widget.update((widget) => ({
-      ...widget,
-      elements: widget.elements.filter((element) => element.id !== id),
-    }));
-    this.selectedId.set(null);
-  }
   protected deleteElement(id: string): void {
     this.widget.update((widget) => ({
       ...widget,
