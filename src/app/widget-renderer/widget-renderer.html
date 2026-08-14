@@ -40,7 +40,7 @@
           @if (isText(element)) {
             <span class="text-element" [style.color]="element.style.color" [style.font-size.px]="element.style.fontSize" [style.font-weight]="element.style.fontWeight"
               [style.font-style]="element.style.italic ? 'italic' : 'normal'" [style.text-decoration]="element.style.underline && element.style.strikethrough ? 'underline line-through' : element.style.underline ? 'underline' : element.style.strikethrough ? 'line-through' : 'none'"
-              [style.text-align]="element.style.align" [style.white-space]="element.style.wrap ? 'normal' : 'nowrap'">{{ element.text }}</span>
+              [style.white-space]="element.style.wrap ? 'normal' : 'nowrap'">{{ element.text }}</span>
           } @else if (isImage(element)) {
             <img [src]="element.source" [alt]="element.alt" [style.object-fit]="element.fit" [style.object-position]="element.anchor" [style.border-radius.px]="element.radius" /><span class="image-overlay" [style.background-color]="element.overlayColor || 'transparent'"></span>
           } @else if (isButton(element)) {

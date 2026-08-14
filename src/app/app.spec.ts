@@ -33,6 +33,17 @@ describe('App', () => {
     expect(contract.elements.every((element) => !('id' in element))).toBe(true);
   });
 
+  it('should omit text alignment from the output contract', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const contract = JSON.parse(fixture.nativeElement.querySelector('pre')?.textContent ?? '{}') as {
+      elements: Array<Record<string, unknown>>;
+    };
+    const textElements = contract.elements.filter((element) => element['type'] === 'text');
+
+    expect(textElements.every((element) => !('align' in (element['style'] as Record<string, unknown>)))).toBe(true);
+  });
+
   it('should not show internal element IDs in the inspector', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
