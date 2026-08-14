@@ -7,10 +7,10 @@
   <div class="widget-overlay" [style.background-color]="widget().background.overlayColor || 'transparent'"></div>
   <div class="widget-toolbar" aria-label="Widget actions">
     @if (widget().refresh.enabled) {
-      <button type="button" class="icon-button" [attr.aria-label]="widget().refresh.label" (click)="refreshRequested.emit()">↻</button>
+      <button type="button" class="icon-button" [attr.aria-label]="widget().refresh.label" [title]="widget().refresh.label" (click)="refreshRequested.emit()">↻</button>
     }
     @if (hasSensitiveElements()) {
-      <button type="button" class="icon-button" [attr.aria-label]="sensitiveVisible() ? 'Hide sensitive data' : 'Show sensitive data'" (click)="toggleSensitive()">
+      <button type="button" class="icon-button" [attr.aria-label]="sensitiveVisible() ? 'Hide sensitive data' : 'Show sensitive data'" [title]="sensitiveVisible() ? 'Hide sensitive data' : 'Show sensitive data'" (click)="toggleSensitive()">
         {{ sensitiveVisible() ? '◉' : '◌' }}
       </button>
     }
