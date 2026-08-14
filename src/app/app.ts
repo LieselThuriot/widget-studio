@@ -31,7 +31,7 @@ export class App {
     const id = `${type}-${Date.now()}`;
     const base = { id, type, row: 0, column: 0, rowSpan: 1, columnSpan: 1, sensitive: false, anchor: 'top left' as const };
     const element: WidgetElement = type === 'text'
-      ? { ...base, type, text: 'New text', style: { color: '#f6f7fb', fontSize: 14, fontWeight: 400, italic: false, underline: false, strikethrough: false, wrap: true } } as TextElement
+      ? { ...base, type, text: 'New text', style: { color: '#f6f7fb', fontSize: 14, fontWeight: 400, italic: false, underline: false, strikethrough: false, align: 'left', wrap: true } } as TextElement
       : type === 'image'
         ? { ...base, type, source: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400', alt: 'Widget image', fit: 'cover', anchor: 'center', overlayColor: undefined, radius: 8 } as ImageElement
         : { ...base, type, label: 'New action', method: 'get', url: '/', style: 'solid' } as ButtonElement;

@@ -15,4 +15,8 @@ h1, h2, p { margin: 0; } h1 { font: 700 25px/1.1 'DM Sans', sans-serif; letter-s
 .anchor-field { margin: 14px 0; color: #67738a; font-size: 11px; font-weight: 600; }.anchor-control { display: grid; grid-template-columns: repeat(3, 28px); width: max-content; margin-top: 6px; border: 1px solid #dfe5ee; border-radius: 5px; overflow: hidden; }.anchor-control button { width: 28px; height: 26px; padding: 0; border: 0; border-right: 1px solid #dfe5ee; border-bottom: 1px solid #dfe5ee; background: #fff; color: #63718a; font-size: 17px; line-height: 1; cursor: pointer; }.anchor-control button:nth-child(3n) { border-right: 0; }.anchor-control button:nth-child(n + 7) { border-bottom: 0; }.anchor-control button:hover, .anchor-control button.active { background: #edf2fb; color: #36527f; }
 @media (max-width: 1050px) { .studio-grid { grid-template-columns: 210px minmax(360px, 1fr); }.settings-panel { grid-column: 1 / -1; }.settings-panel .selected-chip, .settings-panel > label, .settings-panel > .field-row, .settings-panel > .toggle-row, .settings-panel > .placement { max-width: 500px; } }
 @media (max-width: 700px) { .workspace { padding: 24px 16px 50px; }.studio-grid { display: flex; flex-direction: column; }.palette-panel, .settings-panel, .canvas-area { width: 100%; box-sizing: border-box; }.canvas { min-height: 340px; }.canvas-hint { flex-wrap: wrap; text-align: center; }.model-panel pre { font-size: 9px; } }
+
+.text-layout-settings { margin-top: 13px; padding-top: 12px; border-top: 1px solid #edf0f4; }
+.text-layout-settings > label:first-child { margin-top: 0; }
+.text-layout-settings .toggle-row { margin-bottom: 2px; border-top: 0; }
 .layer-list { max-height: none; overflow-y: visible; }

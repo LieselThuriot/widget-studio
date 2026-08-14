@@ -28,6 +28,7 @@ export interface TextStyle {
   italic: boolean;
   underline: boolean;
   strikethrough: boolean;
+  align: 'left' | 'center' | 'right';
   wrap: boolean;
 }
 
@@ -86,6 +87,7 @@ const textStyle = (overrides: Partial<TextStyle> = {}): TextStyle => ({
   italic: false,
   underline: false,
   strikethrough: false,
+  align: 'left',
   wrap: true,
   ...overrides,
 });
