@@ -189,18 +189,35 @@ img {
   transform: translateY(0);
 }
 .icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
   border: 1px solid #ffffff38;
   border-radius: 8px;
   background: #10182ccc;
-  color: white;
+  color: #fff;
   cursor: pointer;
-  font-size: 17px;
+}
+.eye-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 .icon-button:hover,
 .icon-button:focus-visible {
-  background: #ffffff26;
+  border-color: #17233c;
+  background: #fff;
+  color: #17233c;
+}
+.icon-button:focus-visible {
+  outline: 2px solid #f5c451;
+  outline-offset: 2px;
 }
 .action-button {
   min-height: 30px;
