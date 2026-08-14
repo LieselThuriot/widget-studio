@@ -1,5 +1,6 @@
 import { Component, computed, input, output, signal } from '@angular/core';
 import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from './widget.model';
+import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
 
 @Component({
   selector: 'widget-renderer',
@@ -14,9 +15,9 @@ export class WidgetRenderer {
   readonly hasSensitiveElements = computed(() =>
     this.widget().elements.some((element) => element.sensitive),
   );
-  readonly gridRows = computed(() => this.gridTemplate(this.widget().rows));
-  readonly gridColumns = computed(() => this.gridTemplate(this.widget().columns));
-  readonly widgetWidth = computed(() => (this.widget().size === 'wide' ? 530 : 265));
+  readonly gridRows = computed(() => gridTemplate(this.widget().rows));
+  readonly gridColumns = computed(() => gridTemplate(this.widget().columns));
+  readonly widgetWidth = computed(() => getWidgetWidth(this.widget().size));
   readonly backgroundImage = computed(() => {
     const image = this.widget().background.image;
     return image ? `url("${image}")` : 'none';
@@ -49,17 +50,6 @@ export class WidgetRenderer {
     this.sensitiveVisible.update((visible) => !visible);
   }
   protected elementStyle(element: WidgetElement): Record<string, string> {
-    return {
-      'grid-row': `${element.row + 1} / span ${element.rowSpan}`,
-      'grid-column': `${element.column + 1} / span ${element.columnSpan}`,
-    };
-  }
-  private gridTemplate(tracks: Widget['rows']): string {
-    return tracks
-      .map(
-        (track) =>
-          `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`,
-      )
-      .join(' ');
+    return elementGridStyle(element);
   }
 }

@@ -1,5 +1,17 @@
 import { Component, computed, ElementRef, inject, input, output, signal } from '@angular/core';
-import { ButtonElement, Widget, WidgetElement, WidgetRenderer } from 'widget-renderer';
+import {
+  ButtonElement,
+  elementGridStyle,
+  gridTemplate,
+  GridTrack,
+  WIDGET_GAP,
+  WIDGET_HEIGHT,
+  WIDGET_PADDING,
+  Widget,
+  WidgetElement,
+  WidgetRenderer,
+  widgetWidth as getWidgetWidth,
+} from 'widget-renderer';
 
 @Component({
   selector: 'app-editor-canvas',
@@ -30,19 +42,16 @@ export class EditorCanvas {
   readonly ctrlPressed = signal(false);
   readonly draggingId = signal<string | null>(null);
   readonly contextMenu = signal<{ id: string; x: number; y: number } | null>(null);
-  readonly gridRows = computed(() => this.gridTemplate(this.widget().rows));
-  readonly gridColumns = computed(() => this.gridTemplate(this.widget().columns));
-  readonly widgetWidth = computed(() => (this.widget().size === 'wide' ? 530 : 265));
+  readonly gridRows = computed(() => gridTemplate(this.widget().rows));
+  readonly gridColumns = computed(() => gridTemplate(this.widget().columns));
+  readonly widgetWidth = computed(() => getWidgetWidth(this.widget().size));
   private dragOffset = { x: 0, y: 0 };
   private activePointerId: number | null = null;
   private resizing: { id: string; axis: 'row' | 'column' } | null = null;
   private pointerDownElementId: string | null = null;
 
   protected elementStyle(element: WidgetElement): Record<string, string> {
-    return {
-      'grid-row': `${element.row + 1} / span ${element.rowSpan}`,
-      'grid-column': `${element.column + 1} / span ${element.columnSpan}`,
-    };
+    return elementGridStyle(element);
   }
   protected pointerClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).closest('.icon-button')) return;
@@ -142,12 +151,17 @@ export class EditorCanvas {
       const track =
         state.axis === 'column'
           ? this.trackAt(
-              event.clientX - canvas.left - 18,
+              event.clientX - canvas.left - WIDGET_PADDING,
               this.widget().columns,
-              this.widgetWidth() - 36,
+              this.widgetWidth() - WIDGET_PADDING * 2,
               1,
             )
-          : this.trackAt(event.clientY - canvas.top - 18, this.widget().rows, 245 - 36, 1);
+          : this.trackAt(
+              event.clientY - canvas.top - WIDGET_PADDING,
+              this.widget().rows,
+              WIDGET_HEIGHT - WIDGET_PADDING * 2,
+              1,
+            );
       this.elementResized.emit(
         state.axis === 'column'
           ? { id, columnSpan: Math.max(1, track - element.column + 1) }
@@ -156,15 +170,15 @@ export class EditorCanvas {
       return;
     }
     const column = this.trackAt(
-      event.clientX - canvas.left - this.dragOffset.x - 18,
+      event.clientX - canvas.left - this.dragOffset.x - WIDGET_PADDING,
       this.widget().columns,
-      this.widgetWidth() - 36,
+      this.widgetWidth() - WIDGET_PADDING * 2,
       element.columnSpan,
     );
     const row = this.trackAt(
-      event.clientY - canvas.top - this.dragOffset.y - 18,
+      event.clientY - canvas.top - this.dragOffset.y - WIDGET_PADDING,
       this.widget().rows,
-      245 - 36,
+      WIDGET_HEIGHT - WIDGET_PADDING * 2,
       element.rowSpan,
     );
     this.elementMoved.emit({ id, row, column });
@@ -193,12 +207,17 @@ export class EditorCanvas {
   private elementAtPoint(event: MouseEvent): WidgetElement | undefined {
     const bounds = (event.currentTarget as HTMLElement).getBoundingClientRect();
     const column = this.trackAt(
-      event.clientX - bounds.left - 18,
+      event.clientX - bounds.left - WIDGET_PADDING,
       this.widget().columns,
-      this.widgetWidth() - 36,
+      this.widgetWidth() - WIDGET_PADDING * 2,
       1,
     );
-    const row = this.trackAt(event.clientY - bounds.top - 18, this.widget().rows, 245 - 36, 1);
+    const row = this.trackAt(
+      event.clientY - bounds.top - WIDGET_PADDING,
+      this.widget().rows,
+      WIDGET_HEIGHT - WIDGET_PADDING * 2,
+      1,
+    );
     return [...this.widget().elements]
       .reverse()
       .find(
@@ -209,21 +228,8 @@ export class EditorCanvas {
           column < element.column + element.columnSpan,
       );
   }
-  private gridTemplate(tracks: Widget['rows']): string {
-    return tracks
-      .map(
-        (track) =>
-          `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`,
-      )
-      .join(' ');
-  }
-  private trackAt(
-    position: number,
-    tracks: Widget['columns'],
-    available: number,
-    span: number,
-  ): number {
-    const gap = 8;
+  private trackAt(position: number, tracks: GridTrack[], available: number, span: number): number {
+    const gap = WIDGET_GAP;
     const fixed = tracks
       .filter((track) => track.unit === 'pixel')
       .reduce((sum, track) => sum + track.size, 0);
