@@ -5,6 +5,9 @@
       <p class="eyebrow">Widget studio</p>
       <h1>Compose a widget</h1>
     </div>
+    <button type="button" class="preview-button" (click)="openPreview()">
+      <span class="live-dot" aria-hidden="true"></span> Preview
+    </button>
   </header>
 
   <div class="studio-grid">
@@ -738,3 +741,113 @@
     </aside>
   </div>
 </main>
+
+@if (isPreviewOpen()) {
+  <div
+    class="preview-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="preview-title"
+    tabindex="-1"
+    (click)="closePreview()"
+    (keydown)="$event.stopPropagation()"
+  >
+    <div
+      class="preview-window"
+      tabindex="-1"
+      (click)="$event.stopPropagation()"
+      (keydown)="$event.stopPropagation()"
+    >
+      <header class="preview-header">
+        <div>
+          <p class="eyebrow">Preview</p>
+          <h2 id="preview-title">This is how your widget will look</h2>
+        </div>
+        <button
+          type="button"
+          class="preview-close"
+          aria-label="Close live preview"
+          (click)="closePreview()"
+        >
+          ×
+        </button>
+      </header>
+      <div class="preview-stage">
+        <widget-renderer
+          [widget]="widget()"
+          (refreshRequested)="onRefresh()"
+          (actionRequested)="onAction($event)"
+        />
+      </div>
+      <p class="preview-hint">Click an action or refresh control to inspect its event data.</p>
+    </div>
+  </div>
+}
+
+@if (actionAlert(); as alert) {
+  <div
+    class="alert-overlay"
+    role="presentation"
+    tabindex="-1"
+    (click)="closeActionAlert()"
+    (keydown)="$event.stopPropagation()"
+  >
+    <section
+      class="event-alert"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="event-alert-title"
+      tabindex="-1"
+      (click)="$event.stopPropagation()"
+      (keydown)="$event.stopPropagation()"
+    >
+      <div class="alert-icon" aria-hidden="true">{{ alert.kind === 'refresh' ? '↻' : '↗' }}</div>
+      <div class="alert-content">
+        @if (alert.kind === 'refresh') {
+          <p class="eyebrow">Refresh event</p>
+          <h2 id="event-alert-title">Refresh requested</h2>
+          <p class="alert-description">The renderer emitted the configured refresh event.</p>
+          <dl class="event-data">
+            <div>
+              <dt>Event</dt>
+              <dd>refreshRequested</dd>
+            </div>
+            <div>
+              <dt>Label</dt>
+              <dd>{{ alert.label }}</dd>
+            </div>
+          </dl>
+        } @else {
+          <p class="eyebrow">Action event</p>
+          <h2 id="event-alert-title">{{ alert.element.label }} was clicked</h2>
+          <p class="alert-description">The renderer passed this data to the action handler.</p>
+          <dl class="event-data">
+            <div>
+              <dt>Method</dt>
+              <dd>{{ alert.element.method | uppercase }}</dd>
+            </div>
+            <div>
+              <dt>URL</dt>
+              <dd>{{ alert.element.url }}</dd>
+            </div>
+            <div>
+              <dt>Event</dt>
+              <dd>{{ alert.event.type }}</dd>
+            </div>
+            @if (alert.element.body) {
+              <div>
+                <dt>Body</dt>
+                <dd>{{ alert.element.body }}</dd>
+              </div>
+            }
+            <div>
+              <dt>Target</dt>
+              <dd>{{ alert.event.target }}</dd>
+            </div>
+          </dl>
+        }
+        <button type="button" class="alert-close" (click)="closeActionAlert()">Close</button>
+      </div>
+    </section>
+  </div>
+}

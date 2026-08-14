@@ -2,21 +2,42 @@ import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditorCanvas } from './editor-canvas/editor-canvas';
 import { ColorPicker } from './color-picker/color-picker';
-import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from 'widget-renderer';
+import {
+  ButtonElement,
+  ImageElement,
+  TextElement,
+  Widget,
+  WidgetElement,
+  WidgetRenderer,
+} from 'widget-renderer';
 import { sampleWidget } from './sample-widget';
+
+type ActionAlert =
+  | {
+      kind: 'action';
+      element: ButtonElement;
+      event: { type: string; target: string };
+    }
+  | {
+      kind: 'refresh';
+      label: string;
+    };
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, EditorCanvas, ColorPicker],
+  imports: [CommonModule, EditorCanvas, ColorPicker, WidgetRenderer],
   templateUrl: './app.html',
   styleUrl: './app.css',
   host: {
     '(document:click)': 'selectCanvasBackground($event)',
+    '(document:keydown)': 'onDocumentKeyDown($event)',
   },
 })
 export class App {
   protected readonly widget = signal<Widget>(structuredClone(sampleWidget));
   protected readonly selectedId = signal<string | null>('headline');
+  protected readonly isPreviewOpen = signal(false);
+  protected readonly actionAlert = signal<ActionAlert | null>(null);
   protected readonly selectedElement = computed(
     () => this.widget().elements.find((element) => element.id === this.selectedId()) ?? null,
   );
@@ -237,14 +258,35 @@ export class App {
     }));
   }
   protected onRefresh(): void {
-    console.info('Widget refresh requested');
+    this.actionAlert.set({ kind: 'refresh', label: this.widget().refresh.label });
+  }
+  protected openPreview(): void {
+    this.isPreviewOpen.set(true);
+  }
+  protected closePreview(): void {
+    this.isPreviewOpen.set(false);
+  }
+  protected closeActionAlert(): void {
+    this.actionAlert.set(null);
+  }
+  protected onDocumentKeyDown(event: KeyboardEvent): void {
+    if (event.key !== 'Escape') return;
+    if (this.actionAlert()) {
+      this.closeActionAlert();
+    } else if (this.isPreviewOpen()) {
+      this.closePreview();
+    }
   }
   protected onAction(event: { element: ButtonElement; event: Event }): void {
     event.event.preventDefault();
-    console.info(
-      `${event.element.method.toUpperCase()} action requested`,
-      event.element.url,
-      event.element.body,
-    );
+    const target = event.event.target;
+    this.actionAlert.set({
+      kind: 'action',
+      element: event.element,
+      event: {
+        type: event.event.type,
+        target: target instanceof HTMLElement ? target.outerHTML : String(target),
+      },
+    });
   }
 }
