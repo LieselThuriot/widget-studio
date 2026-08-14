@@ -98,6 +98,7 @@ export class App {
     const maximum = kind === 'row' ? this.widget().rows.length - 1 : this.widget().columns.length - 1;
     this.updateSelected({ [kind]: Math.max(0, Math.min(maximum, Math.round(value) - 1)) });
   }
+  protected updateRadius(value: number): void { this.updateSelected({ radius: Math.max(0, Math.round(value) || 0) }); }
   protected updateWidget(patch: Partial<Widget>): void { this.widget.update((widget) => ({ ...widget, ...patch })); }
   protected updateTrack(kind: 'rows' | 'columns', index: number, patch: Partial<Widget['rows'][number]>): void {
     this.widget.update((widget) => ({ ...widget, [kind]: widget[kind].map((track, trackIndex) => trackIndex === index ? { ...track, ...patch } : track) }));
