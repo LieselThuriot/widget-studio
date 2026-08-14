@@ -435,25 +435,10 @@ h2 {
   padding-top: 12px;
   border-top: 1px solid #edf0f4;
 }
-.widget-setting-section summary {
+.widget-setting-section-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  list-style: none;
-  cursor: pointer;
-}
-.widget-setting-section summary::-webkit-details-marker {
-  display: none;
-}
-.widget-setting-section summary:before {
-  content: '›';
-  margin-right: 7px;
-  color: #9aa5b7;
-  font-size: 16px;
-  transition: transform 0.15s;
-}
-.widget-setting-section[open] summary:before {
-  transform: rotate(90deg);
 }
 .summary-value {
   margin-left: auto;

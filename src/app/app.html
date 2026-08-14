@@ -193,9 +193,9 @@
       <div class="widget-settings">
         <div class="selected-chip"><span class="chip-icon">W</span><span>Widget</span><span class="chip-id">{{
             widget().size === 'wide' ? '530' : '265' }} × 245</span></div>
-        <details class="widget-setting-section" open>
-          <summary><span class="eyebrow">Grid</span><span class="summary-value">{{ widget().rows.length }} rows · {{
-              widget().columns.length }} columns</span></summary><label>Widget size<select [value]="widget().size"
+        <section class="widget-setting-section">
+           <div class="widget-setting-section-heading"><span class="eyebrow">Grid</span><span class="summary-value">{{ widget().rows.length }} rows · {{
+                widget().columns.length }} columns</span></div><label>Widget size<select [value]="widget().size"
               (change)="updateWidget({ size: $any($event.target).value })">
               <option value="square">Square · 265 × 245</option>
               <option value="wide">Wide · 530 × 245</option>
@@ -219,10 +219,10 @@
               <option value="auto">Auto</option>
             </select><button type="button" (click)="removeTrack('columns', $index)"
               aria-label="Remove column">×</button></div>}
-        </details>
-        <details class="widget-setting-section">
-          <summary><span class="eyebrow">Background</span><span class="summary-value">{{ widget().background.image ?
-              'Image' : widget().background.color }}</span></summary><app-color-picker label="Color"
+         </section>
+        <section class="widget-setting-section">
+           <div class="widget-setting-section-heading"><span class="eyebrow">Background</span><span class="summary-value">{{ widget().background.image ?
+               'Image' : widget().background.color }}</span></div><app-color-picker label="Color"
             [value]="widget().background.color" [clearable]="true"
             (changed)="updateWidget({ background: { ...widget().background, color: $event } })"
             (cleared)="updateWidget({ background: { ...widget().background, color: undefined } })" /><app-color-picker
@@ -262,16 +262,16 @@
                 (click)="updateWidget({ background: { ...widget().background, anchor: 'bottom right' } })">↘</button>
             </div>
           </div>
-        </details>
-        <details class="widget-setting-section">
-          <summary><span class="eyebrow">Refresh</span><span class="summary-value">{{ widget().refresh.enabled ?
-              'Enabled' : 'Disabled' }}</span></summary><label class="toggle-row"><span><strong>Refresh
+        </section>
+        <section class="widget-setting-section">
+           <div class="widget-setting-section-heading"><span class="eyebrow">Refresh</span><span class="summary-value">{{ widget().refresh.enabled ?
+               'Enabled' : 'Disabled' }}</span></div><label class="toggle-row"><span><strong>Refresh
                 control</strong><small>Show refresh in the hover toolbar</small></span><input type="checkbox"
               [checked]="widget().refresh.enabled"
               (change)="updateWidget({ refresh: { ...widget().refresh, enabled: $any($event.target).checked } })"><span
               class="toggle"></span></label><label>Accessible label<input [value]="widget().refresh.label"
               (input)="updateWidget({ refresh: { ...widget().refresh, label: $any($event.target).value } })"></label>
-        </details>
+        </section>
       </div>
       }
     </aside>
