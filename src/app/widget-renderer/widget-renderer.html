@@ -26,7 +26,7 @@
         }
         @if (isText(element)) {
           <span class="text-element" [style.color]="element.style.color" [style.font-size.px]="element.style.fontSize" [style.font-weight]="element.style.fontWeight"
-            [style.font-style]="element.style.italic ? 'italic' : 'normal'" [style.text-decoration]="element.style.underline ? 'underline' : 'none'"
+            [style.font-style]="element.style.italic ? 'italic' : 'normal'" [style.text-decoration]="element.style.underline && element.style.strikethrough ? 'underline line-through' : element.style.underline ? 'underline' : element.style.strikethrough ? 'line-through' : 'none'"
             [style.text-align]="element.style.align" [style.align-self]="element.style.verticalAlign" [style.white-space]="element.style.wrap ? 'normal' : 'nowrap'">{{ element.text }}</span>
         } @else if (isImage(element)) {
           <img [src]="element.imageUrl" [alt]="element.alt" [style.object-fit]="element.fit" [style.border-radius.px]="element.radius" />

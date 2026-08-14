@@ -21,6 +21,7 @@ export interface TextStyle {
   fontWeight: 400 | 500 | 600 | 700;
   italic: boolean;
   underline: boolean;
+  strikethrough: boolean;
   align: 'left' | 'center' | 'right';
   verticalAlign: 'top' | 'center' | 'bottom';
   wrap: boolean;
@@ -78,6 +79,7 @@ const textStyle = (overrides: Partial<TextStyle> = {}): TextStyle => ({
   fontWeight: 400,
   italic: false,
   underline: false,
+  strikethrough: false,
   align: 'left',
   verticalAlign: 'center',
   wrap: true,
