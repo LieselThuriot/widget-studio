@@ -1,6 +1,7 @@
 export type GridUnit = 'pixel' | 'auto' | 'star';
 export type WidgetElementType = 'text' | 'image' | 'button';
 export type ButtonMethod = 'get' | 'post';
+export type WidgetSize = 'square' | 'wide';
 
 export interface GridTrack {
   size: number;
@@ -64,8 +65,7 @@ export type WidgetElement = TextElement | ImageElement | ButtonElement;
 
 export interface WidgetV2 {
   version: 2;
-  width: 265;
-  height: 245;
+  size: WidgetSize;
   rows: GridTrack[];
   columns: GridTrack[];
   background: BackgroundConfig;
@@ -88,8 +88,7 @@ const textStyle = (overrides: Partial<TextStyle> = {}): TextStyle => ({
 
 export const sampleWidget: WidgetV2 = {
   version: 2,
-  width: 265,
-  height: 245,
+  size: 'square',
   rows: [
     { size: 1, unit: 'star' },
     { size: 1, unit: 'star' },

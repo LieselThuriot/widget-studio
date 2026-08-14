@@ -12,6 +12,7 @@ import { ButtonElement, ImageElement, TextElement, WidgetElement, WidgetV2 } fro
   styleUrl: './widget-renderer.css',
 })
 export class WidgetRenderer {
+  private static readonly widgetHeight = 245;
   readonly widget = input.required<WidgetV2>();
   readonly selectedId = input<string | null>(null);
   readonly refreshRequested = output<void>();
@@ -33,6 +34,7 @@ export class WidgetRenderer {
   readonly hasSensitiveElements = computed(() => this.widget().elements.some((element) => element.sensitive));
   readonly gridRows = computed(() => this.widget().rows.map((track) => `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`).join(' '));
   readonly gridColumns = computed(() => this.widget().columns.map((track) => `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`).join(' '));
+  readonly widgetWidth = computed(() => this.widget().size === 'wide' ? 530 : 265);
 
   protected isText(element: WidgetElement): element is TextElement { return element.type === 'text'; }
   protected isImage(element: WidgetElement): element is ImageElement { return element.type === 'image'; }
@@ -89,10 +91,10 @@ export class WidgetRenderer {
       const widgetRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
       if (!element) return;
       if (this.resizing.axis === 'column') {
-        const column = this.trackAt(event.clientX - widgetRect.left - 18, this.widget().columns, this.widget().width - 36, 1);
+        const column = this.trackAt(event.clientX - widgetRect.left - 18, this.widget().columns, this.widgetWidth() - 36, 1);
         this.elementResized.emit({ id: element.id, columnSpan: Math.max(1, column - element.column + 1) });
       } else {
-        const row = this.trackAt(event.clientY - widgetRect.top - 18, this.widget().rows, this.widget().height - 36, 1);
+      const row = this.trackAt(event.clientY - widgetRect.top - 18, this.widget().rows, WidgetRenderer.widgetHeight - 36, 1);
         this.elementResized.emit({ id: element.id, rowSpan: Math.max(1, row - element.row + 1) });
       }
       return;
@@ -104,8 +106,8 @@ export class WidgetRenderer {
     if (!element) return;
     const pointX = event.clientX - widgetRect.left - this.dragOffset.x - 18;
     const pointY = event.clientY - widgetRect.top - this.dragOffset.y - 18;
-    const column = this.trackAt(pointX, this.widget().columns, this.widget().width - 36, element.columnSpan);
-    const row = this.trackAt(pointY, this.widget().rows, this.widget().height - 36, element.rowSpan);
+    const column = this.trackAt(pointX, this.widget().columns, this.widgetWidth() - 36, element.columnSpan);
+    const row = this.trackAt(pointY, this.widget().rows, WidgetRenderer.widgetHeight - 36, element.rowSpan);
     this.elementMoved.emit({ id, row, column });
   }
   protected endDrag(event?: PointerEvent): void {

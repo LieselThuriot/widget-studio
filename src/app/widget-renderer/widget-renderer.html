@@ -1,4 +1,4 @@
-<section class="widget-shell" tabindex="0" [class.show-guides]="ctrlPressed()" [class.is-dragging]="draggingId()" [style.width.px]="widget().width" [style.height.px]="widget().height"
+<section class="widget-shell" tabindex="0" [class.show-guides]="ctrlPressed()" [class.is-dragging]="draggingId()" [style.width.px]="widgetWidth()" [style.height.px]="245"
   (click)="closeContextMenu()"
   (click)="selectWidget($event)" (pointermove)="moveDrag($event)" (pointerup)="endDrag()" (pointercancel)="endDrag()"
   [style.background-color]="widget().background.color"
