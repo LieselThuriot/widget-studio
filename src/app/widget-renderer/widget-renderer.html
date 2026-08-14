@@ -1,5 +1,5 @@
 <section class="widget-shell" tabindex="0" [class.show-guides]="ctrlPressed()" [class.is-dragging]="draggingId()" [style.width.px]="widget().width" [style.height.px]="widget().height"
-  (pointermove)="moveDrag($event)" (pointerup)="endDrag()" (pointercancel)="endDrag()"
+  (click)="selectWidget($event)" (pointermove)="moveDrag($event)" (pointerup)="endDrag()" (pointercancel)="endDrag()"
   [style.background-color]="widget().background.color"
   [style.background-image]="widget().background.imageUrl ? 'url(' + widget().background.imageUrl + ')' : 'none'"
   [style.background-size]="widget().background.size" [style.background-position]="widget().background.position">

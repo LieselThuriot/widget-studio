@@ -19,6 +19,7 @@ export class WidgetRenderer {
   readonly elementDeleted = output<string>();
   readonly elementMoved = output<{ id: string; row: number; column: number }>();
   readonly elementResized = output<{ id: string; rowSpan?: number; columnSpan?: number }>();
+  readonly widgetSelected = output<void>();
   readonly sensitiveVisible = signal(false);
   readonly ctrlPressed = signal(false);
   readonly draggingId = signal<string | null>(null);
@@ -37,6 +38,9 @@ export class WidgetRenderer {
   protected selectElement(id: string, event: Event): void {
     event.stopPropagation();
     this.elementSelected.emit(id);
+  }
+  protected selectWidget(event: Event): void {
+    this.widgetSelected.emit();
   }
   protected deleteElement(id: string, event: Event): void {
     event.stopPropagation();

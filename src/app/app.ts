@@ -54,6 +54,7 @@ export class App {
   }
 
   protected selectElement(id: string): void { this.selectedId.set(id); }
+  protected selectWidget(): void { this.selectedId.set(null); }
   protected deleteSelected(): void {
     const id = this.selectedId();
     if (!id) return;
@@ -79,6 +80,17 @@ export class App {
   protected updatePosition(kind: 'row' | 'column', value: number): void {
     const maximum = kind === 'row' ? this.widget().rows.length - 1 : this.widget().columns.length - 1;
     this.updateSelected({ [kind]: Math.max(0, Math.min(maximum, Math.round(value) - 1)) });
+  }
+  protected updateWidget(patch: Partial<WidgetV2>): void { this.widget.update((widget) => ({ ...widget, ...patch })); }
+  protected updateTrack(kind: 'rows' | 'columns', index: number, patch: Partial<WidgetV2['rows'][number]>): void {
+    this.widget.update((widget) => ({ ...widget, [kind]: widget[kind].map((track, trackIndex) => trackIndex === index ? { ...track, ...patch } : track) }));
+  }
+  protected addTrack(kind: 'rows' | 'columns'): void {
+    this.widget.update((widget) => ({ ...widget, [kind]: [...widget[kind], { size: 1, unit: 'star' as const }] }));
+  }
+  protected removeTrack(kind: 'rows' | 'columns', index: number): void {
+    if (this.widget()[kind].length <= 1) return;
+    this.widget.update((widget) => ({ ...widget, [kind]: widget[kind].filter((_, trackIndex) => trackIndex !== index), elements: widget.elements.map((element) => ({ ...element, [kind === 'rows' ? 'row' : 'column']: Math.min(element[kind === 'rows' ? 'row' : 'column'], widget[kind].length - 2) })) }));
   }
   protected updateSelected(patch: Partial<WidgetElement>): void {
     const id = this.selectedId();
