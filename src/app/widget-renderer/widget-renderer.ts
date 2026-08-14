@@ -1,5 +1,5 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-import { ButtonElement, ImageElement, TextElement, WidgetElement, WidgetV2 } from '../widget-v2.model';
+import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from '../widget.model';
 
 @Component({
   selector: 'app-widget-renderer',
@@ -13,7 +13,7 @@ import { ButtonElement, ImageElement, TextElement, WidgetElement, WidgetV2 } fro
 })
 export class WidgetRenderer {
   private static readonly widgetHeight = 245;
-  readonly widget = input.required<WidgetV2>();
+  readonly widget = input.required<Widget>();
   readonly selectedId = input<string | null>(null);
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
@@ -35,10 +35,16 @@ export class WidgetRenderer {
   readonly gridRows = computed(() => this.widget().rows.map((track) => `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`).join(' '));
   readonly gridColumns = computed(() => this.widget().columns.map((track) => `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`).join(' '));
   readonly widgetWidth = computed(() => this.widget().size === 'wide' ? 530 : 265);
+  readonly backgroundImage = computed(() => {
+    const image = this.widget().background.image;
+    return image ? `url("${image}")` : 'none';
+  });
 
   protected isText(element: WidgetElement): element is TextElement { return element.type === 'text'; }
   protected isImage(element: WidgetElement): element is ImageElement { return element.type === 'image'; }
   protected isButton(element: WidgetElement): element is ButtonElement { return element.type === 'button'; }
+  protected horizontalAnchor(anchor: string): string { return anchor.endsWith('left') ? 'flex-start' : anchor.endsWith('right') ? 'flex-end' : 'center'; }
+  protected verticalAnchor(anchor: string): string { return anchor.startsWith('top') ? 'flex-start' : anchor.startsWith('bottom') ? 'flex-end' : 'center'; }
   protected toggleSensitive(): void { this.sensitiveVisible.update((visible) => !visible); }
   protected selectElement(id: string, event: Event): void {
     event.stopPropagation();
@@ -116,7 +122,7 @@ export class WidgetRenderer {
     this.resizing = null;
     this.activePointerId = null;
   }
-  protected trackAt(position: number, tracks: WidgetV2['columns'], available: number, span: number): number {
+  protected trackAt(position: number, tracks: Widget['columns'], available: number, span: number): number {
     const gap = 8;
     const totalGaps = Math.max(0, tracks.length - 1) * gap;
     const fixed = tracks.filter((track) => track.unit === 'pixel').reduce((sum, track) => sum + track.size, 0);

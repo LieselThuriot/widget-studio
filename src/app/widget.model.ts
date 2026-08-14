@@ -2,6 +2,10 @@ export type GridUnit = 'pixel' | 'auto' | 'star';
 export type WidgetElementType = 'text' | 'image' | 'button';
 export type ButtonMethod = 'get' | 'post';
 export type WidgetSize = 'square' | 'wide';
+export type ImageAnchor =
+  | 'top left' | 'top center' | 'top right'
+  | 'center left' | 'center' | 'center right'
+  | 'bottom left' | 'bottom center' | 'bottom right';
 
 export interface GridTrack {
   size: number;
@@ -9,10 +13,11 @@ export interface GridTrack {
 }
 
 export interface BackgroundConfig {
-  imageUrl?: string;
+  image?: string;
+  repeat: boolean;
   color: string;
   size: 'cover' | 'contain' | 'auto';
-  position: string;
+  anchor: ImageAnchor;
   overlayColor?: string;
 }
 
@@ -24,7 +29,6 @@ export interface TextStyle {
   underline: boolean;
   strikethrough: boolean;
   align: 'left' | 'center' | 'right';
-  verticalAlign: 'top' | 'center' | 'bottom';
   wrap: boolean;
 }
 
@@ -36,6 +40,7 @@ export interface WidgetElementBase {
   rowSpan: number;
   columnSpan: number;
   sensitive: boolean;
+  anchor: ImageAnchor;
 }
 
 export interface TextElement extends WidgetElementBase {
@@ -46,9 +51,11 @@ export interface TextElement extends WidgetElementBase {
 
 export interface ImageElement extends WidgetElementBase {
   type: 'image';
-  imageUrl: string;
+  source: string;
   alt: string;
   fit: 'cover' | 'contain' | 'fill';
+  anchor: ImageAnchor;
+  overlayColor?: string;
   radius: number;
 }
 
@@ -58,12 +65,12 @@ export interface ButtonElement extends WidgetElementBase {
   method: ButtonMethod;
   url: string;
   body?: string;
-  style: 'solid' | 'outline' | 'ghost';
+  style: 'solid' | 'outline';
 }
 
 export type WidgetElement = TextElement | ImageElement | ButtonElement;
 
-export interface WidgetV2 {
+export interface Widget {
   version: 2;
   size: WidgetSize;
   rows: GridTrack[];
@@ -81,12 +88,11 @@ const textStyle = (overrides: Partial<TextStyle> = {}): TextStyle => ({
   underline: false,
   strikethrough: false,
   align: 'left',
-  verticalAlign: 'center',
   wrap: true,
   ...overrides,
 });
 
-export const sampleWidget: WidgetV2 = {
+export const sampleWidget: Widget = {
   version: 2,
   size: 'square',
   rows: [
@@ -100,27 +106,30 @@ export const sampleWidget: WidgetV2 = {
     { size: 1, unit: 'star' },
   ],
   background: {
-    color: '#17233c',
+    color: '#101827',
+    repeat: false,
     size: 'cover',
-    position: 'center',
+    anchor: 'center',
+    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900',
+    overlayColor: '#10182799',
   },
   refresh: { enabled: true, label: 'Refresh widget' },
   elements: [
     {
-      id: 'headline', type: 'text', row: 0, column: 0, rowSpan: 1, columnSpan: 2, sensitive: false,
-      text: 'Your week at a glance', style: textStyle({ fontSize: 20, fontWeight: 700 }),
+      id: 'headline', type: 'text', row: 0, column: 0, rowSpan: 1, columnSpan: 3, sensitive: false, anchor: 'top left',
+      text: 'Make space for what matters', style: textStyle({ fontSize: 19, fontWeight: 700 }),
     },
     {
-      id: 'balance', type: 'text', row: 1, column: 0, rowSpan: 1, columnSpan: 1, sensitive: true,
-      text: '€ 2,451.00', style: textStyle({ fontSize: 24, fontWeight: 700 }),
+      id: 'message', type: 'text', row: 1, column: 0, rowSpan: 1, columnSpan: 2, sensitive: false, anchor: 'top left',
+      text: 'Your next chapter starts here.', style: textStyle({ fontSize: 14, fontWeight: 600 }),
     },
     {
-      id: 'caption', type: 'text', row: 2, column: 0, rowSpan: 1, columnSpan: 2, sensitive: false,
-      text: 'Available balance', style: textStyle({ fontSize: 12, color: '#b8c5db' }),
+      id: 'caption', type: 'text', row: 2, column: 0, rowSpan: 1, columnSpan: 2, sensitive: true, anchor: 'top left',
+      text: 'Personalized for your profile', style: textStyle({ fontSize: 11, color: '#d4dbea' }),
     },
     {
-      id: 'details', type: 'button', row: 2, column: 2, rowSpan: 1, columnSpan: 1, sensitive: false,
-      label: 'Details', method: 'get', url: '/wallet', style: 'outline',
+      id: 'details', type: 'button', row: 2, column: 2, rowSpan: 1, columnSpan: 1, sensitive: false, anchor: 'top left',
+      label: 'Explore', method: 'get', url: '/overview', style: 'solid',
     },
   ],
 };

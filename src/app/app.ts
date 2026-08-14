@@ -1,7 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WidgetRenderer } from './widget-renderer/widget-renderer';
-import { ButtonElement, ImageElement, TextElement, WidgetElement, WidgetV2, sampleWidget } from './widget-v2.model';
+import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement, sampleWidget } from './widget.model';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { ButtonElement, ImageElement, TextElement, WidgetElement, WidgetV2, samp
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly widget = signal<WidgetV2>(structuredClone(sampleWidget));
+  protected readonly widget = signal<Widget>(structuredClone(sampleWidget));
   protected readonly selectedId = signal<string | null>('headline');
   protected readonly selectedElement = computed(() => this.widget().elements.find((element) => element.id === this.selectedId()) ?? null);
   protected readonly modelJson = computed(() => JSON.stringify(this.widget(), null, 2));
@@ -22,11 +22,11 @@ export class App {
 
   protected addElement(type: WidgetElement['type']): void {
     const id = `${type}-${Date.now()}`;
-    const base = { id, type, row: 0, column: 0, rowSpan: 1, columnSpan: 1, sensitive: false };
+    const base = { id, type, row: 0, column: 0, rowSpan: 1, columnSpan: 1, sensitive: false, anchor: 'top left' as const };
     const element: WidgetElement = type === 'text'
-      ? { ...base, type, text: 'New text', style: { color: '#f6f7fb', fontSize: 14, fontWeight: 400, italic: false, underline: false, strikethrough: false, align: 'left', verticalAlign: 'center', wrap: true } } as TextElement
+      ? { ...base, type, text: 'New text', style: { color: '#f6f7fb', fontSize: 14, fontWeight: 400, italic: false, underline: false, strikethrough: false, align: 'left', wrap: true } } as TextElement
       : type === 'image'
-        ? { ...base, type, imageUrl: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400', alt: 'Widget image', fit: 'cover', radius: 8 } as ImageElement
+        ? { ...base, type, source: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400', alt: 'Widget image', fit: 'cover', anchor: 'center', overlayColor: undefined, radius: 8 } as ImageElement
         : { ...base, type, label: 'New action', method: 'get', url: '/', style: 'solid' } as ButtonElement;
     this.widget.update((widget) => ({ ...widget, elements: [...widget.elements, element] }));
     this.selectedId.set(id);
@@ -67,6 +67,10 @@ export class App {
 
   protected selectElement(id: string): void { this.selectedId.set(id); }
   protected selectWidget(): void { this.selectedId.set(null); }
+  protected clearLayers(): void {
+    this.widget.update((widget) => ({ ...widget, elements: [] }));
+    this.selectedId.set(null);
+  }
   protected deleteSelected(): void {
     const id = this.selectedId();
     if (!id) return;
@@ -93,8 +97,8 @@ export class App {
     const maximum = kind === 'row' ? this.widget().rows.length - 1 : this.widget().columns.length - 1;
     this.updateSelected({ [kind]: Math.max(0, Math.min(maximum, Math.round(value) - 1)) });
   }
-  protected updateWidget(patch: Partial<WidgetV2>): void { this.widget.update((widget) => ({ ...widget, ...patch })); }
-  protected updateTrack(kind: 'rows' | 'columns', index: number, patch: Partial<WidgetV2['rows'][number]>): void {
+  protected updateWidget(patch: Partial<Widget>): void { this.widget.update((widget) => ({ ...widget, ...patch })); }
+  protected updateTrack(kind: 'rows' | 'columns', index: number, patch: Partial<Widget['rows'][number]>): void {
     this.widget.update((widget) => ({ ...widget, [kind]: widget[kind].map((track, trackIndex) => trackIndex === index ? { ...track, ...patch } : track) }));
   }
   protected addTrack(kind: 'rows' | 'columns'): void {
