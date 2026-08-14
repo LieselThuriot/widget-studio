@@ -179,7 +179,7 @@ h2 {
   color: #66738b;
   text-align: left;
   font-size: 11px;
-  cursor: pointer;
+  cursor: inherit;
 }
 .layer-select span {
   width: 18px;
