@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, ElementRef, effect, inject, input, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { ButtonElement } from 'widget-renderer';
 
@@ -15,7 +15,7 @@ export type ActionAlert =
         class="alert-overlay"
         role="presentation"
         tabindex="-1"
-        (click)="closed.emit()"
+        (click)="close()"
         (keydown)="$event.stopPropagation()"
       >
         <section
@@ -25,7 +25,7 @@ export type ActionAlert =
           aria-labelledby="event-alert-title"
           tabindex="-1"
           (click)="$event.stopPropagation()"
-          (keydown)="$event.stopPropagation()"
+          (keydown)="onKeyDown($event)"
         >
           <div class="alert-icon" aria-hidden="true">
             {{ alert.kind === 'refresh' ? '↻' : '↗' }}
@@ -74,7 +74,7 @@ export type ActionAlert =
                 </div>
               </dl>
             }
-            <button type="button" class="alert-close" (click)="closed.emit()">Close</button>
+            <button type="button" class="alert-close" (click)="close()">Close</button>
           </div>
         </section>
       </div>
@@ -83,6 +83,56 @@ export type ActionAlert =
   styleUrl: './event-alert-dialog.css',
 })
 export class EventAlertDialog {
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private previouslyFocused: Element | null = null;
   readonly alert = input<ActionAlert | null>(null);
   readonly closed = output<void>();
+
+  constructor() {
+    effect(() => {
+      const alert = this.alert();
+      if (!alert) return;
+      this.previouslyFocused = document.activeElement;
+      queueMicrotask(() => this.focusInitial());
+    });
+  }
+
+  protected onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = this.getFocusableElements();
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const focusTarget = event.shiftKey ? last : first;
+    const focusBoundary = event.shiftKey ? first : last;
+    if (document.activeElement !== focusBoundary) return;
+    event.preventDefault();
+    focusTarget.focus();
+  }
+
+  protected close(): void {
+    this.closed.emit();
+    this.restoreFocus();
+  }
+
+  private focusInitial(): void {
+    this.getFocusableElements()[0]?.focus();
+  }
+
+  private restoreFocus(): void {
+    if (this.previouslyFocused instanceof HTMLElement) this.previouslyFocused.focus();
+  }
+
+  private getFocusableElements(): HTMLElement[] {
+    const elements = this.elementRef.nativeElement.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    ) as NodeListOf<HTMLElement>;
+    return Array.from(elements).filter((element) => !element.hasAttribute('disabled'));
+  }
 }
