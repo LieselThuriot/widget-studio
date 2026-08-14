@@ -25,12 +25,12 @@
 
     <section class="canvas-area" aria-label="Widget preview">
       <div class="canvas-toolbar"><span>Preview canvas</span><span class="dimensions">265 × 245 px</span></div>
-      <div class="canvas" (click)="selectWidget()" (dragover)="$event.preventDefault()" (drop)="dropElement($event)"><app-widget-renderer [widget]="widget()" [selectedId]="selectedId()" (widgetSelected)="selectWidget()" (elementSelected)="selectElement($event)" (elementDeleted)="deleteElement($event)" (elementMoved)="moveElement($event)" (elementResized)="resizeElement($event)" (refreshRequested)="onRefresh()" (actionRequested)="onAction($event)" /></div>
+      <div class="canvas" (click)="selectWidget()" (dragover)="$event.preventDefault()" (drop)="dropElement($event)"><app-widget-renderer [widget]="widget()" [selectedId]="selectedId()" (widgetSelected)="selectWidget()" (elementSelected)="selectElement($event)" (elementDeleted)="deleteElement($event)" (elementMoved)="moveElement($event)" (elementResized)="resizeElement($event)" (elementStackChanged)="changeStack($event)" (refreshRequested)="onRefresh()" (actionRequested)="onAction($event)" /></div>
       <div class="canvas-hint"><span>Ctrl</span> Hold Ctrl to show element boundaries <span class="hint-separator"></span> Hover the widget to reveal its controls</div>
     </section>
 
     <aside class="panel settings-panel" aria-label="Element settings">
-      <div class="panel-heading"><div><p class="eyebrow">Inspector</p><h2>Settings</h2></div><button class="delete-button" type="button" [disabled]="!selectedElement()" (click)="deleteSelected()" aria-label="Delete selected element">⌫</button></div>
+      <div class="panel-heading"><div><p class="eyebrow">Inspector</p><h2>Settings</h2></div></div>
       @if (selectedElement(); as element) {
         <div class="selected-chip"><span class="chip-icon">{{ element.type === 'text' ? 'T' : element.type === 'image' ? '▧' : '↗' }}</span><span>{{ element.type | titlecase }}</span><span class="chip-id">{{ element.id }}</span></div>
         @if (element.type === 'text') {

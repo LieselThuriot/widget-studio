@@ -47,6 +47,18 @@ export class App {
       return { ...widget, elements };
     });
   }
+  protected changeStack(change: { id: string; action: 'up' | 'down' | 'front' | 'back' }): void {
+    this.widget.update((widget) => {
+      const elements = [...widget.elements];
+      const index = elements.findIndex((element) => element.id === change.id);
+      if (index < 0) return widget;
+      const target = change.action === 'up' ? index + 1 : change.action === 'down' ? index - 1 : change.action === 'front' ? elements.length - 1 : 0;
+      if (target === index || target < 0 || target >= elements.length) return widget;
+      const [element] = elements.splice(index, 1);
+      elements.splice(target, 0, element);
+      return { ...widget, elements };
+    });
+  }
   protected dropElement(event: DragEvent): void {
     event.preventDefault();
     const type = event.dataTransfer?.getData('widget-element-type') as WidgetElement['type'];

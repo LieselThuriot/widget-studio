@@ -1,4 +1,5 @@
 <section class="widget-shell" tabindex="0" [class.show-guides]="ctrlPressed()" [class.is-dragging]="draggingId()" [style.width.px]="widget().width" [style.height.px]="widget().height"
+  (click)="closeContextMenu()"
   (click)="selectWidget($event)" (pointermove)="moveDrag($event)" (pointerup)="endDrag()" (pointercancel)="endDrag()"
   [style.background-color]="widget().background.color"
   [style.background-image]="widget().background.imageUrl ? 'url(' + widget().background.imageUrl + ')' : 'none'"
@@ -14,9 +15,18 @@
       </button>
     }
   </div>
+  @if (contextMenu(); as menu) {
+    <div class="element-context-menu" [style.left.px]="menu.x" [style.top.px]="menu.y" role="menu" aria-label="Element layer order" (pointerdown)="$event.stopPropagation()">
+      <button type="button" role="menuitem" (click)="changeStack('up', $event)">Move up</button>
+      <button type="button" role="menuitem" (click)="changeStack('down', $event)">Move down</button>
+      <div class="menu-divider"></div>
+      <button type="button" role="menuitem" (click)="changeStack('front', $event)">Bring to front</button>
+      <button type="button" role="menuitem" (click)="changeStack('back', $event)">Send to back</button>
+    </div>
+  }
   <div class="widget-grid" [style.grid-template-rows]="gridRows()" [style.grid-template-columns]="gridColumns()">
     @for (element of widget().elements; track element.id) {
-      <div class="widget-element" [class.is-sensitive]="element.sensitive && !sensitiveVisible()" [class.selected]="element.id === selectedId()" [class.is-dragging]="element.id === draggingId()" [style]="elementStyle(element)" (pointerdown)="startDrag(element, $event)" (click)="selectElement(element.id, $event)">
+      <div class="widget-element" [class.is-sensitive]="element.sensitive && !sensitiveVisible()" [class.selected]="element.id === selectedId()" [class.is-dragging]="element.id === draggingId()" [style]="elementStyle(element)" (pointerdown)="startDrag(element, $event)" (click)="selectElement(element.id, $event)" (contextmenu)="openContextMenu(element, $event)">
         @if (ctrlPressed()) {
           <button type="button" class="element-delete" aria-label="Delete element" (click)="deleteElement(element.id, $event)">×</button>
         }

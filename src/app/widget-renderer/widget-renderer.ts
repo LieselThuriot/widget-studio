@@ -6,6 +6,7 @@ import { ButtonElement, ImageElement, TextElement, WidgetElement, WidgetV2 } fro
   host: {
     '(document:keydown)': 'onKeyDown($event)',
     '(document:keyup)': 'onKeyUp($event)',
+    '(document:pointerdown)': 'closeContextMenu()',
   },
   templateUrl: './widget-renderer.html',
   styleUrl: './widget-renderer.css',
@@ -19,10 +20,12 @@ export class WidgetRenderer {
   readonly elementDeleted = output<string>();
   readonly elementMoved = output<{ id: string; row: number; column: number }>();
   readonly elementResized = output<{ id: string; rowSpan?: number; columnSpan?: number }>();
+  readonly elementStackChanged = output<{ id: string; action: 'up' | 'down' | 'front' | 'back' }>();
   readonly widgetSelected = output<void>();
   readonly sensitiveVisible = signal(false);
   readonly ctrlPressed = signal(false);
   readonly draggingId = signal<string | null>(null);
+  readonly contextMenu = signal<{ id: string; x: number; y: number } | null>(null);
   private dragOffset = { x: 0, y: 0 };
   private activePointerId: number | null = null;
   private resizing: { id: string; axis: 'row' | 'column' } | null = null;
@@ -41,6 +44,21 @@ export class WidgetRenderer {
   }
   protected selectWidget(event: Event): void {
     this.widgetSelected.emit();
+  }
+  protected openContextMenu(element: WidgetElement, event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const bounds = (event.currentTarget as HTMLElement).closest('.widget-shell')?.getBoundingClientRect();
+    if (!bounds) return;
+    this.elementSelected.emit(element.id);
+    this.contextMenu.set({ id: element.id, x: event.clientX - bounds.left, y: event.clientY - bounds.top });
+  }
+  protected closeContextMenu(): void { this.contextMenu.set(null); }
+  protected changeStack(action: 'up' | 'down' | 'front' | 'back', event: Event): void {
+    event.stopPropagation();
+    const menu = this.contextMenu();
+    if (menu) this.elementStackChanged.emit({ id: menu.id, action });
+    this.closeContextMenu();
   }
   protected deleteElement(id: string, event: Event): void {
     event.stopPropagation();
