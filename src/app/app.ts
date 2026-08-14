@@ -166,10 +166,11 @@ export class App {
     }));
   }
   protected resizeElement(size: { id: string; rowSpan?: number; columnSpan?: number }): void {
+    const { id, ...patch } = size;
     this.widget.update((widget) => ({
       ...widget,
       elements: widget.elements.map((element) =>
-        element.id === size.id ? { ...element, ...size, id: element.id } : element,
+        element.id === id ? { ...element, ...patch } : element,
       ),
     }));
   }
