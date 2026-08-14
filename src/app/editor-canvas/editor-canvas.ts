@@ -205,28 +205,23 @@ export class EditorCanvas {
     return id ? this.widget().elements.find((element) => element.id === id) : undefined;
   }
   private elementAtPoint(event: MouseEvent): WidgetElement | undefined {
-    const bounds = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    const column = this.trackAt(
-      event.clientX - bounds.left - WIDGET_PADDING,
-      this.widget().columns,
-      this.widgetWidth() - WIDGET_PADDING * 2,
-      1,
+    const elementNodes = Array.from(
+      (this.hostElement.nativeElement as HTMLElement).querySelectorAll('[data-widget-element-id]'),
     );
-    const row = this.trackAt(
-      event.clientY - bounds.top - WIDGET_PADDING,
-      this.widget().rows,
-      WIDGET_HEIGHT - WIDGET_PADDING * 2,
-      1,
-    );
-    return [...this.widget().elements]
-      .reverse()
-      .find(
-        (element) =>
-          row >= element.row &&
-          row < element.row + element.rowSpan &&
-          column >= element.column &&
-          column < element.column + element.columnSpan,
+    const element = [...this.widget().elements].reverse().find((candidate) => {
+      const node = elementNodes.find(
+        (elementNode) => (elementNode as HTMLElement).dataset['widgetElementId'] === candidate.id,
+      ) as HTMLElement | undefined;
+      if (!node) return false;
+      const bounds = node.getBoundingClientRect();
+      return (
+        event.clientX >= bounds.left &&
+        event.clientX <= bounds.right &&
+        event.clientY >= bounds.top &&
+        event.clientY <= bounds.bottom
       );
+    });
+    return element;
   }
   private trackAt(position: number, tracks: GridTrack[], available: number, span: number): number {
     const gap = WIDGET_GAP;
