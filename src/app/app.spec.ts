@@ -14,10 +14,11 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render the widget studio', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, widget');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Compose a widget');
+    expect(compiled.querySelector('app-widget-renderer')).toBeTruthy();
   });
 });

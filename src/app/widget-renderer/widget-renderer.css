@@ -1,0 +1,26 @@
+:host { display: block; }
+.widget-shell { position: relative; overflow: hidden; border-radius: 18px; color: #f6f7fb; box-shadow: 0 18px 40px #10182c38; outline: none; }
+.widget-shell:focus-visible { box-shadow: 0 0 0 3px #77a6ff, 0 18px 40px #10182c38; }
+.widget-overlay { position: absolute; inset: 0; pointer-events: none; }
+.widget-grid { position: absolute; inset: 0; display: grid; gap: 8px; padding: 18px; }
+.widget-element { position: relative; min-width: 0; min-height: 0; display: flex; z-index: 1; border: 1px solid transparent; border-radius: 5px; cursor: grab; touch-action: none; }
+.widget-element.is-dragging { cursor: grabbing; opacity: .78; }
+.widget-element:hover { border-color: #ffffff80; background: #ffffff0d; }
+.widget-element.selected { border-color: #ffffff; box-shadow: 0 0 0 2px #f5c451; }
+.resize-handle { position: absolute; z-index: 5; display: block; background: #f5c451; border: 1px solid #17233c; border-radius: 3px; }
+.resize-right { top: 25%; right: -4px; width: 7px; height: 50%; cursor: ew-resize; }
+.resize-bottom { bottom: -4px; left: 25%; width: 50%; height: 7px; cursor: ns-resize; }
+.element-delete { position: absolute; top: -9px; right: -9px; z-index: 4; display: grid; place-items: center; width: 19px; height: 19px; padding: 0; border: 2px solid #17233c; border-radius: 50%; background: #e87984; color: #fff; font: 700 16px/14px Arial, sans-serif; cursor: pointer; }
+.element-delete:hover, .element-delete:focus-visible { background: #d85462; }
+.show-guides .widget-element { border-color: #f5c451b8; background: #f5c45112; }
+.widget-element.is-sensitive { filter: blur(7px); user-select: none; }
+.text-element { align-self: center; width: 100%; overflow: hidden; line-height: 1.2; }
+img { width: 100%; height: 100%; display: block; }
+.widget-toolbar { position: absolute; top: 8px; right: 8px; z-index: 3; display: flex; gap: 4px; opacity: 0; transform: translateY(-4px); transition: opacity 160ms ease, transform 160ms ease; }
+.widget-shell:hover .widget-toolbar, .widget-shell:focus-within .widget-toolbar { opacity: 1; transform: translateY(0); }
+.icon-button { width: 28px; height: 28px; border: 1px solid #ffffff38; border-radius: 8px; background: #10182ccc; color: white; cursor: pointer; font-size: 17px; }
+.icon-button:hover, .icon-button:focus-visible { background: #ffffff26; }
+.action-button { align-self: center; width: 100%; min-height: 30px; border-radius: 8px; padding: 6px 10px; font: 600 12px/1.1 inherit; cursor: pointer; }
+.action-button.solid { border: 0; background: #f5c451; color: #17233c; }
+.action-button.outline { border: 1px solid #f5c451; background: transparent; color: #f5c451; }
+.action-button.ghost { border: 0; background: transparent; color: #f5c451; }

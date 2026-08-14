@@ -1,0 +1,39 @@
+<section class="widget-shell" tabindex="0" [class.show-guides]="ctrlPressed()" [class.is-dragging]="draggingId()" [style.width.px]="widget().width" [style.height.px]="widget().height"
+  (pointermove)="moveDrag($event)" (pointerup)="endDrag()" (pointercancel)="endDrag()"
+  [style.background-color]="widget().background.color"
+  [style.background-image]="widget().background.imageUrl ? 'url(' + widget().background.imageUrl + ')' : 'none'"
+  [style.background-size]="widget().background.size" [style.background-position]="widget().background.position">
+  <div class="widget-overlay" [style.background-color]="widget().background.overlayColor || 'transparent'"></div>
+  <div class="widget-toolbar" aria-label="Widget actions">
+    @if (widget().refresh.enabled) {
+      <button type="button" class="icon-button" [attr.aria-label]="widget().refresh.label" (click)="refreshRequested.emit()">↻</button>
+    }
+    @if (hasSensitiveElements()) {
+      <button type="button" class="icon-button" [attr.aria-label]="sensitiveVisible() ? 'Hide sensitive data' : 'Show sensitive data'" (click)="toggleSensitive()">
+        {{ sensitiveVisible() ? '◉' : '◌' }}
+      </button>
+    }
+  </div>
+  <div class="widget-grid" [style.grid-template-rows]="gridRows()" [style.grid-template-columns]="gridColumns()">
+    @for (element of widget().elements; track element.id) {
+      <div class="widget-element" [class.is-sensitive]="element.sensitive && !sensitiveVisible()" [class.selected]="element.id === selectedId()" [class.is-dragging]="element.id === draggingId()" [style]="elementStyle(element)" (pointerdown)="startDrag(element, $event)" (click)="selectElement(element.id, $event)">
+        @if (ctrlPressed()) {
+          <button type="button" class="element-delete" aria-label="Delete element" (click)="deleteElement(element.id, $event)">×</button>
+        }
+        @if (element.id === selectedId()) {
+          <span class="resize-handle resize-right" role="presentation" (pointerdown)="startResize(element, 'column', $event)"></span>
+          <span class="resize-handle resize-bottom" role="presentation" (pointerdown)="startResize(element, 'row', $event)"></span>
+        }
+        @if (isText(element)) {
+          <span class="text-element" [style.color]="element.style.color" [style.font-size.px]="element.style.fontSize" [style.font-weight]="element.style.fontWeight"
+            [style.font-style]="element.style.italic ? 'italic' : 'normal'" [style.text-decoration]="element.style.underline ? 'underline' : 'none'"
+            [style.text-align]="element.style.align" [style.align-self]="element.style.verticalAlign" [style.white-space]="element.style.wrap ? 'normal' : 'nowrap'">{{ element.text }}</span>
+        } @else if (isImage(element)) {
+          <img [src]="element.imageUrl" [alt]="element.alt" [style.object-fit]="element.fit" [style.border-radius.px]="element.radius" />
+        } @else if (isButton(element)) {
+          <button type="button" class="action-button" [class.solid]="element.style === 'solid'" [class.outline]="element.style === 'outline'" (click)="actionRequested.emit({ element, event: $event })">{{ element.label }}</button>
+        }
+      </div>
+    }
+  </div>
+</section>
