@@ -1,6 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ColorPicker } from './color-picker/color-picker';
 import { StudioHeader } from './studio-header/studio-header';
 import { ElementPalette } from './element-palette/element-palette';
 import { LayerPanel } from './layer-panel/layer-panel';
@@ -8,6 +7,7 @@ import { CanvasWorkspace } from './canvas-workspace/canvas-workspace';
 import { OutputContract } from './output-contract/output-contract';
 import { PreviewDialog } from './preview-dialog/preview-dialog';
 import { ActionAlert, EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
+import { SettingsPanel } from './settings-panel/settings-panel';
 import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from 'widget-renderer';
 import { sampleWidget } from './sample-widget';
 
@@ -15,7 +15,6 @@ import { sampleWidget } from './sample-widget';
   selector: 'app-root',
   imports: [
     CommonModule,
-    ColorPicker,
     StudioHeader,
     ElementPalette,
     LayerPanel,
@@ -23,6 +22,7 @@ import { sampleWidget } from './sample-widget';
     OutputContract,
     PreviewDialog,
     EventAlertDialog,
+    SettingsPanel,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',

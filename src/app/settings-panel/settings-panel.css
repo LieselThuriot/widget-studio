@@ -1,0 +1,244 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.panel {
+  min-height: 408px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e2e7f0;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px #25365708;
+}
+.panel-heading,
+.widget-setting-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.eyebrow {
+  margin: 0;
+  color: #8794ad;
+  font:
+    700 10px/1.2 'DM Sans',
+    sans-serif;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+h2 {
+  margin: 0;
+  font:
+    700 17px/1.1 'DM Sans',
+    sans-serif;
+}
+.selected-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 18px 0 20px;
+  color: #51617c;
+  font-size: 11px;
+}
+.chip-icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #edf2fb;
+  color: #5874ab;
+  font-weight: 700;
+}
+.chip-id,
+.summary-value {
+  margin-left: auto;
+  color: #9aa5b7;
+  font-size: 10px;
+}
+label {
+  display: block;
+  margin: 13px 0;
+  color: #67738a;
+  font-size: 11px;
+  font-weight: 600;
+}
+input,
+textarea,
+select {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 9px;
+  border: 1px solid #dfe5ee;
+  border-radius: 6px;
+  background: #fff;
+  color: #34425c;
+  font: 12px inherit;
+}
+textarea {
+  min-height: 57px;
+  resize: vertical;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.formatting-tools {
+  display: flex;
+  gap: 5px;
+  margin: 14px 0;
+}
+.formatting-tools button {
+  width: 29px;
+  height: 28px;
+  border: 1px solid #dfe5ee;
+  border-radius: 6px;
+  background: #fff;
+  color: #63718a;
+  cursor: pointer;
+}
+.formatting-tools button.active {
+  border-color: #5874ab;
+  background: #edf2fb;
+  color: #36527f;
+}
+.text-layout-settings,
+.placement,
+.widget-setting-section {
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid #edf0f4;
+}
+.placement {
+  margin-top: 18px;
+}
+.track-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0 5px;
+}
+.small-add {
+  border: 0;
+  background: transparent;
+  color: #5874ab;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.track-row {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 25px;
+  gap: 6px;
+  align-items: center;
+  margin-top: 7px;
+}
+.track-row input,
+.track-row select {
+  margin-top: 0;
+}
+.track-row button {
+  width: 24px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: #bd8290;
+  cursor: pointer;
+}
+.anchor-field {
+  margin: 14px 0;
+  color: #67738a;
+  font-size: 11px;
+  font-weight: 600;
+}
+.anchor-control {
+  display: grid;
+  grid-template-columns: repeat(3, 28px);
+  width: max-content;
+  margin-top: 6px;
+  border: 1px solid #dfe5ee;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.anchor-control button {
+  width: 28px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid #dfe5ee;
+  border-bottom: 1px solid #dfe5ee;
+  background: #fff;
+  color: #63718a;
+  font-size: 17px;
+  cursor: pointer;
+}
+.anchor-control button:nth-child(3n) {
+  border-right: 0;
+}
+.anchor-control button:nth-child(n + 7) {
+  border-bottom: 0;
+}
+.anchor-control button.active {
+  background: #edf2fb;
+  color: #36527f;
+}
+.toggle-row {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0 2px;
+  border-top: 1px solid #edf0f4;
+}
+.toggle-row span:first-child {
+  flex: 1;
+}
+.toggle-row strong,
+.toggle-row small {
+  display: block;
+}
+.toggle-row small {
+  margin-top: 3px;
+  color: #9aa5b7;
+  font-size: 10px;
+  font-weight: 400;
+}
+.toggle-row input {
+  position: absolute;
+  opacity: 0;
+  width: 1px !important;
+}
+.toggle {
+  position: relative;
+  width: 29px;
+  height: 17px;
+  border-radius: 20px;
+  background: #cbd3df;
+}
+.toggle:after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff;
+}
+.toggle-row input:checked + .toggle {
+  background: #5874ab;
+}
+.toggle-row input:checked + .toggle:after {
+  transform: translateX(12px);
+}
+
+@media (max-width: 1050px) {
+  :host {
+    grid-column: 1 / -1;
+  }
+  .panel > *,
+  .widget-settings {
+    max-width: 500px;
+  }
+}

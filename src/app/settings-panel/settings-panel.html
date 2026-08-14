@@ -1,0 +1,417 @@
+<aside class="panel settings-panel" aria-label="Element settings">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Inspector</p>
+      <h2>Settings</h2>
+    </div>
+  </div>
+
+  @if (selectedElement(); as element) {
+    <div class="selected-chip">
+      <span class="chip-icon">{{ icon(element.type) }}</span
+      ><span>{{ element.type | titlecase }}</span>
+    </div>
+
+    @if (element.type === 'text') {
+      <label
+        >Content<textarea
+          [value]="element.text"
+          (input)="elementChanged.emit({ text: $any($event.target).value })"
+          >{{ element.text }}</textarea>
+      </label>
+      <div class="formatting-tools" aria-label="Text formatting">
+        <button
+          type="button"
+          [class.active]="element.style.fontWeight >= 600"
+          aria-label="Toggle bold"
+          (click)="
+            elementChanged.emit({
+              style: { ...element.style, fontWeight: element.style.fontWeight >= 600 ? 400 : 700 },
+            })
+          "
+        >
+          <strong>B</strong>
+        </button>
+        <button
+          type="button"
+          [class.active]="element.style.italic"
+          aria-label="Toggle italic"
+          (click)="
+            elementChanged.emit({ style: { ...element.style, italic: !element.style.italic } })
+          "
+        >
+          <em>I</em>
+        </button>
+        <button
+          type="button"
+          [class.active]="element.style.underline"
+          aria-label="Toggle underline"
+          (click)="
+            elementChanged.emit({
+              style: { ...element.style, underline: !element.style.underline },
+            })
+          "
+        >
+          <u>U</u>
+        </button>
+        <button
+          type="button"
+          [class.active]="element.style.strikethrough"
+          aria-label="Toggle strikethrough"
+          (click)="
+            elementChanged.emit({
+              style: { ...element.style, strikethrough: !element.style.strikethrough },
+            })
+          "
+        >
+          <s>S</s>
+        </button>
+      </div>
+      <label
+        >Size<input
+          type="number"
+          [value]="element.style.fontSize"
+          (input)="
+            elementChanged.emit({
+              style: { ...element.style, fontSize: +$any($event.target).value },
+            })
+          "
+      /></label>
+      <div class="text-layout-settings">
+        <label
+          >Horizontal alignment<select
+            [value]="element.style.align"
+            (change)="
+              elementChanged.emit({ style: { ...element.style, align: $any($event.target).value } })
+            "
+          >
+            <option value="left">Left</option>
+            <option value="center">Center</option>
+            <option value="right">Right</option>
+          </select></label
+        ><label class="toggle-row"
+          ><span>Wrap text</span
+          ><input
+            type="checkbox"
+            [checked]="element.style.wrap"
+            (change)="
+              elementChanged.emit({
+                style: { ...element.style, wrap: $any($event.target).checked },
+              })
+            " /><span class="toggle"></span
+        ></label>
+      </div>
+      <app-color-picker
+        label="Color"
+        [value]="element.style.color"
+        (changed)="elementChanged.emit({ style: { ...element.style, color: $event } })"
+      />
+    } @else if (element.type === 'image') {
+      <label
+        >Image source URL or base64 data<textarea
+          [value]="element.source"
+          (input)="elementChanged.emit({ source: $any($event.target).value })"
+        ></textarea>
+      </label>
+      <label
+        >Alt text<input
+          [value]="element.alt"
+          (input)="elementChanged.emit({ alt: $any($event.target).value })"
+      /></label>
+      <label
+        >Corner radius (px)<input
+          type="number"
+          min="0"
+          [value]="element.radius"
+          (input)="radiusChanged.emit(+$any($event.target).value)"
+      /></label>
+      <app-color-picker
+        label="Overlay color"
+        [value]="element.overlayColor"
+        [clearable]="true"
+        [withAlpha]="true"
+        (changed)="elementChanged.emit({ overlayColor: $event })"
+        (cleared)="elementChanged.emit({ overlayColor: undefined })"
+      />
+      <label
+        >Fit<select
+          [value]="element.fit"
+          (change)="elementChanged.emit({ fit: $any($event.target).value })"
+        >
+          <option value="cover">Cover</option>
+          <option value="contain">Contain</option>
+          <option value="fill">Fill</option>
+        </select></label
+      >
+    } @else {
+      <label
+        >Label<input
+          [value]="element.label"
+          (input)="elementChanged.emit({ label: $any($event.target).value })"
+      /></label>
+      <div class="field-row">
+        <label
+          >Method<select
+            [value]="element.method"
+            (change)="elementChanged.emit({ method: $any($event.target).value })"
+          >
+            <option value="get">GET</option>
+            <option value="post">POST</option>
+          </select></label
+        ><label
+          >Style<select
+            [value]="element.style"
+            (change)="elementChanged.emit({ style: $any($event.target).value })"
+          >
+            <option value="solid">Solid</option>
+            <option value="outline">Outline</option>
+          </select></label
+        >
+      </div>
+      <label
+        >Request URL<input
+          [value]="element.url"
+          (input)="elementChanged.emit({ url: $any($event.target).value })"
+      /></label>
+    }
+
+    <div class="anchor-field">
+      <span>Anchor</span>
+      <div class="anchor-control" role="group" aria-label="Element anchor">
+        @for (anchor of anchors; track anchor.value) {
+          <button
+            type="button"
+            [class.active]="element.anchor === anchor.value"
+            [attr.aria-label]="anchor.value"
+            (click)="elementChanged.emit({ anchor: anchor.value })"
+          >
+            {{ anchor.icon }}
+          </button>
+        }
+      </div>
+    </div>
+    <label class="toggle-row"
+      ><span
+        ><strong>Sensitive content</strong><small>Blur until the eye control is used</small></span
+      ><input
+        type="checkbox"
+        [checked]="element.sensitive"
+        (change)="elementChanged.emit({ sensitive: $any($event.target).checked })" /><span
+        class="toggle"
+      ></span
+    ></label>
+    <div class="placement">
+      <p class="eyebrow">Grid placement</p>
+      <div class="field-row">
+        <label
+          >Row<input
+            type="number"
+            min="1"
+            [max]="widget().rows.length"
+            [value]="element.row + 1"
+            (input)="
+              placementChanged.emit({ kind: 'row', value: +$any($event.target).value })
+            " /></label
+        ><label
+          >Column<input
+            type="number"
+            min="1"
+            [max]="widget().columns.length"
+            [value]="element.column + 1"
+            (input)="placementChanged.emit({ kind: 'column', value: +$any($event.target).value })"
+        /></label>
+      </div>
+      <div class="field-row">
+        <label
+          >Row span<input
+            type="number"
+            min="1"
+            [max]="widget().rows.length - element.row"
+            [value]="element.rowSpan"
+            (input)="
+              spanChanged.emit({ kind: 'rowSpan', value: +$any($event.target).value })
+            " /></label
+        ><label
+          >Column span<input
+            type="number"
+            min="1"
+            [max]="widget().columns.length - element.column"
+            [value]="element.columnSpan"
+            (input)="spanChanged.emit({ kind: 'columnSpan', value: +$any($event.target).value })"
+        /></label>
+      </div>
+    </div>
+  } @else {
+    <div class="widget-settings">
+      <div class="selected-chip">
+        <span class="chip-icon">W</span><span>Widget</span
+        ><span class="chip-id">{{ widget().size === 'wide' ? '530' : '265' }} × 245</span>
+      </div>
+      <section class="widget-setting-section">
+        <div class="widget-setting-section-heading">
+          <span class="eyebrow">Grid</span
+          ><span class="summary-value"
+            >{{ widget().rows.length }} rows · {{ widget().columns.length }} columns</span
+          >
+        </div>
+        <label
+          >Widget size<select
+            [value]="widget().size"
+            (change)="widgetChanged.emit({ size: $any($event.target).value })"
+          >
+            <option value="square">Square · 265 × 245</option>
+            <option value="wide">Wide · 530 × 245</option>
+          </select></label
+        >
+        @for (kind of trackKinds; track kind) {
+          <p class="eyebrow track-heading">
+            {{ kind | titlecase }}
+            <button type="button" class="small-add" (click)="trackAdded.emit($any(kind))">
+              + Add
+            </button>
+          </p>
+          @for (track of tracks(kind); track $index) {
+            <div class="track-row">
+              <input
+                type="number"
+                min="1"
+                [value]="track.size"
+                (input)="
+                  trackChanged.emit({
+                    kind: $any(kind),
+                    index: $index,
+                    patch: { size: +$any($event.target).value },
+                  })
+                "
+              /><select
+                [value]="track.unit"
+                (change)="
+                  trackChanged.emit({
+                    kind: $any(kind),
+                    index: $index,
+                    patch: { unit: $any($event.target).value },
+                  })
+                "
+              >
+                <option value="star">Star</option>
+                <option value="pixel">Pixel</option>
+                <option value="auto">Auto</option></select
+              ><button
+                type="button"
+                (click)="trackRemoved.emit({ kind: $any(kind), index: $index })"
+                [attr.aria-label]="'Remove ' + kind.slice(0, -1)"
+              >
+                ×
+              </button>
+            </div>
+          }
+        }
+      </section>
+      <section class="widget-setting-section">
+        <div class="widget-setting-section-heading">
+          <span class="eyebrow">Background</span
+          ><span class="summary-value">{{
+            widget().background.image ? 'Image' : widget().background.color
+          }}</span>
+        </div>
+        <app-color-picker
+          label="Color"
+          [value]="widget().background.color"
+          [clearable]="true"
+          (changed)="widgetChanged.emit({ background: { ...widget().background, color: $event } })"
+          (cleared)="
+            widgetChanged.emit({ background: { ...widget().background, color: undefined } })
+          "
+        /><app-color-picker
+          label="Overlay color"
+          [value]="widget().background.overlayColor"
+          [clearable]="true"
+          [withAlpha]="true"
+          (changed)="
+            widgetChanged.emit({ background: { ...widget().background, overlayColor: $event } })
+          "
+          (cleared)="
+            widgetChanged.emit({ background: { ...widget().background, overlayColor: undefined } })
+          "
+        /><label
+          >Image URL or base64 data<textarea
+            [value]="widget().background.image || ''"
+            (input)="
+              widgetChanged.emit({
+                background: { ...widget().background, image: $any($event.target).value },
+              })
+            "
+          ></textarea></label
+        ><label
+          >Size<select
+            [value]="widget().background.size"
+            (change)="
+              widgetChanged.emit({
+                background: { ...widget().background, size: $any($event.target).value },
+              })
+            "
+          >
+            <option value="cover">Cover</option>
+            <option value="contain">Contain</option>
+            <option value="auto">Auto</option>
+          </select></label
+        ><label class="toggle-row"
+          ><span
+            ><strong>Repeat image</strong
+            ><small>Tile the background image across the widget</small></span
+          ><input
+            type="checkbox"
+            [checked]="widget().background.repeat"
+            (change)="
+              widgetChanged.emit({
+                background: { ...widget().background, repeat: $any($event.target).checked },
+              })
+            " /><span class="toggle"></span
+        ></label>
+        <div class="anchor-field">
+          <span>Anchor</span>
+          <div class="anchor-control" role="group" aria-label="Background image anchor">
+            @for (anchor of anchors; track anchor.value) {
+              <button
+                type="button"
+                [class.active]="widget().background.anchor === anchor.value"
+                [attr.aria-label]="anchor.value"
+                (click)="setAnchor(anchor.value)"
+              >
+                {{ anchor.icon }}
+              </button>
+            }
+          </div>
+        </div>
+      </section>
+      <section class="widget-setting-section">
+        <div class="widget-setting-section-heading">
+          <span class="eyebrow">Refresh</span
+          ><span class="summary-value">{{
+            widget().refresh.enabled ? 'Enabled' : 'Disabled'
+          }}</span>
+        </div>
+        <label class="toggle-row"
+          ><span
+            ><strong>Refresh control</strong><small>Show refresh in the hover toolbar</small></span
+          ><input
+            type="checkbox"
+            [checked]="widget().refresh.enabled"
+            (change)="
+              widgetChanged.emit({
+                refresh: { ...widget().refresh, enabled: $any($event.target).checked },
+              })
+            " /><span class="toggle"></span></label
+        ><label
+          >Accessible label<input
+            [value]="widget().refresh.label"
+            (input)="
+              widgetChanged.emit({
+                refresh: { ...widget().refresh, label: $any($event.target).value },
+              })
+            "
+        /></label>
+      </section>
+    </div>
+  }
+</aside>
