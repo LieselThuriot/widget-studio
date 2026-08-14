@@ -31,21 +31,57 @@ export class WidgetRenderer {
   private activePointerId: number | null = null;
   private resizing: { id: string; axis: 'row' | 'column' } | null = null;
 
-  readonly hasSensitiveElements = computed(() => this.widget().elements.some((element) => element.sensitive));
-  readonly gridRows = computed(() => this.widget().rows.map((track) => `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`).join(' '));
-  readonly gridColumns = computed(() => this.widget().columns.map((track) => `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`).join(' '));
-  readonly widgetWidth = computed(() => this.widget().size === 'wide' ? 530 : 265);
+  readonly hasSensitiveElements = computed(() =>
+    this.widget().elements.some((element) => element.sensitive),
+  );
+  readonly gridRows = computed(() =>
+    this.widget()
+      .rows.map(
+        (track) =>
+          `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`,
+      )
+      .join(' '),
+  );
+  readonly gridColumns = computed(() =>
+    this.widget()
+      .columns.map(
+        (track) =>
+          `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`,
+      )
+      .join(' '),
+  );
+  readonly widgetWidth = computed(() => (this.widget().size === 'wide' ? 530 : 265));
   readonly backgroundImage = computed(() => {
     const image = this.widget().background.image;
     return image ? `url("${image}")` : 'none';
   });
 
-  protected isText(element: WidgetElement): element is TextElement { return element.type === 'text'; }
-  protected isImage(element: WidgetElement): element is ImageElement { return element.type === 'image'; }
-  protected isButton(element: WidgetElement): element is ButtonElement { return element.type === 'button'; }
-  protected horizontalAnchor(anchor: string): string { return anchor.endsWith('left') ? 'flex-start' : anchor.endsWith('right') ? 'flex-end' : 'center'; }
-  protected verticalAnchor(anchor: string): string { return anchor.startsWith('top') ? 'flex-start' : anchor.startsWith('bottom') ? 'flex-end' : 'center'; }
-  protected toggleSensitive(): void { this.sensitiveVisible.update((visible) => !visible); }
+  protected isText(element: WidgetElement): element is TextElement {
+    return element.type === 'text';
+  }
+  protected isImage(element: WidgetElement): element is ImageElement {
+    return element.type === 'image';
+  }
+  protected isButton(element: WidgetElement): element is ButtonElement {
+    return element.type === 'button';
+  }
+  protected horizontalAnchor(anchor: string): string {
+    return anchor.endsWith('left')
+      ? 'flex-start'
+      : anchor.endsWith('right')
+        ? 'flex-end'
+        : 'center';
+  }
+  protected verticalAnchor(anchor: string): string {
+    return anchor.startsWith('top')
+      ? 'flex-start'
+      : anchor.startsWith('bottom')
+        ? 'flex-end'
+        : 'center';
+  }
+  protected toggleSensitive(): void {
+    this.sensitiveVisible.update((visible) => !visible);
+  }
   protected selectElement(id: string, event: Event): void {
     event.stopPropagation();
     this.elementSelected.emit(id);
@@ -56,12 +92,20 @@ export class WidgetRenderer {
   protected openContextMenu(element: WidgetElement, event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    const bounds = (event.currentTarget as HTMLElement).closest('.widget-shell')?.getBoundingClientRect();
+    const bounds = (event.currentTarget as HTMLElement)
+      .closest('.widget-shell')
+      ?.getBoundingClientRect();
     if (!bounds) return;
     this.elementSelected.emit(element.id);
-    this.contextMenu.set({ id: element.id, x: event.clientX - bounds.left, y: event.clientY - bounds.top });
+    this.contextMenu.set({
+      id: element.id,
+      x: event.clientX - bounds.left,
+      y: event.clientY - bounds.top,
+    });
   }
-  protected closeContextMenu(): void { this.contextMenu.set(null); }
+  protected closeContextMenu(): void {
+    this.contextMenu.set(null);
+  }
   protected changeStack(action: 'up' | 'down' | 'front' | 'back', event: Event): void {
     event.stopPropagation();
     const menu = this.contextMenu();
@@ -93,14 +137,29 @@ export class WidgetRenderer {
   }
   protected moveDrag(event: PointerEvent): void {
     if (this.resizing && event.pointerId === this.activePointerId) {
-      const element = this.widget().elements.find((candidate) => candidate.id === this.resizing?.id);
+      const element = this.widget().elements.find(
+        (candidate) => candidate.id === this.resizing?.id,
+      );
       const widgetRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
       if (!element) return;
       if (this.resizing.axis === 'column') {
-        const column = this.trackAt(event.clientX - widgetRect.left - 18, this.widget().columns, this.widgetWidth() - 36, 1);
-        this.elementResized.emit({ id: element.id, columnSpan: Math.max(1, column - element.column + 1) });
+        const column = this.trackAt(
+          event.clientX - widgetRect.left - 18,
+          this.widget().columns,
+          this.widgetWidth() - 36,
+          1,
+        );
+        this.elementResized.emit({
+          id: element.id,
+          columnSpan: Math.max(1, column - element.column + 1),
+        });
       } else {
-      const row = this.trackAt(event.clientY - widgetRect.top - 18, this.widget().rows, WidgetRenderer.widgetHeight - 36, 1);
+        const row = this.trackAt(
+          event.clientY - widgetRect.top - 18,
+          this.widget().rows,
+          WidgetRenderer.widgetHeight - 36,
+          1,
+        );
         this.elementResized.emit({ id: element.id, rowSpan: Math.max(1, row - element.row + 1) });
       }
       return;
@@ -112,8 +171,18 @@ export class WidgetRenderer {
     if (!element) return;
     const pointX = event.clientX - widgetRect.left - this.dragOffset.x - 18;
     const pointY = event.clientY - widgetRect.top - this.dragOffset.y - 18;
-    const column = this.trackAt(pointX, this.widget().columns, this.widgetWidth() - 36, element.columnSpan);
-    const row = this.trackAt(pointY, this.widget().rows, WidgetRenderer.widgetHeight - 36, element.rowSpan);
+    const column = this.trackAt(
+      pointX,
+      this.widget().columns,
+      this.widgetWidth() - 36,
+      element.columnSpan,
+    );
+    const row = this.trackAt(
+      pointY,
+      this.widget().rows,
+      WidgetRenderer.widgetHeight - 36,
+      element.rowSpan,
+    );
     this.elementMoved.emit({ id, row, column });
   }
   protected endDrag(event?: PointerEvent): void {
@@ -122,24 +191,42 @@ export class WidgetRenderer {
     this.resizing = null;
     this.activePointerId = null;
   }
-  protected trackAt(position: number, tracks: Widget['columns'], available: number, span: number): number {
+  protected trackAt(
+    position: number,
+    tracks: Widget['columns'],
+    available: number,
+    span: number,
+  ): number {
     const gap = 8;
     const totalGaps = Math.max(0, tracks.length - 1) * gap;
-    const fixed = tracks.filter((track) => track.unit === 'pixel').reduce((sum, track) => sum + track.size, 0);
-    const starWeight = tracks.filter((track) => track.unit === 'star').reduce((sum, track) => sum + track.size, 0);
+    const fixed = tracks
+      .filter((track) => track.unit === 'pixel')
+      .reduce((sum, track) => sum + track.size, 0);
+    const starWeight = tracks
+      .filter((track) => track.unit === 'star')
+      .reduce((sum, track) => sum + track.size, 0);
     const flexible = Math.max(0, available - totalGaps - fixed);
     let cursor = 0;
     let index = 0;
     for (const track of tracks) {
-      const size = track.unit === 'pixel' ? track.size : track.unit === 'star' ? flexible * track.size / Math.max(1, starWeight) : flexible / Math.max(1, tracks.length);
+      const size =
+        track.unit === 'pixel'
+          ? track.size
+          : track.unit === 'star'
+            ? (flexible * track.size) / Math.max(1, starWeight)
+            : flexible / Math.max(1, tracks.length);
       if (position < cursor + size / 2) break;
       cursor += size + gap;
       index++;
     }
     return Math.max(0, Math.min(index, tracks.length - span));
   }
-  protected onKeyDown(event: KeyboardEvent): void { if (event.key === 'Control') this.ctrlPressed.set(true); }
-  protected onKeyUp(event: KeyboardEvent): void { if (event.key === 'Control') this.ctrlPressed.set(false); }
+  protected onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Control') this.ctrlPressed.set(true);
+  }
+  protected onKeyUp(event: KeyboardEvent): void {
+    if (event.key === 'Control') this.ctrlPressed.set(false);
+  }
   protected elementStyle(element: WidgetElement): Record<string, string> {
     return {
       'grid-row': `${element.row + 1} / span ${element.rowSpan}`,

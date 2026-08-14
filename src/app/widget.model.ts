@@ -3,9 +3,15 @@ export type WidgetElementType = 'text' | 'image' | 'button';
 export type ButtonMethod = 'get' | 'post';
 export type WidgetSize = 'square' | 'wide';
 export type ImageAnchor =
-  | 'top left' | 'top center' | 'top right'
-  | 'center left' | 'center' | 'center right'
-  | 'bottom left' | 'bottom center' | 'bottom right';
+  | 'top left'
+  | 'top center'
+  | 'top right'
+  | 'center left'
+  | 'center'
+  | 'center right'
+  | 'bottom left'
+  | 'bottom center'
+  | 'bottom right';
 
 export interface GridTrack {
   size: number;
@@ -116,20 +122,54 @@ export const sampleWidget: Widget = {
   refresh: { enabled: true, label: 'Refresh widget' },
   elements: [
     {
-      id: 'headline', type: 'text', row: 0, column: 0, rowSpan: 1, columnSpan: 3, sensitive: false, anchor: 'top left',
-      text: 'Make space for what matters', style: textStyle({ fontSize: 19, fontWeight: 700 }),
+      id: 'headline',
+      type: 'text',
+      row: 0,
+      column: 0,
+      rowSpan: 1,
+      columnSpan: 3,
+      sensitive: false,
+      anchor: 'top left',
+      text: 'Make space for what matters',
+      style: textStyle({ fontSize: 19, fontWeight: 700 }),
     },
     {
-      id: 'message', type: 'text', row: 1, column: 0, rowSpan: 1, columnSpan: 2, sensitive: false, anchor: 'top left',
-      text: 'Your next chapter starts here.', style: textStyle({ fontSize: 14, fontWeight: 600 }),
+      id: 'message',
+      type: 'text',
+      row: 1,
+      column: 0,
+      rowSpan: 1,
+      columnSpan: 2,
+      sensitive: false,
+      anchor: 'top left',
+      text: 'Your next chapter starts here.',
+      style: textStyle({ fontSize: 14, fontWeight: 600 }),
     },
     {
-      id: 'caption', type: 'text', row: 2, column: 0, rowSpan: 1, columnSpan: 2, sensitive: true, anchor: 'top left',
-      text: 'Personalized for your profile', style: textStyle({ fontSize: 11, color: '#d4dbea' }),
+      id: 'caption',
+      type: 'text',
+      row: 2,
+      column: 0,
+      rowSpan: 1,
+      columnSpan: 2,
+      sensitive: true,
+      anchor: 'top left',
+      text: 'Personalized for your profile',
+      style: textStyle({ fontSize: 11, color: '#d4dbea' }),
     },
     {
-      id: 'details', type: 'button', row: 2, column: 2, rowSpan: 1, columnSpan: 1, sensitive: false, anchor: 'top left',
-      label: 'Explore', method: 'get', url: '/overview', style: 'solid',
+      id: 'details',
+      type: 'button',
+      row: 2,
+      column: 2,
+      rowSpan: 1,
+      columnSpan: 1,
+      sensitive: false,
+      anchor: 'top left',
+      label: 'Explore',
+      method: 'get',
+      url: '/overview',
+      style: 'solid',
     },
   ],
 };

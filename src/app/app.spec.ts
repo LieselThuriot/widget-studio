@@ -26,7 +26,9 @@ describe('App', () => {
   it('should omit internal element IDs from the output contract', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const contract = JSON.parse(fixture.nativeElement.querySelector('pre')?.textContent ?? '{}') as {
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as {
       elements: Array<Record<string, unknown>>;
     };
 
@@ -36,12 +38,18 @@ describe('App', () => {
   it('should include left text alignment in the output contract', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const contract = JSON.parse(fixture.nativeElement.querySelector('pre')?.textContent ?? '{}') as {
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as {
       elements: Array<Record<string, unknown>>;
     };
     const textElements = contract.elements.filter((element) => element['type'] === 'text');
 
-    expect(textElements.every((element) => (element['style'] as Record<string, unknown>)['align'] === 'left')).toBe(true);
+    expect(
+      textElements.every(
+        (element) => (element['style'] as Record<string, unknown>)['align'] === 'left',
+      ),
+    ).toBe(true);
   });
 
   it('should not show internal element IDs in the inspector', async () => {
