@@ -25,6 +25,7 @@ export class WidgetRenderer {
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
+  private readonly failedImages = signal<Record<string, string>>({});
   private hydratedWidget: Widget | undefined;
   readonly validationIssues = computed<WidgetValidationIssue[]>(() => {
     const result = safeParseWidgetInput(this.widget());
@@ -72,6 +73,19 @@ export class WidgetRenderer {
   }
   protected elementAlt(element: ImageElement): string {
     return this.isElementSensitive(element) ? '' : element.alt;
+  }
+  protected imageFailed(element: ImageElement): boolean {
+    return this.failedImages()[element.id] === element.source;
+  }
+  protected imageLoadFailed(element: ImageElement): void {
+    this.failedImages.update((failed) => ({ ...failed, [element.id]: element.source }));
+  }
+  protected retryImage(element: ImageElement): void {
+    this.failedImages.update((failed) => {
+      const next = { ...failed };
+      delete next[element.id];
+      return next;
+    });
   }
   protected horizontalAnchor(anchor: string): string {
     return anchor.endsWith('left')

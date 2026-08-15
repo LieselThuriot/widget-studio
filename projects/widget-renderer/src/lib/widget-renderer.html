@@ -91,13 +91,21 @@
               >{{ element.text }}</span
             >
           } @else if (isImage(element)) {
-            <img
-              [src]="element.source"
-              [alt]="elementAlt(element)"
-              [style.object-fit]="element.fit"
-              [style.object-position]="element.grid.anchor ?? 'center'"
-              [style.border-radius.px]="element.radius"
-            />
+            @if (imageFailed(element)) {
+              <div class="image-fallback" role="status">
+                <span>Image unavailable: {{ elementAlt(element) || 'Sensitive image' }}</span>
+                <button type="button" (click)="retryImage(element)">Retry image</button>
+              </div>
+            } @else {
+              <img
+                [src]="element.source"
+                [alt]="elementAlt(element)"
+                [style.object-fit]="element.fit"
+                [style.object-position]="element.grid.anchor ?? 'center'"
+                [style.border-radius.px]="element.radius"
+                (error)="imageLoadFailed(element)"
+              />
+            }
             <span
               class="image-overlay"
               [style.background-color]="element.overlayColor || 'transparent'"

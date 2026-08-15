@@ -87,6 +87,27 @@ img {
   pointer-events: none;
   border-radius: inherit;
 }
+.image-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  color: #d4dbea;
+  text-align: center;
+  background: rgb(15 23 42 / 0.8);
+}
+.image-fallback button {
+  padding: 4px 8px;
+  color: inherit;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid currentcolor;
+  border-radius: 4px;
+}
 .widget-toolbar {
   position: absolute;
   top: 8px;
