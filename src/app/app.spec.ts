@@ -80,6 +80,41 @@ describe('App', () => {
     ).toBe(true);
   });
 
+  it('should keep dragging visible renderer elements', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const target = fixture.nativeElement.querySelector(
+      'widget-renderer [data-widget-element-id="headline"]',
+    ) as HTMLElement;
+    const canvas = fixture.nativeElement.querySelector('.editor-canvas') as HTMLElement;
+    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 0, 265, 245));
+    (canvas as HTMLElement & { setPointerCapture: (pointerId: number) => void }).setPointerCapture =
+      vi.fn();
+    vi.spyOn(target, 'getBoundingClientRect').mockReturnValue(new DOMRect(18, 18, 100, 30));
+
+    target.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        bubbles: true,
+        button: 0,
+        clientX: 20,
+        clientY: 20,
+        pointerId: 1,
+      }),
+    );
+    canvas.dispatchEvent(
+      new PointerEvent('pointermove', {
+        bubbles: true,
+        clientX: 90,
+        clientY: 90,
+        pointerId: 1,
+      }),
+    );
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.editor-element.is-dragging')).toBeTruthy();
+  });
+
   it('should add an element from the palette', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
@@ -105,7 +140,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const target = fixture.nativeElement.querySelector(
-      '[data-widget-element-id="headline"]',
+      'widget-renderer [data-widget-element-id="headline"] .element-content',
     ) as HTMLElement;
     target.dispatchEvent(
       new MouseEvent('contextmenu', { bubbles: true, clientX: 10, clientY: 10 }),

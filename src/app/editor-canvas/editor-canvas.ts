@@ -77,7 +77,7 @@ export class EditorCanvas {
     this.startDrag(element, event);
   }
   protected pointerContextMenu(event: MouseEvent): void {
-    const element = this.elementFromEvent(event);
+    const element = this.elementFromEvent(event) ?? this.elementAtPoint(event);
     if (element) this.openContextMenu(element, event);
   }
   protected selectElement(id: string, event: Event): void {
