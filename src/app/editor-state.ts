@@ -52,7 +52,9 @@ export function updateElementPosition(
   value: number,
 ): Widget {
   const maximum = kind === 'row' ? widget.rows.length - 1 : widget.columns.length - 1;
-  const position = Math.max(0, Math.min(maximum, Math.round(value) - 1));
+  const position = Number.isFinite(value)
+    ? Math.max(0, Math.min(maximum, Math.round(value) - 1))
+    : 0;
   return patchElement(widget, id, { [kind]: position });
 }
 

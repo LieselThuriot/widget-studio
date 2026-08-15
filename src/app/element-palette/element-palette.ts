@@ -86,6 +86,55 @@ export interface PaletteItem {
       color: #a6b0c0;
       font-size: 18px;
     }
+    .palette-list {
+      display: grid;
+      gap: 8px;
+    }
+    .palette-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e4e8f0;
+      border-radius: 9px;
+      background: #fff;
+      color: #25324b;
+      text-align: left;
+      cursor: pointer;
+    }
+    .palette-item:hover,
+    .palette-item:focus-visible {
+      border-color: #a8bae1;
+      background: #f8faff;
+    }
+    .palette-icon {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: #edf2fb;
+      color: #5874ab;
+      font-weight: 700;
+    }
+    .palette-item strong,
+    .palette-item small {
+      display: block;
+    }
+    .palette-item strong {
+      font-size: 12px;
+    }
+    .palette-item small {
+      margin-top: 2px;
+      color: #8b96a9;
+      font-size: 10px;
+    }
+    .add {
+      margin-left: auto;
+      color: #a6b0c0;
+      font-size: 18px;
+    }
   `,
 })
 export class ElementPalette {

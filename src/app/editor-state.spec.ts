@@ -62,4 +62,18 @@ describe('editor state transformations', () => {
     expect(updated.columns).toHaveLength(2);
     expect(updated.elements.find((element) => element.id === 'details')?.column).toBe(1);
   });
+
+  it('falls back to the first grid position for invalid coordinates', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = updateElementPosition(widget, 'headline', 'row', Number.NaN);
+
+    expect(updated.elements.find((element) => element.id === 'headline')?.row).toBe(0);
+  });
+
+  it('leaves the widget unchanged for unknown operations', () => {
+    const widget = structuredClone(sampleWidget);
+
+    expect(changeElementStack(widget, { id: 'missing', action: 'front' })).toBe(widget);
+    expect(removeTrack(widget, 'rows', 99).rows).toHaveLength(widget.rows.length);
+  });
 });

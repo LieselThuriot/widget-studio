@@ -93,6 +93,68 @@ import { WidgetElement } from 'widget-renderer';
       border-radius: 7px;
       cursor: grab;
     }
+    .layer:active {
+      cursor: grabbing;
+    }
+    .layer:hover,
+    .layer.selected {
+      background: #edf2fb;
+    }
+    .layer-select {
+      display: flex;
+      flex: 1;
+      gap: 8px;
+      align-items: center;
+      padding: 5px;
+      border: 0;
+      background: transparent;
+      color: #66738b;
+      text-align: left;
+      font-size: 11px;
+      cursor: inherit;
+    }
+    .layer.selected .layer-select {
+      color: #36527f;
+    }
+    .layer-select span {
+      width: 18px;
+      color: #a2aec2;
+      font-weight: 700;
+    }
+    .layer-select .layer-grip {
+      width: 10px;
+      color: #c0c8d5;
+      font-size: 13px;
+      letter-spacing: -4px;
+    }
+    .layer-delete {
+      display: none;
+      width: 22px;
+      height: 22px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: #bd8290;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .layer:hover .layer-delete,
+    .layer:focus-within .layer-delete {
+      display: block;
+    }
+    .layer-delete:hover,
+    .layer-delete:focus-visible {
+      background: #fbecef;
+      color: #b64d60;
+    }
+    .layer {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 3px;
+      border-radius: 7px;
+      cursor: grab;
+    }
     .layer:hover,
     .layer.selected {
       background: #edf2fb;

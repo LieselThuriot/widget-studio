@@ -80,6 +80,46 @@ describe('App', () => {
     ).toBe(true);
   });
 
+  it('should add an element from the palette', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const text = fixture.nativeElement.querySelector('.palette-item') as HTMLButtonElement;
+    text.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(5);
+    expect(fixture.nativeElement.querySelector('.selected-chip')?.textContent).toContain('Text');
+  });
+
+  it('should delete a layer from the layer panel', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const deleteButton = fixture.nativeElement.querySelector('.layer-delete') as HTMLButtonElement;
+    deleteButton.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(3);
+  });
+
+  it('should apply a context-menu stack action', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const target = fixture.nativeElement.querySelector(
+      '[data-widget-element-id="headline"]',
+    ) as HTMLElement;
+    target.dispatchEvent(
+      new MouseEvent('contextmenu', { bubbles: true, clientX: 10, clientY: 10 }),
+    );
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('[role="menuitem"]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: { type: string }[] };
+    expect(contract.elements.at(1)?.type).toBe('text');
+  });
+
   it('should select the widget when clicking an empty grid gap', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
@@ -168,6 +208,23 @@ describe('App', () => {
     alertDialog.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
 
     expect(document.activeElement).toBe(closeButton);
+  });
+
+  it('should close dialogs from the backdrop and restore focus', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const previewButton = fixture.nativeElement.querySelector(
+      '.preview-button',
+    ) as HTMLButtonElement;
+    previewButton.focus();
+    previewButton.click();
+    fixture.detectChanges();
+    const overlay = fixture.nativeElement.querySelector('.preview-overlay') as HTMLElement;
+    overlay.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.preview-overlay')).toBeNull();
+    expect(document.activeElement).toBe(previewButton);
   });
 
   it('should focus and restore focus for the event alert dialog', async () => {
