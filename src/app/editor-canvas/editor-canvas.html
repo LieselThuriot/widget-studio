@@ -26,69 +26,22 @@
     [style.grid-template-columns]="gridColumns()"
   >
     @for (element of widget().elements; track element.id) {
-      <div
-        class="editor-element"
-        tabindex="0"
-        [attr.aria-label]="elementLabel(element)"
-        [attr.aria-selected]="element.id === selectedId()"
-        [attr.data-widget-element-id]="element.id"
-        [class.selected]="element.id === selectedId()"
-        [class.is-dragging]="element.id === draggingId()"
-        [style]="elementStyle(element)"
-      >
-        @if (ctrlPressed()) {
-          <button
-            type="button"
-            class="element-delete"
-            aria-label="Delete element"
-            (click)="deleteElement(element.id, $event)"
-          >
-            ×
-          </button>
-        }
-        @if (element.id === selectedId()) {
-          <span
-            class="resize-handle resize-right"
-            role="presentation"
-            (pointerdown)="startResize(element, 'column', $event)"
-          ></span>
-          <span
-            class="resize-handle resize-bottom"
-            role="presentation"
-            (pointerdown)="startResize(element, 'row', $event)"
-          ></span>
-        }
-      </div>
+      <app-canvas-element-overlay
+        [element]="element"
+        [selected]="element.id === selectedId()"
+        [dragging]="element.id === draggingId()"
+        [showGuides]="ctrlPressed()"
+        (deleteRequested)="deleteElement(element.id, $event)"
+        (resizeStarted)="startResize(element, $event.axis, $event.event)"
+      />
     }
   </div>
   @if (contextMenu(); as menu) {
-    <div
-      class="element-context-menu"
-      [style.left.px]="menu.x"
-      [style.top.px]="menu.y"
-      role="menu"
-      aria-label="Element layer order"
-      (pointerdown)="$event.stopPropagation()"
-    >
-      <button type="button" role="menuitem" (click)="changeStack('up', $event)">Move up</button
-      ><button type="button" role="menuitem" (click)="changeStack('down', $event)">
-        Move down
-      </button>
-      <div class="menu-divider"></div>
-      <button type="button" role="menuitem" (click)="changeStack('front', $event)">
-        Bring to front</button
-      ><button type="button" role="menuitem" (click)="changeStack('back', $event)">
-        Send to back
-      </button>
-      <div class="menu-divider"></div>
-      <button
-        type="button"
-        class="menu-delete"
-        role="menuitem"
-        (click)="deleteElement(menu.id, $event)"
-      >
-        Delete
-      </button>
-    </div>
+    <app-canvas-context-menu
+      [menu]="menu"
+      (stackChanged)="changeStack($event)"
+      (deleteRequested)="deleteElement(menu.id)"
+      (closed)="closeContextMenu()"
+    />
   }
 </div>

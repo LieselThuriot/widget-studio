@@ -1,0 +1,34 @@
+<div
+  class="editor-element"
+  tabindex="0"
+  [attr.aria-label]="label(element())"
+  [attr.aria-selected]="selected()"
+  [attr.data-widget-element-id]="element().id"
+  [class.selected]="selected()"
+  [class.is-dragging]="dragging()"
+  [class.show-guides]="showGuides()"
+  [style]="style(element())"
+>
+  @if (showGuides()) {
+    <button
+      type="button"
+      class="element-delete"
+      aria-label="Delete element"
+      (click)="deleteRequested.emit($event)"
+    >
+      ×
+    </button>
+  }
+  @if (selected()) {
+    <span
+      class="resize-handle resize-right"
+      role="presentation"
+      (pointerdown)="resizeStarted.emit({ axis: 'column', event: $event })"
+    ></span>
+    <span
+      class="resize-handle resize-bottom"
+      role="presentation"
+      (pointerdown)="resizeStarted.emit({ axis: 'row', event: $event })"
+    ></span>
+  }
+</div>

@@ -1,0 +1,46 @@
+:host {
+  display: contents;
+}
+
+.element-context-menu {
+  position: absolute;
+  z-index: 10;
+  min-width: 145px;
+  padding: 5px;
+  transform: translate(-4px, -4px);
+  border: 1px solid #ffffff2e;
+  border-radius: 9px;
+  background: #17233cf5;
+  box-shadow: 0 10px 24px #10182c66;
+}
+
+.element-context-menu button {
+  display: block;
+  width: 100%;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #f6f7fb;
+  text-align: left;
+  font:
+    11px 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+
+.element-context-menu button:hover,
+.element-context-menu button:focus-visible {
+  background: #ffffff1c;
+  color: #f5c451;
+}
+
+.menu-delete {
+  color: #f19aa4 !important;
+}
+
+.menu-divider {
+  height: 1px;
+  margin: 4px 2px;
+  background: #ffffff20;
+}
