@@ -3,7 +3,10 @@
     class="progress-element"
     [style]="progressStyle(progress(element()))"
     [attr.aria-label]="ariaLabel(progress(element()))"
-    [attr.aria-describedby]="'chart-summary-' + progress(element()).id"
+    [attr.aria-describedby]="
+      progress(element()).sensitive ? null : 'chart-summary-' + progress(element()).id
+    "
+    [attr.aria-hidden]="progress(element()).sensitive ? 'true' : null"
     role="progressbar"
     [attr.aria-valuemin]="progress(element()).data.min"
     [attr.aria-valuemax]="progress(element()).data.max"
@@ -17,20 +20,27 @@
         >{{ progress(element()).data.label }} {{ progress(element()).data.value }}</span
       >
     }
-    <span class="visually-hidden" [id]="'chart-summary-' + progress(element()).id">{{
-      accessibilitySummary(progress(element()))
-    }}</span>
+    @if (!progress(element()).sensitive) {
+      <span class="visually-hidden" [id]="'chart-summary-' + progress(element()).id">{{
+        accessibilitySummary(progress(element()))
+      }}</span>
+    }
   </div>
 } @else {
   <div
     class="chart-chart"
     [attr.aria-label]="ariaLabel(chart(element()))"
-    [attr.aria-describedby]="'chart-summary-' + chart(element()).id"
+    [attr.aria-describedby]="
+      chart(element()).sensitive ? null : 'chart-summary-' + chart(element()).id
+    "
+    [attr.aria-hidden]="chart(element()).sensitive ? 'true' : null"
     role="img"
   >
     <div #chartHost class="chart-host"></div>
-    <span class="visually-hidden" [id]="'chart-summary-' + chart(element()).id">{{
-      accessibilitySummary(chart(element()))
-    }}</span>
+    @if (!chart(element()).sensitive) {
+      <span class="visually-hidden" [id]="'chart-summary-' + chart(element()).id">{{
+        accessibilitySummary(chart(element()))
+      }}</span>
+    }
   </div>
 }

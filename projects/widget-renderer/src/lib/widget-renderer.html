@@ -60,12 +60,13 @@
       <div
         class="widget-element"
         [attr.data-widget-element-id]="element.id"
-        [class.is-sensitive]="element.sensitive && !sensitiveVisible()"
+        [class.is-sensitive]="isElementSensitive(element)"
+        [attr.aria-hidden]="isElementSensitive(element) ? 'true' : null"
         [style]="elementStyle(element)"
       >
         <div
           class="element-content"
-          [class.is-sensitive]="element.sensitive && !sensitiveVisible()"
+          [class.is-sensitive]="isElementSensitive(element)"
           [style.justify-content]="
             isChart(element) && element.type !== 'progress'
               ? 'stretch'
@@ -92,7 +93,7 @@
           } @else if (isImage(element)) {
             <img
               [src]="element.source"
-              [alt]="element.alt"
+              [alt]="elementAlt(element)"
               [style.object-fit]="element.fit"
               [style.object-position]="element.grid.anchor ?? 'center'"
               [style.border-radius.px]="element.radius"
@@ -108,6 +109,7 @@
               [class.solid]="element.style === 'solid'"
               [class.outline]="element.style === 'outline'"
               (click)="actionRequested.emit({ element, event: $event })"
+              [tabindex]="isElementSensitive(element) ? -1 : 0"
             >
               {{ element.label }}
             </button>

@@ -67,6 +67,12 @@ export class WidgetRenderer {
   protected isChart(element: WidgetElement): element is ChartElement | ProgressElement {
     return ['pie', 'donut', 'gauge', 'bar', 'line', 'progress'].includes(element.type);
   }
+  protected isElementSensitive(element: WidgetElement): boolean {
+    return element.sensitive && !this.sensitiveVisible();
+  }
+  protected elementAlt(element: ImageElement): string {
+    return this.isElementSensitive(element) ? '' : element.alt;
+  }
   protected horizontalAnchor(anchor: string): string {
     return anchor.endsWith('left')
       ? 'flex-start'
