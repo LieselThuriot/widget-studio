@@ -1,0 +1,18 @@
+<p class="helper">Drag components into the canvas, or click to add them.</p>
+<div class="palette-list">
+  @for (item of items(); track item.type) {
+    <button
+      class="palette-item"
+      type="button"
+      draggable="true"
+      (dragstart)="dragStarted.emit({ event: $event, type: item.type })"
+      (click)="elementAdded.emit(item.type)"
+    >
+      <span class="palette-icon">{{ item.icon }}</span
+      ><span
+        ><strong>{{ item.label }}</strong
+        ><small>{{ item.description }}</small></span
+      ><span class="add">+</span>
+    </button>
+  }
+</div>

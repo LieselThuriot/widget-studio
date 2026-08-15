@@ -4,47 +4,7 @@ import { ButtonElement, Widget, WidgetRenderer } from 'widget-renderer';
 @Component({
   selector: 'app-preview-dialog',
   imports: [WidgetRenderer],
-  template: `
-    <div
-      class="preview-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="preview-title"
-      tabindex="-1"
-      (click)="close()"
-      (keydown)="onKeyDown($event)"
-    >
-      <div
-        class="preview-window"
-        tabindex="-1"
-        (click)="$event.stopPropagation()"
-        (keydown)="onKeyDown($event)"
-      >
-        <header class="preview-header">
-          <div>
-            <p class="eyebrow">Preview</p>
-            <h2 id="preview-title">This is how your widget will look</h2>
-          </div>
-          <button
-            type="button"
-            class="preview-close"
-            aria-label="Close live preview"
-            (click)="close()"
-          >
-            ×
-          </button>
-        </header>
-        <div class="preview-stage">
-          <widget-renderer
-            [widget]="widget()"
-            (refreshRequested)="refreshRequested.emit()"
-            (actionRequested)="actionRequested.emit($event)"
-          />
-        </div>
-        <p class="preview-hint">Click an action or refresh control to inspect its event data.</p>
-      </div>
-    </div>
-  `,
+  templateUrl: './preview-dialog.html',
   styleUrl: './preview-dialog.css',
 })
 export class PreviewDialog {

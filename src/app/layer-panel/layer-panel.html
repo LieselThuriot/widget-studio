@@ -1,0 +1,38 @@
+<div class="panel-heading compact">
+  <div>
+    <p class="eyebrow">On canvas</p>
+    <h2>Layers</h2>
+  </div>
+  <button
+    type="button"
+    class="clear-layers"
+    [disabled]="!elements().length"
+    (click)="layersCleared.emit()"
+  >
+    Clear all
+  </button>
+</div>
+<div class="layer-list">
+  @for (element of elements(); track element.id) {
+    <div
+      class="layer"
+      draggable="true"
+      [class.selected]="element.id === selectedId()"
+      (dragstart)="dragStarted.emit({ event: $event, id: element.id })"
+      (dragover)="$event.preventDefault()"
+      (drop)="layerDropped.emit({ event: $event, id: element.id })"
+    >
+      <button type="button" class="layer-select" (click)="elementSelected.emit(element.id)">
+        <span class="layer-grip" aria-hidden="true">⋮⋮</span><span>{{ icon(element) }}</span
+        >{{ label(element) }}</button
+      ><button
+        type="button"
+        class="layer-delete"
+        aria-label="Delete layer"
+        (click)="elementDeleted.emit(element.id)"
+      >
+        x
+      </button>
+    </div>
+  }
+</div>

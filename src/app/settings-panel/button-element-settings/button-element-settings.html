@@ -1,0 +1,20 @@
+<label
+  >Label<input [value]="element().label" (input)="changed.emit({ label: value($event) })"
+/></label>
+<div class="field-row">
+  <label
+    >Method<select [value]="element().method" (change)="changed.emit({ method: method($event) })">
+      <option value="get">GET</option>
+      <option value="post">POST</option>
+    </select></label
+  >
+  <label
+    >Style<select [value]="element().style" (change)="changed.emit({ style: style($event) })">
+      <option value="solid">Solid</option>
+      <option value="outline">Outline</option>
+    </select></label
+  >
+</div>
+<label
+  >Request URL<input [value]="element().url" (input)="changed.emit({ url: value($event) })"
+/></label>

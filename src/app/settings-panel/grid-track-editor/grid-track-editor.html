@@ -1,0 +1,27 @@
+<p class="eyebrow track-heading">
+  {{ kind() === 'rows' ? 'Rows' : 'Columns' }}
+  <button type="button" class="small-add" (click)="added.emit()">+ Add</button>
+</p>
+@for (track of tracks(); track $index) {
+  <div class="track-row">
+    <input
+      type="number"
+      min="1"
+      [value]="track.size"
+      (input)="sizeChanged.emit({ index: $index, value: number($event) })"
+    /><select
+      [value]="track.unit"
+      (change)="unitChanged.emit({ index: $index, value: unit($event) })"
+    >
+      <option value="star">Star</option>
+      <option value="pixel">Pixel</option>
+      <option value="auto">Auto</option></select
+    ><button
+      type="button"
+      [attr.aria-label]="'Remove ' + (kind() === 'rows' ? 'row' : 'column')"
+      (click)="removed.emit($index)"
+    >
+      ×
+    </button>
+  </div>
+}

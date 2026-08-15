@@ -1,0 +1,73 @@
+<label
+  >Content<textarea [value]="element().text" (input)="changed.emit({ text: value($event) })">{{
+    element().text
+  }}</textarea>
+</label>
+<div class="formatting-tools" aria-label="Text formatting">
+  <button
+    type="button"
+    [class.active]="element().style.fontWeight >= 600"
+    aria-label="Toggle bold"
+    (click)="
+      changed.emit({
+        style: { ...element().style, fontWeight: element().style.fontWeight >= 600 ? 400 : 700 },
+      })
+    "
+  >
+    <strong>B</strong></button
+  ><button
+    type="button"
+    [class.active]="element().style.italic"
+    aria-label="Toggle italic"
+    (click)="changed.emit({ style: { ...element().style, italic: !element().style.italic } })"
+  >
+    <em>I</em></button
+  ><button
+    type="button"
+    [class.active]="element().style.underline"
+    aria-label="Toggle underline"
+    (click)="changed.emit({ style: { ...element().style, underline: !element().style.underline } })"
+  >
+    <u>U</u></button
+  ><button
+    type="button"
+    [class.active]="element().style.strikethrough"
+    aria-label="Toggle strikethrough"
+    (click)="
+      changed.emit({ style: { ...element().style, strikethrough: !element().style.strikethrough } })
+    "
+  >
+    <s>S</s>
+  </button>
+</div>
+<label
+  >Size<input
+    type="number"
+    [value]="element().style.fontSize"
+    (input)="changed.emit({ style: { ...element().style, fontSize: number($event) } })"
+/></label>
+<div class="text-layout-settings">
+  <label
+    >Horizontal alignment<select
+      [value]="element().style.align"
+      (change)="changed.emit({ style: { ...element().style, align: alignment($event) } })"
+    >
+      <option value="left">Left</option>
+      <option value="center">Center</option>
+      <option value="right">Right</option>
+    </select></label
+  ><label class="toggle-row"
+    ><span>Wrap text</span
+    ><input
+      type="checkbox"
+      [checked]="element().style.wrap"
+      (change)="changed.emit({ style: { ...element().style, wrap: checked($event) } })" /><span
+      class="toggle"
+    ></span
+  ></label>
+</div>
+<app-color-picker
+  label="Color"
+  [value]="element().style.color"
+  (changed)="changed.emit({ style: { ...element().style, color: $event } })"
+/>

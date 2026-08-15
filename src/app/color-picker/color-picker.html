@@ -1,0 +1,39 @@
+<div class="color-picker">
+  <div class="color-picker-label">
+    <span>{{ label() }}</span>
+    @if (clearable()) {
+      <button
+        type="button"
+        class="clear-button"
+        [class.has-color]="value()"
+        [disabled]="!value()"
+        [attr.aria-label]="'Clear ' + label().toLowerCase()"
+        (click)="cleared.emit()"
+      >
+        ×
+      </button>
+    }
+  </div>
+  <input
+    type="color"
+    [value]="inputValue()"
+    [attr.aria-label]="label()"
+    (input)="onInput($any($event.target).value)"
+  />
+  @if (withAlpha()) {
+    <div class="alpha-control">
+      <label [for]="alphaId"
+        >Opacity <output>{{ alphaValue() }}%</output></label
+      >
+      <input
+        [id]="alphaId"
+        type="range"
+        min="0"
+        max="100"
+        [value]="alphaValue()"
+        [attr.aria-label]="label() + ' opacity'"
+        (input)="onAlphaInput(+$any($event.target).value)"
+      />
+    </div>
+  }
+</div>

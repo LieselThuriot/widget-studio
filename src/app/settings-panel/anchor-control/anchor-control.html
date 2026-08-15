@@ -1,0 +1,15 @@
+<div class="anchor-field">
+  <span>Anchor</span>
+  <div class="anchor-control" role="group" [attr.aria-label]="ariaLabel()">
+    @for (anchor of anchors; track anchor.value) {
+      <button
+        type="button"
+        [class.active]="value() === anchor.value"
+        [attr.aria-label]="anchor.value"
+        (click)="changed.emit(anchor.value)"
+      >
+        {{ anchor.icon }}
+      </button>
+    }
+  </div>
+</div>
