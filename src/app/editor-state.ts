@@ -116,14 +116,21 @@ export function changeElementStack(
   const elements = [...widget.elements];
   const index = elements.findIndex((element) => element.id === change.id);
   if (index < 0) return widget;
-  const target =
-    change.action === 'up'
-      ? index + 1
-      : change.action === 'down'
-        ? index - 1
-        : change.action === 'front'
-          ? elements.length - 1
-          : 0;
+  let target: number;
+  switch (change.action) {
+    case 'up':
+      target = index + 1;
+      break;
+    case 'down':
+      target = index - 1;
+      break;
+    case 'front':
+      target = elements.length - 1;
+      break;
+    case 'back':
+      target = 0;
+      break;
+  }
   if (target === index || target < 0 || target >= elements.length) return widget;
   const [element] = elements.splice(index, 1);
   elements.splice(target, 0, element);
