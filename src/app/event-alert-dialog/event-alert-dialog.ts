@@ -1,6 +1,7 @@
 import { Component, ElementRef, effect, inject, input, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { ButtonElement } from 'widget-renderer';
+import { focusableElements, trapTabFocus } from '../dialog-focus';
 
 export type ActionAlert =
   | { kind: 'action'; element: ButtonElement; event: { type: string; target: string } }
@@ -34,16 +35,7 @@ export class EventAlertDialog {
       this.close();
       return;
     }
-    if (event.key !== 'Tab') return;
-    const focusable = this.getFocusableElements();
-    if (!focusable.length) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    const focusTarget = event.shiftKey ? last : first;
-    const focusBoundary = event.shiftKey ? first : last;
-    if (document.activeElement !== focusBoundary) return;
-    event.preventDefault();
-    focusTarget.focus();
+    trapTabFocus(event, focusableElements(this.elementRef.nativeElement));
   }
 
   protected close(): void {
@@ -52,17 +44,10 @@ export class EventAlertDialog {
   }
 
   private focusInitial(): void {
-    this.getFocusableElements()[0]?.focus();
+    focusableElements(this.elementRef.nativeElement)[0]?.focus();
   }
 
   private restoreFocus(): void {
     if (this.previouslyFocused instanceof HTMLElement) this.previouslyFocused.focus();
-  }
-
-  private getFocusableElements(): HTMLElement[] {
-    const elements = this.elementRef.nativeElement.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    ) as NodeListOf<HTMLElement>;
-    return Array.from(elements).filter((element) => !element.hasAttribute('disabled'));
   }
 }

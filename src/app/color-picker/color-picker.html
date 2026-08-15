@@ -18,7 +18,7 @@
     type="color"
     [value]="inputValue()"
     [attr.aria-label]="label()"
-    (input)="onInput($any($event.target).value)"
+    (input)="onInput($event)"
   />
   @if (withAlpha()) {
     <div class="alpha-control">
@@ -32,7 +32,7 @@
         max="100"
         [value]="alphaValue()"
         [attr.aria-label]="label() + ' opacity'"
-        (input)="onAlphaInput(+$any($event.target).value)"
+        (input)="onAlphaInput($event)"
       />
     </div>
   }

@@ -260,27 +260,33 @@ export function patchElement(widget: Widget, id: string, patch: Partial<WidgetEl
 }
 
 function mergeElementStyle(element: WidgetElement, patch: object): object {
-  const currentStyle = 'style' in element && typeof element.style === 'object' ? element.style : {};
+  const currentStyle =
+    'style' in element && isRecord(element.style) ? element.style : ({} as Record<string, unknown>);
   const merged = { ...currentStyle, ...patch } as Record<string, unknown>;
-  if ('font' in currentStyle && 'font' in patch) {
+  const patchRecord = patch as Record<string, unknown>;
+  if (isRecord(currentStyle['font']) && isRecord(patchRecord['font'])) {
     merged['font'] = {
-      ...(currentStyle.font as Record<string, unknown>),
-      ...((patch as Record<string, unknown>)['font'] as Record<string, unknown>),
+      ...currentStyle['font'],
+      ...patchRecord['font'],
     };
   }
-  if ('color' in currentStyle && 'color' in patch) {
+  if (isRecord(currentStyle['color']) && isRecord(patchRecord['color'])) {
     merged['color'] = {
-      ...(currentStyle.color as Record<string, unknown>),
-      ...((patch as Record<string, unknown>)['color'] as Record<string, unknown>),
+      ...currentStyle['color'],
+      ...patchRecord['color'],
     };
   }
-  if ('axis' in currentStyle && 'axis' in patch) {
+  if (isRecord(currentStyle['axis']) && isRecord(patchRecord['axis'])) {
     merged['axis'] = {
-      ...(currentStyle.axis as Record<string, unknown>),
-      ...((patch as Record<string, unknown>)['axis'] as Record<string, unknown>),
+      ...currentStyle['axis'],
+      ...patchRecord['axis'],
     };
   }
   return merged;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }
 
 export function reorderElements(widget: Widget, sourceId: string, targetId: string): Widget {

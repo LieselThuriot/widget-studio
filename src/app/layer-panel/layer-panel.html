@@ -28,10 +28,10 @@
       ><button
         type="button"
         class="layer-delete"
-        aria-label="Delete layer"
+        [attr.aria-label]="'Delete ' + label(element) + ' layer'"
         (click)="elementDeleted.emit(element.id)"
       >
-        x
+        <span aria-hidden="true">x</span>
       </button>
     </div>
   }

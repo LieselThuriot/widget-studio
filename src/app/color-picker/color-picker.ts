@@ -19,7 +19,8 @@ export class ColorPicker {
     return this.value()?.slice(0, 7) || '#000000';
   }
 
-  protected onInput(value: string): void {
+  protected onInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
     this.changed.emit(this.withAlpha() ? `${value}${this.alphaHex()}` : value);
   }
 
@@ -28,7 +29,8 @@ export class ColorPicker {
     return alpha ? Math.round((parseInt(alpha, 16) / 255) * 100) : 60;
   }
 
-  protected onAlphaInput(value: number): void {
+  protected onAlphaInput(event: Event): void {
+    const value = Number((event.target as HTMLInputElement).value);
     this.changed.emit(
       `${this.inputValue()}${Math.round((value / 100) * 255)
         .toString(16)
