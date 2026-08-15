@@ -146,6 +146,17 @@ export interface ProgressElement extends WidgetElementBase {
 export type ChartElement = PieElement | GaugeElement | SeriesElement;
 export type WidgetElement =
   TextElement | ImageElement | ButtonElement | ChartElement | ProgressElement;
+export type TextElementContract = Omit<TextElement, 'id'>;
+export type ImageElementContract = Omit<ImageElement, 'id'>;
+export type ButtonElementContract = Omit<ButtonElement, 'id'>;
+export type ChartElementContract = Omit<ChartElement, 'id'>;
+export type ProgressElementContract = Omit<ProgressElement, 'id'>;
+export type WidgetElementContract =
+  | TextElementContract
+  | ImageElementContract
+  | ButtonElementContract
+  | ChartElementContract
+  | ProgressElementContract;
 export interface Widget {
   version: 2;
   size: WidgetSize;
@@ -155,3 +166,7 @@ export interface Widget {
   refresh: { enabled: boolean; label: string };
   elements: WidgetElement[];
 }
+export type WidgetContract = Omit<Widget, 'elements'> & {
+  elements: WidgetElementContract[];
+};
+export type WidgetInput = Widget | WidgetContract;

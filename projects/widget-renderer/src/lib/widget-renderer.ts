@@ -9,6 +9,8 @@ import {
   Widget,
   WidgetElement,
 } from './widget.model';
+import { hydrateWidget } from './widget-hydration';
+import { WidgetInput } from './widget.model';
 import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
 
 @Component({
@@ -18,23 +20,24 @@ import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from '.
   imports: [ChartElementRenderer],
 })
 export class WidgetRenderer {
-  readonly widget = input.required<Widget>();
+  readonly widget = input.required<WidgetInput>();
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
+  protected readonly renderWidget = computed<Widget>(() => hydrateWidget(this.widget()));
   readonly hasSensitiveElements = computed(
     () =>
-      this.widget().background.sensitive ||
-      this.widget().elements.some((element) => element.sensitive),
+      this.renderWidget().background.sensitive ||
+      this.renderWidget().elements.some((element) => element.sensitive),
   );
   readonly backgroundSensitive = computed(
-    () => this.widget().background.sensitive && !this.sensitiveVisible(),
+    () => this.renderWidget().background.sensitive && !this.sensitiveVisible(),
   );
-  readonly gridRows = computed(() => gridTemplate(this.widget().rows));
-  readonly gridColumns = computed(() => gridTemplate(this.widget().columns));
-  readonly widgetWidth = computed(() => getWidgetWidth(this.widget().size));
+  readonly gridRows = computed(() => gridTemplate(this.renderWidget().rows));
+  readonly gridColumns = computed(() => gridTemplate(this.renderWidget().columns));
+  readonly widgetWidth = computed(() => getWidgetWidth(this.renderWidget().size));
   readonly backgroundImage = computed(() => {
-    const image = this.widget().background.image;
+    const image = this.renderWidget().background.image;
     return image ? `url("${image}")` : 'none';
   });
 

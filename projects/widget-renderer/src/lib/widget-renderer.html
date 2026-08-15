@@ -2,27 +2,27 @@
   class="widget-shell"
   [style.width.px]="widgetWidth()"
   [style.height.px]="245"
-  [style.background-color]="widget().background.color || 'transparent'"
+  [style.background-color]="renderWidget().background.color || 'transparent'"
 >
   <div
     class="widget-background"
     [class.is-sensitive]="backgroundSensitive()"
     [style.background-image]="backgroundImage()"
-    [style.background-size]="widget().background.size"
-    [style.background-position]="widget().background.anchor"
-    [style.background-repeat]="widget().background.repeat ? 'repeat' : 'no-repeat'"
+    [style.background-size]="renderWidget().background.size"
+    [style.background-position]="renderWidget().background.anchor"
+    [style.background-repeat]="renderWidget().background.repeat ? 'repeat' : 'no-repeat'"
   ></div>
   <div
     class="widget-overlay"
-    [style.background-color]="widget().background.overlayColor || 'transparent'"
+    [style.background-color]="renderWidget().background.overlayColor || 'transparent'"
   ></div>
   <div class="widget-toolbar" aria-label="Widget actions">
-    @if (widget().refresh.enabled) {
+    @if (renderWidget().refresh.enabled) {
       <button
         type="button"
         class="icon-button"
-        [attr.aria-label]="widget().refresh.label"
-        [title]="widget().refresh.label"
+        [attr.aria-label]="renderWidget().refresh.label"
+        [title]="renderWidget().refresh.label"
         (click)="refreshRequested.emit()"
       >
         ↻
@@ -56,7 +56,7 @@
     [style.grid-template-rows]="gridRows()"
     [style.grid-template-columns]="gridColumns()"
   >
-    @for (element of widget().elements; track element.id) {
+    @for (element of renderWidget().elements; track element.id) {
       <div
         class="widget-element"
         [attr.data-widget-element-id]="element.id"
