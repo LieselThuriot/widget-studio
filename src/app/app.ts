@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudioHeader } from './studio-header/studio-header';
 import { ElementPalette } from './element-palette/element-palette';
@@ -6,27 +6,11 @@ import { LayerPanel } from './layer-panel/layer-panel';
 import { CanvasWorkspace } from './canvas-workspace/canvas-workspace';
 import { OutputContract } from './output-contract/output-contract';
 import { PreviewDialog } from './preview-dialog/preview-dialog';
-import { ActionAlert, EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
+import { EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
 import { SettingsPanel } from './settings-panel/settings-panel';
 import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
-import { sampleWidget } from './sample-widget';
-import {
-  addTrack,
-  changeElementStack,
-  moveElement as moveElementState,
-  patchElement,
-  patchWidget,
-  removeTrack,
-  reorderElements,
-  resizeElement as resizeElementState,
-  updateElementPosition,
-  updateElementRadius,
-  updateElementSpan,
-  updateTrack,
-} from './editor-state';
-import { normalizeWidget } from './editor-state';
 import { widgetElementPalette } from './widget-element-metadata';
-import { createWidgetElement } from './widget-element-factory';
+import { EditorStateStore } from './editor-state-store';
 
 @Component({
   selector: 'app-root',
@@ -49,140 +33,123 @@ import { createWidgetElement } from './widget-element-factory';
   },
 })
 export class App {
-  protected readonly widget = signal<Widget>(normalizeWidget(structuredClone(sampleWidget)));
-  protected readonly selectedId = signal<string | null>('headline');
-  protected readonly isPreviewOpen = signal(false);
-  protected readonly actionAlert = signal<ActionAlert | null>(null);
-  protected readonly selectedElement = computed(
-    () => this.widget().elements.find((element) => element.id === this.selectedId()) ?? null,
-  );
-  protected readonly modelJson = computed(() => {
-    const { elements, ...publicWidget } = this.widget();
-    return JSON.stringify(
-      {
-        ...publicWidget,
-        elements: elements.map(({ id: _id, ...element }) => {
-          if (
-            element.type === 'pie' ||
-            element.type === 'donut' ||
-            element.type === 'gauge' ||
-            element.type === 'bar' ||
-            element.type === 'line'
-          ) {
-            return element;
-          }
-          return element;
-        }),
-      },
-      null,
-      2,
-    );
-  });
+  private readonly editorState = new EditorStateStore();
+  protected readonly widget = this.editorState.widget;
+  protected readonly selectedId = this.editorState.selectedId;
+  protected readonly isPreviewOpen = this.editorState.isPreviewOpen;
+  protected readonly actionAlert = this.editorState.actionAlert;
+  protected readonly selectedElement = this.editorState.selectedElement;
+  protected readonly modelJson = this.editorState.modelJson;
   protected readonly palette = widgetElementPalette;
 
   protected addElement(type: WidgetElement['type']): void {
-    const id = `${type}-${crypto.randomUUID()}`;
-    const element = createWidgetElement(type, id);
-    this.widget.update((widget) => ({ ...widget, elements: [...widget.elements, element] }));
-    this.selectedId.set(id);
+    this.editorState.addElement(type);
   }
+
   protected dragStart(event: DragEvent, type: WidgetElement['type']): void {
     event.dataTransfer?.setData('widget-element-type', type);
   }
+
   protected layerDragStart(event: DragEvent, id: string): void {
     event.dataTransfer?.setData('widget-layer-id', id);
   }
+
   protected reorderLayer(event: DragEvent, targetId: string): void {
-    event.preventDefault();
-    const sourceId = event.dataTransfer?.getData('widget-layer-id');
-    if (!sourceId || sourceId === targetId) return;
-    this.widget.update((widget) => reorderElements(widget, sourceId, targetId));
+    this.editorState.reorderLayer(event, targetId);
   }
+
   protected changeStack(change: { id: string; action: 'up' | 'down' | 'front' | 'back' }): void {
-    this.widget.update((widget) => changeElementStack(widget, change));
+    this.editorState.changeStack(change);
   }
+
   protected dropElement(event: DragEvent): void {
     event.preventDefault();
     const type = event.dataTransfer?.getData('widget-element-type') as WidgetElement['type'];
-    if (this.palette.some((item) => item.type === type)) this.addElement(type);
+    if (this.palette.some((item) => item.type === type)) this.editorState.addElement(type);
   }
 
   protected selectElement(id: string): void {
     this.selectedId.set(id);
   }
+
   protected selectWidget(): void {
     this.selectedId.set(null);
   }
+
   protected selectCanvasBackground(event: MouseEvent): void {
     if (event.target instanceof HTMLElement && event.target.classList.contains('canvas')) {
       this.selectWidget();
     }
   }
+
   protected clearLayers(): void {
-    this.widget.update((widget) => ({ ...widget, elements: [] }));
-    this.selectedId.set(null);
+    this.editorState.clearLayers();
   }
+
   protected deleteElement(id: string): void {
-    this.widget.update((widget) => ({
-      ...widget,
-      elements: widget.elements.filter((element) => element.id !== id),
-    }));
-    if (this.selectedId() === id) this.selectedId.set(null);
+    this.editorState.deleteElement(id);
   }
+
   protected moveElement(position: { id: string; row: number; column: number }): void {
-    this.widget.update((widget) => moveElementState(widget, position));
+    this.editorState.moveElement(position);
   }
+
   protected resizeElement(size: { id: string; rowSpan?: number; columnSpan?: number }): void {
-    this.widget.update((widget) => resizeElementState(widget, size));
+    this.editorState.resizeElement(size);
   }
+
   protected updateSpan(kind: 'rowSpan' | 'columnSpan', value: number): void {
-    const element = this.selectedElement();
-    if (!element) return;
-    this.widget.update((widget) => updateElementSpan(widget, element, kind, value));
+    this.editorState.updateSpan(kind, value);
   }
+
   protected updatePosition(kind: 'row' | 'column', value: number): void {
-    const id = this.selectedId();
-    if (!id) return;
-    this.widget.update((widget) => updateElementPosition(widget, id, kind, value));
+    this.editorState.updatePosition(kind, value);
   }
+
   protected updateRadius(value: number): void {
-    const id = this.selectedId();
-    if (!id) return;
-    this.widget.update((widget) => updateElementRadius(widget, id, value));
+    this.editorState.updateRadius(value);
   }
+
   protected updateWidget(patch: Partial<Widget>): void {
-    this.widget.update((widget) => patchWidget(widget, patch));
+    this.editorState.updateWidget(patch);
   }
+
   protected updateTrack(
     kind: 'rows' | 'columns',
     index: number,
     patch: Partial<Widget['rows'][number]>,
   ): void {
-    this.widget.update((widget) => updateTrack(widget, kind, index, patch));
+    this.editorState.updateTrack(kind, index, patch);
   }
+
   protected addTrack(kind: 'rows' | 'columns'): void {
-    this.widget.update((widget) => addTrack(widget, kind));
+    this.editorState.addTrack(kind);
   }
+
   protected removeTrack(kind: 'rows' | 'columns', index: number): void {
-    this.widget.update((widget) => removeTrack(widget, kind, index));
+    this.editorState.removeTrack(kind, index);
   }
+
   protected updateSelected(patch: Partial<WidgetElement>): void {
-    const id = this.selectedId();
-    if (!id) return;
-    this.widget.update((widget) => patchElement(widget, id, patch));
+    this.editorState.updateSelected(patch);
   }
+
   protected onRefresh(): void {
-    this.actionAlert.set({ kind: 'refresh', label: this.widget().refresh.label });
+    this.editorState.onRefresh();
   }
+
   protected openPreview(): void {
-    this.isPreviewOpen.set(true);
+    this.editorState.openPreview();
   }
+
   protected closePreview(): void {
-    this.isPreviewOpen.set(false);
+    this.editorState.closePreview();
   }
+
   protected closeActionAlert(): void {
-    this.actionAlert.set(null);
+    this.editorState.closeActionAlert();
   }
+
   protected onDocumentKeyDown(event: KeyboardEvent): void {
     if (event.key !== 'Escape') return;
     if (this.actionAlert()) {
@@ -191,16 +158,8 @@ export class App {
       this.closePreview();
     }
   }
+
   protected onAction(event: { element: ButtonElement; event: Event }): void {
-    event.event.preventDefault();
-    const target = event.event.target;
-    this.actionAlert.set({
-      kind: 'action',
-      element: event.element,
-      event: {
-        type: event.event.type,
-        target: target instanceof HTMLElement ? target.outerHTML : String(target),
-      },
-    });
+    this.editorState.onAction(event);
   }
 }
