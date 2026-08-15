@@ -8,20 +8,7 @@ import { OutputContract } from './output-contract/output-contract';
 import { PreviewDialog } from './preview-dialog/preview-dialog';
 import { ActionAlert, EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
 import { SettingsPanel } from './settings-panel/settings-panel';
-import {
-  ButtonElement,
-  ChartElement,
-  GaugeElement,
-  ImageElement,
-  ProgressElement,
-  SeriesElement,
-  TextElement,
-  Widget,
-  WidgetElement,
-  WidgetElementBase,
-  GraphStyle,
-  GaugeStyle,
-} from 'widget-renderer';
+import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
 import { sampleWidget } from './sample-widget';
 import {
   addTrack,
@@ -38,6 +25,8 @@ import {
   updateTrack,
 } from './editor-state';
 import { normalizeWidget } from './editor-state';
+import { widgetElementPalette } from './widget-element-metadata';
+import { createWidgetElement } from './widget-element-factory';
 
 @Component({
   selector: 'app-root',
@@ -89,60 +78,11 @@ export class App {
       2,
     );
   });
-  protected readonly palette = [
-    { type: 'text' as const, label: 'Text', icon: 'T', description: 'Formatted content' },
-    { type: 'image' as const, label: 'Image', icon: '▧', description: 'Remote image' },
-    { type: 'button' as const, label: 'Action', icon: '↗', description: 'GET or POST' },
-    { type: 'pie' as const, label: 'Pie', icon: '◔', description: 'Part-to-whole' },
-    { type: 'donut' as const, label: 'Donut', icon: '◉', description: 'Part-to-whole' },
-    { type: 'gauge' as const, label: 'Gauge', icon: '◌', description: 'Single value' },
-    { type: 'bar' as const, label: 'Bar', icon: '▥', description: 'Compare values' },
-    { type: 'line' as const, label: 'Line', icon: '⌁', description: 'Show a trend' },
-    { type: 'progress' as const, label: 'Progress', icon: '▰', description: 'Completion value' },
-  ];
+  protected readonly palette = widgetElementPalette;
 
   protected addElement(type: WidgetElement['type']): void {
     const id = `${type}-${crypto.randomUUID()}`;
-    const base = {
-      id,
-      type,
-      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'top left' as const },
-      sensitive: false,
-    };
-    const element: WidgetElement =
-      type === 'text'
-        ? ({
-            ...base,
-            type,
-            text: 'New text',
-            style: {
-              color: '#f6f7fb',
-              font: { size: 14, weight: 400, style: 'normal', decoration: 'none' },
-              align: 'left',
-              wrap: true,
-            },
-          } as TextElement)
-        : type === 'image'
-          ? ({
-              ...base,
-              type,
-              source: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400',
-              alt: 'Widget image',
-              fit: 'cover',
-              grid: { ...base.grid, anchor: 'center' as const },
-              overlayColor: undefined,
-              radius: 8,
-            } as ImageElement)
-          : type === 'button'
-            ? ({
-                ...base,
-                type,
-                label: 'New action',
-                method: 'get',
-                url: '/',
-                style: 'solid',
-              } as ButtonElement)
-            : this.newChartElement(type, base);
+    const element = createWidgetElement(type, id);
     this.widget.update((widget) => ({ ...widget, elements: [...widget.elements, element] }));
     this.selectedId.set(id);
   }
@@ -165,82 +105,6 @@ export class App {
     event.preventDefault();
     const type = event.dataTransfer?.getData('widget-element-type') as WidgetElement['type'];
     if (this.palette.some((item) => item.type === type)) this.addElement(type);
-  }
-
-  private newChartElement(
-    type: Exclude<WidgetElement['type'], 'text' | 'image' | 'button'>,
-    base: Omit<WidgetElementBase, 'type'>,
-  ): ChartElement | ProgressElement {
-    const data = [
-      { label: 'Complete', value: 72, color: '#7dd3fc' },
-      { label: 'Remaining', value: 28, color: '#334155' },
-    ];
-    if (type === 'progress') {
-      return {
-        ...base,
-        type,
-        data: { label: 'Progress', value: 72, min: 0, max: 100 },
-        style: {
-          color: { legend: '#f6f7fb', fill: '#7dd3fc', track: '#334155' },
-          font: { size: 11 },
-        },
-        showLegend: true,
-        active: false,
-      } as ProgressElement;
-    }
-    if (type === 'gauge') {
-      return {
-        ...base,
-        grid: {
-          row: base.grid.row,
-          column: base.grid.column,
-          rowSpan: base.grid.rowSpan,
-          columnSpan: base.grid.columnSpan,
-        },
-        type,
-        title: 'Performance',
-        data: { value: 72, min: 0, max: 100 },
-        showLegend: true,
-        style: this.gaugeStyle(),
-      } as GaugeElement;
-    }
-    return {
-      ...base,
-      grid: {
-        row: base.grid.row,
-        column: base.grid.column,
-        rowSpan: base.grid.rowSpan,
-        columnSpan: base.grid.columnSpan,
-      },
-      type,
-      title: type === 'line' ? 'Trend' : 'Overview',
-      data,
-      showLegend: type === 'pie' || type === 'donut',
-      style: this.graphStyle(),
-    } as SeriesElement;
-  }
-
-  private graphStyle(): GraphStyle {
-    return {
-      color: {
-        legend: '#f6f7fb',
-        title: '#f6f7fb',
-      },
-      font: { size: 11 },
-      axis: { label: '#d4dbea', line: '#94a3b8', grid: '#475569' },
-    };
-  }
-
-  private gaugeStyle(): GaugeStyle {
-    return {
-      color: {
-        legend: '#f6f7fb',
-        title: '#f6f7fb',
-        fill: '#7dd3fc',
-        track: '#334155',
-      },
-      font: { size: 11 },
-    };
   }
 
   protected selectElement(id: string): void {

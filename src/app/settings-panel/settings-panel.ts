@@ -8,6 +8,7 @@ import { ButtonElementSettings } from './button-element-settings/button-element-
 import { WidgetSettings } from './widget-settings/widget-settings';
 import { eventChecked, eventNumber } from './form-events';
 import { ChartElementSettings } from './chart-element-settings/chart-element-settings';
+import { elementIcon } from '../widget-element-metadata';
 
 export interface TrackChange {
   kind: 'rows' | 'columns';
@@ -52,7 +53,7 @@ export class SettingsPanel {
   readonly trackRemoved = output<{ kind: 'rows' | 'columns'; index: number }>();
 
   protected icon(type: WidgetElementType): string {
-    return type === 'text' ? 'T' : type === 'image' ? '▧' : type === 'button' ? '↗' : '◌';
+    return elementIcon(type);
   }
 
   protected checked(event: Event): boolean {

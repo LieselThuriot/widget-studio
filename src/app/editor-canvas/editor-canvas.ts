@@ -21,6 +21,7 @@ import {
   WidgetRenderer,
   widgetWidth as getWidgetWidth,
 } from 'widget-renderer';
+import { elementLabel } from '../widget-element-metadata';
 
 @Component({
   selector: 'app-editor-canvas',
@@ -108,15 +109,7 @@ export class EditorCanvas {
     this.widgetSelected.emit();
   }
   protected elementLabel(element: WidgetElement): string {
-    return element.type === 'text'
-      ? element.text
-      : element.type === 'image'
-        ? element.alt
-        : element.type === 'button'
-          ? element.label
-          : element.type === 'progress'
-            ? element.data.label
-            : element.title;
+    return elementLabel(element);
   }
   protected onCanvasKeyDown(event: KeyboardEvent): void {
     const target = (event.target as HTMLElement).closest('.editor-element') as HTMLElement | null;

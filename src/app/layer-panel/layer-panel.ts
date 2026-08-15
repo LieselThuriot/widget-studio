@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { WidgetElement } from 'widget-renderer';
+import { elementIcon, elementLabel } from '../widget-element-metadata';
 
 @Component({
   selector: 'app-layer-panel',
@@ -22,24 +23,10 @@ export class LayerPanel {
   protected readonly openActionsId = signal<string | null>(null);
 
   protected icon(element: WidgetElement): string {
-    return element.type === 'text'
-      ? 'T'
-      : element.type === 'image'
-        ? '▧'
-        : element.type === 'button'
-          ? '↗'
-          : '◌';
+    return elementIcon(element.type);
   }
   protected label(element: WidgetElement): string {
-    return element.type === 'text'
-      ? element.text
-      : element.type === 'image'
-        ? element.alt
-        : element.type === 'button'
-          ? element.label
-          : element.type === 'progress'
-            ? element.data.label
-            : element.title;
+    return elementLabel(element);
   }
   protected canMove(index: number, action: 'up' | 'down' | 'front' | 'back'): boolean {
     const last = this.elements().length - 1;

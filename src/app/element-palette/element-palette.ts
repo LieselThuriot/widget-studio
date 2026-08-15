@@ -1,12 +1,8 @@
 import { Component, input, output } from '@angular/core';
 import { WidgetElement } from 'widget-renderer';
+import { PaletteItem } from '../widget-element-metadata';
 
-export interface PaletteItem {
-  type: WidgetElement['type'];
-  label: string;
-  icon: string;
-  description: string;
-}
+export type { PaletteItem } from '../widget-element-metadata';
 
 @Component({
   selector: 'app-element-palette',
