@@ -5,6 +5,10 @@ export function focusableElements(host: HTMLElement): HTMLElement[] {
   return Array.from(elements).filter((element) => !element.hasAttribute('disabled'));
 }
 
+export function focusFirstElement(host: HTMLElement): void {
+  focusableElements(host)[0]?.focus();
+}
+
 export function trapTabFocus(event: KeyboardEvent, elements: HTMLElement[]): void {
   if (event.key !== 'Tab' || !elements.length) return;
   const first = elements[0];

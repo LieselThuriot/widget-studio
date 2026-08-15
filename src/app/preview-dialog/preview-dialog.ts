@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, input, output, signal } from '@angular/core';
 import { ButtonElement, Widget, WidgetRenderer } from 'widget-renderer';
-import { focusableElements, trapTabFocus } from '../dialog-focus';
+import { focusFirstElement, focusableElements, trapTabFocus } from '../dialog-focus';
 
 @Component({
   selector: 'app-preview-dialog',
@@ -41,7 +41,7 @@ export class PreviewDialog {
   }
 
   private focusInitial(): void {
-    focusableElements(this.elementRef.nativeElement)[0]?.focus();
+    focusFirstElement(this.elementRef.nativeElement);
   }
 
   private restoreFocus(): void {

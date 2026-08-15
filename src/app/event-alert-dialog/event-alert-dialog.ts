@@ -1,7 +1,7 @@
 import { Component, ElementRef, effect, inject, input, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { ButtonElement } from 'widget-renderer';
-import { focusableElements, trapTabFocus } from '../dialog-focus';
+import { focusFirstElement, focusableElements, trapTabFocus } from '../dialog-focus';
 
 export type ActionAlert =
   | { kind: 'action'; element: ButtonElement; event: { type: string; target: string } }
@@ -44,7 +44,7 @@ export class EventAlertDialog {
   }
 
   private focusInitial(): void {
-    focusableElements(this.elementRef.nativeElement)[0]?.focus();
+    focusFirstElement(this.elementRef.nativeElement);
   }
 
   private restoreFocus(): void {
