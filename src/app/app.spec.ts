@@ -326,6 +326,60 @@ describe('App', () => {
     ).toHaveLength(4);
   });
 
+  it('should mark the widget background as sensitive', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.canvas') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const sensitiveToggle = Array.from(
+      fixture.nativeElement.querySelectorAll(
+        '.widget-settings input[type="checkbox"]',
+      ) as NodeListOf<HTMLInputElement>,
+    ).find((input) => (input.parentElement?.textContent ?? '').includes('Sensitive content')) as
+      HTMLInputElement | undefined;
+    expect(sensitiveToggle).toBeTruthy();
+
+    sensitiveToggle!.click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { background: { sensitive: boolean } };
+    expect(contract.background.sensitive).toBe(true);
+  });
+
+  it('should reveal a sensitive background with the sensitive content control', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.canvas') as HTMLElement).click();
+    fixture.detectChanges();
+    const sensitiveToggle = Array.from(
+      fixture.nativeElement.querySelectorAll(
+        '.widget-settings input[type="checkbox"]',
+      ) as NodeListOf<HTMLInputElement>,
+    ).find((input) => (input.parentElement?.textContent ?? '').includes('Sensitive content')) as
+      HTMLInputElement | undefined;
+    sensitiveToggle!.click();
+    fixture.detectChanges();
+
+    const renderer = fixture.nativeElement.querySelector('widget-renderer');
+    expect(renderer.querySelector('.widget-background')?.classList.contains('is-sensitive')).toBe(
+      true,
+    );
+
+    (
+      renderer.querySelector('.icon-button[aria-label="Show sensitive data"]') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    expect(renderer.querySelector('.widget-background')?.classList.contains('is-sensitive')).toBe(
+      false,
+    );
+  });
+
   it('should clamp selected element placement and span values', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

@@ -19,6 +19,7 @@ export interface GridTrack {
 }
 export interface BackgroundConfig {
   image?: string;
+  sensitive: boolean;
   repeat: boolean;
   color?: string;
   size: 'cover' | 'contain' | 'auto';

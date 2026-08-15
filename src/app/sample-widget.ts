@@ -15,6 +15,7 @@ export const sampleWidget: Widget = {
   ],
   background: {
     color: '#101827',
+    sensitive: false,
     repeat: false,
     size: 'cover',
     anchor: 'center',

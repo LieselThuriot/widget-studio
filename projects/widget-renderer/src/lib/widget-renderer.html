@@ -3,11 +3,15 @@
   [style.width.px]="widgetWidth()"
   [style.height.px]="245"
   [style.background-color]="widget().background.color || 'transparent'"
-  [style.background-image]="backgroundImage()"
-  [style.background-size]="widget().background.size"
-  [style.background-position]="widget().background.anchor"
-  [style.background-repeat]="widget().background.repeat ? 'repeat' : 'no-repeat'"
 >
+  <div
+    class="widget-background"
+    [class.is-sensitive]="backgroundSensitive()"
+    [style.background-image]="backgroundImage()"
+    [style.background-size]="widget().background.size"
+    [style.background-position]="widget().background.anchor"
+    [style.background-repeat]="widget().background.repeat ? 'repeat' : 'no-repeat'"
+  ></div>
   <div
     class="widget-overlay"
     [style.background-color]="widget().background.overlayColor || 'transparent'"

@@ -12,8 +12,13 @@ export class WidgetRenderer {
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
-  readonly hasSensitiveElements = computed(() =>
-    this.widget().elements.some((element) => element.sensitive),
+  readonly hasSensitiveElements = computed(
+    () =>
+      this.widget().background.sensitive ||
+      this.widget().elements.some((element) => element.sensitive),
+  );
+  readonly backgroundSensitive = computed(
+    () => this.widget().background.sensitive && !this.sensitiveVisible(),
   );
   readonly gridRows = computed(() => gridTemplate(this.widget().rows));
   readonly gridColumns = computed(() => gridTemplate(this.widget().columns));

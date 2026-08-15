@@ -78,6 +78,19 @@
         "
       ></textarea>
     </label>
+    <label class="toggle-row"
+      ><span
+        ><strong>Sensitive content</strong
+        ><small>Hide the background image until sensitive content is revealed</small></span
+      ><input
+        type="checkbox"
+        [checked]="widget().background.sensitive"
+        (change)="
+          widgetChanged.emit({
+            background: { ...widget().background, sensitive: checked($event) },
+          })
+        " /><span class="toggle"></span
+    ></label>
     <label
       >Size<select
         [value]="widget().background.size"
