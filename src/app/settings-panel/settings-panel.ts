@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { GridTrack, Widget, WidgetElement, WidgetElementType } from 'widget-renderer';
-import { ColorPicker } from '../color-picker/color-picker';
 import { AnchorControl } from './anchor-control/anchor-control';
-import { GridTrackEditor } from './grid-track-editor/grid-track-editor';
 import { TextElementSettings } from './text-element-settings/text-element-settings';
 import { ImageElementSettings } from './image-element-settings/image-element-settings';
 import { ButtonElementSettings } from './button-element-settings/button-element-settings';
+import { WidgetSettings } from './widget-settings/widget-settings';
 
 export interface TrackChange {
   kind: 'rows' | 'columns';
@@ -28,12 +27,11 @@ export interface SpanChange {
   selector: 'app-settings-panel',
   imports: [
     CommonModule,
-    ColorPicker,
     AnchorControl,
-    GridTrackEditor,
     TextElementSettings,
     ImageElementSettings,
     ButtonElementSettings,
+    WidgetSettings,
   ],
   templateUrl: './settings-panel.html',
   styleUrl: './settings-panel.css',
