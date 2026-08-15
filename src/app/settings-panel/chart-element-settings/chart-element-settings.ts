@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { ChartElement, GaugeElement, GraphStyle, ProgressElement } from 'widget-renderer';
-import { eventNumber, eventValue } from '../form-events';
+import { eventChecked, eventNumber, eventValue } from '../form-events';
 
 @Component({
   selector: 'app-chart-element-settings',
@@ -17,6 +17,9 @@ export class ChartElementSettings {
 
   protected number(event: Event): number {
     return eventNumber(event);
+  }
+  protected checked(event: Event): boolean {
+    return eventChecked(event);
   }
   protected progress(): ProgressElement {
     return this.element() as ProgressElement;

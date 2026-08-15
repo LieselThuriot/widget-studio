@@ -18,6 +18,20 @@ describe('editor state transformations', () => {
     expect(updated.elements.find((element) => element.id === 'message')?.sensitive).toBe(false);
   });
 
+  it('preserves nested style fields when patching one style value', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = patchElement(widget, 'headline', {
+      style: { font: { weight: 700 } } as never,
+    });
+    const headline = updated.elements.find((element) => element.id === 'headline');
+
+    expect(headline?.type).toBe('text');
+    if (headline?.type === 'text') {
+      expect(headline.style.font.size).toBe(10);
+      expect(headline.style.font.weight).toBe(700);
+    }
+  });
+
   it('clamps element position and span to the widget grid', () => {
     const widget = structuredClone(sampleWidget);
     const position = updateElementPosition(widget, 'headline', 'row', 99);

@@ -251,12 +251,36 @@ export function patchElement(widget: Widget, id: string, patch: Partial<WidgetEl
             typeof stylePatch === 'object' &&
             'style' in element &&
             typeof element.style === 'object'
-              ? { style: { ...element.style, ...stylePatch } }
+              ? { style: mergeElementStyle(element, stylePatch) }
               : {}),
           } as WidgetElement)
         : element,
     ),
   };
+}
+
+function mergeElementStyle(element: WidgetElement, patch: object): object {
+  const currentStyle = 'style' in element && typeof element.style === 'object' ? element.style : {};
+  const merged = { ...currentStyle, ...patch } as Record<string, unknown>;
+  if ('font' in currentStyle && 'font' in patch) {
+    merged['font'] = {
+      ...(currentStyle.font as Record<string, unknown>),
+      ...((patch as Record<string, unknown>)['font'] as Record<string, unknown>),
+    };
+  }
+  if ('color' in currentStyle && 'color' in patch) {
+    merged['color'] = {
+      ...(currentStyle.color as Record<string, unknown>),
+      ...((patch as Record<string, unknown>)['color'] as Record<string, unknown>),
+    };
+  }
+  if ('axis' in currentStyle && 'axis' in patch) {
+    merged['axis'] = {
+      ...(currentStyle.axis as Record<string, unknown>),
+      ...((patch as Record<string, unknown>)['axis'] as Record<string, unknown>),
+    };
+  }
+  return merged;
 }
 
 export function reorderElements(widget: Widget, sourceId: string, targetId: string): Widget {

@@ -58,9 +58,7 @@
       ><input
         type="checkbox"
         [checked]="progress().showLegend ?? true"
-        (change)="changed.emit({ showLegend: $any($event.target).checked })" /><span
-        class="toggle"
-      ></span
+        (change)="changed.emit({ showLegend: checked($event) })" /><span class="toggle"></span
     ></label>
     <label
       >Legend color<input
@@ -95,9 +93,7 @@
       ><input
         type="checkbox"
         [checked]="progress().active ?? false"
-        (change)="changed.emit({ active: $any($event.target).checked })" /><span
-        class="toggle"
-      ></span
+        (change)="changed.emit({ active: checked($event) })" /><span class="toggle"></span
     ></label>
   } @else {
     <label
@@ -133,9 +129,7 @@
         ><input
           type="checkbox"
           [checked]="chart().showLegend"
-          (change)="changed.emit({ showLegend: $any($event.target).checked })" /><span
-          class="toggle"
-        ></span
+          (change)="changed.emit({ showLegend: checked($event) })" /><span class="toggle"></span
       ></label>
       <label
         >Legend color<input
@@ -238,9 +232,7 @@
         ><input
           type="checkbox"
           [checked]="gauge().showLegend"
-          (change)="changed.emit({ showLegend: $any($event.target).checked })" /><span
-          class="toggle"
-        ></span
+          (change)="changed.emit({ showLegend: checked($event) })" /><span class="toggle"></span
       ></label>
       <label
         >Legend color<input
