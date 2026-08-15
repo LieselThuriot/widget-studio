@@ -51,14 +51,14 @@ export class WidgetRenderer {
     this.hydratedWidget = hydrateWidget(result.data as WidgetInput, this.hydratedWidget);
     return this.hydratedWidget;
   });
-  readonly hasSensitiveElements = computed(
-    () =>
-      this.renderWidget().background.sensitive ||
-      this.renderWidget().elements.some((element) => element.sensitive),
-  );
-  readonly backgroundSensitive = computed(
-    () => this.renderWidget().background.sensitive && !this.sensitiveVisible(),
-  );
+  readonly hasSensitiveElements = computed(() => {
+    const widget = this.renderWidget();
+    return widget.background.sensitive || widget.elements.some((element) => element.sensitive);
+  });
+  readonly backgroundSensitive = computed(() => {
+    const widget = this.renderWidget();
+    return widget.background.sensitive && !this.sensitiveVisible();
+  });
   readonly gridRows = computed(() => gridTemplate(this.renderWidget().rows));
   readonly gridColumns = computed(() => gridTemplate(this.renderWidget().columns));
   readonly widgetWidth = computed(() => getWidgetWidth(this.renderWidget().size));
