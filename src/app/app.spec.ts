@@ -149,4 +149,68 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('.alert-overlay')).toBeNull();
     expect(document.activeElement).toBe(actionButton);
   });
+
+  it('should update text formatting from the inspector', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const boldButton = fixture.nativeElement.querySelector(
+      '.formatting-tools button[aria-label="Toggle bold"]',
+    ) as HTMLButtonElement;
+    boldButton.click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: { id?: string; type: string; style?: { fontWeight: number } }[] };
+    const headline = contract.elements.find((element) => element.type === 'text');
+
+    expect(headline?.style?.fontWeight).toBe(400);
+  });
+
+  it('should update widget size and add a grid track', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const canvas = fixture.nativeElement.querySelector('.canvas') as HTMLElement;
+    canvas.click();
+    fixture.detectChanges();
+
+    const size = fixture.nativeElement.querySelector('.settings-panel select') as HTMLSelectElement;
+    size.value = 'wide';
+    size.dispatchEvent(new Event('change', { bubbles: true }));
+    fixture.detectChanges();
+    const addRow = fixture.nativeElement.querySelector(
+      'app-grid-track-editor[kind="rows"] .small-add',
+    ) as HTMLButtonElement;
+    addRow.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('530');
+    expect(
+      fixture.nativeElement.querySelectorAll('app-grid-track-editor[kind="rows"] .track-row'),
+    ).toHaveLength(4);
+  });
+
+  it('should clamp selected element placement and span values', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const numberInputs = fixture.nativeElement.querySelectorAll(
+      '.settings-panel .placement input',
+    ) as NodeListOf<HTMLInputElement>;
+    numberInputs[0].value = '99';
+    numberInputs[0].dispatchEvent(new Event('input', { bubbles: true }));
+    numberInputs[2].value = '99';
+    numberInputs[2].dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: { type: string; row: number; rowSpan: number }[] };
+    const headline = contract.elements.find((element) => element.type === 'text');
+
+    expect(headline?.row).toBe(2);
+    expect(headline?.rowSpan).toBe(1);
+  });
 });

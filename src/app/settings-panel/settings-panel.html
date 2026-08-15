@@ -21,20 +21,20 @@
     } @else {
       <app-button-element-settings [element]="element" (changed)="elementChanged.emit($event)" />
     }
-    <app-anchor-control
-      [value]="element.anchor"
-      ariaLabel="Element anchor"
-      (changed)="elementChanged.emit({ anchor: $event })"
-    />
+    @if (element.type !== 'image') {
+      <app-anchor-control
+        [value]="element.anchor"
+        ariaLabel="Element anchor"
+        (changed)="elementChanged.emit({ anchor: $event })"
+      />
+    }
     <label class="toggle-row"
       ><span
         ><strong>Sensitive content</strong><small>Blur until the eye control is used</small></span
       ><input
         type="checkbox"
         [checked]="element.sensitive"
-        (change)="elementChanged.emit({ sensitive: $any($event.target).checked })" /><span
-        class="toggle"
-      ></span
+        (change)="elementChanged.emit({ sensitive: checked($event) })" /><span class="toggle"></span
     ></label>
     <div class="placement">
       <p class="eyebrow">Grid placement</p>
@@ -45,16 +45,14 @@
             min="1"
             [max]="widget().rows.length"
             [value]="element.row + 1"
-            (input)="
-              placementChanged.emit({ kind: 'row', value: +$any($event.target).value })
-            " /></label
+            (input)="placementChanged.emit({ kind: 'row', value: number($event) })" /></label
         ><label
           >Column<input
             type="number"
             min="1"
             [max]="widget().columns.length"
             [value]="element.column + 1"
-            (input)="placementChanged.emit({ kind: 'column', value: +$any($event.target).value })"
+            (input)="placementChanged.emit({ kind: 'column', value: number($event) })"
         /></label>
       </div>
       <div class="field-row">
@@ -64,16 +62,14 @@
             min="1"
             [max]="widget().rows.length - element.row"
             [value]="element.rowSpan"
-            (input)="
-              spanChanged.emit({ kind: 'rowSpan', value: +$any($event.target).value })
-            " /></label
+            (input)="spanChanged.emit({ kind: 'rowSpan', value: number($event) })" /></label
         ><label
           >Column span<input
             type="number"
             min="1"
             [max]="widget().columns.length - element.column"
             [value]="element.columnSpan"
-            (input)="spanChanged.emit({ kind: 'columnSpan', value: +$any($event.target).value })"
+            (input)="spanChanged.emit({ kind: 'columnSpan', value: number($event) })"
         /></label>
       </div>
     </div>

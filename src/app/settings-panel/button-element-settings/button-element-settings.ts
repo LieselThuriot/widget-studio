@@ -1,36 +1,30 @@
 import { Component, input, output } from '@angular/core';
 import { ButtonElement } from 'widget-renderer';
+import { eventValue } from '../form-events';
 
 @Component({
   selector: 'app-button-element-settings',
   template: `<label
-      >Label<input
-        [value]="element().label"
-        (input)="changed.emit({ label: $any($event.target).value })"
+      >Label<input [value]="element().label" (input)="changed.emit({ label: value($event) })"
     /></label>
     <div class="field-row">
       <label
         >Method<select
           [value]="element().method"
-          (change)="changed.emit({ method: $any($event.target).value })"
+          (change)="changed.emit({ method: method($event) })"
         >
           <option value="get">GET</option>
           <option value="post">POST</option>
         </select></label
       ><label
-        >Style<select
-          [value]="element().style"
-          (change)="changed.emit({ style: $any($event.target).value })"
-        >
+        >Style<select [value]="element().style" (change)="changed.emit({ style: style($event) })">
           <option value="solid">Solid</option>
           <option value="outline">Outline</option>
         </select></label
       >
     </div>
     <label
-      >Request URL<input
-        [value]="element().url"
-        (input)="changed.emit({ url: $any($event.target).value })"
+      >Request URL<input [value]="element().url" (input)="changed.emit({ url: value($event) })"
     /></label>`,
   styles: `
     :host {
@@ -66,4 +60,16 @@ import { ButtonElement } from 'widget-renderer';
 export class ButtonElementSettings {
   readonly element = input.required<ButtonElement>();
   readonly changed = output<Partial<ButtonElement>>();
+
+  protected value(event: Event): string {
+    return eventValue(event);
+  }
+
+  protected method(event: Event): ButtonElement['method'] {
+    return eventValue(event) === 'post' ? 'post' : 'get';
+  }
+
+  protected style(event: Event): ButtonElement['style'] {
+    return eventValue(event) === 'outline' ? 'outline' : 'solid';
+  }
 }

@@ -3,6 +3,7 @@ import { Widget } from 'widget-renderer';
 import { ColorPicker } from '../../color-picker/color-picker';
 import { AnchorControl } from '../anchor-control/anchor-control';
 import { GridTrackEditor } from '../grid-track-editor/grid-track-editor';
+import { eventChecked, eventValue } from '../form-events';
 
 export interface WidgetTrackChange {
   kind: 'rows' | 'columns';
@@ -29,7 +30,7 @@ export interface WidgetTrackChange {
         <label
           >Widget size<select
             [value]="widget().size"
-            (change)="widgetChanged.emit({ size: $any($event.target).value })"
+            (change)="widgetChanged.emit({ size: size($event) })"
           >
             <option value="square">Square · 265 × 245</option>
             <option value="wide">Wide · 530 × 245</option>
@@ -97,7 +98,7 @@ export interface WidgetTrackChange {
             [value]="widget().background.image || ''"
             (input)="
               widgetChanged.emit({
-                background: { ...widget().background, image: $any($event.target).value },
+                background: { ...widget().background, image: value($event) },
               })
             "
           ></textarea></label
@@ -106,7 +107,7 @@ export interface WidgetTrackChange {
             [value]="widget().background.size"
             (change)="
               widgetChanged.emit({
-                background: { ...widget().background, size: $any($event.target).value },
+                background: { ...widget().background, size: backgroundSize($event) },
               })
             "
           >
@@ -123,7 +124,7 @@ export interface WidgetTrackChange {
             [checked]="widget().background.repeat"
             (change)="
               widgetChanged.emit({
-                background: { ...widget().background, repeat: $any($event.target).checked },
+                background: { ...widget().background, repeat: checked($event) },
               })
             " /><span class="toggle"></span></label
         ><app-anchor-control
@@ -147,7 +148,7 @@ export interface WidgetTrackChange {
             [checked]="widget().refresh.enabled"
             (change)="
               widgetChanged.emit({
-                refresh: { ...widget().refresh, enabled: $any($event.target).checked },
+                refresh: { ...widget().refresh, enabled: checked($event) },
               })
             " /><span class="toggle"></span></label
         ><label
@@ -155,7 +156,7 @@ export interface WidgetTrackChange {
             [value]="widget().refresh.label"
             (input)="
               widgetChanged.emit({
-                refresh: { ...widget().refresh, label: $any($event.target).value },
+                refresh: { ...widget().refresh, label: value($event) },
               })
             "
         /></label>
@@ -271,4 +272,21 @@ export class WidgetSettings {
   readonly trackChanged = output<WidgetTrackChange>();
   readonly trackAdded = output<'rows' | 'columns'>();
   readonly trackRemoved = output<{ kind: 'rows' | 'columns'; index: number }>();
+
+  protected value(event: Event): string {
+    return eventValue(event);
+  }
+
+  protected checked(event: Event): boolean {
+    return eventChecked(event);
+  }
+
+  protected size(event: Event): Widget['size'] {
+    return eventValue(event) === 'wide' ? 'wide' : 'square';
+  }
+
+  protected backgroundSize(event: Event): Widget['background']['size'] {
+    const value = eventValue(event);
+    return value === 'contain' || value === 'auto' ? value : 'cover';
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { GridTrack } from 'widget-renderer';
+import { eventNumber, eventValue } from '../form-events';
 
 @Component({
   selector: 'app-grid-track-editor',
@@ -14,11 +15,11 @@ import { GridTrack } from 'widget-renderer';
           type="number"
           min="1"
           [value]="track.size"
-          (input)="sizeChanged.emit({ index: $index, value: +$any($event.target).value })"
+          (input)="sizeChanged.emit({ index: $index, value: number($event) })"
         />
         <select
           [value]="track.unit"
-          (change)="unitChanged.emit({ index: $index, value: $any($event.target).value })"
+          (change)="unitChanged.emit({ index: $index, value: unit($event) })"
         >
           <option value="star">Star</option>
           <option value="pixel">Pixel</option>
@@ -98,4 +99,13 @@ export class GridTrackEditor {
   readonly removed = output<number>();
   readonly sizeChanged = output<{ index: number; value: number }>();
   readonly unitChanged = output<{ index: number; value: GridTrack['unit'] }>();
+
+  protected number(event: Event): number {
+    return eventNumber(event);
+  }
+
+  protected unit(event: Event): GridTrack['unit'] {
+    const value = eventValue(event);
+    return value === 'pixel' || value === 'auto' ? value : 'star';
+  }
 }

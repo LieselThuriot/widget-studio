@@ -6,6 +6,7 @@ import { TextElementSettings } from './text-element-settings/text-element-settin
 import { ImageElementSettings } from './image-element-settings/image-element-settings';
 import { ButtonElementSettings } from './button-element-settings/button-element-settings';
 import { WidgetSettings } from './widget-settings/widget-settings';
+import { eventChecked, eventNumber } from './form-events';
 
 export interface TrackChange {
   kind: 'rows' | 'columns';
@@ -50,5 +51,13 @@ export class SettingsPanel {
 
   protected icon(type: WidgetElementType): string {
     return type === 'text' ? 'T' : type === 'image' ? '▧' : '↗';
+  }
+
+  protected checked(event: Event): boolean {
+    return eventChecked(event);
+  }
+
+  protected number(event: Event): number {
+    return eventNumber(event);
   }
 }

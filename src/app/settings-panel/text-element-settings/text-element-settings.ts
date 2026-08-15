@@ -1,16 +1,16 @@
 import { Component, input, output } from '@angular/core';
 import { TextElement } from 'widget-renderer';
 import { ColorPicker } from '../../color-picker/color-picker';
+import { eventChecked, eventNumber, eventValue } from '../form-events';
 
 @Component({
   selector: 'app-text-element-settings',
   imports: [ColorPicker],
   template: `
     <label
-      >Content<textarea
-        [value]="element().text"
-        (input)="changed.emit({ text: $any($event.target).value })"
-        >{{ element().text }}</textarea>
+      >Content<textarea [value]="element().text" (input)="changed.emit({ text: value($event) })">{{
+        element().text
+      }}</textarea>
     </label>
     <div class="formatting-tools" aria-label="Text formatting">
       <button
@@ -63,17 +63,13 @@ import { ColorPicker } from '../../color-picker/color-picker';
       >Size<input
         type="number"
         [value]="element().style.fontSize"
-        (input)="
-          changed.emit({ style: { ...element().style, fontSize: +$any($event.target).value } })
-        "
+        (input)="changed.emit({ style: { ...element().style, fontSize: number($event) } })"
     /></label>
     <div class="text-layout-settings">
       <label
         >Horizontal alignment<select
           [value]="element().style.align"
-          (change)="
-            changed.emit({ style: { ...element().style, align: $any($event.target).value } })
-          "
+          (change)="changed.emit({ style: { ...element().style, align: alignment($event) } })"
         >
           <option value="left">Left</option>
           <option value="center">Center</option>
@@ -84,9 +80,9 @@ import { ColorPicker } from '../../color-picker/color-picker';
         ><input
           type="checkbox"
           [checked]="element().style.wrap"
-          (change)="
-            changed.emit({ style: { ...element().style, wrap: $any($event.target).checked } })
-          " /><span class="toggle"></span
+          (change)="changed.emit({ style: { ...element().style, wrap: checked($event) } })" /><span
+          class="toggle"
+        ></span
       ></label>
     </div>
     <app-color-picker
@@ -191,4 +187,21 @@ import { ColorPicker } from '../../color-picker/color-picker';
 export class TextElementSettings {
   readonly element = input.required<TextElement>();
   readonly changed = output<Partial<TextElement>>();
+
+  protected value(event: Event): string {
+    return eventValue(event);
+  }
+
+  protected number(event: Event): number {
+    return eventNumber(event);
+  }
+
+  protected checked(event: Event): boolean {
+    return eventChecked(event);
+  }
+
+  protected alignment(event: Event): TextElement['style']['align'] {
+    const value = eventValue(event);
+    return value === 'center' || value === 'right' ? value : 'left';
+  }
 }
