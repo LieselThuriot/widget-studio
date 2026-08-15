@@ -8,9 +8,9 @@ import {
   TextElement,
   Widget,
   WidgetElement,
+  WidgetInput,
 } from './widget.model';
 import { hydrateWidget } from './widget-hydration';
-import { WidgetInput } from './widget.model';
 import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
 import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
 
