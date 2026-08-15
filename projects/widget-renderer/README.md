@@ -32,7 +32,8 @@ Your Angular component
 <widget-renderer>
 ```
 
-Your API does not need to add an ID to every element.
+Your API does not need to add an ID to every element. IDs are optional, but any
+non-empty IDs that are provided must be unique within the widget.
 
 ## Basic Usage
 
@@ -107,7 +108,8 @@ Then render it:
 
 ## API Data And IDs
 
-Use `WidgetContract` for API data. Its elements do not need an `id`:
+Use `WidgetContract` for API data. Its elements may include an `id`, but do not
+need one:
 
 ```ts
 const apiWidget: WidgetContract = {
@@ -115,14 +117,25 @@ const apiWidget: WidgetContract = {
   elements: [
     {
       type: 'text',
-      // No id is required here.
+      // An id is optional. If present, it must be unique in this widget.
       // ...other text properties
     },
   ],
 };
 ```
 
-The renderer creates temporary internal IDs while it is running. These IDs are used by Angular and the renderer to keep track of elements.
+The renderer creates temporary internal IDs for elements without an API ID.
+These IDs are used by Angular and the renderer to keep track of elements and
+are never required from your API.
+
+When API data is refreshed, the renderer uses a non-empty API ID as the
+element's stable identity. Elements without API IDs use their previous
+position and type when possible; otherwise, the renderer creates a new
+temporary ID. This means API IDs preserve identity when elements are reordered,
+while the common no-ID case continues to work without extra API data.
+
+`null` and empty-string IDs are treated the same as a missing ID. Duplicate
+non-empty IDs are invalid and are reported by runtime validation.
 
 You do not need to:
 
@@ -237,7 +250,9 @@ if (result.success) {
 }
 ```
 
-Each issue includes a path, for example `elements[0].grid.rowSpan`.
+Each issue includes a path. An element with an API ID uses that ID in the path,
+for example `elements["headline"].grid.rowSpan`. An element without an ID uses
+its array index, for example `elements[0].grid.rowSpan`.
 
 ### Option 2: Throw On Invalid Data
 
@@ -259,7 +274,7 @@ Use these types as follows:
 
 | Type             | Use it for                                                                                            |
 | ---------------- | ----------------------------------------------------------------------------------------------------- |
-| `WidgetContract` | API data without renderer IDs. This is the normal input for `WidgetRenderer`.                         |
+| `WidgetContract` | API data with optional element IDs. This is the normal input for `WidgetRenderer`.                    |
 | `Widget`         | The internal client-side model, including renderer IDs. Useful for editors and advanced integrations. |
 
 Advanced consumers can call `hydrateWidget()` when they specifically need the internal `Widget` model. Normal renderer consumers should not need it.
@@ -276,7 +291,18 @@ This is a display and privacy feature. It is not encryption. Sensitive values st
 
 ### Do API elements need IDs?
 
-No. Use `WidgetContract` and pass it directly to `WidgetRenderer`.
+No. Use `WidgetContract` and pass it directly to `WidgetRenderer`. If you do
+provide IDs, make them non-empty and unique within the widget.
+
+### What are API IDs used for?
+
+API IDs provide stable element identity when widget data is refreshed or
+reordered. Elements without IDs receive temporary renderer IDs instead.
+
+### Can two API elements share an ID?
+
+No. Duplicate non-empty IDs fail runtime validation. Missing, `null`, and empty
+IDs are allowed and are treated as elements without an API ID.
 
 ### Do I need to call `hydrateWidget()`?
 

@@ -18,7 +18,7 @@ The renderer is display-focused. It does not edit layouts, persist changes, or m
 - Defensive runtime validation for API responses
 - Sensitive-content visibility controls
 - Accessible chart summaries and keyboard-friendly interaction
-- Temporary internal IDs, so API elements do not need IDs
+- Optional API IDs with temporary internal IDs when IDs are absent
 
 ## Quick Start
 
