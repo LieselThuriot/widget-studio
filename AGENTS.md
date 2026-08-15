@@ -1,70 +1,29 @@
-You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
+# Repository Instructions
 
-## TypeScript Best Practices
+## Structure
 
-- Use strict type checking
-- Prefer type inference when the type is obvious
-- Avoid the `any` type; use `unknown` when type is uncertain
+- This is an Angular 22 workspace with two projects: `widget` is the editor application under `src/`; `widget-renderer` is the reusable library under `projects/widget-renderer/`.
+- The library entrypoint is `projects/widget-renderer/src/public-api.ts`. Keep public exports there in sync with any new consumer-facing API.
+- The editor imports the library through the `widget-renderer` TypeScript path alias; application changes do not by themselves prove the packaged library works.
 
-## Angular Best Practices
+## Commands
 
-- Always use standalone components over NgModules
-- Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
-- Do NOT set `changeDetection: ChangeDetectionStrategy.OnPush` explicitly. `OnPush` is the default in Angular v22+.
-- Use signals for state management
-- Implement lazy loading for feature routes
-- Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
-- Use `NgOptimizedImage` for all static images.
-  - `NgOptimizedImage` does not work for inline base64 images.
+- Use npm with the committed `package-lock.json` (`npm@12.0.2` is declared in `package.json`); use `npm ci` for a clean install.
+- Start the editor with `npm start` and open `http://localhost:4200/`.
+- Run formatting after edits with `npm run format`; check it with `npm run format:check`.
+- Run lint with `npm run lint` and non-watch unit tests with `npm test -- --watch=false`.
+- `npm run build` builds both the application and library. Use `npm run build:app` or `npm run build:library` for one project.
+- For library-facing changes, run `npm run verify:library-package` after the library build. It packs `dist/widget-renderer`, installs it into a temporary consumer, and verifies the public API.
 
-## Accessibility Requirements
+## Conventions
 
-- It MUST pass all AXE checks.
-- It MUST follow all WCAG AA minimums, including focus management, color contrast, and ARIA attributes.
-
-### Components
-
-- Keep components small and focused on a single responsibility
-- Use `input()` and `output()` functions instead of decorators
-- Use `model()` for two-way bound properties with `[(prop)]` syntax instead of pairing `input()` with `output()`
-- Use `computed()` for derived state
-- Use `linkedSignal()` for state derived from multiple reactive sources that must stay synchronized
-- Keep component HTML and CSS in external colocated files next to the component TypeScript file
-- Prefer Signal Forms (`@angular/forms/signals`) for new forms. They are stable in Angular v22+ and provide signal-based state, type-safe field access, and schema-based validation
-- When not using Signal Forms, prefer Reactive forms instead of Template-driven ones
-- Do NOT use `ngClass`, use `class` bindings instead
-- Do NOT use `ngStyle`, use `style` bindings instead
-- When using external templates/styles, use paths relative to the component TS file.
-
-## State Management
-
-- Use signals for local component state
-- Use `computed()` for derived state
-- Keep state transformations pure and predictable
-- Do NOT use `mutate` on signals, use `update` or `set` instead
-
-## Templates
-
-- Keep templates simple and avoid complex logic
-- Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
-- Use the async pipe to handle observables
-- Do not assume globals like (`new Date()`) are available.
-
-## Services
-
-- Design services around a single responsibility
-- Use the `providedIn: 'root'` option for singleton services
-- Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
-- Use the `inject()` function instead of constructor injection
-
-## Formatting
-
-- Use Prettier for TypeScript, CSS, and Angular HTML templates. There are currently no JavaScript source files.
-- Run `npm run format` after making code changes.
-- Run `npm run format:check` before considering the changes complete.
-
-## Linting
-
-- Use Angular ESLint for TypeScript and Angular HTML templates.
-- Run `npm run lint` after making code changes.
-- Run `npm run lint` before considering the changes complete.
+- Keep strict TypeScript settings intact; prefer inferred types and avoid `any` when `unknown` or a specific type is possible.
+- Use the existing Angular patterns: standalone components, signals for local state, `inject()`, signal/input/output APIs, external colocated HTML/CSS, and native `@if`/`@for`/`@switch` control flow.
+- Do not add `standalone: true` or explicit `OnPush`; both are defaults in this Angular 22 workspace.
+- Put host event bindings in a component or directive decorator's `host` object instead of using `@HostBinding` or `@HostListener`.
+- Use `NgOptimizedImage` for static images; it does not support inline base64 images.
+- Use `computed()` for derived signal state and update signals with `set()` or `update()` rather than mutation.
+- Preserve accessibility behavior. Angular ESLint includes template accessibility rules, and the test suite covers renderer behavior such as focus, hydration, validation, chart accessibility, loading, and sensitive content.
+- The editor uses `Widget` internal models with IDs; normal library/API consumers use `WidgetContract` without IDs. Do not require callers to hydrate API data before rendering.
+- Renderer button actions and refresh events are emitted to the consuming application; the library must not make those network requests itself.
+- ECharts is a peer dependency of `widget-renderer`; chart tests use `src/test-setup.ts` because ECharts probes canvas support even when charts render as SVG.
