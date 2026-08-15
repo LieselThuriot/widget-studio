@@ -62,4 +62,33 @@ describe('hydrateWidget', () => {
 
     expect(second.elements[0].id).not.toBe(first.elements[0].id);
   });
+
+  it('preserves API-provided IDs when elements reorder', () => {
+    const first = hydrateWidget({
+      ...contract,
+      elements: [
+        { ...contract.elements[0], id: 'headline' },
+        { ...contract.elements[0], id: 'summary' },
+      ],
+    });
+    const reordered = hydrateWidget(
+      {
+        ...contract,
+        elements: [
+          { ...contract.elements[0], id: 'summary' },
+          { ...contract.elements[0], id: 'headline' },
+        ],
+      },
+      first,
+    );
+
+    expect(reordered.elements.map((element) => element.id)).toEqual(['summary', 'headline']);
+  });
+
+  it('generates IDs for elements without public IDs', () => {
+    const hydrated = hydrateWidget(contract);
+
+    expect(hydrated.elements[0].id).toMatch(/^text-/);
+    expect(contract.elements[0]).not.toHaveProperty('id');
+  });
 });
