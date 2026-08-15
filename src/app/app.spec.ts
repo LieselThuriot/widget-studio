@@ -38,6 +38,20 @@ describe('App', () => {
     expect(contract.elements.every((element) => !('id' in element))).toBe(true);
   });
 
+  it('should omit anchors from chart grid contracts', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: { type: string; grid?: { anchor?: string } }[] };
+
+    const chartElements = contract.elements.filter((element) =>
+      ['pie', 'donut', 'gauge', 'bar', 'line'].includes(element.type),
+    );
+
+    expect(chartElements.every((element) => !('anchor' in (element.grid ?? {})))).toBe(true);
+  });
+
   it('should include left text alignment in the output contract', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
@@ -124,6 +138,176 @@ describe('App', () => {
 
     expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(5);
     expect(fixture.nativeElement.querySelector('.selected-chip')?.textContent).toContain('Text');
+  });
+
+  it('should add progress defaults to the output contract', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const progress = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-item') as NodeListOf<HTMLButtonElement>,
+    ).find((item) => item.textContent?.includes('Progress')) as HTMLButtonElement;
+    progress.click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: Record<string, unknown>[] };
+    const progressElement = contract.elements.find((element) => element['type'] === 'progress');
+
+    expect(progressElement?.['showLegend']).toBe(true);
+    expect(progressElement?.['active']).toBe(false);
+  });
+
+  it('should update progress legend and active settings', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const progress = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-item') as NodeListOf<HTMLButtonElement>,
+    ).find((item) => item.textContent?.includes('Progress')) as HTMLButtonElement;
+    progress.click();
+    fixture.detectChanges();
+
+    const toggles = Array.from(
+      fixture.nativeElement.querySelectorAll(
+        'app-chart-element-settings .toggle-row input',
+      ) as NodeListOf<HTMLInputElement>,
+    );
+    expect(toggles).toHaveLength(2);
+    toggles[0].click();
+    toggles[1].click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: Record<string, unknown>[] };
+    const progressElement = contract.elements.find((element) => element['type'] === 'progress');
+
+    expect(progressElement?.['showLegend']).toBe(false);
+    expect(progressElement?.['active']).toBe(true);
+  });
+
+  it('should preserve progress style fields when changing one style setting', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const progress = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-item') as NodeListOf<HTMLButtonElement>,
+    ).find((item) => item.textContent?.includes('Progress')) as HTMLButtonElement;
+    progress.click();
+    fixture.detectChanges();
+
+    const legendColor = Array.from(
+      fixture.nativeElement.querySelectorAll(
+        'app-chart-element-settings input[type="color"]',
+      ) as NodeListOf<HTMLInputElement>,
+    ).find((input) =>
+      input.parentElement?.textContent?.includes('Legend color'),
+    ) as HTMLInputElement;
+    legendColor.value = '#ff0000';
+    legendColor.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as {
+      elements: {
+        type: string;
+        data?: Record<string, unknown>;
+        style?: { color?: Record<string, unknown> };
+      }[];
+    };
+    const progressElement = contract.elements.find((element) => element.type === 'progress');
+
+    expect(progressElement?.style?.color?.['fill']).toBe('#7dd3fc');
+    expect(progressElement?.style?.color?.['legend']).toBe('#ff0000');
+    expect(progressElement?.style?.color?.['track']).toBe('#334155');
+  });
+
+  it('should omit gauge label, colors, and value color from the contract', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const gauge = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-item') as NodeListOf<HTMLButtonElement>,
+    ).find((item) => item.textContent?.includes('Gauge')) as HTMLButtonElement;
+    gauge.click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: Record<string, unknown>[] };
+    const gaugeElement = contract.elements.find((element) => element['type'] === 'gauge');
+    const data = gaugeElement?.['data'] as Record<string, unknown>;
+    const style = gaugeElement?.['style'] as Record<string, unknown>;
+
+    expect(data['label']).toBeUndefined();
+    expect(gaugeElement?.['colors']).toBeUndefined();
+    expect(style['valueColor']).toBeUndefined();
+    expect(style['axisLabelColor']).toBeUndefined();
+    expect(style['axisLineColor']).toBeUndefined();
+    expect((style['color'] as Record<string, unknown>)['legend']).toBe('#f6f7fb');
+  });
+
+  it('should update gauge legend color from the inspector', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const gauge = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-item') as NodeListOf<HTMLButtonElement>,
+    ).find((item) => item.textContent?.includes('Gauge')) as HTMLButtonElement;
+    gauge.click();
+    fixture.detectChanges();
+
+    const legendColor = Array.from(
+      fixture.nativeElement.querySelectorAll(
+        'app-chart-element-settings input[type="color"]',
+      ) as NodeListOf<HTMLInputElement>,
+    ).find((input) =>
+      input.parentElement?.textContent?.includes('Legend color'),
+    ) as HTMLInputElement;
+    legendColor.value = '#ff0000';
+    legendColor.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: { type: string; style?: { color?: { legend?: string } } }[] };
+    const gaugeElement = contract.elements.find((element) => element.type === 'gauge');
+
+    expect(gaugeElement?.style?.color?.legend).toBe('#ff0000');
+  });
+
+  it('should expose gauge legend controls in the gauge section', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const gauge = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-item') as NodeListOf<HTMLButtonElement>,
+    ).find((item) => item.textContent?.includes('Gauge')) as HTMLButtonElement;
+    gauge.click();
+    fixture.detectChanges();
+
+    const settings = fixture.nativeElement.querySelector(
+      'app-chart-element-settings',
+    ) as HTMLElement;
+    const labels = Array.from(settings.querySelectorAll('label')).map((label) =>
+      label.textContent?.replace(/\s+/g, ' ').trim(),
+    );
+
+    expect(labels).toEqual([
+      'Title',
+      'Title color',
+      'Value',
+      'Minimum',
+      'Maximum',
+      'Fill color',
+      'Track color',
+      'Show legendDisplay gauge labels and value',
+      'Legend color',
+      'Font size',
+    ]);
   });
 
   it('should delete a layer from the layer panel', async () => {
@@ -296,10 +480,41 @@ describe('App', () => {
 
     const contract = JSON.parse(
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
-    ) as { elements: { id?: string; type: string; style?: { fontWeight: number } }[] };
+    ) as { elements: { id?: string; type: string; style?: { font?: { weight?: number } } }[] };
     const headline = contract.elements.find((element) => element.type === 'text');
 
-    expect(headline?.style?.fontWeight).toBe(400);
+    expect(headline?.style?.font?.weight).toBe(400);
+  });
+
+  it('should preserve the remaining text decoration when toggling another', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const underline = fixture.nativeElement.querySelector(
+      '.formatting-tools button[aria-label="Toggle underline"]',
+    ) as HTMLButtonElement;
+    const strikethrough = fixture.nativeElement.querySelector(
+      '.formatting-tools button[aria-label="Toggle strikethrough"]',
+    ) as HTMLButtonElement;
+    underline.click();
+    fixture.detectChanges();
+    strikethrough.click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: { type: string; style?: { font?: { decoration?: string } } }[] };
+    const headline = contract.elements.find((element) => element.type === 'text');
+    expect(headline?.style?.font?.decoration).toBe('underline line-through');
+
+    underline.click();
+    fixture.detectChanges();
+    const updatedContract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: { type: string; style?: { font?: { decoration?: string } } }[] };
+    const updatedHeadline = updatedContract.elements.find((element) => element.type === 'text');
+
+    expect(updatedHeadline?.style?.font?.decoration).toBe('line-through');
   });
 
   it('should update widget size and add a grid track', async () => {
@@ -395,10 +610,10 @@ describe('App', () => {
 
     const contract = JSON.parse(
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
-    ) as { elements: { type: string; row: number; rowSpan: number }[] };
+    ) as { elements: { type: string; grid: { row: number; rowSpan: number } }[] };
     const headline = contract.elements.find((element) => element.type === 'text');
 
-    expect(headline?.row).toBe(2);
-    expect(headline?.rowSpan).toBe(1);
+    expect(headline?.grid.row).toBe(2);
+    expect(headline?.grid.rowSpan).toBe(1);
   });
 });

@@ -1,0 +1,27 @@
+@if (isProgress(element())) {
+  <div
+    class="progress-element"
+    [style]="progressStyle(progress(element()))"
+    [attr.aria-label]="progress(element()).data.label"
+    role="progressbar"
+    [attr.aria-valuemin]="progress(element()).data.min"
+    [attr.aria-valuemax]="progress(element()).data.max"
+    [attr.aria-valuenow]="progress(element()).data.value"
+  >
+    <span class="progress-track" [class.is-active]="progressActive(progress(element()))"
+      ><span class="progress-fill"></span
+    ></span>
+    @if (progressShowLegend(progress(element()))) {
+      <span class="progress-label" [style.text-align]="progressTextAlign(progress(element()))"
+        >{{ progress(element()).data.label }} {{ progress(element()).data.value }}</span
+      >
+    }
+  </div>
+} @else {
+  <div
+    #chartHost
+    class="chart-host"
+    [attr.aria-label]="chart(element()).title || 'Chart'"
+    role="img"
+  ></div>
+}

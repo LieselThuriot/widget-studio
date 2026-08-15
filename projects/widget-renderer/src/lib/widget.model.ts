@@ -1,8 +1,9 @@
 export type GridUnit = 'pixel' | 'auto' | 'star';
-export type WidgetElementType = 'text' | 'image' | 'button';
+export type WidgetElementType =
+  'text' | 'image' | 'button' | 'pie' | 'donut' | 'gauge' | 'bar' | 'line' | 'progress';
 export type ButtonMethod = 'get' | 'post';
 export type WidgetSize = 'square' | 'wide';
-export type ImageAnchor =
+export type ElementAnchor =
   | 'top left'
   | 'top center'
   | 'top right'
@@ -23,28 +24,33 @@ export interface BackgroundConfig {
   repeat: boolean;
   color?: string;
   size: 'cover' | 'contain' | 'auto';
-  anchor: ImageAnchor;
+  anchor: ElementAnchor;
   overlayColor?: string;
 }
 export interface TextStyle {
   color: string;
-  fontSize: number;
-  fontWeight: 400 | 500 | 600 | 700;
-  italic: boolean;
-  underline: boolean;
-  strikethrough: boolean;
+  font: FontStyle;
   align: 'left' | 'center' | 'right';
   wrap: boolean;
 }
-export interface WidgetElementBase {
-  id: string;
-  type: WidgetElementType;
+export interface ElementGrid {
   row: number;
   column: number;
   rowSpan: number;
   columnSpan: number;
+  anchor?: ElementAnchor;
+}
+export interface FontStyle {
+  size: number;
+  weight?: 400 | 500 | 600 | 700;
+  style?: 'normal' | 'italic';
+  decoration?: 'none' | 'underline' | 'line-through' | 'underline line-through';
+}
+export interface WidgetElementBase {
+  id: string;
+  type: WidgetElementType;
+  grid: ElementGrid;
   sensitive: boolean;
-  anchor: ImageAnchor;
 }
 export interface TextElement extends WidgetElementBase {
   type: 'text';
@@ -56,7 +62,6 @@ export interface ImageElement extends WidgetElementBase {
   source: string;
   alt: string;
   fit: 'cover' | 'contain' | 'fill';
-  anchor: ImageAnchor;
   overlayColor?: string;
   radius: number;
 }
@@ -68,7 +73,79 @@ export interface ButtonElement extends WidgetElementBase {
   body?: string;
   style: 'solid' | 'outline';
 }
-export type WidgetElement = TextElement | ImageElement | ButtonElement;
+export interface ChartDataPoint {
+  label: string;
+  value: number;
+  color?: string;
+}
+export interface ChartElementBase extends WidgetElementBase {
+  type: 'pie' | 'donut' | 'gauge' | 'bar' | 'line';
+  title: string;
+  showLegend: boolean;
+}
+export interface DataVisualStyle {
+  color: {
+    legend: string;
+  };
+  font: FontStyle;
+}
+export interface GraphStyle extends DataVisualStyle {
+  color: DataVisualStyle['color'] & { title: string };
+  axis: {
+    label: string;
+    line: string;
+    grid: string;
+  };
+}
+export interface ProgressStyle extends DataVisualStyle {
+  color: DataVisualStyle['color'] & {
+    fill: string;
+    track: string;
+  };
+}
+export interface ProgressData {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+}
+export interface GaugeData {
+  value: number;
+  min: number;
+  max: number;
+}
+export interface GaugeStyle extends DataVisualStyle {
+  color: DataVisualStyle['color'] & {
+    title: string;
+    fill: string;
+    track: string;
+  };
+}
+export interface PieElement extends ChartElementBase {
+  type: 'pie' | 'donut';
+  data: ChartDataPoint[];
+  style: GraphStyle;
+}
+export interface GaugeElement extends ChartElementBase {
+  type: 'gauge';
+  data: GaugeData;
+  style: GaugeStyle;
+}
+export interface SeriesElement extends ChartElementBase {
+  type: 'bar' | 'line';
+  data: ChartDataPoint[];
+  style: GraphStyle;
+}
+export interface ProgressElement extends WidgetElementBase {
+  type: 'progress';
+  data: ProgressData;
+  style: ProgressStyle;
+  showLegend: boolean;
+  active: boolean;
+}
+export type ChartElement = PieElement | GaugeElement | SeriesElement;
+export type WidgetElement =
+  TextElement | ImageElement | ButtonElement | ChartElement | ProgressElement;
 export interface Widget {
   version: 2;
   size: WidgetSize;

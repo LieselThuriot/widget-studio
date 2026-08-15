@@ -1,0 +1,263 @@
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  effect,
+  input,
+  viewChild,
+} from '@angular/core';
+import { use } from 'echarts/core';
+import { BarChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
+import {
+  GridComponent,
+  LegendComponent,
+  TitleComponent,
+  TooltipComponent,
+} from 'echarts/components';
+import { SVGRenderer } from 'echarts/renderers';
+import { init, type ECharts, type EChartsCoreOption } from 'echarts/core';
+import { ChartElement, ProgressElement, WidgetElement } from './widget.model';
+
+use([
+  BarChart,
+  GaugeChart,
+  LineChart,
+  PieChart,
+  GridComponent,
+  LegendComponent,
+  TitleComponent,
+  TooltipComponent,
+  SVGRenderer,
+]);
+
+@Component({
+  selector: 'widget-chart-element',
+  templateUrl: './chart-element-renderer.html',
+  styleUrl: './chart-element-renderer.css',
+})
+export class ChartElementRenderer implements AfterViewInit, OnDestroy {
+  readonly element = input.required<ChartElement | ProgressElement>();
+  private readonly chartHost = viewChild.required<ElementRef<HTMLDivElement>>('chartHost');
+  private chartInstance: ECharts | null = null;
+  private resizeObserver: ResizeObserver | null = null;
+
+  constructor() {
+    effect(() => {
+      this.element();
+      if (this.chartInstance) this.renderChart();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.element().type !== 'progress') {
+      this.chartInstance = init(this.chartHost().nativeElement, undefined, { renderer: 'svg' });
+      if (typeof ResizeObserver !== 'undefined') {
+        this.resizeObserver = new ResizeObserver(() => this.chartInstance?.resize());
+        this.resizeObserver.observe(this.chartHost().nativeElement);
+      }
+      this.renderChart();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+    this.chartInstance?.dispose();
+  }
+
+  protected isProgress(element: WidgetElement): element is ProgressElement {
+    return element.type === 'progress';
+  }
+  protected progress(element: ChartElement | ProgressElement): ProgressElement {
+    return element as ProgressElement;
+  }
+  protected chart(element: ChartElement | ProgressElement): ChartElement {
+    return element as ChartElement;
+  }
+
+  protected progressStyle(element: ProgressElement): Record<string, string> {
+    const range = Math.max(1, element.data.max - element.data.min);
+    const percent = Math.max(
+      0,
+      Math.min(100, ((element.data.value - element.data.min) / range) * 100),
+    );
+    return {
+      '--progress-value': `${percent}%`,
+      '--progress-color': element.style?.color.fill ?? '#7dd3fc',
+      '--progress-track': element.style?.color.track ?? '#334155',
+      '--progress-legend-color': element.style?.color.legend ?? '#f6f7fb',
+      '--progress-font-size': `${element.style?.font.size ?? 11}px`,
+    };
+  }
+
+  protected progressShowLegend(element: ProgressElement): boolean {
+    return element.showLegend ?? true;
+  }
+
+  protected progressActive(element: ProgressElement): boolean {
+    return element.active ?? false;
+  }
+
+  protected progressTextAlign(element: ProgressElement): 'left' | 'center' | 'right' {
+    return (element.grid.anchor ?? 'center').endsWith('left')
+      ? 'left'
+      : (element.grid.anchor ?? 'center').endsWith('right')
+        ? 'right'
+        : 'center';
+  }
+
+  private renderChart(): void {
+    const element = this.element();
+    if (element.type === 'progress' || !this.chartInstance) return;
+    this.chartInstance.setOption(this.options(element), true);
+  }
+
+  private options(element: ChartElement): EChartsCoreOption {
+    const base = {
+      animation: false,
+      color:
+        element.type === 'pie' ||
+        element.type === 'donut' ||
+        element.type === 'bar' ||
+        element.type === 'line'
+          ? element.data.map((point) => point.color ?? '#7dd3fc')
+          : undefined,
+      title: element.title
+        ? {
+            text: element.title,
+            left: 'center',
+            textStyle: { fontSize: element.style.font.size, color: element.style.color.title },
+          }
+        : undefined,
+      legend:
+        (element.type === 'pie' || element.type === 'donut') && element.showLegend
+          ? {
+              bottom: 10,
+              textStyle: { fontSize: element.style.font.size, color: element.style.color.legend },
+            }
+          : undefined,
+      tooltip: { trigger: element.type === 'pie' || element.type === 'donut' ? 'item' : 'axis' },
+    } satisfies EChartsCoreOption;
+
+    if (element.type === 'pie' || element.type === 'donut') {
+      return {
+        ...base,
+        series: [
+          {
+            type: 'pie',
+            radius: element.type === 'donut' ? ['45%', '72%'] : '68%',
+            data: element.data.map(({ label, value }) => ({ name: label, value })),
+          },
+        ],
+      };
+    }
+    if (element.type === 'gauge') {
+      const percentage = Math.max(
+        0,
+        Math.min(
+          1,
+          (element.data.value - element.data.min) /
+            Math.max(1, element.data.max - element.data.min),
+        ),
+      );
+      return {
+        ...base,
+        title: element.title
+          ? {
+              text: element.title,
+              left: 'center',
+              bottom: 0,
+              textStyle: {
+                fontSize: element.style.font.size,
+                color: element.style.color.title,
+              },
+            }
+          : undefined,
+        series: [
+          {
+            type: 'gauge',
+            center: ['50%', '58%'],
+            radius: '78%',
+            startAngle: 200,
+            endAngle: -20,
+            min: element.data.min,
+            max: element.data.max,
+            splitNumber: 6,
+            axisLine: {
+              lineStyle: {
+                width: 16,
+                cap: 'round',
+                color: [
+                  [percentage, element.style.color.fill],
+                  [1, element.style.color.track],
+                ],
+              },
+            },
+            axisTick: {
+              distance: -22,
+              splitNumber: 5,
+              length: 4,
+              lineStyle: { color: element.style.color.legend, width: 1 },
+            },
+            splitLine: {
+              distance: -24,
+              length: 8,
+              lineStyle: { color: element.style.color.legend, width: 2 },
+            },
+            axisLabel: {
+              show: element.showLegend,
+              distance: -2,
+              color: element.style.color.legend,
+              fontSize: element.style.font.size,
+              formatter: (value: number) => `${Math.round(value)}`,
+            },
+            pointer: {
+              show: true,
+              length: '55%',
+              width: 5,
+              itemStyle: { color: element.style.color.legend },
+            },
+            progress: { show: true, itemStyle: { color: element.style.color.fill } },
+            detail: {
+              show: element.showLegend,
+              valueAnimation: false,
+              formatter: (value: number) => `${Math.round(value)}`,
+              color: element.style.color.legend,
+              fontSize: element.style.font.size,
+            },
+            data: [{ value: element.data.value }],
+          },
+        ],
+      };
+    }
+    return {
+      ...base,
+      grid: {
+        left: 34,
+        right: 12,
+        top: element.title ? 30 : 12,
+        bottom: element.showLegend ? 28 : 24,
+        containLabel: true,
+      },
+      xAxis: {
+        type: 'category',
+        data: element.data.map(({ label }) => label),
+        axisLabel: { color: element.style.axis.label, fontSize: element.style.font.size },
+        axisLine: { lineStyle: { color: element.style.axis.line } },
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: { color: element.style.axis.label, fontSize: element.style.font.size },
+        axisLine: { lineStyle: { color: element.style.axis.line } },
+        splitLine: { lineStyle: { color: element.style.axis.grid } },
+      },
+      series: [
+        {
+          type: element.type,
+          data: element.data.map(({ value }) => value),
+          smooth: element.type === 'line',
+        },
+      ],
+    };
+  }
+}

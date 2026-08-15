@@ -1,0 +1,142 @@
+:host {
+  display: block;
+  color: #67738a;
+  font-size: 11px;
+}
+
+label {
+  display: block;
+  margin: 13px 0;
+  color: #67738a;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+input,
+select {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 32px;
+  margin-top: 6px;
+  padding: 8px 9px;
+  border: 1px solid #dfe5ee;
+  border-radius: 6px;
+  background: #fff;
+  color: #34425c;
+  font: 12px inherit;
+}
+
+input[type='color'] {
+  min-height: 32px;
+  padding: 3px;
+  cursor: pointer;
+}
+
+input:hover,
+select:hover {
+  border-color: #b9c6da;
+}
+
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #8da6d4;
+  outline-offset: 1px;
+  border-color: #5874ab;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.color-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stacked-fields {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.toggle-row {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 12px 0 2px;
+  border-top: 1px solid #edf0f4;
+}
+
+.toggle-row span:first-child {
+  flex: 1;
+}
+
+.toggle-row strong,
+.toggle-row small {
+  display: block;
+}
+
+.toggle-row small {
+  margin-top: 3px;
+  color: #9aa5b7;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.toggle-row input {
+  position: absolute;
+  width: 1px !important;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.toggle {
+  position: relative;
+  flex: 0 0 auto;
+  width: 29px;
+  height: 17px;
+  border-radius: 20px;
+  background: #cbd3df;
+  transition: background 120ms ease;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 120ms ease;
+}
+
+.toggle-row input:checked + .toggle {
+  background: #5874ab;
+}
+
+.toggle-row input:checked + .toggle::after {
+  transform: translateX(12px);
+}
+
+.toggle-row input:focus-visible + .toggle {
+  outline: 2px solid #8da6d4;
+  outline-offset: 2px;
+}
+
+@media (max-width: 360px) {
+  .field-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

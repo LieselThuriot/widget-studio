@@ -2,6 +2,7 @@ import { sampleWidget } from './sample-widget';
 import {
   addTrack,
   changeElementStack,
+  normalizeWidget,
   patchElement,
   removeTrack,
   updateElementPosition,
@@ -23,8 +24,8 @@ describe('editor state transformations', () => {
     const element = position.elements.find((candidate) => candidate.id === 'headline');
     const span = updateElementSpan(position, element!, 'rowSpan', 99);
 
-    expect(element?.row).toBe(2);
-    expect(span.elements.find((candidate) => candidate.id === 'headline')?.rowSpan).toBe(1);
+    expect(element?.grid.row).toBe(2);
+    expect(span.elements.find((candidate) => candidate.id === 'headline')?.grid.rowSpan).toBe(1);
   });
 
   it('moves an element to the requested stack position', () => {
@@ -60,14 +61,14 @@ describe('editor state transformations', () => {
     const updated = removeTrack(widget, 'columns', 0);
 
     expect(updated.columns).toHaveLength(2);
-    expect(updated.elements.find((element) => element.id === 'details')?.column).toBe(1);
+    expect(updated.elements.find((element) => element.id === 'details')?.grid.column).toBe(1);
   });
 
   it('falls back to the first grid position for invalid coordinates', () => {
     const widget = structuredClone(sampleWidget);
     const updated = updateElementPosition(widget, 'headline', 'row', Number.NaN);
 
-    expect(updated.elements.find((element) => element.id === 'headline')?.row).toBe(0);
+    expect(updated.elements.find((element) => element.id === 'headline')?.grid.row).toBe(0);
   });
 
   it('leaves the widget unchanged for unknown operations', () => {
@@ -75,5 +76,33 @@ describe('editor state transformations', () => {
 
     expect(changeElementStack(widget, { id: 'missing', action: 'front' })).toBe(widget);
     expect(removeTrack(widget, 'rows', 99).rows).toHaveLength(widget.rows.length);
+  });
+
+  it('normalizes legacy text styles without a nested font', () => {
+    const widget = structuredClone(sampleWidget);
+    const text = widget.elements.find((element) => element.type === 'text');
+    if (!text || text.type !== 'text') throw new Error('Expected a text element');
+
+    (text as unknown as { style: Record<string, unknown> }).style = {
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: 700,
+      italic: true,
+      underline: true,
+      strikethrough: true,
+    };
+
+    const normalized = normalizeWidget(widget);
+    const normalizedText = normalized.elements.find((element) => element.type === 'text');
+
+    expect(normalizedText?.type).toBe('text');
+    if (normalizedText?.type === 'text') {
+      expect(normalizedText.style.font).toEqual({
+        size: 18,
+        weight: 700,
+        style: 'italic',
+        decoration: 'underline line-through',
+      });
+    }
   });
 });

@@ -30,7 +30,7 @@
   </select></label
 >
 <app-anchor-control
-  [value]="element().anchor"
+  [value]="element().grid.anchor ?? 'center'"
   ariaLabel="Image anchor"
-  (changed)="changed.emit({ anchor: $event })"
+  (changed)="changed.emit({ grid: { ...element().grid, anchor: $event } })"
 />

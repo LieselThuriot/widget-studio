@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { TextElement } from 'widget-renderer';
+import { FontStyle, TextElement } from 'widget-renderer';
 import { ColorPicker } from '../../color-picker/color-picker';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 
@@ -28,5 +28,22 @@ export class TextElementSettings {
   protected alignment(event: Event): TextElement['style']['align'] {
     const value = eventValue(event);
     return value === 'center' || value === 'right' ? value : 'left';
+  }
+
+  protected toggleDecoration(decoration: 'underline' | 'line-through'): FontStyle['decoration'] {
+    const current = this.element().style.font.decoration ?? 'none';
+    const decorations = new Set(current === 'none' ? [] : current.split(' '));
+    if (decorations.has(decoration)) {
+      decorations.delete(decoration);
+    } else {
+      decorations.add(decoration);
+    }
+    return decorations.has('underline')
+      ? decorations.has('line-through')
+        ? 'underline line-through'
+        : 'underline'
+      : decorations.has('line-through')
+        ? 'line-through'
+        : 'none';
   }
 }

@@ -7,6 +7,7 @@ import { ImageElementSettings } from './image-element-settings/image-element-set
 import { ButtonElementSettings } from './button-element-settings/button-element-settings';
 import { WidgetSettings } from './widget-settings/widget-settings';
 import { eventChecked, eventNumber } from './form-events';
+import { ChartElementSettings } from './chart-element-settings/chart-element-settings';
 
 export interface TrackChange {
   kind: 'rows' | 'columns';
@@ -33,6 +34,7 @@ export interface SpanChange {
     ImageElementSettings,
     ButtonElementSettings,
     WidgetSettings,
+    ChartElementSettings,
   ],
   templateUrl: './settings-panel.html',
   styleUrl: './settings-panel.css',
@@ -50,7 +52,7 @@ export class SettingsPanel {
   readonly trackRemoved = output<{ kind: 'rows' | 'columns'; index: number }>();
 
   protected icon(type: WidgetElementType): string {
-    return type === 'text' ? 'T' : type === 'image' ? '▧' : '↗';
+    return type === 'text' ? 'T' : type === 'image' ? '▧' : type === 'button' ? '↗' : '◌';
   }
 
   protected checked(event: Event): boolean {

@@ -66,25 +66,25 @@
         <div
           class="element-content"
           [class.is-sensitive]="element.sensitive && !sensitiveVisible()"
-          [style.justify-content]="horizontalAnchor(element.anchor)"
-          [style.align-items]="verticalAnchor(element.anchor)"
+          [style.justify-content]="
+            isChart(element) && element.type !== 'progress'
+              ? 'stretch'
+              : horizontalAnchor(element.grid.anchor ?? 'center')
+          "
+          [style.align-items]="
+            isChart(element) && element.type !== 'progress'
+              ? 'stretch'
+              : verticalAnchor(element.grid.anchor ?? 'center')
+          "
         >
           @if (isText(element)) {
             <span
               class="text-element"
               [style.color]="element.style.color"
-              [style.font-size.px]="element.style.fontSize"
-              [style.font-weight]="element.style.fontWeight"
-              [style.font-style]="element.style.italic ? 'italic' : 'normal'"
-              [style.text-decoration]="
-                element.style.underline && element.style.strikethrough
-                  ? 'underline line-through'
-                  : element.style.underline
-                    ? 'underline'
-                    : element.style.strikethrough
-                      ? 'line-through'
-                      : 'none'
-              "
+              [style.font-size.px]="element.style.font.size"
+              [style.font-weight]="element.style.font.weight"
+              [style.font-style]="element.style.font.style"
+              [style.text-decoration]="element.style.font.decoration"
               [style.text-align]="element.style.align"
               [style.white-space]="element.style.wrap ? 'normal' : 'nowrap'"
               >{{ element.text }}</span
@@ -94,7 +94,7 @@
               [src]="element.source"
               [alt]="element.alt"
               [style.object-fit]="element.fit"
-              [style.object-position]="element.anchor"
+              [style.object-position]="element.grid.anchor ?? 'center'"
               [style.border-radius.px]="element.radius"
             />
             <span
@@ -111,6 +111,15 @@
             >
               {{ element.label }}
             </button>
+          } @else if (isChart(element)) {
+            @defer (on immediate) {
+              <widget-chart-element
+                [class.is-progress]="element.type === 'progress'"
+                [element]="element"
+              />
+            } @placeholder {
+              <div class="chart-placeholder" aria-hidden="true"></div>
+            }
           }
         </div>
       </div>

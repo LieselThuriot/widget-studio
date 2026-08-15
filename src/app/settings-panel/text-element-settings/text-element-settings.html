@@ -6,35 +6,69 @@
 <div class="formatting-tools" aria-label="Text formatting">
   <button
     type="button"
-    [class.active]="element().style.fontWeight >= 600"
+    [class.active]="(element().style.font.weight ?? 400) >= 600"
     aria-label="Toggle bold"
     (click)="
       changed.emit({
-        style: { ...element().style, fontWeight: element().style.fontWeight >= 600 ? 400 : 700 },
+        style: {
+          ...element().style,
+          font: {
+            ...element().style.font,
+            weight: (element().style.font.weight ?? 400) >= 600 ? 400 : 700,
+          },
+        },
       })
     "
   >
     <strong>B</strong></button
   ><button
     type="button"
-    [class.active]="element().style.italic"
+    [class.active]="element().style.font.style === 'italic'"
     aria-label="Toggle italic"
-    (click)="changed.emit({ style: { ...element().style, italic: !element().style.italic } })"
+    (click)="
+      changed.emit({
+        style: {
+          ...element().style,
+          font: {
+            ...element().style.font,
+            style: element().style.font.style === 'italic' ? 'normal' : 'italic',
+          },
+        },
+      })
+    "
   >
     <em>I</em></button
   ><button
     type="button"
-    [class.active]="element().style.underline"
+    [class.active]="element().style.font.decoration?.includes('underline')"
     aria-label="Toggle underline"
-    (click)="changed.emit({ style: { ...element().style, underline: !element().style.underline } })"
+    (click)="
+      changed.emit({
+        style: {
+          ...element().style,
+          font: {
+            ...element().style.font,
+            decoration: toggleDecoration('underline'),
+          },
+        },
+      })
+    "
   >
     <u>U</u></button
   ><button
     type="button"
-    [class.active]="element().style.strikethrough"
+    [class.active]="element().style.font.decoration?.includes('line-through')"
     aria-label="Toggle strikethrough"
     (click)="
-      changed.emit({ style: { ...element().style, strikethrough: !element().style.strikethrough } })
+      changed.emit({
+        style: {
+          ...element().style,
+          font: {
+            ...element().style.font,
+            decoration: toggleDecoration('line-through'),
+          },
+        },
+      })
     "
   >
     <s>S</s>
@@ -43,8 +77,12 @@
 <label
   >Size<input
     type="number"
-    [value]="element().style.fontSize"
-    (input)="changed.emit({ style: { ...element().style, fontSize: number($event) } })"
+    [value]="element().style.font.size"
+    (input)="
+      changed.emit({
+        style: { ...element().style, font: { ...element().style.font, size: number($event) } },
+      })
+    "
 /></label>
 <div class="text-layout-settings">
   <label

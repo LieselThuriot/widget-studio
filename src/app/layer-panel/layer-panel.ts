@@ -16,13 +16,23 @@ export class LayerPanel {
   readonly layerDropped = output<{ event: DragEvent; id: string }>();
 
   protected icon(element: WidgetElement): string {
-    return element.type === 'text' ? 'T' : element.type === 'image' ? '▧' : '↗';
+    return element.type === 'text'
+      ? 'T'
+      : element.type === 'image'
+        ? '▧'
+        : element.type === 'button'
+          ? '↗'
+          : '◌';
   }
   protected label(element: WidgetElement): string {
     return element.type === 'text'
       ? element.text
       : element.type === 'image'
         ? element.alt
-        : element.label;
+        : element.type === 'button'
+          ? element.label
+          : element.type === 'progress'
+            ? element.data.label
+            : element.title;
   }
 }

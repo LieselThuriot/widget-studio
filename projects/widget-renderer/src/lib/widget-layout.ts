@@ -19,7 +19,7 @@ export function gridTemplate(tracks: GridTrack[]): string {
 
 export function elementGridStyle(element: WidgetElement): Record<string, string> {
   return {
-    'grid-row': `${element.row + 1} / span ${element.rowSpan}`,
-    'grid-column': `${element.column + 1} / span ${element.columnSpan}`,
+    'grid-row': `${element.grid.row + 1} / span ${element.grid.rowSpan}`,
+    'grid-column': `${element.grid.column + 1} / span ${element.grid.columnSpan}`,
   };
 }

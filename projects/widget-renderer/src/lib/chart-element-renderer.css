@@ -1,0 +1,79 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+:host.is-progress {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+.chart-host {
+  width: 100%;
+  height: 100%;
+  min-height: 40px;
+}
+.progress-element {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  color: inherit;
+  font-size: 11px;
+}
+.progress-track {
+  display: block;
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--progress-track);
+}
+.progress-fill {
+  position: relative;
+  display: block;
+  width: var(--progress-value);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--progress-color);
+}
+.progress-track.is-active .progress-fill {
+  overflow: hidden;
+}
+.progress-track.is-active .progress-fill::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0,
+    transparent 18px,
+    rgb(255 255 255 / 0.18) 18px,
+    rgb(255 255 255 / 0.18) 36px
+  );
+  background-position: 0 0;
+  background-size: 51px 51px;
+  animation: progress-active 900ms linear infinite;
+}
+@keyframes progress-active {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 51px 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .progress-track.is-active .progress-fill::after {
+    animation: none;
+  }
+}
+.progress-label {
+  color: var(--progress-legend-color);
+  font-size: var(--progress-font-size);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

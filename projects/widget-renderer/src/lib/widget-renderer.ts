@@ -1,11 +1,21 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from './widget.model';
+import { ChartElementRenderer } from './chart-element-renderer';
+import {
+  ButtonElement,
+  ChartElement,
+  ImageElement,
+  ProgressElement,
+  TextElement,
+  Widget,
+  WidgetElement,
+} from './widget.model';
 import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
 
 @Component({
   selector: 'widget-renderer',
   templateUrl: './widget-renderer.html',
   styleUrl: './widget-renderer.css',
+  imports: [ChartElementRenderer],
 })
 export class WidgetRenderer {
   readonly widget = input.required<Widget>();
@@ -36,6 +46,9 @@ export class WidgetRenderer {
   }
   protected isButton(element: WidgetElement): element is ButtonElement {
     return element.type === 'button';
+  }
+  protected isChart(element: WidgetElement): element is ChartElement | ProgressElement {
+    return ['pie', 'donut', 'gauge', 'bar', 'line', 'progress'].includes(element.type);
   }
   protected horizontalAnchor(anchor: string): string {
     return anchor.endsWith('left')

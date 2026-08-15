@@ -18,14 +18,16 @@
         (changed)="elementChanged.emit($event)"
         (radiusChanged)="radiusChanged.emit($event)"
       />
-    } @else {
+    } @else if (element.type === 'button') {
       <app-button-element-settings [element]="element" (changed)="elementChanged.emit($event)" />
+    } @else {
+      <app-chart-element-settings [element]="element" (changed)="elementChanged.emit($event)" />
     }
-    @if (element.type !== 'image') {
+    @if (element.type === 'progress' || element.type === 'text' || element.type === 'button') {
       <app-anchor-control
-        [value]="element.anchor"
+        [value]="element.grid.anchor ?? 'top left'"
         ariaLabel="Element anchor"
-        (changed)="elementChanged.emit({ anchor: $event })"
+        (changed)="elementChanged.emit({ grid: { ...element.grid, anchor: $event } })"
       />
     }
     <label class="toggle-row"
@@ -44,14 +46,14 @@
             type="number"
             min="1"
             [max]="widget().rows.length"
-            [value]="element.row + 1"
+            [value]="element.grid.row + 1"
             (input)="placementChanged.emit({ kind: 'row', value: number($event) })" /></label
         ><label
           >Column<input
             type="number"
             min="1"
             [max]="widget().columns.length"
-            [value]="element.column + 1"
+            [value]="element.grid.column + 1"
             (input)="placementChanged.emit({ kind: 'column', value: number($event) })"
         /></label>
       </div>
@@ -60,15 +62,15 @@
           >Row span<input
             type="number"
             min="1"
-            [max]="widget().rows.length - element.row"
-            [value]="element.rowSpan"
+            [max]="widget().rows.length - element.grid.row"
+            [value]="element.grid.rowSpan"
             (input)="spanChanged.emit({ kind: 'rowSpan', value: number($event) })" /></label
         ><label
           >Column span<input
             type="number"
             min="1"
-            [max]="widget().columns.length - element.column"
-            [value]="element.columnSpan"
+            [max]="widget().columns.length - element.grid.column"
+            [value]="element.grid.columnSpan"
             (input)="spanChanged.emit({ kind: 'columnSpan', value: number($event) })"
         /></label>
       </div>

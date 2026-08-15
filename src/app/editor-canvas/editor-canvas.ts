@@ -164,8 +164,8 @@ export class EditorCanvas {
             );
       this.elementResized.emit(
         state.axis === 'column'
-          ? { id, columnSpan: Math.max(1, track - element.column + 1) }
-          : { id, rowSpan: Math.max(1, track - element.row + 1) },
+          ? { id, columnSpan: Math.max(1, track - element.grid.column + 1) }
+          : { id, rowSpan: Math.max(1, track - element.grid.row + 1) },
       );
       return;
     }
@@ -173,13 +173,13 @@ export class EditorCanvas {
       event.clientX - canvas.left - this.dragOffset.x - WIDGET_PADDING,
       this.widget().columns,
       this.widgetWidth() - WIDGET_PADDING * 2,
-      element.columnSpan,
+      element.grid.columnSpan,
     );
     const row = this.trackAt(
       event.clientY - canvas.top - this.dragOffset.y - WIDGET_PADDING,
       this.widget().rows,
       WIDGET_HEIGHT - WIDGET_PADDING * 2,
-      element.rowSpan,
+      element.grid.rowSpan,
     );
     this.elementMoved.emit({ id, row, column });
   }

@@ -1,0 +1,269 @@
+@if (element(); as current) {
+  @if (current.type === 'progress') {
+    <label
+      >Label<input
+        [value]="progress().data.label"
+        (input)="changed.emit({ data: { ...progress().data, label: value($event) } })"
+    /></label>
+    <div class="field-row">
+      <label
+        >Minimum<input
+          type="number"
+          [value]="progress().data.min"
+          (input)="changed.emit({ data: { ...progress().data, min: number($event) } })"
+      /></label>
+      <label
+        >Value<input
+          type="number"
+          [value]="progress().data.value"
+          (input)="changed.emit({ data: { ...progress().data, value: number($event) } })"
+      /></label>
+      <label
+        >Maximum<input
+          type="number"
+          [value]="progress().data.max"
+          (input)="changed.emit({ data: { ...progress().data, max: number($event) } })"
+      /></label>
+    </div>
+    <div class="field-row color-fields stacked-fields">
+      <label
+        >Fill<input
+          type="color"
+          [value]="progress().style.color.fill"
+          (input)="
+            changed.emit({
+              style: {
+                ...progress().style,
+                color: { ...progress().style.color, fill: value($event) },
+              },
+            })
+          "
+      /></label>
+      <label
+        >Track<input
+          type="color"
+          [value]="progress().style.color.track"
+          (input)="
+            changed.emit({
+              style: {
+                ...progress().style,
+                color: { ...progress().style.color, track: value($event) },
+              },
+            })
+          "
+      /></label>
+    </div>
+    <label class="toggle-row"
+      ><span><strong>Show legend</strong><small>Display the label and value</small></span
+      ><input
+        type="checkbox"
+        [checked]="progress().showLegend ?? true"
+        (change)="changed.emit({ showLegend: $any($event.target).checked })" /><span
+        class="toggle"
+      ></span
+    ></label>
+    <label
+      >Legend color<input
+        type="color"
+        [value]="progress().style.color.legend"
+        (input)="
+          changed.emit({
+            style: {
+              ...progress().style,
+              color: { ...progress().style.color, legend: value($event) },
+            },
+          })
+        "
+    /></label>
+    <label
+      >Font size<input
+        type="number"
+        min="8"
+        max="32"
+        [value]="progress().style.font.size"
+        (input)="
+          changed.emit({
+            style: {
+              ...progress().style,
+              font: { ...progress().style.font, size: number($event) },
+            },
+          })
+        "
+    /></label>
+    <label class="toggle-row"
+      ><span><strong>Active</strong><small>Animate the progress fill</small></span
+      ><input
+        type="checkbox"
+        [checked]="progress().active ?? false"
+        (change)="changed.emit({ active: $any($event.target).checked })" /><span
+        class="toggle"
+      ></span
+    ></label>
+  } @else {
+    <label
+      >Title<input [value]="chart().title" (input)="changed.emit({ title: value($event) })"
+    /></label>
+    <label
+      >Title color<input
+        type="color"
+        [value]="chartStyle().color.title"
+        (input)="
+          changed.emit({
+            style: { ...chartStyle(), color: { ...chartStyle().color, title: value($event) } },
+          })
+        "
+    /></label>
+    @if (chart().type !== 'gauge') {
+      <label
+        >Font size<input
+          type="number"
+          min="8"
+          max="32"
+          [value]="chartStyle().font.size"
+          (input)="
+            changed.emit({
+              style: { ...chartStyle(), font: { ...chartStyle().font, size: number($event) } },
+            })
+          "
+      /></label>
+    }
+    @if (chart().type === 'pie' || chart().type === 'donut') {
+      <label class="toggle-row"
+        ><span><strong>Show legend</strong><small>Display labels for chart data</small></span
+        ><input
+          type="checkbox"
+          [checked]="chart().showLegend"
+          (change)="changed.emit({ showLegend: $any($event.target).checked })" /><span
+          class="toggle"
+        ></span
+      ></label>
+      <label
+        >Legend color<input
+          type="color"
+          [value]="chartStyle().color.legend"
+          (input)="
+            changed.emit({
+              style: { ...chartStyle(), color: { ...chartStyle().color, legend: value($event) } },
+            })
+          "
+      /></label>
+    }
+    @if (chart().type === 'bar' || chart().type === 'line') {
+      <label
+        >Axis labels<input
+          type="color"
+          [value]="chartStyle().axis.label"
+          (input)="
+            changed.emit({
+              style: {
+                ...chartStyle(),
+                axis: { ...chartStyle().axis, label: value($event) },
+              },
+            })
+          "
+      /></label>
+      <label
+        >Axis line<input
+          type="color"
+          [value]="chartStyle().axis.line"
+          (input)="
+            changed.emit({
+              style: { ...chartStyle(), axis: { ...chartStyle().axis, line: value($event) } },
+            })
+          "
+      /></label>
+      <label
+        >Grid<input
+          type="color"
+          [value]="chartStyle().axis.grid"
+          (input)="
+            changed.emit({
+              style: { ...chartStyle(), axis: { ...chartStyle().axis, grid: value($event) } },
+            })
+          "
+      /></label>
+    }
+    @if (chart().type === 'gauge') {
+      <div class="field-row">
+        <label
+          >Value<input
+            type="number"
+            [value]="gauge().data.value"
+            (input)="
+              changed.emit({
+                data: { ...gauge().data, value: number($event) },
+              })
+            "
+        /></label>
+        <label
+          >Minimum<input
+            type="number"
+            [value]="gauge().data.min"
+            (input)="changed.emit({ data: { ...gauge().data, min: number($event) } })"
+        /></label>
+        <label
+          >Maximum<input
+            type="number"
+            [value]="gauge().data.max"
+            (input)="changed.emit({ data: { ...gauge().data, max: number($event) } })"
+        /></label>
+      </div>
+      <div class="field-row color-fields stacked-fields">
+        <label
+          >Fill color<input
+            type="color"
+            [value]="gauge().style.color.fill"
+            (input)="
+              changed.emit({
+                style: { ...gauge().style, color: { ...gauge().style.color, fill: value($event) } },
+              })
+            "
+        /></label>
+        <label
+          >Track color<input
+            type="color"
+            [value]="gauge().style.color.track"
+            (input)="
+              changed.emit({
+                style: {
+                  ...gauge().style,
+                  color: { ...gauge().style.color, track: value($event) },
+                },
+              })
+            "
+        /></label>
+      </div>
+      <label class="toggle-row"
+        ><span><strong>Show legend</strong><small>Display gauge labels and value</small></span
+        ><input
+          type="checkbox"
+          [checked]="gauge().showLegend"
+          (change)="changed.emit({ showLegend: $any($event.target).checked })" /><span
+          class="toggle"
+        ></span
+      ></label>
+      <label
+        >Legend color<input
+          type="color"
+          [value]="gauge().style.color.legend"
+          (input)="
+            changed.emit({
+              style: { ...gauge().style, color: { ...gauge().style.color, legend: value($event) } },
+            })
+          "
+      /></label>
+      <label
+        >Font size<input
+          type="number"
+          min="8"
+          max="32"
+          [value]="gauge().style.font.size"
+          (input)="
+            changed.emit({
+              style: { ...gauge().style, font: { ...gauge().style.font, size: number($event) } },
+            })
+          "
+      /></label>
+    }
+  }
+}
