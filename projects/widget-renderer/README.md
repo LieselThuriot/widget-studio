@@ -47,3 +47,9 @@ The component owns sensitive-data visibility and renders the refresh control. It
 `WidgetRenderer` accepts a `WidgetContract` without element IDs. It hydrates each element with a client-only internal ID before rendering. Consumers do not need to add IDs, persist them, or send them back to the API. When an ID-free response updates in place, IDs are retained by element position and type; APIs that need identity across reorder or replacement should provide a domain key separately.
 
 The `Widget` type represents the hydrated model and is useful for editor integrations. Advanced consumers can call `hydrateWidget()` directly when they need access to the internal model.
+
+## Runtime validation
+
+TypeScript types are not available when a widget is loaded from JSON. Use `safeParseWidgetInput()` when the host needs structured diagnostics, or `parseWidgetInput()` when invalid API data should throw a `WidgetValidationError`.
+
+`WidgetRenderer` validates its input at runtime and renders an empty safe widget when the payload is invalid. It does not partially render malformed data. Renderer-generated element IDs remain client-only and are not part of the API contract.

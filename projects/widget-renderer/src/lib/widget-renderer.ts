@@ -11,6 +11,7 @@ import {
 } from './widget.model';
 import { hydrateWidget } from './widget-hydration';
 import { WidgetInput } from './widget.model';
+import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
 import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
 
 @Component({
@@ -20,13 +21,22 @@ import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from '.
   imports: [ChartElementRenderer],
 })
 export class WidgetRenderer {
-  readonly widget = input.required<WidgetInput>();
+  readonly widget = input.required<unknown>();
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
   private hydratedWidget: Widget | undefined;
+  readonly validationIssues = computed<WidgetValidationIssue[]>(() => {
+    const result = safeParseWidgetInput(this.widget());
+    return result.success ? [] : result.issues;
+  });
   protected readonly renderWidget = computed<Widget>(() => {
-    this.hydratedWidget = hydrateWidget(this.widget(), this.hydratedWidget);
+    const result = safeParseWidgetInput(this.widget());
+    if (!result.success) {
+      this.hydratedWidget = emptyWidget;
+      return emptyWidget;
+    }
+    this.hydratedWidget = hydrateWidget(result.data as WidgetInput, this.hydratedWidget);
     return this.hydratedWidget;
   });
   readonly hasSensitiveElements = computed(
@@ -78,3 +88,18 @@ export class WidgetRenderer {
     return elementGridStyle(element);
   }
 }
+
+const emptyWidget: Widget = {
+  version: 2,
+  size: 'square',
+  rows: [{ size: 1, unit: 'star' }],
+  columns: [{ size: 1, unit: 'star' }],
+  background: {
+    sensitive: false,
+    repeat: false,
+    size: 'auto',
+    anchor: 'center',
+  },
+  refresh: { enabled: false, label: 'Refresh widget' },
+  elements: [],
+};
