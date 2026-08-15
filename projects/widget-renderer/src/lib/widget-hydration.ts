@@ -16,15 +16,23 @@ function isHydratedElement(
   return 'id' in element && typeof element.id === 'string' && element.id.length > 0;
 }
 
-function hydrateElement(element: WidgetElementContract | WidgetElement): WidgetElement {
+function hydrateElement(
+  element: WidgetElementContract | WidgetElement,
+  previous: WidgetElement | undefined,
+): WidgetElement {
   return isHydratedElement(element)
     ? element
-    : ({ ...element, id: createElementId(element.type) } as WidgetElement);
+    : ({
+        ...element,
+        id: previous?.type === element.type ? previous.id : createElementId(element.type),
+      } as WidgetElement);
 }
 
-export function hydrateWidget(widget: WidgetInput): Widget {
+export function hydrateWidget(widget: WidgetInput, previous?: Widget): Widget {
   return {
     ...widget,
-    elements: widget.elements.map(hydrateElement),
+    elements: widget.elements.map((element, index) =>
+      hydrateElement(element, previous?.elements[index]),
+    ),
   };
 }

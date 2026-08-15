@@ -24,7 +24,11 @@ export class WidgetRenderer {
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
-  protected readonly renderWidget = computed<Widget>(() => hydrateWidget(this.widget()));
+  private hydratedWidget: Widget | undefined;
+  protected readonly renderWidget = computed<Widget>(() => {
+    this.hydratedWidget = hydrateWidget(this.widget(), this.hydratedWidget);
+    return this.hydratedWidget;
+  });
   readonly hasSensitiveElements = computed(
     () =>
       this.renderWidget().background.sensitive ||

@@ -44,6 +44,6 @@ The component owns sensitive-data visibility and renders the refresh control. It
 
 ## API contract and internal IDs
 
-`WidgetRenderer` accepts a `WidgetContract` without element IDs. It hydrates each element with a client-only internal ID before rendering. Consumers do not need to add IDs, persist them, or send them back to the API.
+`WidgetRenderer` accepts a `WidgetContract` without element IDs. It hydrates each element with a client-only internal ID before rendering. Consumers do not need to add IDs, persist them, or send them back to the API. When an ID-free response updates in place, IDs are retained by element position and type; APIs that need identity across reorder or replacement should provide a domain key separately.
 
 The `Widget` type represents the hydrated model and is useful for editor integrations. Advanced consumers can call `hydrateWidget()` directly when they need access to the internal model.
