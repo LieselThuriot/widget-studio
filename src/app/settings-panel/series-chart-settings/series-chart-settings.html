@@ -1,0 +1,64 @@
+<label
+  >Title<input [value]="element().title" (input)="changed.emit({ title: value($event) })"
+/></label>
+<label
+  >Title color<input
+    type="color"
+    [value]="style().color.title"
+    (input)="
+      changed.emit({ style: { ...style(), color: { ...style().color, title: value($event) } } })
+    "
+/></label>
+<label
+  >Font size<input
+    type="number"
+    min="8"
+    max="32"
+    [value]="style().font.size"
+    (input)="
+      changed.emit({ style: { ...style(), font: { ...style().font, size: number($event) } } })
+    "
+/></label>
+@if (element().type === 'pie' || element().type === 'donut') {
+  <label class="toggle-row"
+    ><span><strong>Show legend</strong><small>Display labels for chart data</small></span
+    ><input
+      type="checkbox"
+      [checked]="element().showLegend"
+      (change)="changed.emit({ showLegend: checked($event) })" /><span class="toggle"></span
+  ></label>
+  <label
+    >Legend color<input
+      type="color"
+      [value]="style().color.legend"
+      (input)="
+        changed.emit({ style: { ...style(), color: { ...style().color, legend: value($event) } } })
+      "
+  /></label>
+}
+@if (element().type === 'bar' || element().type === 'line') {
+  <label
+    >Axis labels<input
+      type="color"
+      [value]="style().axis.label"
+      (input)="
+        changed.emit({ style: { ...style(), axis: { ...style().axis, label: value($event) } } })
+      "
+  /></label>
+  <label
+    >Axis line<input
+      type="color"
+      [value]="style().axis.line"
+      (input)="
+        changed.emit({ style: { ...style(), axis: { ...style().axis, line: value($event) } } })
+      "
+  /></label>
+  <label
+    >Grid<input
+      type="color"
+      [value]="style().axis.grid"
+      (input)="
+        changed.emit({ style: { ...style(), axis: { ...style().axis, grid: value($event) } } })
+      "
+  /></label>
+}

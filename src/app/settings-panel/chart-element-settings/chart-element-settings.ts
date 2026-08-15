@@ -1,36 +1,16 @@
 import { Component, input, output } from '@angular/core';
-import { ChartElement, GaugeElement, GraphStyle, ProgressElement } from 'widget-renderer';
-import { eventChecked, eventNumber, eventValue } from '../form-events';
+import { ChartElement, ProgressElement } from 'widget-renderer';
+import { GaugeElementSettings } from '../gauge-element-settings/gauge-element-settings';
+import { ProgressElementSettings } from '../progress-element-settings/progress-element-settings';
+import { SeriesChartSettings } from '../series-chart-settings/series-chart-settings';
 
 @Component({
   selector: 'app-chart-element-settings',
+  imports: [ProgressElementSettings, GaugeElementSettings, SeriesChartSettings],
   templateUrl: './chart-element-settings.html',
-  styleUrl: './chart-element-settings.css',
+  styleUrl: './chart-settings.css',
 })
 export class ChartElementSettings {
   readonly element = input.required<ChartElement | ProgressElement>();
   readonly changed = output<Partial<ChartElement | ProgressElement>>();
-
-  protected value(event: Event): string {
-    return eventValue(event);
-  }
-
-  protected number(event: Event): number {
-    return eventNumber(event);
-  }
-  protected checked(event: Event): boolean {
-    return eventChecked(event);
-  }
-  protected progress(): ProgressElement {
-    return this.element() as ProgressElement;
-  }
-  protected chart(): ChartElement {
-    return this.element() as ChartElement;
-  }
-  protected gauge(): GaugeElement {
-    return this.element() as GaugeElement;
-  }
-  protected chartStyle(): GraphStyle {
-    return this.chart().style as GraphStyle;
-  }
 }

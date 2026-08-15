@@ -1,0 +1,83 @@
+<label
+  >Label<input
+    [value]="element().data.label"
+    (input)="changed.emit({ data: { ...element().data, label: value($event) } })"
+/></label>
+<div class="field-row">
+  <label
+    >Minimum<input
+      type="number"
+      [value]="element().data.min"
+      (input)="changed.emit({ data: { ...element().data, min: number($event) } })"
+  /></label>
+  <label
+    >Value<input
+      type="number"
+      [value]="element().data.value"
+      (input)="changed.emit({ data: { ...element().data, value: number($event) } })"
+  /></label>
+  <label
+    >Maximum<input
+      type="number"
+      [value]="element().data.max"
+      (input)="changed.emit({ data: { ...element().data, max: number($event) } })"
+  /></label>
+</div>
+<div class="field-row color-fields stacked-fields">
+  <label
+    >Fill<input
+      type="color"
+      [value]="element().style.color.fill"
+      (input)="
+        changed.emit({
+          style: { ...element().style, color: { ...element().style.color, fill: value($event) } },
+        })
+      "
+  /></label>
+  <label
+    >Track<input
+      type="color"
+      [value]="element().style.color.track"
+      (input)="
+        changed.emit({
+          style: { ...element().style, color: { ...element().style.color, track: value($event) } },
+        })
+      "
+  /></label>
+</div>
+<label class="toggle-row"
+  ><span><strong>Show legend</strong><small>Display the label and value</small></span
+  ><input
+    type="checkbox"
+    [checked]="element().showLegend"
+    (change)="changed.emit({ showLegend: checked($event) })" /><span class="toggle"></span
+></label>
+<label
+  >Legend color<input
+    type="color"
+    [value]="element().style.color.legend"
+    (input)="
+      changed.emit({
+        style: { ...element().style, color: { ...element().style.color, legend: value($event) } },
+      })
+    "
+/></label>
+<label
+  >Font size<input
+    type="number"
+    min="8"
+    max="32"
+    [value]="element().style.font.size"
+    (input)="
+      changed.emit({
+        style: { ...element().style, font: { ...element().style.font, size: number($event) } },
+      })
+    "
+/></label>
+<label class="toggle-row"
+  ><span><strong>Active</strong><small>Animate the progress fill</small></span
+  ><input
+    type="checkbox"
+    [checked]="element().active"
+    (change)="changed.emit({ active: checked($event) })" /><span class="toggle"></span
+></label>
