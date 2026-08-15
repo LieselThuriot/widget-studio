@@ -100,7 +100,7 @@ export class App {
   ];
 
   protected addElement(type: WidgetElement['type']): void {
-    const id = `${type}-${Date.now()}`;
+    const id = `${type}-${crypto.randomUUID()}`;
     const base = {
       id,
       type,
@@ -265,13 +265,14 @@ export class App {
   }
   protected moveElement(position: { id: string; row: number; column: number }): void {
     this.widget.update((widget) =>
-      patchElement(widget, position.id, {
-        grid: {
-          ...widget.elements.find((element) => element.id === position.id)!.grid,
-          row: position.row,
-          column: position.column,
-        },
-      }),
+      (() => {
+        const element = widget.elements.find((candidate) => candidate.id === position.id);
+        return element
+          ? patchElement(widget, position.id, {
+              grid: { ...element.grid, row: position.row, column: position.column },
+            })
+          : widget;
+      })(),
     );
   }
   protected resizeElement(size: { id: string; rowSpan?: number; columnSpan?: number }): void {

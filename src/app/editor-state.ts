@@ -345,19 +345,29 @@ export function addTrack(widget: Widget, kind: 'rows' | 'columns'): Widget {
 }
 
 export function removeTrack(widget: Widget, kind: 'rows' | 'columns', index: number): Widget {
-  if (widget[kind].length <= 1) return widget;
+  if (widget[kind].length <= 1 || index < 0 || index >= widget[kind].length) return widget;
+  const positionKey = kind === 'rows' ? 'row' : 'column';
+  const spanKey = kind === 'rows' ? 'rowSpan' : 'columnSpan';
+  const remainingTracks = widget[kind].length - 1;
   return {
     ...widget,
     [kind]: widget[kind].filter((_, trackIndex) => trackIndex !== index),
-    elements: widget.elements.map((element) => ({
-      ...element,
-      grid: {
-        ...element.grid,
-        [kind === 'rows' ? 'row' : 'column']: Math.min(
-          element.grid[kind === 'rows' ? 'row' : 'column'],
-          widget[kind].length - 2,
-        ),
-      },
-    })),
+    elements: widget.elements.map((element) => {
+      const position = element.grid[positionKey];
+      const span = element.grid[spanKey];
+      const coversRemovedTrack = index >= position && index < position + span;
+      const nextPosition = Math.min(
+        remainingTracks - 1,
+        position > index ? position - 1 : position,
+      );
+      const nextSpan = Math.max(
+        1,
+        Math.min(remainingTracks - nextPosition, span - (coversRemovedTrack ? 1 : 0)),
+      );
+      return {
+        ...element,
+        grid: { ...element.grid, [positionKey]: nextPosition, [spanKey]: nextSpan },
+      };
+    }),
   };
 }

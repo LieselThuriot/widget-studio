@@ -64,6 +64,18 @@ describe('editor state transformations', () => {
     expect(updated.elements.find((element) => element.id === 'details')?.grid.column).toBe(1);
   });
 
+  it('shifts later elements and clamps spans when removing a middle track', () => {
+    const widget = structuredClone(sampleWidget);
+    widget.columns.push({ size: 1, unit: 'star' });
+    const headline = widget.elements.find((element) => element.id === 'headline');
+    if (!headline) throw new Error('Expected headline element');
+    headline.grid = { ...headline.grid, column: 0, columnSpan: 4 };
+    const updated = removeTrack(widget, 'columns', 1);
+
+    expect(updated.elements.find((element) => element.id === 'details')?.grid.column).toBe(1);
+    expect(updated.elements.find((element) => element.id === 'headline')?.grid.columnSpan).toBe(3);
+  });
+
   it('falls back to the first grid position for invalid coordinates', () => {
     const widget = structuredClone(sampleWidget);
     const updated = updateElementPosition(widget, 'headline', 'row', Number.NaN);

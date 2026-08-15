@@ -10,9 +10,8 @@ export function widgetWidth(size: WidgetSize): number {
 
 export function gridTemplate(tracks: GridTrack[]): string {
   return tracks
-    .map(
-      (track) =>
-        `${track.size}${track.unit === 'star' ? 'fr' : track.unit === 'pixel' ? 'px' : ' auto'}`,
+    .map((track) =>
+      track.unit === 'auto' ? 'auto' : `${track.size}${track.unit === 'star' ? 'fr' : 'px'}`,
     )
     .join(' ');
 }
