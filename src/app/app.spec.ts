@@ -128,6 +128,45 @@ describe('App', () => {
     expect(document.activeElement).toBe(previewButton);
   });
 
+  it('should trap preview dialog tab focus', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const previewButton = fixture.nativeElement.querySelector(
+      '.preview-button',
+    ) as HTMLButtonElement;
+    previewButton.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const previewWindow = fixture.nativeElement.querySelector('.preview-window') as HTMLElement;
+    const closeButton = fixture.nativeElement.querySelector('.preview-close') as HTMLButtonElement;
+    closeButton.focus();
+    previewWindow.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }),
+    );
+
+    expect(document.activeElement).not.toBe(closeButton);
+    expect((document.activeElement as HTMLElement).closest('.preview-window')).toBe(previewWindow);
+  });
+
+  it('should keep alert dialog focus on its close action', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const actionButton = fixture.nativeElement.querySelector(
+      '[data-widget-element-id="details"] .action-button',
+    ) as HTMLButtonElement;
+    actionButton.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const alertDialog = fixture.nativeElement.querySelector('.event-alert') as HTMLElement;
+    const closeButton = fixture.nativeElement.querySelector('.alert-close') as HTMLButtonElement;
+    closeButton.focus();
+    alertDialog.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+
+    expect(document.activeElement).toBe(closeButton);
+  });
+
   it('should focus and restore focus for the event alert dialog', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

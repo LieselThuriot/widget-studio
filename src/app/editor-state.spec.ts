@@ -34,6 +34,16 @@ describe('editor state transformations', () => {
     expect(updated.elements.at(-1)?.id).toBe('headline');
   });
 
+  it('reorders layers without changing element data', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = changeElementStack(widget, { id: 'details', action: 'back' });
+
+    expect(updated.elements[0].id).toBe('details');
+    const details = updated.elements.find((element) => element.id === 'details');
+    expect(details?.type).toBe('button');
+    if (details?.type === 'button') expect(details.url).toBe('/brief');
+  });
+
   it('adds tracks and keeps at least one track when removing', () => {
     const widget = structuredClone(sampleWidget);
     const expanded = addTrack(widget, 'rows');
@@ -43,5 +53,13 @@ describe('editor state transformations', () => {
     expect(expanded.rows).toHaveLength(4);
     expect(removed.rows).toHaveLength(3);
     expect(lastRemoved.rows).toHaveLength(2);
+  });
+
+  it('repositions elements when a track is removed', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = removeTrack(widget, 'columns', 0);
+
+    expect(updated.columns).toHaveLength(2);
+    expect(updated.elements.find((element) => element.id === 'details')?.column).toBe(1);
   });
 });
