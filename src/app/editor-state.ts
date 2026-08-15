@@ -259,6 +259,47 @@ export function patchElement(widget: Widget, id: string, patch: Partial<WidgetEl
   };
 }
 
+export function moveElement(
+  widget: Widget,
+  position: { id: string; row: number; column: number },
+): Widget {
+  const element = widget.elements.find((candidate) => candidate.id === position.id);
+  if (!element) return widget;
+
+  return patchElement(widget, position.id, {
+    grid: {
+      ...element.grid,
+      row: Math.max(0, Math.min(widget.rows.length - element.grid.rowSpan, position.row)),
+      column: Math.max(
+        0,
+        Math.min(widget.columns.length - element.grid.columnSpan, position.column),
+      ),
+    },
+  });
+}
+
+export function resizeElement(
+  widget: Widget,
+  size: { id: string; rowSpan?: number; columnSpan?: number },
+): Widget {
+  const element = widget.elements.find((candidate) => candidate.id === size.id);
+  if (!element) return widget;
+
+  return patchElement(widget, size.id, {
+    grid: {
+      ...element.grid,
+      ...(size.rowSpan === undefined
+        ? {}
+        : { rowSpan: clampElementSpan(widget, element, 'rowSpan', size.rowSpan) }),
+      ...(size.columnSpan === undefined
+        ? {}
+        : {
+            columnSpan: clampElementSpan(widget, element, 'columnSpan', size.columnSpan),
+          }),
+    },
+  });
+}
+
 function mergeElementStyle(element: WidgetElement, patch: object): object {
   const currentStyle =
     'style' in element && isRecord(element.style) ? element.style : ({} as Record<string, unknown>);
@@ -343,13 +384,22 @@ export function updateElementSpan(
   kind: 'rowSpan' | 'columnSpan',
   value: number,
 ): Widget {
+  return patchElement(widget, element.id, {
+    grid: { ...element.grid, [kind]: clampElementSpan(widget, element, kind, value) },
+  });
+}
+
+function clampElementSpan(
+  widget: Widget,
+  element: WidgetElement,
+  kind: 'rowSpan' | 'columnSpan',
+  value: number,
+): number {
   const limit =
     kind === 'rowSpan'
       ? widget.rows.length - element.grid.row
       : widget.columns.length - element.grid.column;
-  return patchElement(widget, element.id, {
-    grid: { ...element.grid, [kind]: Math.max(1, Math.min(limit, Math.round(value) || 1)) },
-  });
+  return Math.max(1, Math.min(limit, Math.round(value) || 1));
 }
 
 export function updateElementRadius(widget: Widget, id: string, value: number): Widget {

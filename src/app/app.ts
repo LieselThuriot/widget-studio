@@ -26,10 +26,12 @@ import { sampleWidget } from './sample-widget';
 import {
   addTrack,
   changeElementStack,
+  moveElement as moveElementState,
   patchElement,
   patchWidget,
   removeTrack,
   reorderElements,
+  resizeElement as resizeElementState,
   updateElementPosition,
   updateElementRadius,
   updateElementSpan,
@@ -264,23 +266,10 @@ export class App {
     if (this.selectedId() === id) this.selectedId.set(null);
   }
   protected moveElement(position: { id: string; row: number; column: number }): void {
-    this.widget.update((widget) =>
-      (() => {
-        const element = widget.elements.find((candidate) => candidate.id === position.id);
-        return element
-          ? patchElement(widget, position.id, {
-              grid: { ...element.grid, row: position.row, column: position.column },
-            })
-          : widget;
-      })(),
-    );
+    this.widget.update((widget) => moveElementState(widget, position));
   }
   protected resizeElement(size: { id: string; rowSpan?: number; columnSpan?: number }): void {
-    const { id, ...patch } = size;
-    this.widget.update((widget) => {
-      const element = widget.elements.find((candidate) => candidate.id === id);
-      return element ? patchElement(widget, id, { grid: { ...element.grid, ...patch } }) : widget;
-    });
+    this.widget.update((widget) => resizeElementState(widget, size));
   }
   protected updateSpan(kind: 'rowSpan' | 'columnSpan', value: number): void {
     const element = this.selectedElement();

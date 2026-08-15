@@ -2,9 +2,11 @@ import { sampleWidget } from './sample-widget';
 import {
   addTrack,
   changeElementStack,
+  moveElement,
   normalizeWidget,
   patchElement,
   removeTrack,
+  resizeElement,
   updateElementPosition,
   updateElementSpan,
 } from './editor-state';
@@ -40,6 +42,33 @@ describe('editor state transformations', () => {
 
     expect(element?.grid.row).toBe(2);
     expect(span.elements.find((candidate) => candidate.id === 'headline')?.grid.rowSpan).toBe(1);
+  });
+
+  it('clamps element movement to the grid edges including its span', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = moveElement(widget, { id: 'headline', row: 99, column: 99 });
+    const element = updated.elements.find((candidate) => candidate.id === 'headline');
+
+    expect(element?.grid.row).toBe(2);
+    expect(element?.grid.column).toBe(0);
+  });
+
+  it('keeps movement inside the grid when moving a smaller element', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = moveElement(widget, { id: 'message', row: 99, column: 99 });
+    const element = updated.elements.find((candidate) => candidate.id === 'message');
+
+    expect(element?.grid.row).toBe(2);
+    expect(element?.grid.column).toBe(1);
+  });
+
+  it('clamps element resizing to one track and the remaining grid space', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = resizeElement(widget, { id: 'message', rowSpan: 99, columnSpan: 0 });
+    const element = updated.elements.find((candidate) => candidate.id === 'message');
+
+    expect(element?.grid.rowSpan).toBe(2);
+    expect(element?.grid.columnSpan).toBe(1);
   });
 
   it('moves an element to the requested stack position', () => {
