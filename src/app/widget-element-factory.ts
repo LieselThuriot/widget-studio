@@ -87,12 +87,7 @@ function createChartElement(
   if (type === 'gauge') {
     return {
       ...base,
-      grid: {
-        row: base.grid.row,
-        column: base.grid.column,
-        rowSpan: base.grid.rowSpan,
-        columnSpan: base.grid.columnSpan,
-      },
+      grid: chartGrid(base),
       type,
       title: 'Performance',
       data: { value: 72, min: 0, max: 100 },
@@ -103,18 +98,20 @@ function createChartElement(
 
   return {
     ...base,
-    grid: {
-      row: base.grid.row,
-      column: base.grid.column,
-      rowSpan: base.grid.rowSpan,
-      columnSpan: base.grid.columnSpan,
-    },
+    grid: chartGrid(base),
     type,
     title: type === 'line' ? 'Trend' : 'Overview',
     data,
     showLegend: type === 'pie' || type === 'donut',
     style: defaultGraphStyle(),
   } as SeriesElement;
+}
+
+function chartGrid(
+  base: Omit<WidgetElementBase, 'type'>,
+): Omit<WidgetElementBase['grid'], 'anchor'> {
+  const { anchor: _anchor, ...grid } = base.grid;
+  return grid;
 }
 
 export function defaultGraphStyle(): GraphStyle {
