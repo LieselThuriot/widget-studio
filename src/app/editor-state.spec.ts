@@ -10,6 +10,7 @@ import {
   updateElementPosition,
   updateElementSpan,
 } from './editor-state';
+import { normalizeChartElement, normalizeGaugeElement } from './widget-normalization';
 
 describe('editor state transformations', () => {
   it('patches only the requested element', () => {
@@ -159,5 +160,104 @@ describe('editor state transformations', () => {
         decoration: 'underline line-through',
       });
     }
+  });
+
+  it('normalizes legacy progress fields and styles', () => {
+    const widget = structuredClone(sampleWidget);
+    widget.elements.push({
+      id: 'legacy-progress',
+      type: 'progress',
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+      sensitive: false,
+      label: 'Done',
+      value: 75,
+      min: 10,
+      max: 90,
+      color: '#22c55e',
+      trackColor: '#172033',
+      style: { fontSize: 14 },
+    } as never);
+
+    const progress = normalizeWidget(widget).elements.find(
+      (element) => element.id === 'legacy-progress',
+    );
+
+    expect(progress?.type).toBe('progress');
+    if (progress?.type === 'progress') {
+      expect(progress.data).toEqual({ label: 'Done', value: 75, min: 10, max: 90 });
+      expect(progress.style.color.fill).toBe('#22c55e');
+      expect(progress.style.color.track).toBe('#172033');
+      expect(progress.style.font.size).toBe(14);
+      expect(progress.showLegend).toBe(true);
+      expect(progress.active).toBe(false);
+    }
+  });
+
+  it('normalizes legacy gauge and series chart styles', () => {
+    const gauge = normalizeGaugeElement(
+      {
+        id: 'gauge',
+        type: 'gauge',
+        grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'center' },
+        sensitive: false,
+        title: 'Gauge',
+        showLegend: false,
+        data: { value: 42, min: 0, max: 100 },
+        style: {
+          color: { legend: '#fff', title: '#eee', fill: '#0f0', track: '#000' },
+          font: { size: 12 },
+        },
+      },
+      { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+    );
+    const chart = normalizeChartElement(
+      {
+        id: 'bar',
+        type: 'bar',
+        grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+        sensitive: false,
+        title: 'Bar',
+        showLegend: false,
+        data: [{ label: 'A', value: 1 }],
+        style: {
+          color: { legend: '#fff', title: '#eee' },
+          font: { size: 16 },
+          axis: { label: '#aaa', line: '#bbb', grid: '#ccc' },
+        },
+      },
+      { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+    );
+
+    expect(gauge.grid).not.toHaveProperty('anchor');
+    expect(gauge.style.color.fill).toBe('#0f0');
+    expect(chart.style.font.size).toBe(16);
+    if ('axis' in chart.style) expect(chart.style.axis.grid).toBe('#ccc');
+  });
+
+  it('normalizes legacy grid coordinates and preserves chart anchor omission', () => {
+    const widget = structuredClone(sampleWidget);
+    const text = widget.elements[0] as unknown as Record<string, unknown>;
+    delete text['grid'];
+    text['row'] = 2;
+    text['column'] = 1;
+    text['rowSpan'] = 2;
+    text['columnSpan'] = 2;
+    text['anchor'] = 'bottom right';
+
+    const normalized = normalizeWidget(widget);
+    const normalizedText = normalized.elements[0];
+
+    expect(normalizedText.grid).toMatchObject({
+      row: 2,
+      column: 1,
+      rowSpan: 2,
+      columnSpan: 2,
+      anchor: 'bottom right',
+    });
+    expect(
+      normalized.elements
+        .filter((element) => ['pie', 'donut', 'gauge', 'bar', 'line'].includes(element.type))
+        .every((element) => !('anchor' in element.grid)),
+    ).toBe(true);
   });
 });
