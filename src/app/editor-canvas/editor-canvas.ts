@@ -20,7 +20,7 @@ import {
 } from 'widget-renderer';
 import { CanvasContextMenu, CanvasContextMenuState } from './canvas-context-menu';
 import { CanvasElementOverlay } from './canvas-element-overlay';
-import { elementAtPoint, elementFromEvent, trackAt } from './editor-canvas-interaction';
+import { elementForEvent, trackAt } from './editor-canvas-interaction';
 
 @Component({
   selector: 'app-editor-canvas',
@@ -74,8 +74,7 @@ export class EditorCanvas {
     if ((event.target as HTMLElement).closest('.icon-button')) return;
     const element = this.pointerDownElementId
       ? this.widget().elements.find((candidate) => candidate.id === this.pointerDownElementId)
-      : (elementFromEvent(event, this.widget().elements) ??
-        elementAtPoint(event, this.hostElement.nativeElement, this.widget().elements));
+      : elementForEvent(event, this.hostElement.nativeElement, this.widget().elements);
     this.pointerDownElementId = null;
     if (element) {
       event.stopPropagation();
@@ -88,18 +87,14 @@ export class EditorCanvas {
   protected pointerDown(event: PointerEvent): void {
     this.pointerDownElementId = null;
     if ((event.target as HTMLElement).closest('.icon-button')) return;
-    const element =
-      elementFromEvent(event, this.widget().elements) ??
-      elementAtPoint(event, this.hostElement.nativeElement, this.widget().elements);
+    const element = elementForEvent(event, this.hostElement.nativeElement, this.widget().elements);
     if (!element || event.button !== 0 || this.ctrlPressed()) return;
     this.pointerDownElementId = element.id;
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
     this.startDrag(element, event);
   }
   protected pointerContextMenu(event: MouseEvent): void {
-    const element =
-      elementFromEvent(event, this.widget().elements) ??
-      elementAtPoint(event, this.hostElement.nativeElement, this.widget().elements);
+    const element = elementForEvent(event, this.hostElement.nativeElement, this.widget().elements);
     if (element) this.openContextMenu(element, event);
   }
   protected selectElement(id: string, event: Event): void {

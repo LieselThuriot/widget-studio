@@ -41,6 +41,14 @@ export function elementFromEvent(
   return id ? elements.find((element) => element.id === id) : undefined;
 }
 
+export function elementForEvent(
+  event: MouseEvent,
+  host: HTMLElement,
+  elements: WidgetElement[],
+): WidgetElement | undefined {
+  return elementFromEvent(event, elements) ?? elementAtPoint(event, host, elements);
+}
+
 export function elementAtPoint(
   event: MouseEvent,
   host: HTMLElement,
