@@ -15,7 +15,6 @@
 .widget-skeleton.is-wide {
   width: 530px;
 }
-.widget-skeleton::after,
 .skeleton-line,
 .skeleton-chart,
 .skeleton-button {
@@ -74,7 +73,6 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .widget-skeleton::after,
   .skeleton-line,
   .skeleton-chart,
   .skeleton-button {
