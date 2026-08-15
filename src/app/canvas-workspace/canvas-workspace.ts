@@ -1,10 +1,14 @@
-import { Component, HostListener, input, output, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { ButtonElement, Widget } from 'widget-renderer';
 import { EditorCanvas } from '../editor-canvas/editor-canvas';
 
 @Component({
   selector: 'app-canvas-workspace',
   imports: [EditorCanvas],
+  host: {
+    '(document:keydown.escape)': 'closeShortcuts()',
+    '(document:click)': 'closeShortcutsOnOutside($event)',
+  },
   templateUrl: './canvas-workspace.html',
   styleUrl: './canvas-workspace.css',
 })
@@ -27,12 +31,10 @@ export class CanvasWorkspace {
     this.shortcutsOpen.update((open) => !open);
   }
 
-  @HostListener('document:keydown.escape')
   protected closeShortcuts(): void {
     this.shortcutsOpen.set(false);
   }
 
-  @HostListener('document:click', ['$event'])
   protected closeShortcutsOnOutside(event: MouseEvent): void {
     if (!(event.target as HTMLElement).closest('.shortcut-help')) this.closeShortcuts();
   }
