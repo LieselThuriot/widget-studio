@@ -10,6 +10,18 @@ import { ActionAlert, EventAlertDialog } from './event-alert-dialog/event-alert-
 import { SettingsPanel } from './settings-panel/settings-panel';
 import { ButtonElement, ImageElement, TextElement, Widget, WidgetElement } from 'widget-renderer';
 import { sampleWidget } from './sample-widget';
+import {
+  addTrack,
+  changeElementStack,
+  patchElement,
+  patchWidget,
+  removeTrack,
+  reorderElements,
+  updateElementPosition,
+  updateElementRadius,
+  updateElementSpan,
+  updateTrack,
+} from './editor-state';
 
 @Component({
   selector: 'app-root',
@@ -117,34 +129,10 @@ export class App {
     event.preventDefault();
     const sourceId = event.dataTransfer?.getData('widget-layer-id');
     if (!sourceId || sourceId === targetId) return;
-    this.widget.update((widget) => {
-      const elements = [...widget.elements];
-      const sourceIndex = elements.findIndex((element) => element.id === sourceId);
-      const targetIndex = elements.findIndex((element) => element.id === targetId);
-      if (sourceIndex < 0 || targetIndex < 0) return widget;
-      const [source] = elements.splice(sourceIndex, 1);
-      elements.splice(targetIndex, 0, source);
-      return { ...widget, elements };
-    });
+    this.widget.update((widget) => reorderElements(widget, sourceId, targetId));
   }
   protected changeStack(change: { id: string; action: 'up' | 'down' | 'front' | 'back' }): void {
-    this.widget.update((widget) => {
-      const elements = [...widget.elements];
-      const index = elements.findIndex((element) => element.id === change.id);
-      if (index < 0) return widget;
-      const target =
-        change.action === 'up'
-          ? index + 1
-          : change.action === 'down'
-            ? index - 1
-            : change.action === 'front'
-              ? elements.length - 1
-              : 0;
-      if (target === index || target < 0 || target >= elements.length) return widget;
-      const [element] = elements.splice(index, 1);
-      elements.splice(target, 0, element);
-      return { ...widget, elements };
-    });
+    this.widget.update((widget) => changeElementStack(widget, change));
   }
   protected dropElement(event: DragEvent): void {
     event.preventDefault();
@@ -175,85 +163,49 @@ export class App {
     if (this.selectedId() === id) this.selectedId.set(null);
   }
   protected moveElement(position: { id: string; row: number; column: number }): void {
-    this.widget.update((widget) => ({
-      ...widget,
-      elements: widget.elements.map((element) =>
-        element.id === position.id
-          ? { ...element, row: position.row, column: position.column }
-          : element,
-      ),
-    }));
+    this.widget.update((widget) =>
+      patchElement(widget, position.id, { row: position.row, column: position.column }),
+    );
   }
   protected resizeElement(size: { id: string; rowSpan?: number; columnSpan?: number }): void {
     const { id, ...patch } = size;
-    this.widget.update((widget) => ({
-      ...widget,
-      elements: widget.elements.map((element) =>
-        element.id === id ? { ...element, ...patch } : element,
-      ),
-    }));
+    this.widget.update((widget) => patchElement(widget, id, patch));
   }
   protected updateSpan(kind: 'rowSpan' | 'columnSpan', value: number): void {
     const element = this.selectedElement();
     if (!element) return;
-    const limit =
-      kind === 'rowSpan'
-        ? this.widget().rows.length - element.row
-        : this.widget().columns.length - element.column;
-    this.updateSelected({ [kind]: Math.max(1, Math.min(limit, Math.round(value) || 1)) });
+    this.widget.update((widget) => updateElementSpan(widget, element, kind, value));
   }
   protected updatePosition(kind: 'row' | 'column', value: number): void {
-    const maximum =
-      kind === 'row' ? this.widget().rows.length - 1 : this.widget().columns.length - 1;
-    this.updateSelected({ [kind]: Math.max(0, Math.min(maximum, Math.round(value) - 1)) });
+    const id = this.selectedId();
+    if (!id) return;
+    this.widget.update((widget) => updateElementPosition(widget, id, kind, value));
   }
   protected updateRadius(value: number): void {
-    this.updateSelected({ radius: Math.max(0, Math.round(value) || 0) });
+    const id = this.selectedId();
+    if (!id) return;
+    this.widget.update((widget) => updateElementRadius(widget, id, value));
   }
   protected updateWidget(patch: Partial<Widget>): void {
-    this.widget.update((widget) => ({ ...widget, ...patch }));
+    this.widget.update((widget) => patchWidget(widget, patch));
   }
   protected updateTrack(
     kind: 'rows' | 'columns',
     index: number,
     patch: Partial<Widget['rows'][number]>,
   ): void {
-    this.widget.update((widget) => ({
-      ...widget,
-      [kind]: widget[kind].map((track, trackIndex) =>
-        trackIndex === index ? { ...track, ...patch } : track,
-      ),
-    }));
+    this.widget.update((widget) => updateTrack(widget, kind, index, patch));
   }
   protected addTrack(kind: 'rows' | 'columns'): void {
-    this.widget.update((widget) => ({
-      ...widget,
-      [kind]: [...widget[kind], { size: 1, unit: 'star' as const }],
-    }));
+    this.widget.update((widget) => addTrack(widget, kind));
   }
   protected removeTrack(kind: 'rows' | 'columns', index: number): void {
-    if (this.widget()[kind].length <= 1) return;
-    this.widget.update((widget) => ({
-      ...widget,
-      [kind]: widget[kind].filter((_, trackIndex) => trackIndex !== index),
-      elements: widget.elements.map((element) => ({
-        ...element,
-        [kind === 'rows' ? 'row' : 'column']: Math.min(
-          element[kind === 'rows' ? 'row' : 'column'],
-          widget[kind].length - 2,
-        ),
-      })),
-    }));
+    this.widget.update((widget) => removeTrack(widget, kind, index));
   }
   protected updateSelected(patch: Partial<WidgetElement>): void {
     const id = this.selectedId();
     if (!id) return;
-    this.widget.update((widget) => ({
-      ...widget,
-      elements: widget.elements.map((element) =>
-        element.id === id ? ({ ...element, ...patch } as WidgetElement) : element,
-      ),
-    }));
+    this.widget.update((widget) => patchElement(widget, id, patch));
   }
   protected onRefresh(): void {
     this.actionAlert.set({ kind: 'refresh', label: this.widget().refresh.label });
