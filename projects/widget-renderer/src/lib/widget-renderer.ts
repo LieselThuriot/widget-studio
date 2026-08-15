@@ -21,18 +21,19 @@ import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from '.
   imports: [ChartElementRenderer],
 })
 export class WidgetRenderer {
-  readonly widget = input.required<unknown>();
+  readonly widget = input.required<WidgetInput>();
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
   private readonly failedImages = signal<Record<string, string>>({});
   private hydratedWidget: Widget | undefined;
+  private readonly parsedWidget = computed(() => safeParseWidgetInput(this.widget()));
   readonly validationIssues = computed<WidgetValidationIssue[]>(() => {
-    const result = safeParseWidgetInput(this.widget());
+    const result = this.parsedWidget();
     return result.success ? [] : result.issues;
   });
   protected readonly renderWidget = computed<Widget>(() => {
-    const result = safeParseWidgetInput(this.widget());
+    const result = this.parsedWidget();
     if (!result.success) {
       this.hydratedWidget = emptyWidget;
       return emptyWidget;
