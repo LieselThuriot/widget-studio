@@ -18,6 +18,7 @@ import {
 import { SVGRenderer } from 'echarts/renderers';
 import { init, type ECharts, type EChartsCoreOption } from 'echarts/core';
 import { ChartElement, ProgressElement, WidgetElement } from './widget.model';
+import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
 
 use([
   BarChart,
@@ -104,6 +105,14 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
       : (element.grid.anchor ?? 'center').endsWith('right')
         ? 'right'
         : 'center';
+  }
+
+  protected ariaLabel(element: ChartElement | ProgressElement): string {
+    return chartAriaLabel(element);
+  }
+
+  protected accessibilitySummary(element: ChartElement | ProgressElement): string {
+    return chartAccessibilitySummary(element);
   }
 
   private renderChart(): void {

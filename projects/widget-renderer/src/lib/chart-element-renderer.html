@@ -2,7 +2,8 @@
   <div
     class="progress-element"
     [style]="progressStyle(progress(element()))"
-    [attr.aria-label]="progress(element()).data.label"
+    [attr.aria-label]="ariaLabel(progress(element()))"
+    [attr.aria-describedby]="'chart-summary-' + progress(element()).id"
     role="progressbar"
     [attr.aria-valuemin]="progress(element()).data.min"
     [attr.aria-valuemax]="progress(element()).data.max"
@@ -16,12 +17,20 @@
         >{{ progress(element()).data.label }} {{ progress(element()).data.value }}</span
       >
     }
+    <span class="visually-hidden" [id]="'chart-summary-' + progress(element()).id">{{
+      accessibilitySummary(progress(element()))
+    }}</span>
   </div>
 } @else {
   <div
-    #chartHost
-    class="chart-host"
-    [attr.aria-label]="chart(element()).title || 'Chart'"
+    class="chart-chart"
+    [attr.aria-label]="ariaLabel(chart(element()))"
+    [attr.aria-describedby]="'chart-summary-' + chart(element()).id"
     role="img"
-  ></div>
+  >
+    <div #chartHost class="chart-host"></div>
+    <span class="visually-hidden" [id]="'chart-summary-' + chart(element()).id">{{
+      accessibilitySummary(chart(element()))
+    }}</span>
+  </div>
 }
