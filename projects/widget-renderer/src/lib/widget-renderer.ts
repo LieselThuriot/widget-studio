@@ -91,13 +91,6 @@ export class WidgetRenderer {
   protected imageLoadFailed(element: ImageElement): void {
     this.failedImages.update((failed) => ({ ...failed, [element.id]: element.source }));
   }
-  protected retryImage(element: ImageElement): void {
-    this.failedImages.update((failed) => {
-      const next = { ...failed };
-      delete next[element.id];
-      return next;
-    });
-  }
   protected horizontalAnchor(anchor: string): string {
     return anchor.endsWith('left')
       ? 'flex-start'
