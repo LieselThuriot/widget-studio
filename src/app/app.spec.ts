@@ -344,6 +344,9 @@ describe('App', () => {
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
     ) as { elements: { type: string }[] };
     expect(contract.elements.at(1)?.type).toBe('text');
+    expect(
+      fixture.nativeElement.querySelector('.settings-panel .selected-chip')?.textContent,
+    ).toContain('Text');
   });
 
   it('should close the context menu when deleting an element', async () => {

@@ -6,15 +6,31 @@
   aria-label="Element layer order"
   (pointerdown)="$event.stopPropagation()"
 >
-  <button type="button" role="menuitem" (click)="stackChanged.emit('up'); closed.emit()">
+  <button
+    type="button"
+    role="menuitem"
+    (click)="$event.stopPropagation(); stackChanged.emit('up'); closed.emit()"
+  >
     Move up</button
-  ><button type="button" role="menuitem" (click)="stackChanged.emit('down'); closed.emit()">
+  ><button
+    type="button"
+    role="menuitem"
+    (click)="$event.stopPropagation(); stackChanged.emit('down'); closed.emit()"
+  >
     Move down
   </button>
   <div class="menu-divider"></div>
-  <button type="button" role="menuitem" (click)="stackChanged.emit('front'); closed.emit()">
+  <button
+    type="button"
+    role="menuitem"
+    (click)="$event.stopPropagation(); stackChanged.emit('front'); closed.emit()"
+  >
     Bring to front</button
-  ><button type="button" role="menuitem" (click)="stackChanged.emit('back'); closed.emit()">
+  ><button
+    type="button"
+    role="menuitem"
+    (click)="$event.stopPropagation(); stackChanged.emit('back'); closed.emit()"
+  >
     Send to back
   </button>
   <div class="menu-divider"></div>
@@ -22,7 +38,7 @@
     type="button"
     class="menu-delete"
     role="menuitem"
-    (click)="deleteRequested.emit(); closed.emit()"
+    (click)="$event.stopPropagation(); deleteRequested.emit(); closed.emit()"
   >
     Delete
   </button>
