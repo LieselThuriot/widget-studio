@@ -20,6 +20,9 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Compose a widget');
     expect(compiled.querySelector('app-editor-canvas')).toBeTruthy();
+    expect(compiled.querySelector('.editor-canvas')?.getAttribute('aria-label')).toBe(
+      'Widget editor canvas',
+    );
     expect(compiled.querySelector('.topbar-meta')).toBeNull();
   });
 
