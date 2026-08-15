@@ -18,6 +18,8 @@ const defaultGraphStyle = {
   font: { size: 11 },
   axis: { label: '#d4dbea', line: '#94a3b8', grid: '#475569' },
 };
+const chartTypes = ['pie', 'donut', 'gauge', 'bar', 'line'] as const;
+const seriesTypes = ['pie', 'donut', 'bar', 'line'] as const;
 
 type LegacyLayout = WidgetElement & {
   row?: number;
@@ -226,13 +228,13 @@ function normalizeGrid(element: WidgetElement, legacyLayout: LegacyLayout) {
 }
 
 function isChartElement(element: WidgetElement): element is ChartElement {
-  return ['pie', 'donut', 'gauge', 'bar', 'line'].includes(element.type);
+  return chartTypes.includes(element.type as (typeof chartTypes)[number]);
 }
 
 function isSeriesElement(
   element: WidgetElement,
 ): element is Extract<ChartElement, { type: 'pie' | 'donut' | 'bar' | 'line' }> {
-  return ['pie', 'donut', 'bar', 'line'].includes(element.type);
+  return seriesTypes.includes(element.type as (typeof seriesTypes)[number]);
 }
 
 function recordValue(value: unknown): Record<string, unknown> {
