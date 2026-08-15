@@ -209,6 +209,7 @@ export class EditorCanvas {
   protected deleteElement(id: string, event: Event): void {
     event.stopPropagation();
     this.elementDeleted.emit(id);
+    this.closeContextMenu();
   }
   protected startDrag(element: WidgetElement, event: PointerEvent): void {
     if (event.button !== 0 || this.ctrlPressed()) return;

@@ -346,6 +346,24 @@ describe('App', () => {
     expect(contract.elements.at(1)?.type).toBe('text');
   });
 
+  it('should close the context menu when deleting an element', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const target = fixture.nativeElement.querySelector(
+      'widget-renderer [data-widget-element-id="headline"] .element-content',
+    ) as HTMLElement;
+    target.dispatchEvent(
+      new MouseEvent('contextmenu', { bubbles: true, clientX: 10, clientY: 10 }),
+    );
+    fixture.detectChanges();
+
+    const deleteButton = fixture.nativeElement.querySelector('.menu-delete') as HTMLButtonElement;
+    deleteButton.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.element-context-menu')).toBeNull();
+  });
+
   it('should select the widget when clicking an empty grid gap', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
