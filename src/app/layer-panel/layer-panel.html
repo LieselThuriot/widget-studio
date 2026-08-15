@@ -30,42 +30,59 @@
         >{{ label(element) }}</button
       ><button
         type="button"
-        class="layer-delete"
-        [attr.aria-label]="'Delete ' + label(element) + ' layer'"
-        (click)="elementDeleted.emit(element.id)"
+        class="layer-actions-trigger"
+        [attr.aria-label]="'Actions for ' + label(element)"
+        [attr.aria-expanded]="openActionsId() === element.id"
+        (click)="toggleActions(element.id, $event)"
       >
-        <span aria-hidden="true">x</span>
+        <span aria-hidden="true">•••</span>
       </button>
-      <div class="layer-actions" aria-label="Layer actions">
-        <button
-          type="button"
-          [disabled]="!canMove(index, 'up')"
-          (click)="changeStack(element.id, 'up')"
-        >
-          Move up
-        </button>
-        <button
-          type="button"
-          [disabled]="!canMove(index, 'down')"
-          (click)="changeStack(element.id, 'down')"
-        >
-          Move down
-        </button>
-        <button
-          type="button"
-          [disabled]="!canMove(index, 'front')"
-          (click)="changeStack(element.id, 'front')"
-        >
-          Bring to front
-        </button>
-        <button
-          type="button"
-          [disabled]="!canMove(index, 'back')"
-          (click)="changeStack(element.id, 'back')"
-        >
-          Send to back
-        </button>
-      </div>
+      @if (openActionsId() === element.id) {
+        <div class="layer-actions" aria-label="Layer actions" role="menu">
+          <button
+            type="button"
+            role="menuitem"
+            [disabled]="!canMove(index, 'up')"
+            (click)="changeStack(element.id, 'up')"
+          >
+            Move up
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            [disabled]="!canMove(index, 'down')"
+            (click)="changeStack(element.id, 'down')"
+          >
+            Move down
+          </button>
+          <div class="layer-menu-divider" role="separator"></div>
+          <button
+            type="button"
+            role="menuitem"
+            [disabled]="!canMove(index, 'front')"
+            (click)="changeStack(element.id, 'front')"
+          >
+            Bring to front
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            [disabled]="!canMove(index, 'back')"
+            (click)="changeStack(element.id, 'back')"
+          >
+            Send to back
+          </button>
+          <div class="layer-menu-divider" role="separator"></div>
+          <button
+            type="button"
+            class="layer-menu-delete"
+            role="menuitem"
+            (click)="elementDeleted.emit(element.id); closeActions()"
+          >
+            Delete
+          </button>
+        </div>
+      }
     </div>
   }
 </div>

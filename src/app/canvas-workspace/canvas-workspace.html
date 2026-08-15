@@ -1,7 +1,57 @@
 <section class="canvas-area" aria-label="Widget preview">
   <div class="canvas-toolbar">
-    <span>Preview canvas</span
-    ><span class="dimensions">{{ widget().size === 'wide' ? '530' : '265' }} × 245 px</span>
+    <span>Preview canvas</span>
+    <span class="shortcut-help">
+      <button
+        type="button"
+        class="shortcut-help-trigger"
+        aria-label="Show keyboard shortcuts"
+        [attr.aria-expanded]="shortcutsOpen()"
+        (click)="toggleShortcuts($event)"
+      >
+        ?
+      </button>
+      @if (shortcutsOpen()) {
+        <div class="shortcut-popover" role="dialog" aria-label="Keyboard shortcuts">
+          <strong>Keyboard shortcuts</strong>
+          <dl>
+            <div>
+              <dt><kbd>Ctrl</kbd></dt>
+              <dd>Show element boundaries</dd>
+            </div>
+            <div>
+              <dt><kbd>Arrow keys</kbd></dt>
+              <dd>Move the focused element</dd>
+            </div>
+            <div>
+              <dt><kbd>Shift</kbd> + <kbd>Arrow</kbd></dt>
+              <dd>Resize the focused element</dd>
+            </div>
+            <div>
+              <dt><kbd>Delete</kbd></dt>
+              <dd>Delete the focused element</dd>
+            </div>
+            <div>
+              <dt><kbd>[</kbd> / <kbd>]</kbd></dt>
+              <dd>Move layer down / up</dd>
+            </div>
+            <div>
+              <dt><kbd>Shift</kbd> + <kbd>[</kbd> / <kbd>]</kbd></dt>
+              <dd>Send back / bring front</dd>
+            </div>
+            <div>
+              <dt><kbd>Enter</kbd> / <kbd>Space</kbd></dt>
+              <dd>Select the focused element</dd>
+            </div>
+            <div>
+              <dt><kbd>Esc</kbd></dt>
+              <dd>Close menus</dd>
+            </div>
+          </dl>
+        </div>
+      }
+    </span>
+    <span class="dimensions">{{ widget().size === 'wide' ? '530' : '265' }} × 245 px</span>
   </div>
   <div class="canvas" (dragover)="$event.preventDefault()" (drop)="elementDropped.emit($event)">
     <app-editor-canvas
@@ -16,9 +66,5 @@
       (refreshRequested)="refreshRequested.emit()"
       (actionRequested)="actionRequested.emit($event)"
     />
-  </div>
-  <div class="canvas-hint">
-    <span>Ctrl</span> Hold Ctrl to show element boundaries
-    <span class="hint-separator"></span> Hover the widget to reveal its controls
   </div>
 </section>

@@ -313,7 +313,14 @@ describe('App', () => {
   it('should delete a layer from the layer panel', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const deleteButton = fixture.nativeElement.querySelector('.layer-delete') as HTMLButtonElement;
+    const actionsButton = fixture.nativeElement.querySelector(
+      '.layer-actions-trigger',
+    ) as HTMLButtonElement;
+    actionsButton.click();
+    fixture.detectChanges();
+    const deleteButton = fixture.nativeElement.querySelector(
+      '.layer-menu-delete',
+    ) as HTMLButtonElement;
     deleteButton.click();
     fixture.detectChanges();
 

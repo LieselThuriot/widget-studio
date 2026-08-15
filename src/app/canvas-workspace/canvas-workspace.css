@@ -4,12 +4,17 @@
 }
 .canvas-toolbar {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin: 0 4px 14px;
   color: #56647d;
   font:
     700 12px 'DM Sans',
     sans-serif;
+}
+.canvas-toolbar > .shortcut-help {
+  margin-right: auto;
+  margin-left: 8px;
 }
 .dimensions {
   color: #a1aabd;
@@ -25,33 +30,76 @@
   background-image: radial-gradient(#d5dce8 1px, transparent 1px);
   background-size: 14px 14px;
 }
-.canvas-hint {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 15px;
-  color: #97a1b3;
-  font-size: 11px;
-}
-.canvas-hint span:first-child {
+.shortcut-help kbd {
   padding: 2px 5px;
   border: 1px solid #d6dce6;
   border-radius: 4px;
-  font-weight: 700;
+  background: #fff;
+  color: #66738b;
+  font: 700 10px/1.2 inherit;
 }
-.hint-separator {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #c2c9d5;
+.shortcut-help {
+  position: relative;
+  display: inline-flex;
+}
+.shortcut-help-trigger {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #cbd4e3;
+  border-radius: 5px;
+  background: #fff;
+  color: #53627b;
+  font-weight: 700;
+  cursor: pointer;
+}
+.shortcut-help-trigger:hover,
+.shortcut-help-trigger:focus-visible {
+  border-color: #36527f;
+  color: #36527f;
+}
+.shortcut-popover {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  width: 270px;
+  padding: 13px 14px;
+  border: 1px solid #d4dce8;
+  border-radius: 9px;
+  background: #fff;
+  color: #53627b;
+  box-shadow: 0 10px 24px #27365326;
+  text-align: left;
+}
+.shortcut-popover strong {
+  color: #36527f;
+  font-size: 12px;
+}
+.shortcut-popover dl {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 0;
+}
+.shortcut-popover dl div {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.shortcut-popover dt,
+.shortcut-popover dd {
+  margin: 0;
+  font-size: 10px;
+}
+.shortcut-popover dd {
+  color: #8794ad;
 }
 @media (max-width: 700px) {
   .canvas {
     min-height: 340px;
-  }
-  .canvas-hint {
-    flex-wrap: wrap;
-    text-align: center;
   }
 }

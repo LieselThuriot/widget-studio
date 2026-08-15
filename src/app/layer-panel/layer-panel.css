@@ -40,6 +40,7 @@ h2 {
   margin-top: 18px;
 }
 .layer {
+  position: relative;
   display: flex;
   gap: 4px;
   align-items: center;
@@ -81,23 +82,72 @@ h2 {
   font-size: 13px;
   letter-spacing: -4px;
 }
-.layer-delete {
-  display: none;
-  width: 22px;
-  height: 22px;
-  border: 0;
+.layer-actions-trigger {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
   border-radius: 5px;
   background: transparent;
-  color: #bd8290;
-  font-size: 16px;
+  color: #8794ad;
+  font-size: 14px;
+  line-height: 1;
   cursor: pointer;
 }
-.layer:hover .layer-delete,
-.layer:focus-within .layer-delete {
-  display: block;
+.layer-actions-trigger:hover,
+.layer-actions-trigger:focus-visible,
+.layer.selected .layer-actions-trigger {
+  border-color: #cbd5e5;
+  background: #fff;
+  color: #36527f;
 }
-.layer-delete:hover,
-.layer-delete:focus-visible {
-  background: #fbecef;
+.layer-actions {
+  position: absolute;
+  top: calc(100% - 2px);
+  right: 3px;
+  z-index: 20;
+  display: grid;
+  width: 132px;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid #d4dce8;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 8px 18px #27365326;
+}
+.layer-actions button {
+  width: 100%;
+  padding: 6px 7px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #53627b;
+  text-align: left;
+  font-size: 10px;
+  cursor: pointer;
+}
+.layer-actions button:hover,
+.layer-actions button:focus-visible {
+  background: #edf2fb;
+  color: #36527f;
+}
+.layer-actions button:disabled {
+  color: #b8c0ce;
+  cursor: not-allowed;
+}
+.layer-menu-divider {
+  height: 1px;
+  margin: 3px 2px;
+  background: #e3e8f0;
+}
+.layer-actions .layer-menu-delete {
   color: #b64d60;
+}
+.layer-actions .layer-menu-delete:hover,
+.layer-actions .layer-menu-delete:focus-visible {
+  background: #fbecef;
+  color: #a43e52;
 }

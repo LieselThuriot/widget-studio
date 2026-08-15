@@ -16,7 +16,7 @@ const widget: WidgetContract = {
       source: '/missing.png',
       alt: 'A missing image',
       fit: 'cover',
-      radius: 0,
+      radius: 12,
     },
   ],
 };
@@ -26,7 +26,7 @@ describe('renderer image failures', () => {
     await TestBed.configureTestingModule({ imports: [WidgetRenderer] }).compileComponents();
   });
 
-  it('shows an accessible fallback and retry action after an image error', async () => {
+  it('shows a bounded placeholder after an image error', async () => {
     const fixture = TestBed.createComponent(WidgetRenderer);
     fixture.componentRef.setInput('widget', widget);
     await fixture.whenStable();
@@ -34,13 +34,10 @@ describe('renderer image failures', () => {
     fixture.nativeElement.querySelector('img').dispatchEvent(new Event('error'));
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.image-fallback')?.textContent).toContain(
-      'A missing image',
+    expect(fixture.nativeElement.querySelector('.image-placeholder')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.image-placeholder button')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.image-placeholder')?.style.borderRadius).toBe(
+      '12px',
     );
-    expect(fixture.nativeElement.querySelector('.image-fallback button')).toBeTruthy();
-
-    fixture.nativeElement.querySelector('.image-fallback button').click();
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('img')).toBeTruthy();
   });
 });

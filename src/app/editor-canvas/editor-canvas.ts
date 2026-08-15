@@ -1,4 +1,13 @@
-import { Component, computed, ElementRef, inject, input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import {
   ButtonElement,
   elementGridStyle,
@@ -50,6 +59,17 @@ export class EditorCanvas {
   private resizing: { id: string; axis: 'row' | 'column' } | null = null;
   private pointerDownElementId: string | null = null;
 
+  constructor() {
+    effect(() => {
+      const id = this.selectedId();
+      if (id && !document.activeElement?.closest('.event-alert, .preview-window')) {
+        queueMicrotask(() => {
+          if (!document.querySelector('.event-alert, .preview-window')) this.focusElement(id);
+        });
+      }
+    });
+  }
+
   protected elementStyle(element: WidgetElement): Record<string, string> {
     return elementGridStyle(element);
   }
@@ -99,7 +119,7 @@ export class EditorCanvas {
             : element.title;
   }
   protected onCanvasKeyDown(event: KeyboardEvent): void {
-    const target = (event.target as HTMLElement).closest<HTMLElement>('.editor-element');
+    const target = (event.target as HTMLElement).closest('.editor-element') as HTMLElement | null;
     const id = target?.dataset['widgetElementId'];
     if (
       !id ||
@@ -156,6 +176,12 @@ export class EditorCanvas {
           : { id, row: element.grid.row, column: element.grid.column + direction },
       );
     }
+  }
+  private focusElement(id: string): void {
+    const element = Array.from(this.hostElement.nativeElement.querySelectorAll('.editor-element'))
+      .map((candidate) => candidate as HTMLElement)
+      .find((candidate) => candidate.dataset['widgetElementId'] === id);
+    element?.focus();
   }
   protected openContextMenu(element: WidgetElement, event: MouseEvent): void {
     event.preventDefault();
