@@ -175,21 +175,11 @@
       /></label>
     }
 
-    <div class="anchor-field">
-      <span>Anchor</span>
-      <div class="anchor-control" role="group" aria-label="Element anchor">
-        @for (anchor of anchors; track anchor.value) {
-          <button
-            type="button"
-            [class.active]="element.anchor === anchor.value"
-            [attr.aria-label]="anchor.value"
-            (click)="elementChanged.emit({ anchor: anchor.value })"
-          >
-            {{ anchor.icon }}
-          </button>
-        }
-      </div>
-    </div>
+    <app-anchor-control
+      [value]="element.anchor"
+      ariaLabel="Element anchor"
+      (changed)="elementChanged.emit({ anchor: $event })"
+    />
     <label class="toggle-row"
       ><span
         ><strong>Sensitive content</strong><small>Blur until the eye control is used</small></span
@@ -263,49 +253,38 @@
             <option value="wide">Wide · 530 × 245</option>
           </select></label
         >
-        @for (kind of trackKinds; track kind) {
-          <p class="eyebrow track-heading">
-            {{ kind | titlecase }}
-            <button type="button" class="small-add" (click)="trackAdded.emit($any(kind))">
-              + Add
-            </button>
-          </p>
-          @for (track of tracks(kind); track $index) {
-            <div class="track-row">
-              <input
-                type="number"
-                min="1"
-                [value]="track.size"
-                (input)="
-                  trackChanged.emit({
-                    kind: $any(kind),
-                    index: $index,
-                    patch: { size: +$any($event.target).value },
-                  })
-                "
-              /><select
-                [value]="track.unit"
-                (change)="
-                  trackChanged.emit({
-                    kind: $any(kind),
-                    index: $index,
-                    patch: { unit: $any($event.target).value },
-                  })
-                "
-              >
-                <option value="star">Star</option>
-                <option value="pixel">Pixel</option>
-                <option value="auto">Auto</option></select
-              ><button
-                type="button"
-                (click)="trackRemoved.emit({ kind: $any(kind), index: $index })"
-                [attr.aria-label]="'Remove ' + kind.slice(0, -1)"
-              >
-                ×
-              </button>
-            </div>
-          }
-        }
+        <app-grid-track-editor
+          kind="rows"
+          [tracks]="widget().rows"
+          (added)="trackAdded.emit('rows')"
+          (removed)="trackRemoved.emit({ kind: 'rows', index: $event })"
+          (sizeChanged)="
+            trackChanged.emit({ kind: 'rows', index: $event.index, patch: { size: $event.value } })
+          "
+          (unitChanged)="
+            trackChanged.emit({ kind: 'rows', index: $event.index, patch: { unit: $event.value } })
+          "
+        />
+        <app-grid-track-editor
+          kind="columns"
+          [tracks]="widget().columns"
+          (added)="trackAdded.emit('columns')"
+          (removed)="trackRemoved.emit({ kind: 'columns', index: $event })"
+          (sizeChanged)="
+            trackChanged.emit({
+              kind: 'columns',
+              index: $event.index,
+              patch: { size: $event.value },
+            })
+          "
+          (unitChanged)="
+            trackChanged.emit({
+              kind: 'columns',
+              index: $event.index,
+              patch: { unit: $event.value },
+            })
+          "
+        />
       </section>
       <section class="widget-setting-section">
         <div class="widget-setting-section-heading">
@@ -368,21 +347,11 @@
               })
             " /><span class="toggle"></span
         ></label>
-        <div class="anchor-field">
-          <span>Anchor</span>
-          <div class="anchor-control" role="group" aria-label="Background image anchor">
-            @for (anchor of anchors; track anchor.value) {
-              <button
-                type="button"
-                [class.active]="widget().background.anchor === anchor.value"
-                [attr.aria-label]="anchor.value"
-                (click)="setAnchor(anchor.value)"
-              >
-                {{ anchor.icon }}
-              </button>
-            }
-          </div>
-        </div>
+        <app-anchor-control
+          [value]="widget().background.anchor"
+          ariaLabel="Background image anchor"
+          (changed)="widgetChanged.emit({ background: { ...widget().background, anchor: $event } })"
+        />
       </section>
       <section class="widget-setting-section">
         <div class="widget-setting-section-heading">

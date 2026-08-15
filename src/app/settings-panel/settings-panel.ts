@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { GridTrack, ImageAnchor, Widget, WidgetElement, WidgetElementType } from 'widget-renderer';
+import { GridTrack, Widget, WidgetElement, WidgetElementType } from 'widget-renderer';
 import { ColorPicker } from '../color-picker/color-picker';
+import { AnchorControl } from './anchor-control/anchor-control';
+import { GridTrackEditor } from './grid-track-editor/grid-track-editor';
 
 export interface TrackChange {
   kind: 'rows' | 'columns';
@@ -21,7 +23,7 @@ export interface SpanChange {
 
 @Component({
   selector: 'app-settings-panel',
-  imports: [CommonModule, ColorPicker],
+  imports: [CommonModule, ColorPicker, AnchorControl, GridTrackEditor],
   templateUrl: './settings-panel.html',
   styleUrl: './settings-panel.css',
 })
@@ -37,29 +39,7 @@ export class SettingsPanel {
   readonly trackAdded = output<'rows' | 'columns'>();
   readonly trackRemoved = output<{ kind: 'rows' | 'columns'; index: number }>();
 
-  protected readonly anchors: { value: ImageAnchor; icon: string }[] = [
-    { value: 'top left', icon: '↖' },
-    { value: 'top center', icon: '↑' },
-    { value: 'top right', icon: '↗' },
-    { value: 'center left', icon: '←' },
-    { value: 'center', icon: '•' },
-    { value: 'center right', icon: '→' },
-    { value: 'bottom left', icon: '↙' },
-    { value: 'bottom center', icon: '↓' },
-    { value: 'bottom right', icon: '↘' },
-  ];
-  protected readonly trackKinds = ['rows', 'columns'] as const;
-
-  protected tracks(kind: 'rows' | 'columns'): GridTrack[] {
-    return this.widget()[kind];
-  }
-
   protected icon(type: WidgetElementType): string {
     return type === 'text' ? 'T' : type === 'image' ? '▧' : '↗';
-  }
-
-  protected setAnchor(anchor: ImageAnchor): void {
-    if (this.selectedElement()) this.elementChanged.emit({ anchor });
-    else this.widgetChanged.emit({ background: { ...this.widget().background, anchor } });
   }
 }
