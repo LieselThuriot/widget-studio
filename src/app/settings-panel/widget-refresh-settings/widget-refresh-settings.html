@@ -1,0 +1,20 @@
+<section class="widget-setting-section">
+  <div class="widget-setting-section-heading">
+    <span class="eyebrow">Refresh</span
+    ><span class="summary-value">{{ widget().refresh.enabled ? 'Enabled' : 'Disabled' }}</span>
+  </div>
+  <label class="toggle-row"
+    ><span><strong>Refresh control</strong><small>Show refresh in the hover toolbar</small></span
+    ><input
+      type="checkbox"
+      [checked]="widget().refresh.enabled"
+      (change)="
+        changed.emit({ refresh: { ...widget().refresh, enabled: checked($event) } })
+      " /><span class="toggle"></span
+  ></label>
+  <label
+    >Accessible label<input
+      [value]="widget().refresh.label"
+      (input)="changed.emit({ refresh: { ...widget().refresh, label: value($event) } })"
+  /></label>
+</section>

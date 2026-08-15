@@ -1,0 +1,41 @@
+<section class="widget-setting-section">
+  <div class="widget-setting-section-heading">
+    <span class="eyebrow">Grid</span
+    ><span class="summary-value"
+      >{{ widget().rows.length }} rows · {{ widget().columns.length }} columns</span
+    >
+  </div>
+  <label
+    >Widget size<select
+      [value]="widget().size"
+      (change)="widgetChanged.emit({ size: size($event) })"
+    >
+      <option value="square">Square · 265 × 245</option>
+      <option value="wide">Wide · 530 × 245</option>
+    </select></label
+  >
+  <app-grid-track-editor
+    kind="rows"
+    [tracks]="widget().rows"
+    (added)="trackAdded.emit('rows')"
+    (removed)="trackRemoved.emit({ kind: 'rows', index: $event })"
+    (sizeChanged)="
+      trackChanged.emit({ kind: 'rows', index: $event.index, patch: { size: $event.value } })
+    "
+    (unitChanged)="
+      trackChanged.emit({ kind: 'rows', index: $event.index, patch: { unit: $event.value } })
+    "
+  />
+  <app-grid-track-editor
+    kind="columns"
+    [tracks]="widget().columns"
+    (added)="trackAdded.emit('columns')"
+    (removed)="trackRemoved.emit({ kind: 'columns', index: $event })"
+    (sizeChanged)="
+      trackChanged.emit({ kind: 'columns', index: $event.index, patch: { size: $event.value } })
+    "
+    (unitChanged)="
+      trackChanged.emit({ kind: 'columns', index: $event.index, patch: { unit: $event.value } })
+    "
+  />
+</section>

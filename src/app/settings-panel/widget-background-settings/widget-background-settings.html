@@ -1,0 +1,65 @@
+<section class="widget-setting-section">
+  <div class="widget-setting-section-heading">
+    <span class="eyebrow">Background</span
+    ><span class="summary-value">{{
+      widget().background.image ? 'Image' : widget().background.color
+    }}</span>
+  </div>
+  <app-color-picker
+    label="Color"
+    [value]="widget().background.color"
+    [clearable]="true"
+    (changed)="changed.emit({ background: { ...widget().background, color: $event } })"
+    (cleared)="changed.emit({ background: { ...widget().background, color: undefined } })"
+  />
+  <app-color-picker
+    label="Overlay color"
+    [value]="widget().background.overlayColor"
+    [clearable]="true"
+    [withAlpha]="true"
+    (changed)="changed.emit({ background: { ...widget().background, overlayColor: $event } })"
+    (cleared)="changed.emit({ background: { ...widget().background, overlayColor: undefined } })"
+  />
+  <label
+    >Image URL or base64 data<textarea
+      [value]="widget().background.image || ''"
+      (input)="changed.emit({ background: { ...widget().background, image: value($event) } })"
+    ></textarea>
+  </label>
+  <label class="toggle-row"
+    ><span
+      ><strong>Sensitive content</strong
+      ><small>Hide the background image until sensitive content is revealed</small></span
+    ><input
+      type="checkbox"
+      [checked]="widget().background.sensitive"
+      (change)="
+        changed.emit({ background: { ...widget().background, sensitive: checked($event) } })
+      " /><span class="toggle"></span
+  ></label>
+  <label
+    >Size<select
+      [value]="widget().background.size"
+      (change)="changed.emit({ background: { ...widget().background, size: size($event) } })"
+    >
+      <option value="cover">Cover</option>
+      <option value="contain">Contain</option>
+      <option value="auto">Auto</option>
+    </select></label
+  >
+  <label class="toggle-row"
+    ><span
+      ><strong>Repeat image</strong><small>Tile the background image across the widget</small></span
+    ><input
+      type="checkbox"
+      [checked]="widget().background.repeat"
+      (change)="
+        changed.emit({ background: { ...widget().background, repeat: checked($event) } })
+      " /><span class="toggle"></span
+  ></label>
+  <app-anchor-control
+    [value]="widget().background.anchor"
+    ariaLabel="Background image anchor"
+    (changed)="changed.emit({ background: { ...widget().background, anchor: $event } })"
+  />
+</section>
