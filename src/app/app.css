@@ -113,8 +113,7 @@ h2 {
 .canvas-column {
   min-width: 0;
 }
-.panel,
-.model-panel {
+.panel {
   background: #fff;
   border: 1px solid #e2e7f0;
   border-radius: 14px;
@@ -264,84 +263,6 @@ h2 {
 .layer.selected .layer-select {
   color: #36527f;
 }
-.canvas-area {
-  min-width: 0;
-  padding: 4px 0;
-}
-.canvas-toolbar {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 4px 14px;
-  color: #56647d;
-  font:
-    700 12px 'DM Sans',
-    sans-serif;
-}
-.dimensions {
-  color: #a1aabd;
-  font-weight: 500;
-}
-.canvas {
-  min-height: 430px;
-  display: grid;
-  place-items: center;
-  border: 1px dashed #cbd4e3;
-  border-radius: 14px;
-  background: #f2f5f9;
-  background-image: radial-gradient(#d5dce8 1px, transparent 1px);
-  background-size: 14px 14px;
-}
-.canvas-hint {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 15px;
-  color: #97a1b3;
-  font-size: 11px;
-}
-.canvas-hint span:first-child {
-  padding: 2px 5px;
-  border: 1px solid #d6dce6;
-  border-radius: 4px;
-  font-weight: 700;
-}
-.hint-separator {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #c2c9d5;
-}
-.delete-button {
-  border: 0;
-  background: transparent;
-  color: #bd8290;
-  font-size: 18px;
-  cursor: pointer;
-}
-.delete-button:disabled {
-  color: #cbd2de;
-  cursor: default;
-}
-.model-panel {
-  margin-top: 28px;
-  padding: 20px 22px;
-}
-.model-heading {
-  align-items: center;
-}
-.model-panel pre {
-  max-height: 380px;
-  overflow: auto;
-  margin: 18px 0 0;
-  padding: 18px;
-  border-radius: 9px;
-  background: #17233c;
-  color: #b9c9e6;
-  font:
-    11px/1.65 'DM Mono',
-    monospace;
-}
 @media (max-width: 1050px) {
   .studio-grid {
     grid-template-columns: 210px minmax(360px, 1fr);
@@ -355,26 +276,10 @@ h2 {
     display: flex;
     flex-direction: column;
   }
-  .palette-panel,
-  .canvas-area {
+  .palette-panel {
     width: 100%;
     box-sizing: border-box;
   }
-  .canvas {
-    min-height: 340px;
-  }
-  .canvas-hint {
-    flex-wrap: wrap;
-    text-align: center;
-  }
-  .model-panel pre {
-    font-size: 9px;
-  }
-}
-
-.layer-list {
-  max-height: none;
-  overflow-y: visible;
 }
 
 .preview-overlay,
