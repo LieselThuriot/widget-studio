@@ -79,6 +79,11 @@ function addIssue(issues: WidgetValidationIssue[], path: string, message: string
   issues.push({ path, message });
 }
 
+function elementPath(path: string, id: string): string {
+  const elementsPath = path.slice(0, path.lastIndexOf('['));
+  return `${elementsPath}[${JSON.stringify(id)}]`;
+}
+
 function requiredString(
   value: unknown,
   path: string,
@@ -203,62 +208,64 @@ function validateElement(
     addIssue(issues, path, 'must be an object');
     return;
   }
-  if (value['id'] !== undefined) {
+  let issuePath = path;
+  if (value['id'] !== undefined && value['id'] !== null && value['id'] !== '') {
     if (!requiredString(value['id'], `${path}.id`, issues)) return;
-    if (ids.has(value['id'])) addIssue(issues, `${path}.id`, 'must be unique');
+    issuePath = elementPath(path, value['id']);
+    if (ids.has(value['id'])) addIssue(issues, `${issuePath}.id`, 'must be unique');
     ids.add(value['id']);
   }
   if (!isOneOf(value['type'], elementTypes)) {
-    addIssue(issues, `${path}.type`, 'has an unsupported value');
+    addIssue(issues, `${issuePath}.type`, 'has an unsupported value');
     return;
   }
-  validateGrid(value['grid'], `${path}.grid`, issues);
-  requiredBoolean(value['sensitive'], `${path}.sensitive`, issues);
+  validateGrid(value['grid'], `${issuePath}.grid`, issues);
+  requiredBoolean(value['sensitive'], `${issuePath}.sensitive`, issues);
   switch (value['type']) {
     case 'text':
-      requiredString(value['text'], `${path}.text`, issues, true);
-      validateStyle(value['style'], `${path}.style`, issues);
+      requiredString(value['text'], `${issuePath}.text`, issues, true);
+      validateStyle(value['style'], `${issuePath}.style`, issues);
       if (!isRecord(value['style'])) break;
-      requiredString(value['style']['color'], `${path}.style.color`, issues, true);
+      requiredString(value['style']['color'], `${issuePath}.style.color`, issues, true);
       if (!isOneOf(value['style']['align'], ['left', 'center', 'right'] as const))
-        addIssue(issues, `${path}.style.align`, 'has an unsupported value');
-      requiredBoolean(value['style']['wrap'], `${path}.style.wrap`, issues);
+        addIssue(issues, `${issuePath}.style.align`, 'has an unsupported value');
+      requiredBoolean(value['style']['wrap'], `${issuePath}.style.wrap`, issues);
       break;
     case 'image':
-      requiredString(value['source'], `${path}.source`, issues);
-      requiredString(value['alt'], `${path}.alt`, issues, true);
+      requiredString(value['source'], `${issuePath}.source`, issues);
+      requiredString(value['alt'], `${issuePath}.alt`, issues, true);
       if (!isOneOf(value['fit'], ['cover', 'contain', 'fill'] as const))
-        addIssue(issues, `${path}.fit`, 'has an unsupported value');
-      requiredNumber(value['radius'], `${path}.radius`, issues);
+        addIssue(issues, `${issuePath}.fit`, 'has an unsupported value');
+      requiredNumber(value['radius'], `${issuePath}.radius`, issues);
       break;
     case 'button':
-      requiredString(value['label'], `${path}.label`, issues, true);
+      requiredString(value['label'], `${issuePath}.label`, issues, true);
       if (!isOneOf(value['method'], ['get', 'post'] as const))
-        addIssue(issues, `${path}.method`, 'has an unsupported value');
-      requiredString(value['url'], `${path}.url`, issues, true);
+        addIssue(issues, `${issuePath}.method`, 'has an unsupported value');
+      requiredString(value['url'], `${issuePath}.url`, issues, true);
       if (!isOneOf(value['style'], ['solid', 'outline'] as const))
-        addIssue(issues, `${path}.style`, 'has an unsupported value');
+        addIssue(issues, `${issuePath}.style`, 'has an unsupported value');
       break;
     case 'gauge':
-      requiredString(value['title'], `${path}.title`, issues, true);
-      requiredBoolean(value['showLegend'], `${path}.showLegend`, issues);
-      validateRange(value['data'], `${path}.data`, issues, false);
-      validateStyle(value['style'], `${path}.style`, issues);
+      requiredString(value['title'], `${issuePath}.title`, issues, true);
+      requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
+      validateRange(value['data'], `${issuePath}.data`, issues, false);
+      validateStyle(value['style'], `${issuePath}.style`, issues);
       break;
     case 'progress':
-      validateRange(value['data'], `${path}.data`, issues, true);
-      validateStyle(value['style'], `${path}.style`, issues);
-      requiredBoolean(value['showLegend'], `${path}.showLegend`, issues);
-      requiredBoolean(value['active'], `${path}.active`, issues);
+      validateRange(value['data'], `${issuePath}.data`, issues, true);
+      validateStyle(value['style'], `${issuePath}.style`, issues);
+      requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
+      requiredBoolean(value['active'], `${issuePath}.active`, issues);
       break;
     case 'pie':
     case 'donut':
     case 'bar':
     case 'line':
-      requiredString(value['title'], `${path}.title`, issues, true);
-      requiredBoolean(value['showLegend'], `${path}.showLegend`, issues);
-      validateDataPoints(value['data'], `${path}.data`, issues);
-      validateStyle(value['style'], `${path}.style`, issues);
+      requiredString(value['title'], `${issuePath}.title`, issues, true);
+      requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
+      validateDataPoints(value['data'], `${issuePath}.data`, issues);
+      validateStyle(value['style'], `${issuePath}.style`, issues);
       break;
   }
 }

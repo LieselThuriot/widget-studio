@@ -64,9 +64,58 @@ describe('widget contract validation', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.issues.map((issue) => issue.path)).toEqual(
-        expect.arrayContaining(['elements[0].data', 'elements[1].id']),
+        expect.arrayContaining(['elements["same"].data', 'elements["same"].id']),
       );
     }
+  });
+
+  it('allows optional IDs and uses an ID in nested issue paths', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          id: 'headline.primary',
+          type: 'text',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          text: 'Headline',
+          style: { color: '#fff', font: { size: 0 }, align: 'left', wrap: true },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.issues.map((issue) => issue.path)).toContain(
+        'elements["headline.primary"].style.font.size',
+      );
+    }
+  });
+
+  it('accepts null and empty IDs as missing IDs', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          id: null,
+          type: 'text',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          text: 'First',
+          style: { color: '#fff', font: { size: 11 }, align: 'left', wrap: true },
+        },
+        {
+          id: '',
+          type: 'text',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          text: 'Second',
+          style: { color: '#fff', font: { size: 11 }, align: 'left', wrap: true },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
   });
 
   it('throws a validation error from the throwing parser', () => {

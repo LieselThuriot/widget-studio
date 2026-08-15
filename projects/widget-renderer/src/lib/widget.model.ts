@@ -147,12 +147,12 @@ export type ChartElement = PieElement | GaugeElement | SeriesElement;
 export type WidgetElement =
   TextElement | ImageElement | ButtonElement | ChartElement | ProgressElement;
 export type TextElementContract = Omit<TextElement, 'id'>;
-export type ImageElementContract = Omit<ImageElement, 'id'>;
-export type ButtonElementContract = Omit<ButtonElement, 'id'>;
-export type ChartElementContract = Omit<ChartElement, 'id'>;
-export type ProgressElementContract = Omit<ProgressElement, 'id'>;
+export type ImageElementContract = Omit<ImageElement, 'id'> & OptionalElementId;
+export type ButtonElementContract = Omit<ButtonElement, 'id'> & OptionalElementId;
+export type ChartElementContract = Omit<ChartElement, 'id'> & OptionalElementId;
+export type ProgressElementContract = Omit<ProgressElement, 'id'> & OptionalElementId;
 export type WidgetElementContract =
-  | TextElementContract
+  | (TextElementContract & OptionalElementId)
   | ImageElementContract
   | ButtonElementContract
   | ChartElementContract
@@ -170,3 +170,7 @@ export type WidgetContract = Omit<Widget, 'elements'> & {
   elements: WidgetElementContract[];
 };
 export type WidgetInput = Widget | WidgetContract;
+
+export interface OptionalElementId {
+  id?: string | null;
+}
