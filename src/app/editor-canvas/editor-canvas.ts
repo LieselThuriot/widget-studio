@@ -87,6 +87,76 @@ export class EditorCanvas {
   protected selectWidget(): void {
     this.widgetSelected.emit();
   }
+  protected elementLabel(element: WidgetElement): string {
+    return element.type === 'text'
+      ? element.text
+      : element.type === 'image'
+        ? element.alt
+        : element.type === 'button'
+          ? element.label
+          : element.type === 'progress'
+            ? element.data.label
+            : element.title;
+  }
+  protected onCanvasKeyDown(event: KeyboardEvent): void {
+    const target = (event.target as HTMLElement).closest<HTMLElement>('.editor-element');
+    const id = target?.dataset['widgetElementId'];
+    if (
+      !id ||
+      ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes((event.target as HTMLElement).tagName)
+    ) {
+      return;
+    }
+    const element = this.widget().elements.find((candidate) => candidate.id === id);
+    if (!element) return;
+    if (event.key === 'Delete' || event.key === 'Backspace') {
+      event.preventDefault();
+      this.elementDeleted.emit(id);
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.elementSelected.emit(id);
+      return;
+    }
+    const action =
+      event.key === '['
+        ? event.shiftKey
+          ? 'back'
+          : 'down'
+        : event.key === ']'
+          ? event.shiftKey
+            ? 'front'
+            : 'up'
+          : null;
+    if (action) {
+      event.preventDefault();
+      this.elementStackChanged.emit({ id, action });
+      return;
+    }
+    const axis =
+      event.key === 'ArrowUp' || event.key === 'ArrowDown'
+        ? 'row'
+        : event.key === 'ArrowLeft' || event.key === 'ArrowRight'
+          ? 'column'
+          : null;
+    if (!axis) return;
+    event.preventDefault();
+    const direction = event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? -1 : 1;
+    if (event.shiftKey) {
+      this.elementResized.emit(
+        axis === 'row'
+          ? { id, rowSpan: element.grid.rowSpan + direction }
+          : { id, columnSpan: element.grid.columnSpan + direction },
+      );
+    } else {
+      this.elementMoved.emit(
+        axis === 'row'
+          ? { id, row: element.grid.row + direction, column: element.grid.column }
+          : { id, row: element.grid.row, column: element.grid.column + direction },
+      );
+    }
+  }
   protected openContextMenu(element: WidgetElement, event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();

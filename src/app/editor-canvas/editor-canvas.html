@@ -10,6 +10,7 @@
   (click)="pointerClick($event)"
   (keydown.enter)="selectWidget()"
   (keydown.space)="selectWidget()"
+  (keydown)="onCanvasKeyDown($event)"
   (pointerdown)="pointerDown($event)"
   (contextmenu)="pointerContextMenu($event)"
   (pointermove)="moveDrag($event)"
@@ -29,6 +30,9 @@
     @for (element of widget().elements; track element.id) {
       <div
         class="editor-element"
+        tabindex="0"
+        [attr.aria-label]="elementLabel(element)"
+        [attr.aria-selected]="element.id === selectedId()"
         [attr.data-widget-element-id]="element.id"
         [class.selected]="element.id === selectedId()"
         [class.is-dragging]="element.id === draggingId()"

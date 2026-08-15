@@ -23,6 +23,7 @@
         (layersCleared)="clearLayers()"
         (dragStarted)="layerDragStart($event.event, $event.id)"
         (layerDropped)="reorderLayer($event.event, $event.id)"
+        (stackChanged)="changeStack($event)"
       />
     </aside>
     <div class="canvas-column">

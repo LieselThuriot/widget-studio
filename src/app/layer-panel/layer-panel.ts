@@ -14,6 +14,7 @@ export class LayerPanel {
   readonly layersCleared = output<void>();
   readonly dragStarted = output<{ event: DragEvent; id: string }>();
   readonly layerDropped = output<{ event: DragEvent; id: string }>();
+  readonly stackChanged = output<{ id: string; action: 'up' | 'down' | 'front' | 'back' }>();
 
   protected icon(element: WidgetElement): string {
     return element.type === 'text'
@@ -34,5 +35,18 @@ export class LayerPanel {
           : element.type === 'progress'
             ? element.data.label
             : element.title;
+  }
+  protected canMove(index: number, action: 'up' | 'down' | 'front' | 'back'): boolean {
+    const last = this.elements().length - 1;
+    return action === 'up'
+      ? index < last
+      : action === 'down'
+        ? index > 0
+        : action === 'front'
+          ? index < last
+          : index > 0;
+  }
+  protected changeStack(id: string, action: 'up' | 'down' | 'front' | 'back'): void {
+    this.stackChanged.emit({ id, action });
   }
 }
