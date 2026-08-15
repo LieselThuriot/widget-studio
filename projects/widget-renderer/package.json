@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "peerDependencies": {
     "@angular/common": "^21.0.0 || ^22.0.0",
-    "@angular/core": "^21.0.0 || ^22.0.0"
+    "@angular/core": "^21.0.0 || ^22.0.0",
+    "echarts": "^6.1.0"
   },
   "sideEffects": false
 }

@@ -8,6 +8,7 @@
     "build:app": "ng build widget",
     "build:library": "ng build widget-renderer",
     "pack:library": "npm pack ./dist/widget-renderer",
+    "verify:library-package": "node scripts/verify-library-package.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "format": "prettier --write \"src/**/*.{ts,css,html}\" \"projects/**/*.{ts,css,html}\"",

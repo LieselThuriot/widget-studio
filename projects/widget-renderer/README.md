@@ -8,7 +8,7 @@ An Angular component that renders a widget model received from a web API.
 npm install widget-renderer
 ```
 
-Angular `^21.0.0` or `^22.0.0` is required as a peer dependency.
+Angular `^21.0.0` or `^22.0.0`, and ECharts `^6.1.0`, are required as peer dependencies.
 
 ## Usage
 
