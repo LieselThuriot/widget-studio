@@ -18,17 +18,43 @@
         <p class="eyebrow">Preview</p>
         <h2 id="preview-title">This is how your widget will look</h2>
       </div>
-      <button type="button" class="preview-close" aria-label="Close live preview" (click)="close()">
-        ×
-      </button>
+      <div class="preview-header-actions">
+        <button
+          type="button"
+          class="preview-close"
+          aria-label="Close live preview"
+          (click)="close()"
+        >
+          ×
+        </button>
+        <button
+          type="button"
+          class="loading-toggle"
+          [attr.aria-pressed]="previewLoading() !== false"
+          (click)="toggleLoading()"
+        >
+          {{ previewLoading() !== false ? 'Show widget' : 'Show loading' }}
+        </button>
+      </div>
     </header>
-    <div class="preview-stage">
+    <div
+      class="preview-stage"
+      [attr.aria-busy]="previewLoading() !== false"
+      [attr.aria-label]="previewLoading() !== false ? 'Widget loading' : null"
+    >
       <widget-renderer
         [widget]="widget()"
+        [loading]="previewLoading()"
         (refreshRequested)="refreshRequested.emit()"
         (actionRequested)="actionRequested.emit($event)"
       />
     </div>
-    <p class="preview-hint">Click an action or refresh control to inspect its event data.</p>
+    <p class="preview-hint">
+      {{
+        previewLoading() !== false
+          ? 'Loading state enabled for this preview.'
+          : 'Click an action or refresh control to inspect its event data.'
+      }}
+    </p>
   </div>
 </div>

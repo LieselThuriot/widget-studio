@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, output } from '@angular/core';
+import { Component, ElementRef, inject, input, output, signal } from '@angular/core';
 import { ButtonElement, Widget, WidgetRenderer } from 'widget-renderer';
 import { focusableElements, trapTabFocus } from '../dialog-focus';
 
@@ -15,6 +15,7 @@ export class PreviewDialog {
   readonly closed = output<void>();
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
+  protected readonly previewLoading = signal<false | Widget['size']>(false);
 
   constructor() {
     queueMicrotask(() => this.focusInitial());
@@ -33,6 +34,10 @@ export class PreviewDialog {
   protected close(): void {
     this.closed.emit();
     this.restoreFocus();
+  }
+
+  protected toggleLoading(): void {
+    this.previewLoading.set(this.previewLoading() ? false : this.widget().size);
   }
 
   private focusInitial(): void {

@@ -14,6 +14,8 @@ import { WidgetInput } from './widget.model';
 import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
 import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
 
+export type WidgetLoading = boolean | Widget['size'];
+
 @Component({
   selector: 'widget-renderer',
   templateUrl: './widget-renderer.html',
@@ -21,13 +23,21 @@ import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from '.
   imports: [ChartElementRenderer],
 })
 export class WidgetRenderer {
-  readonly widget = input.required<WidgetInput>();
+  readonly widget = input<WidgetInput | null>(null);
+  readonly loading = input<WidgetLoading>(false);
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
   private readonly failedImages = signal<Record<string, string>>({});
   private hydratedWidget: Widget | undefined;
-  private readonly parsedWidget = computed(() => safeParseWidgetInput(this.widget()));
+  private readonly parsedWidget = computed(() => {
+    const widget = this.widget();
+    return widget === null ? { success: false as const, issues: [] } : safeParseWidgetInput(widget);
+  });
+  protected readonly isLoading = computed(() => this.loading() !== false);
+  protected readonly loadingSize = computed<Widget['size']>(() =>
+    this.loading() === 'wide' ? 'wide' : 'square',
+  );
   readonly validationIssues = computed<WidgetValidationIssue[]>(() => {
     const result = this.parsedWidget();
     return result.success ? [] : result.issues;

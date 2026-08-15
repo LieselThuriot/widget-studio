@@ -1,6 +1,86 @@
 :host {
   display: block;
 }
+.widget-skeleton {
+  position: relative;
+  width: 265px;
+  max-width: 100%;
+  height: 245px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #dfe5ee;
+  box-shadow: 0 18px 40px #10182c38;
+}
+.widget-skeleton.is-wide {
+  width: 530px;
+}
+.widget-skeleton::after,
+.skeleton-line,
+.skeleton-chart,
+.skeleton-button {
+  background: linear-gradient(100deg, #dfe5ee 20%, #f2f5f9 45%, #dfe5ee 70%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s linear infinite;
+}
+.skeleton-toolbar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #c4cedd;
+}
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 44px 18px 16px;
+}
+.skeleton-line {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+}
+.skeleton-line-small {
+  width: 28%;
+}
+.skeleton-line-title {
+  width: 72%;
+  height: 20px;
+}
+.skeleton-line-copy {
+  width: 58%;
+}
+.skeleton-chart {
+  width: 100%;
+  height: 64px;
+  margin-top: 2px;
+  border-radius: 8px;
+}
+.skeleton-button {
+  align-self: flex-end;
+  width: 58px;
+  height: 30px;
+  border-radius: 8px;
+}
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .widget-skeleton::after,
+  .skeleton-line,
+  .skeleton-chart,
+  .skeleton-button {
+    animation: none;
+  }
+}
 .widget-shell {
   position: relative;
   overflow: hidden;

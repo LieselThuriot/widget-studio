@@ -29,6 +29,11 @@
   background: #fff;
   border-bottom: 1px solid #e2e7f0;
 }
+.preview-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .eyebrow {
   margin: 0;
   color: #8794ad;
@@ -64,6 +69,26 @@ h2 {
   color: #36527f;
   outline: none;
 }
+.loading-toggle {
+  order: -1;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid #dfe5ee;
+  border-radius: 8px;
+  background: #fff;
+  color: #36527f;
+  font:
+    600 11px/1 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+.loading-toggle:hover,
+.loading-toggle:focus-visible,
+.loading-toggle[aria-pressed='true'] {
+  border-color: #5874ab;
+  background: #eef3fb;
+  outline: none;
+}
 .preview-stage {
   flex: 1;
   display: grid;
@@ -90,6 +115,12 @@ h2 {
   }
   .preview-header {
     padding: 18px;
+  }
+  .preview-header-actions {
+    gap: 6px;
+  }
+  .loading-toggle {
+    padding: 0 8px;
   }
   .preview-stage {
     min-height: 300px;

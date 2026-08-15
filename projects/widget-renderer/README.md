@@ -139,21 +139,32 @@ Your Angular service can fetch the response and expose it as a `WidgetContract`:
 
 ```ts
 readonly widget = signal<WidgetContract | null>(null);
+readonly loading = signal<boolean | 'square' | 'wide'>(true);
 
 loadWidget(): void {
   this.http.get<WidgetContract>('/api/widget').subscribe((widget) => {
     this.widget.set(widget);
+    this.loading.set(false);
   });
 }
 ```
 
-Render it after the request completes:
+Pass both values to the renderer. The renderer can show its loading skeleton before the widget data exists:
 
 ```html
-@if (widget(); as currentWidget) {
-  <widget-renderer [widget]="currentWidget" />
-}
+<widget-renderer [widget]="widget()" [loading]="loading()" />
 ```
+
+The `loading` input accepts `boolean | 'square' | 'wide'`:
+
+| Value      | Behavior                                                             |
+| ---------- | -------------------------------------------------------------------- |
+| `false`    | Renders the widget.                                                  |
+| `true`     | Shows the square loading skeleton. This is the default loading size. |
+| `'square'` | Shows the square loading skeleton.                                   |
+| `'wide'`   | Shows the wide loading skeleton.                                     |
+
+The `widget` input may be `null` while loading. Once loading is disabled, provide a valid widget value to render the widget.
 
 The TypeScript type helps your Angular code. It does not prove that the server actually returned valid JSON. Runtime validation is explained below.
 
@@ -187,17 +198,17 @@ The renderer does not automatically make network requests for button elements.
 
 ## Supported Elements
 
-| Type | Purpose |
-| --- | --- |
-| `text` | Displays formatted text. |
-| `image` | Displays an image with alt text, fit, overlay, and radius settings. |
-| `button` | Displays an action button and emits an event when clicked. |
-| `pie` | Displays part-to-whole data. |
-| `donut` | Displays part-to-whole data with a center hole. |
-| `gauge` | Displays one value within a range. |
-| `bar` | Compares multiple values. |
-| `line` | Displays a trend. |
-| `progress` | Displays completion within a range. |
+| Type       | Purpose                                                             |
+| ---------- | ------------------------------------------------------------------- |
+| `text`     | Displays formatted text.                                            |
+| `image`    | Displays an image with alt text, fit, overlay, and radius settings. |
+| `button`   | Displays an action button and emits an event when clicked.          |
+| `pie`      | Displays part-to-whole data.                                        |
+| `donut`    | Displays part-to-whole data with a center hole.                     |
+| `gauge`    | Displays one value within a range.                                  |
+| `bar`      | Compares multiple values.                                           |
+| `line`     | Displays a trend.                                                   |
+| `progress` | Displays completion within a range.                                 |
 
 ## Runtime Validation
 
@@ -246,10 +257,10 @@ This repository also contains a separate editor application. The editor helps us
 
 Use these types as follows:
 
-| Type | Use it for |
-| --- | --- |
-| `WidgetContract` | API data without renderer IDs. This is the normal input for `WidgetRenderer`. |
-| `Widget` | The internal client-side model, including renderer IDs. Useful for editors and advanced integrations. |
+| Type             | Use it for                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------- |
+| `WidgetContract` | API data without renderer IDs. This is the normal input for `WidgetRenderer`.                         |
+| `Widget`         | The internal client-side model, including renderer IDs. Useful for editors and advanced integrations. |
 
 Advanced consumers can call `hydrateWidget()` when they specifically need the internal `Widget` model. Normal renderer consumers should not need it.
 

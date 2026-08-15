@@ -415,6 +415,41 @@ describe('App', () => {
     expect(document.activeElement).toBe(previewButton);
   });
 
+  it('should toggle the preview loading skeleton', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const previewButton = fixture.nativeElement.querySelector(
+      '.preview-button',
+    ) as HTMLButtonElement;
+    previewButton.click();
+    fixture.detectChanges();
+
+    const loadingToggle = fixture.nativeElement.querySelector(
+      '.loading-toggle',
+    ) as HTMLButtonElement;
+    const previewStage = fixture.nativeElement.querySelector('.preview-stage') as HTMLElement;
+    expect(loadingToggle.getAttribute('aria-pressed')).toBe('false');
+    expect(previewStage.getAttribute('aria-busy')).toBe('false');
+    expect(fixture.nativeElement.querySelector('.widget-skeleton')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-preview-dialog widget-renderer')).toBeTruthy();
+
+    loadingToggle.click();
+    fixture.detectChanges();
+
+    expect(loadingToggle.getAttribute('aria-pressed')).toBe('true');
+    expect(loadingToggle.textContent).toContain('Show widget');
+    expect(previewStage.getAttribute('aria-busy')).toBe('true');
+    expect(previewStage.getAttribute('aria-label')).toBe('Widget loading');
+    expect(fixture.nativeElement.querySelector('.widget-skeleton')).toBeTruthy();
+
+    loadingToggle.click();
+    fixture.detectChanges();
+
+    expect(loadingToggle.getAttribute('aria-pressed')).toBe('false');
+    expect(fixture.nativeElement.querySelector('.widget-skeleton')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-preview-dialog widget-renderer')).toBeTruthy();
+  });
+
   it('should trap preview dialog tab focus', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
