@@ -22,6 +22,9 @@ describe('widget element factory', () => {
   it('creates chart defaults without an anchor in the grid', () => {
     const gauge = createWidgetElement('gauge', 'gauge-id');
     const progress = createWidgetElement('progress', 'progress-id');
+    const pie = createWidgetElement('pie', 'pie-id');
+    const donut = createWidgetElement('donut', 'donut-id');
+    const bar = createWidgetElement('bar', 'bar-id');
 
     expect(gauge).toMatchObject({
       id: 'gauge-id',
@@ -36,6 +39,9 @@ describe('widget element factory', () => {
       showLegend: true,
       active: false,
     });
+    expect(pie).toMatchObject({ id: 'pie-id', type: 'pie', title: 'Distribution' });
+    expect(donut).toMatchObject({ id: 'donut-id', type: 'donut', title: 'Composition' });
+    expect(bar).toMatchObject({ id: 'bar-id', type: 'bar', title: 'Comparison' });
   });
 
   it('returns fresh default style objects', () => {

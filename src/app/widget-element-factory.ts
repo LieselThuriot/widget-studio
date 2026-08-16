@@ -100,11 +100,26 @@ function createChartElement(
     ...base,
     grid: chartGrid(base),
     type,
-    title: type === 'line' ? 'Trend' : 'Overview',
+    title: createTitle(type),
     data,
     showLegend: type === 'pie' || type === 'donut',
     style: defaultGraphStyle(),
   } as SeriesElement;
+}
+
+function createTitle(type: 'pie' | 'donut' | 'bar' | 'line'): string {
+  switch (type) {
+    case 'pie':
+      return 'Distribution';
+    case 'donut':
+      return 'Composition';
+    case 'bar':
+      return 'Comparison';
+    case 'line':
+      return 'Trend';
+    default:
+      return 'Chart';
+  }
 }
 
 function chartGrid(
