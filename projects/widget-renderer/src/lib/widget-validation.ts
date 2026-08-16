@@ -325,7 +325,7 @@ function validateWidget(value: unknown): WidgetValidationIssue[] {
     if (!isOneOf(background['anchor'], anchors))
       addIssue(issues, 'background.anchor', 'has an unsupported value');
     if (background['image'] !== undefined)
-      requiredString(background['image'], 'background.image', issues);
+      requiredString(background['image'], 'background.image', issues, true);
   }
   const refresh = value['refresh'];
   if (!isRecord(refresh)) addIssue(issues, 'refresh', 'must be an object');

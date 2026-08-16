@@ -40,4 +40,25 @@ describe('renderer image failures', () => {
       '12px',
     );
   });
+
+  it('preserves the background color when the image URL is empty', async () => {
+    const fixture = TestBed.createComponent(WidgetRenderer);
+    fixture.componentRef.setInput('widget', {
+      ...widget,
+      background: {
+        ...widget.background,
+        color: '#101827',
+        image: '',
+        overlayColor: '#101827b8',
+      },
+      elements: [],
+    });
+    await fixture.whenStable();
+
+    const shell = fixture.nativeElement.querySelector('.widget-shell') as HTMLElement;
+    const background = fixture.nativeElement.querySelector('.widget-background') as HTMLElement;
+
+    expect(shell.style.backgroundColor).toBe('rgb(16, 24, 39)');
+    expect(background.style.backgroundImage).toBe('none');
+  });
 });

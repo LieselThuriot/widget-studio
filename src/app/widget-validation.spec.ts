@@ -18,6 +18,27 @@ describe('widget contract validation', () => {
     expect(result).toEqual({ success: true, data: validContract });
   });
 
+  it('accepts an empty background image URL', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      background: {
+        ...validContract.background,
+        color: '#101827',
+        image: '',
+        overlayColor: '#101827b8',
+      },
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('allows the background image URL to be omitted', () => {
+    const result = safeParseWidgetInput(validContract);
+
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.background.image).toBeUndefined();
+  });
+
   it('reports actionable paths for malformed contracts', () => {
     const result = safeParseWidgetInput({
       ...validContract,

@@ -23,7 +23,11 @@
   <label
     >Image URL or base64 data<textarea
       [value]="widget().background.image || ''"
-      (input)="changed.emit({ background: { ...widget().background, image: value($event) } })"
+      (input)="
+        changed.emit({
+          background: { ...widget().background, image: value($event) || undefined },
+        })
+      "
     ></textarea>
   </label>
   <label class="toggle-row"

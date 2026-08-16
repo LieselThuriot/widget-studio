@@ -38,6 +38,26 @@ describe('App', () => {
     expect(contract.elements.every((element) => !('id' in element))).toBe(true);
   });
 
+  it('should omit a cleared background image from the output contract', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.canvas') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const imageInput = fixture.nativeElement.querySelector(
+      '.widget-settings textarea',
+    ) as HTMLTextAreaElement;
+    imageInput.value = '';
+    imageInput.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { background: Record<string, unknown> };
+    expect(contract.background).not.toHaveProperty('image');
+  });
+
   it('should omit anchors from chart grid contracts', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
