@@ -39,20 +39,26 @@ use([
 })
 export class ChartElementRenderer implements AfterViewInit, OnDestroy {
   readonly element = input.required<ChartElement | ProgressElement>();
+  readonly darkMode = input(false);
   private readonly chartHost = viewChild.required<ElementRef<HTMLDivElement>>('chartHost');
   private chartInstance: ECharts | null = null;
+  private chartDarkMode = false;
   private resizeObserver: ResizeObserver | null = null;
 
   constructor() {
     effect(() => {
       this.element();
-      if (this.chartInstance) this.renderChart();
+      const darkMode = this.darkMode();
+      if (this.chartInstance) {
+        if (this.chartDarkMode !== darkMode) this.createChart();
+        this.renderChart();
+      }
     });
   }
 
   ngAfterViewInit(): void {
     if (this.element().type !== 'progress') {
-      this.chartInstance = init(this.chartHost().nativeElement, undefined, { renderer: 'svg' });
+      this.createChart();
       if (typeof ResizeObserver !== 'undefined') {
         this.resizeObserver = new ResizeObserver(() => this.chartInstance?.resize());
         this.resizeObserver.observe(this.chartHost().nativeElement);
@@ -119,6 +125,16 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
     const element = this.element();
     if (element.type === 'progress' || !this.chartInstance) return;
     this.chartInstance.setOption(this.options(element), true);
+  }
+
+  private createChart(): void {
+    this.chartInstance?.dispose();
+    this.chartInstance = init(
+      this.chartHost().nativeElement,
+      this.darkMode() ? 'dark' : undefined,
+      { renderer: 'svg' },
+    );
+    this.chartDarkMode = this.darkMode();
   }
 
   private options(element: ChartElement): EChartsCoreOption {

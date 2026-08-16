@@ -154,6 +154,7 @@
                 <widget-chart-element
                   [class.is-progress]="element.type === 'progress'"
                   [element]="element"
+                  [darkMode]="darkMode()"
                 />
               } @placeholder {
                 <div class="chart-placeholder" aria-hidden="true"></div>
