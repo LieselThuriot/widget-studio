@@ -112,9 +112,6 @@
   background-size: cover;
   transition: filter 160ms ease;
 }
-.widget-background.is-sensitive {
-  background-image: none !important;
-}
 .widget-background-image.is-sensitive {
   inset: -18px;
   filter: blur(18px);

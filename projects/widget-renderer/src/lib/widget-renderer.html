@@ -26,15 +26,12 @@
     <div
       class="widget-background"
       [class.is-sensitive]="backgroundSensitive()"
-      [style.background-image]="backgroundSensitive() ? 'none' : backgroundImage()"
-      [style.background-size]="widget.background.size"
-      [style.background-position]="widget.background.anchor"
-      [style.background-repeat]="widget.background.repeat ? 'repeat' : 'no-repeat'"
+      style="background-image: none"
     >
       <div
         class="widget-background-image"
         [class.is-sensitive]="backgroundSensitive()"
-        [style.background-image]="backgroundSensitive() ? backgroundImage() : 'none'"
+        [style.background-image]="backgroundImage()"
         [style.background-size]="widget.background.size"
         [style.background-position]="widget.background.anchor"
         [style.background-repeat]="widget.background.repeat ? 'repeat' : 'no-repeat'"
