@@ -23,8 +23,8 @@
   />
   <div
     class="editor-grid"
-    [style.grid-template-rows]="gridRows()"
-    [style.grid-template-columns]="gridColumns()"
+    [style.grid-template-rows]="overlayRows()"
+    [style.grid-template-columns]="overlayColumns()"
   >
     @for (element of widget().elements; track element.id) {
       <app-canvas-element-overlay

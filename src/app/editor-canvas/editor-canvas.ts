@@ -3,6 +3,8 @@ import {
   computed,
   effect,
   ElementRef,
+  AfterViewInit,
+  OnDestroy,
   inject,
   input,
   output,
@@ -23,7 +25,7 @@ import {
   ElementStackAction,
 } from '../element-actions-menu/element-actions-menu';
 import { CanvasElementOverlay } from './canvas-element-overlay';
-import { elementForEvent, trackAt } from './editor-canvas-interaction';
+import { elementForEvent, resolvedTrackSizes, trackAt } from './editor-canvas-interaction';
 
 @Component({
   selector: 'app-editor-canvas',
@@ -39,7 +41,7 @@ import { elementForEvent, trackAt } from './editor-canvas-interaction';
     '(document:pointercancel)': 'endDrag($event)',
   },
 })
-export class EditorCanvas {
+export class EditorCanvas implements AfterViewInit, OnDestroy {
   private readonly hostElement = inject(ElementRef<HTMLElement>);
   readonly widget = input.required<Widget>();
   readonly darkMode = input(false);
@@ -62,6 +64,12 @@ export class EditorCanvas {
   private activePointerId: number | null = null;
   private resizing: { id: string; axis: 'row' | 'column' } | null = null;
   private pointerDownElementId: string | null = null;
+  private readonly resolvedRows = signal<string | null>(null);
+  private readonly resolvedColumns = signal<string | null>(null);
+  private resizeObserver: ResizeObserver | null = null;
+
+  protected readonly overlayRows = computed(() => this.resolvedRows() ?? this.gridRows());
+  protected readonly overlayColumns = computed(() => this.resolvedColumns() ?? this.gridColumns());
 
   constructor() {
     effect(() => {
@@ -72,6 +80,35 @@ export class EditorCanvas {
         });
       }
     });
+    effect(() => {
+      this.widget();
+      queueMicrotask(() => this.syncOverlayGrid());
+    });
+  }
+
+  ngAfterViewInit(): void {
+    const grid = this.hostElement.nativeElement.querySelector(
+      'widget-renderer .widget-grid',
+    ) as HTMLElement | null;
+    if (!grid) return;
+    if (typeof ResizeObserver === 'undefined') return;
+    this.resizeObserver = new ResizeObserver(() => this.syncOverlayGrid());
+    this.resizeObserver.observe(grid);
+    this.syncOverlayGrid();
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+  }
+
+  private syncOverlayGrid(): void {
+    const grid = this.hostElement.nativeElement.querySelector(
+      'widget-renderer .widget-grid',
+    ) as HTMLElement | null;
+    if (!grid) return;
+    const style = getComputedStyle(grid);
+    this.resolvedRows.set(style.gridTemplateRows);
+    this.resolvedColumns.set(style.gridTemplateColumns);
   }
 
   protected pointerClick(event: MouseEvent): void {
@@ -245,12 +282,14 @@ export class EditorCanvas {
               this.widget().columns,
               this.widgetWidth() - WIDGET_PADDING * 2,
               1,
+              resolvedTrackSizes(this.hostElement.nativeElement, 'columns'),
             )
           : trackAt(
               event.clientY - canvas.top - WIDGET_PADDING,
               this.widget().rows,
               WIDGET_HEIGHT - WIDGET_PADDING * 2,
               1,
+              resolvedTrackSizes(this.hostElement.nativeElement, 'rows'),
             );
       this.elementResized.emit(
         state.axis === 'column'
@@ -264,12 +303,14 @@ export class EditorCanvas {
       this.widget().columns,
       this.widgetWidth() - WIDGET_PADDING * 2,
       element.grid.columnSpan,
+      resolvedTrackSizes(this.hostElement.nativeElement, 'columns'),
     );
     const row = trackAt(
       event.clientY - canvas.top - this.dragOffset.y - WIDGET_PADDING,
       this.widget().rows,
       WIDGET_HEIGHT - WIDGET_PADDING * 2,
       element.grid.rowSpan,
+      resolvedTrackSizes(this.hostElement.nativeElement, 'rows'),
     );
     this.elementMoved.emit({ id, row, column });
   }

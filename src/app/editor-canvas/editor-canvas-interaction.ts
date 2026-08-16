@@ -7,6 +7,7 @@ export function trackAt(
   tracks: GridTrack[],
   available: number,
   span: number,
+  resolvedSizes?: number[],
 ): number {
   const fixed = tracks
     .filter((track) => track.unit === 'pixel')
@@ -17,18 +18,34 @@ export function trackAt(
   const flexible = Math.max(0, available - Math.max(0, tracks.length - 1) * CANVAS_GAP - fixed);
   let cursor = 0;
   let index = 0;
-  for (const track of tracks) {
+  for (const [trackIndex, track] of tracks.entries()) {
     const size =
-      track.unit === 'pixel'
+      resolvedSizes?.[trackIndex] ??
+      (track.unit === 'pixel'
         ? track.size
         : track.unit === 'star'
           ? (flexible * track.size) / Math.max(1, stars)
-          : flexible / Math.max(1, tracks.length);
+          : flexible / Math.max(1, tracks.length));
     if (position < cursor + size / 2) break;
     cursor += size + CANVAS_GAP;
     index++;
   }
   return Math.max(0, Math.min(index, tracks.length - span));
+}
+
+export function resolvedTrackSizes(
+  host: HTMLElement,
+  axis: 'rows' | 'columns',
+): number[] | undefined {
+  const grid = host.querySelector('.widget-grid') as HTMLElement | null;
+  if (!grid) return undefined;
+  const value =
+    getComputedStyle(grid)[axis === 'rows' ? 'gridTemplateRows' : 'gridTemplateColumns'];
+  const sizes = value
+    .split(' ')
+    .map((size) => Number.parseFloat(size))
+    .filter((size) => Number.isFinite(size));
+  return sizes.length ? sizes : undefined;
 }
 
 export function elementFromEvent(
