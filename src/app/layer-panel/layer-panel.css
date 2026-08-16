@@ -104,53 +104,6 @@ h2 {
   background: #fff;
   color: #36527f;
 }
-.layer-actions {
-  position: absolute;
-  top: calc(100% - 2px);
-  right: 3px;
-  z-index: 20;
-  display: grid;
-  width: 132px;
-  gap: 2px;
-  padding: 4px;
-  border: 1px solid #d4dce8;
-  border-radius: 7px;
-  background: #fff;
-  box-shadow: 0 8px 18px #27365326;
-}
-.layer-actions button {
-  width: 100%;
-  padding: 6px 7px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: #53627b;
-  text-align: left;
-  font-size: 10px;
-  cursor: pointer;
-}
-.layer-actions button:hover,
-.layer-actions button:focus-visible {
-  background: #edf2fb;
-  color: #36527f;
-}
-.layer-actions button:disabled {
-  color: #b8c0ce;
-  cursor: not-allowed;
-}
-.layer-menu-divider {
-  height: 1px;
-  margin: 3px 2px;
-  background: #e3e8f0;
-}
-.layer-actions .layer-menu-delete {
-  color: #b64d60;
-}
-.layer-actions .layer-menu-delete:hover,
-.layer-actions .layer-menu-delete:focus-visible {
-  background: #fbecef;
-  color: #a43e52;
-}
 :host-context(html[data-theme='dark']) .layer:hover,
 :host-context(html[data-theme='dark']) .layer.selected {
   background: #263b63;
@@ -169,23 +122,4 @@ h2 {
 :host-context(html[data-theme='dark']) .layer.selected .layer-actions-trigger {
   border-color: #5874ab;
   background: #1d2b49;
-}
-:host-context(html[data-theme='dark']) .layer-actions {
-  border-color: #3a4b6e;
-  background: #17233c;
-  box-shadow: 0 10px 24px #080e1f80;
-}
-:host-context(html[data-theme='dark']) .layer-actions button {
-  color: #aebbd1;
-}
-:host-context(html[data-theme='dark']) .layer-actions button:hover,
-:host-context(html[data-theme='dark']) .layer-actions button:focus-visible {
-  background: #263b63;
-  color: #d7e1f2;
-}
-:host-context(html[data-theme='dark']) .layer-menu-divider {
-  background: #3a4b6e;
-}
-:host-context(html[data-theme='dark']) .layer-actions .layer-menu-delete {
-  color: #f19aa4;
 }

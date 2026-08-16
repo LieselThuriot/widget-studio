@@ -18,13 +18,16 @@ import {
   WidgetRenderer,
   widgetWidth as getWidgetWidth,
 } from 'widget-renderer';
-import { CanvasContextMenu, CanvasContextMenuState } from './canvas-context-menu';
+import {
+  ElementActionsMenu,
+  ElementStackAction,
+} from '../element-actions-menu/element-actions-menu';
 import { CanvasElementOverlay } from './canvas-element-overlay';
 import { elementForEvent, trackAt } from './editor-canvas-interaction';
 
 @Component({
   selector: 'app-editor-canvas',
-  imports: [WidgetRenderer, CanvasElementOverlay, CanvasContextMenu],
+  imports: [WidgetRenderer, CanvasElementOverlay, ElementActionsMenu],
   templateUrl: './editor-canvas.html',
   styleUrl: './editor-canvas.css',
   host: {
@@ -51,7 +54,7 @@ export class EditorCanvas {
   readonly widgetSelected = output<void>();
   readonly ctrlPressed = signal(false);
   readonly draggingId = signal<string | null>(null);
-  readonly contextMenu = signal<CanvasContextMenuState | null>(null);
+  readonly contextMenu = signal<{ id: string; x: number; y: number } | null>(null);
   readonly gridRows = computed(() => gridTemplate(this.widget().rows));
   readonly gridColumns = computed(() => gridTemplate(this.widget().columns));
   readonly widgetWidth = computed(() => getWidgetWidth(this.widget().size));
@@ -187,10 +190,14 @@ export class EditorCanvas {
   protected closeContextMenu(): void {
     this.contextMenu.set(null);
   }
-  protected changeStack(action: 'up' | 'down' | 'front' | 'back'): void {
+  protected changeStack(action: ElementStackAction): void {
     const menu = this.contextMenu();
     if (menu) this.elementStackChanged.emit({ id: menu.id, action });
     this.closeContextMenu();
+  }
+  protected contextMenuIndex(): number {
+    const id = this.contextMenu()?.id;
+    return this.widget().elements.findIndex((element) => element.id === id);
   }
   protected deleteElement(id: string, event?: Event): void {
     event?.stopPropagation();

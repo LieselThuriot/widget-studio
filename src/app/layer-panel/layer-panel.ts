@@ -1,9 +1,14 @@
 import { Component, input, output, signal } from '@angular/core';
 import { WidgetElement } from 'widget-renderer';
 import { elementIcon, elementLabel } from '../widget-element-metadata';
+import {
+  ElementActionsMenu,
+  ElementStackAction,
+} from '../element-actions-menu/element-actions-menu';
 
 @Component({
   selector: 'app-layer-panel',
+  imports: [ElementActionsMenu],
   host: {
     '(document:keydown.escape)': 'closeActions()',
     '(document:click)': 'closeActionsOnOutside($event)',
@@ -28,17 +33,7 @@ export class LayerPanel {
   protected label(element: WidgetElement): string {
     return elementLabel(element);
   }
-  protected canMove(index: number, action: 'up' | 'down' | 'front' | 'back'): boolean {
-    const last = this.elements().length - 1;
-    return action === 'up'
-      ? index < last
-      : action === 'down'
-        ? index > 0
-        : action === 'front'
-          ? index < last
-          : index > 0;
-  }
-  protected changeStack(id: string, action: 'up' | 'down' | 'front' | 'back'): void {
+  protected changeStack(id: string, action: ElementStackAction): void {
     this.stackChanged.emit({ id, action });
     this.openActionsId.set(null);
   }
@@ -46,11 +41,17 @@ export class LayerPanel {
     event.stopPropagation();
     this.openActionsId.update((openId) => (openId === id ? null : id));
   }
+  protected openActionsFromContextMenu(id: string, event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.elementSelected.emit(id);
+    this.openActionsId.set(id);
+  }
   protected closeActions(): void {
     this.openActionsId.set(null);
   }
   protected closeActionsOnOutside(event: MouseEvent): void {
-    if (!(event.target as HTMLElement).closest('.layer-actions, .layer-actions-trigger')) {
+    if (!(event.target as HTMLElement).closest('.element-actions-menu, .layer-actions-trigger')) {
       this.closeActions();
     }
   }

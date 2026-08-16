@@ -38,8 +38,12 @@
     }
   </div>
   @if (contextMenu(); as menu) {
-    <app-canvas-context-menu
-      [menu]="menu"
+    <app-element-actions-menu
+      placement="canvas"
+      [x]="menu.x"
+      [y]="menu.y"
+      [index]="contextMenuIndex()"
+      [count]="widget().elements.length"
       (stackChanged)="changeStack($event)"
       (deleteRequested)="deleteElement(menu.id)"
       (closed)="closeContextMenu()"

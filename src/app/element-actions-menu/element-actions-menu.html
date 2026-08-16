@@ -1,0 +1,53 @@
+<div
+  class="element-actions-menu"
+  [class.canvas-menu]="placement() === 'canvas'"
+  [class.layer-menu]="placement() === 'layer'"
+  [style.left.px]="x()"
+  [style.top.px]="y()"
+  role="menu"
+  aria-label="Element layer order"
+  (pointerdown)="$event.stopPropagation()"
+>
+  <button
+    type="button"
+    role="menuitem"
+    [disabled]="!canMove().up"
+    (click)="$event.stopPropagation(); choose('up')"
+  >
+    Move up
+  </button>
+  <button
+    type="button"
+    role="menuitem"
+    [disabled]="!canMove().down"
+    (click)="$event.stopPropagation(); choose('down')"
+  >
+    Move down
+  </button>
+  <div class="menu-divider" role="separator"></div>
+  <button
+    type="button"
+    role="menuitem"
+    [disabled]="!canMove().front"
+    (click)="$event.stopPropagation(); choose('front')"
+  >
+    Bring to front
+  </button>
+  <button
+    type="button"
+    role="menuitem"
+    [disabled]="!canMove().back"
+    (click)="$event.stopPropagation(); choose('back')"
+  >
+    Send to back
+  </button>
+  <div class="menu-divider" role="separator"></div>
+  <button
+    type="button"
+    class="menu-delete"
+    role="menuitem"
+    (click)="$event.stopPropagation(); delete()"
+  >
+    Delete
+  </button>
+</div>

@@ -24,6 +24,7 @@
       (dragstart)="dragStarted.emit({ event: $event, id: element.id })"
       (dragover)="$event.preventDefault()"
       (drop)="layerDropped.emit({ event: $event, id: element.id })"
+      (contextmenu)="openActionsFromContextMenu(element.id, $event)"
     >
       <button type="button" class="layer-select" (click)="elementSelected.emit(element.id)">
         <span class="layer-grip" aria-hidden="true">⋮⋮</span><span>{{ icon(element) }}</span
@@ -38,50 +39,13 @@
         <span aria-hidden="true">•••</span>
       </button>
       @if (openActionsId() === element.id) {
-        <div class="layer-actions" aria-label="Layer actions" role="menu">
-          <button
-            type="button"
-            role="menuitem"
-            [disabled]="!canMove(index, 'up')"
-            (click)="changeStack(element.id, 'up')"
-          >
-            Move up
-          </button>
-          <button
-            type="button"
-            role="menuitem"
-            [disabled]="!canMove(index, 'down')"
-            (click)="changeStack(element.id, 'down')"
-          >
-            Move down
-          </button>
-          <div class="layer-menu-divider" role="separator"></div>
-          <button
-            type="button"
-            role="menuitem"
-            [disabled]="!canMove(index, 'front')"
-            (click)="changeStack(element.id, 'front')"
-          >
-            Bring to front
-          </button>
-          <button
-            type="button"
-            role="menuitem"
-            [disabled]="!canMove(index, 'back')"
-            (click)="changeStack(element.id, 'back')"
-          >
-            Send to back
-          </button>
-          <div class="layer-menu-divider" role="separator"></div>
-          <button
-            type="button"
-            class="layer-menu-delete"
-            role="menuitem"
-            (click)="elementDeleted.emit(element.id); closeActions()"
-          >
-            Delete
-          </button>
-        </div>
+        <app-element-actions-menu
+          [index]="index"
+          [count]="elements().length"
+          (stackChanged)="changeStack(element.id, $event)"
+          (deleteRequested)="elementDeleted.emit(element.id)"
+          (closed)="closeActions()"
+        />
       }
     </div>
   }

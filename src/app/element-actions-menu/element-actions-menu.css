@@ -1,0 +1,115 @@
+:host {
+  display: contents;
+}
+
+.element-actions-menu {
+  z-index: 20;
+  display: grid;
+  width: 132px;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid #d4dce8;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 8px 18px #27365326;
+}
+
+.canvas-menu {
+  position: absolute;
+  z-index: 10;
+  min-width: 145px;
+  width: auto;
+  padding: 5px;
+  transform: translate(-4px, -4px);
+  border-radius: 9px;
+}
+
+.layer-menu {
+  position: absolute;
+  top: calc(100% - 2px);
+  right: 3px;
+}
+
+.element-actions-menu button {
+  width: 100%;
+  padding: 6px 7px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #53627b;
+  text-align: left;
+  font:
+    10px 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+
+.canvas-menu button {
+  padding: 7px 9px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+.element-actions-menu button:hover,
+.element-actions-menu button:focus-visible {
+  background: #edf2fb;
+  color: #36527f;
+}
+
+.element-actions-menu button:disabled {
+  color: #b8c0ce;
+  cursor: not-allowed;
+}
+
+.menu-delete {
+  color: #b64d60 !important;
+}
+
+.menu-delete:hover,
+.menu-delete:focus-visible {
+  background: #fbecef !important;
+  color: #a43e52 !important;
+}
+
+.menu-divider {
+  height: 1px;
+  margin: 3px 2px;
+  background: #e3e8f0;
+}
+
+.canvas-menu .menu-divider {
+  margin: 4px 2px;
+}
+
+:host-context(html[data-theme='dark']) .element-actions-menu {
+  border-color: #3a4b6e;
+  background: #17233cf5;
+  box-shadow: 0 10px 24px #080e1f80;
+}
+
+:host-context(html[data-theme='dark']) .element-actions-menu button {
+  color: #aebbd1;
+}
+
+:host-context(html[data-theme='dark']) .element-actions-menu button:hover,
+:host-context(html[data-theme='dark']) .element-actions-menu button:focus-visible {
+  background: #263b63;
+  color: #d7e1f2;
+}
+
+:host-context(html[data-theme='dark']) .element-actions-menu button:disabled,
+:host-context(html[data-theme='dark']) .element-actions-menu button:disabled:hover,
+:host-context(html[data-theme='dark']) .element-actions-menu button:disabled:focus-visible {
+  background: transparent;
+  color: #64718a;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+:host-context(html[data-theme='dark']) .menu-divider {
+  background: #3a4b6e;
+}
+
+:host-context(html[data-theme='dark']) .menu-delete {
+  color: #f19aa4 !important;
+}

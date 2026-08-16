@@ -381,12 +381,24 @@ describe('App', () => {
     actionsButton.click();
     fixture.detectChanges();
     const deleteButton = fixture.nativeElement.querySelector(
-      '.layer-menu-delete',
+      '.element-actions-menu .menu-delete',
     ) as HTMLButtonElement;
     deleteButton.click();
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(3);
+  });
+
+  it('should open layer actions from the context menu', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const layer = fixture.nativeElement.querySelector('.layer') as HTMLElement;
+
+    layer.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.element-actions-menu')).toBeTruthy();
+    expect(layer.classList.contains('selected')).toBe(true);
   });
 
   it('should apply a context-menu stack action', async () => {
@@ -426,7 +438,7 @@ describe('App', () => {
     deleteButton.click();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.element-context-menu')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.element-actions-menu')).toBeNull();
   });
 
   it('should select the widget when clicking an empty grid gap', async () => {
