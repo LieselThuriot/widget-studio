@@ -93,7 +93,7 @@
 }
 .widget-shell {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 8px;
   color: #f6f7fb;
   box-shadow: 0 18px 40px #10182c38;
@@ -101,13 +101,22 @@
 .widget-background {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   border-radius: 8px;
+}
+.widget-background-image {
+  position: absolute;
+  inset: 0;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   transition: filter 160ms ease;
 }
 .widget-background.is-sensitive {
+  background-image: none !important;
+}
+.widget-background-image.is-sensitive {
+  inset: -18px;
   filter: blur(18px);
   transform: scale(1.04);
 }

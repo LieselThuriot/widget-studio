@@ -30,7 +30,16 @@
       [style.background-size]="widget.background.size"
       [style.background-position]="widget.background.anchor"
       [style.background-repeat]="widget.background.repeat ? 'repeat' : 'no-repeat'"
-    ></div>
+    >
+      <div
+        class="widget-background-image"
+        [class.is-sensitive]="backgroundSensitive()"
+        [style.background-image]="backgroundSensitive() ? backgroundImage() : 'none'"
+        [style.background-size]="widget.background.size"
+        [style.background-position]="widget.background.anchor"
+        [style.background-repeat]="widget.background.repeat ? 'repeat' : 'no-repeat'"
+      ></div>
+    </div>
     <div
       class="widget-overlay"
       [style.background-color]="widget.background.overlayColor || 'transparent'"
