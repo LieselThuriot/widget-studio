@@ -154,7 +154,13 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
         series: [
           {
             type: 'pie',
-            radius: element.type === 'donut' ? ['45%', '72%'] : '68%',
+            center: ['50%', element.title ? '54%' : '50%'],
+            radius:
+              element.type === 'donut'
+                ? [element.title ? '34%' : '45%', element.title ? '54%' : '72%']
+                : element.title
+                  ? '62%'
+                  : '68%',
             label: { show: false },
             labelLine: { show: false },
             data: element.data.map(({ label, value }) => ({ name: label, value })),
