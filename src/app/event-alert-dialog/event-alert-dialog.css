@@ -97,6 +97,39 @@ h2 {
 .alert-close:focus-visible {
   background: #263b63;
 }
+:host-context(html[data-theme='dark']) .event-alert {
+  border-color: #3a4b6e;
+  background: #17233c;
+  color: #e7ecf5;
+  box-shadow: 0 20px 55px #080e1f80;
+}
+:host-context(html[data-theme='dark']) .alert-icon {
+  background: #293b61;
+  color: #b7cdf5;
+}
+:host-context(html[data-theme='dark']) .alert-description {
+  color: #aebbd1;
+}
+:host-context(html[data-theme='dark']) .event-data {
+  border-color: #526483;
+}
+:host-context(html[data-theme='dark']) .event-data div {
+  border-bottom-color: #3a4b6e;
+}
+:host-context(html[data-theme='dark']) .event-data dt {
+  color: #aebbd1;
+}
+:host-context(html[data-theme='dark']) .event-data dd {
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .alert-close {
+  background: #5874ab;
+  color: #fff;
+}
+:host-context(html[data-theme='dark']) .alert-close:hover,
+:host-context(html[data-theme='dark']) .alert-close:focus-visible {
+  background: #6b8bc8;
+}
 @media (max-width: 700px) {
   .alert-overlay {
     padding: 12px;
