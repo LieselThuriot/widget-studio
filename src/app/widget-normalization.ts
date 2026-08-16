@@ -186,23 +186,28 @@ export function normalizeChartElement(
   const color = recordValue(style['color']);
   const font = recordValue(style['font']);
   const axis = recordValue(style['axis']);
+  const sharedStyle = {
+    font: {
+      ...font,
+      size:
+        (font['size'] as number | undefined) ??
+        (style['fontSize'] as number | undefined) ??
+        defaultGraphStyle.font.size,
+    },
+    color: {
+      ...color,
+      legend: color['legend'] ?? style['legendColor'] ?? defaultGraphStyle.color.legend,
+      title: color['title'] ?? style['titleColor'] ?? defaultGraphStyle.color.title,
+    },
+  };
+  if (element.type === 'pie' || element.type === 'donut') {
+    return { ...element, grid, style: sharedStyle } as ChartElement;
+  }
   return {
     ...element,
     grid,
     style: {
-      font: {
-        ...font,
-        size:
-          (font['size'] as number | undefined) ??
-          (style['fontSize'] as number | undefined) ??
-          defaultGraphStyle.font.size,
-      },
-      color: {
-        ...defaultGraphStyle.color,
-        ...color,
-        legend: color['legend'] ?? style['legendColor'],
-        title: color['title'] ?? style['titleColor'],
-      },
+      ...sharedStyle,
       axis: {
         ...defaultGraphStyle.axis,
         ...axis,

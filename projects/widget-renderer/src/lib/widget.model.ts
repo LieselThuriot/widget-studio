@@ -89,8 +89,10 @@ export interface DataVisualStyle {
   };
   font: FontStyle;
 }
-export interface GraphStyle extends DataVisualStyle {
+export interface PieStyle extends DataVisualStyle {
   color: DataVisualStyle['color'] & { title: string };
+}
+export interface GraphStyle extends PieStyle {
   axis: {
     label: string;
     line: string;
@@ -124,7 +126,7 @@ export interface GaugeStyle extends DataVisualStyle {
 export interface PieElement extends ChartElementBase {
   type: 'pie' | 'donut';
   data: ChartDataPoint[];
-  style: GraphStyle;
+  style: PieStyle;
 }
 export interface GaugeElement extends ChartElementBase {
   type: 'gauge';

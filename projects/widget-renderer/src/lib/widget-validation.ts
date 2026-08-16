@@ -157,7 +157,12 @@ function validateGrid(value: unknown, path: string, issues: WidgetValidationIssu
   }
 }
 
-function validateStyle(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
+function validateStyle(
+  value: unknown,
+  path: string,
+  issues: WidgetValidationIssue[],
+  axisMode: 'required' | 'forbidden' | 'optional' = 'optional',
+): void {
   if (!isRecord(value)) {
     addIssue(issues, path, 'must be an object');
     return;
@@ -172,11 +177,13 @@ function validateStyle(value: unknown, path: string, issues: WidgetValidationIss
   } else {
     requiredString(color, `${path}.color`, issues, true);
   }
-  if (value['axis'] !== undefined) {
+  if (axisMode === 'required') {
     if (!isRecord(value['axis'])) addIssue(issues, `${path}.axis`, 'must be an object');
     else
       for (const key of ['label', 'line', 'grid'])
         requiredString(value['axis'][key], `${path}.axis.${key}`, issues, true);
+  } else if (axisMode === 'forbidden' && value['axis'] !== undefined) {
+    addIssue(issues, `${path}.axis`, 'is not supported for this chart');
   }
 }
 
@@ -265,7 +272,12 @@ function validateElement(
       requiredString(value['title'], `${issuePath}.title`, issues, true);
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
       validateDataPoints(value['data'], `${issuePath}.data`, issues);
-      validateStyle(value['style'], `${issuePath}.style`, issues);
+      validateStyle(
+        value['style'],
+        `${issuePath}.style`,
+        issues,
+        value['type'] === 'pie' || value['type'] === 'donut' ? 'forbidden' : 'required',
+      );
       break;
   }
 }

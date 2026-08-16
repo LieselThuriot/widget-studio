@@ -139,6 +139,31 @@ describe('widget contract validation', () => {
     expect(result.success).toBe(true);
   });
 
+  it('rejects axis styling on pie and donut charts', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'pie',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          title: 'Distribution',
+          showLegend: true,
+          data: [{ label: 'A', value: 1 }],
+          style: {
+            color: { legend: '#fff', title: '#fff' },
+            font: { size: 11 },
+            axis: { label: '#fff', line: '#fff', grid: '#fff' },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success)
+      expect(result.issues.map((issue) => issue.path)).toContain('elements[0].style.axis');
+  });
+
   it('throws a validation error from the throwing parser', () => {
     expect(() => parseWidgetInput(null)).toThrow(/must be an object/);
   });

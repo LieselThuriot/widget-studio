@@ -41,6 +41,8 @@ describe('widget element factory', () => {
     });
     expect(pie).toMatchObject({ id: 'pie-id', type: 'pie', title: 'Distribution' });
     expect(donut).toMatchObject({ id: 'donut-id', type: 'donut', title: 'Composition' });
+    expect((pie as { style: object }).style).not.toHaveProperty('axis');
+    expect((donut as { style: object }).style).not.toHaveProperty('axis');
     expect(bar).toMatchObject({ id: 'bar-id', type: 'bar', title: 'Comparison' });
   });
 

@@ -5,6 +5,7 @@ import {
   GaugeStyle,
   GraphStyle,
   ImageElement,
+  PieStyle,
   ProgressElement,
   SeriesElement,
   TextElement,
@@ -103,7 +104,7 @@ function createChartElement(
     title: createTitle(type),
     data,
     showLegend: type === 'pie' || type === 'donut',
-    style: defaultGraphStyle(),
+    style: type === 'pie' || type === 'donut' ? defaultPieStyle() : defaultGraphStyle(),
   } as SeriesElement;
 }
 
@@ -138,6 +139,11 @@ export function defaultGraphStyle(): GraphStyle {
     font: { size: 11 },
     axis: { label: '#d4dbea', line: '#94a3b8', grid: '#475569' },
   };
+}
+
+export function defaultPieStyle(): PieStyle {
+  const { axis: _axis, ...style } = defaultGraphStyle();
+  return style;
 }
 
 export function defaultGaugeStyle(): GaugeStyle {

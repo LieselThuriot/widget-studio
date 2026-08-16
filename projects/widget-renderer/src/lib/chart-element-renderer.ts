@@ -247,6 +247,7 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
         ],
       };
     }
+    const seriesElement = element as Extract<ChartElement, { type: 'bar' | 'line' }>;
     return {
       ...base,
       grid: {
@@ -259,20 +260,26 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
       xAxis: {
         type: 'category',
         data: element.data.map(({ label }) => label),
-        axisLabel: { color: element.style.axis.label, fontSize: element.style.font.size },
-        axisLine: { lineStyle: { color: element.style.axis.line } },
+        axisLabel: {
+          color: seriesElement.style.axis.label,
+          fontSize: seriesElement.style.font.size,
+        },
+        axisLine: { lineStyle: { color: seriesElement.style.axis.line } },
       },
       yAxis: {
         type: 'value',
-        axisLabel: { color: element.style.axis.label, fontSize: element.style.font.size },
-        axisLine: { lineStyle: { color: element.style.axis.line } },
-        splitLine: { lineStyle: { color: element.style.axis.grid } },
+        axisLabel: {
+          color: seriesElement.style.axis.label,
+          fontSize: seriesElement.style.font.size,
+        },
+        axisLine: { lineStyle: { color: seriesElement.style.axis.line } },
+        splitLine: { lineStyle: { color: seriesElement.style.axis.grid } },
       },
       series: [
         {
-          type: element.type,
-          data: element.data.map(({ value }) => value),
-          smooth: element.type === 'line',
+          type: seriesElement.type,
+          data: seriesElement.data.map(({ value }) => value),
+          smooth: seriesElement.type === 'line',
         },
       ],
     };
