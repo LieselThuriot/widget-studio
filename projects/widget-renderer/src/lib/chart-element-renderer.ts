@@ -163,7 +163,11 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
                   : '68%',
             label: { show: false },
             labelLine: { show: false },
-            data: element.data.map(({ label, value }) => ({ name: label, value })),
+            data: element.data.map(({ label, value, color }) => ({
+              name: label,
+              value,
+              ...(color ? { itemStyle: { color } } : {}),
+            })),
           },
         ],
       };
@@ -278,7 +282,19 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
       series: [
         {
           type: seriesElement.type,
-          data: seriesElement.data.map(({ value }) => value),
+          data: seriesElement.data.map(({ value, color }) => ({
+            value,
+            ...(color ? { itemStyle: { color } } : {}),
+          })),
+          itemStyle:
+            seriesElement.type === 'line'
+              ? { color: seriesElement.style.color.line ?? '#7dd3fc' }
+              : undefined,
+          lineStyle:
+            seriesElement.type === 'line'
+              ? { color: seriesElement.style.color.line ?? '#7dd3fc' }
+              : undefined,
+          symbol: seriesElement.type === 'line' ? 'circle' : undefined,
           smooth: seriesElement.type === 'line',
         },
       ],

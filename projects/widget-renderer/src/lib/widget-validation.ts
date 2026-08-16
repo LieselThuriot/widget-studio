@@ -170,7 +170,7 @@ function validateStyle(
   validateFont(value['font'], `${path}.font`, issues);
   const color = value['color'];
   if (isRecord(color)) {
-    for (const key of ['legend', 'title', 'fill', 'track']) {
+    for (const key of ['legend', 'title', 'line', 'fill', 'track']) {
       if (color[key] !== undefined)
         requiredString(color[key], `${path}.color.${key}`, issues, true);
     }

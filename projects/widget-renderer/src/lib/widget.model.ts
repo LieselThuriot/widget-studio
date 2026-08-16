@@ -93,6 +93,7 @@ export interface PieStyle extends DataVisualStyle {
   color: DataVisualStyle['color'] & { title: string };
 }
 export interface GraphStyle extends PieStyle {
+  color: PieStyle['color'] & { line?: string };
   axis: {
     label: string;
     line: string;

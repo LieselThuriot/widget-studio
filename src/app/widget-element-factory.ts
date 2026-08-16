@@ -135,6 +135,7 @@ export function defaultGraphStyle(): GraphStyle {
     color: {
       legend: '#f6f7fb',
       title: '#f6f7fb',
+      line: '#7dd3fc',
     },
     font: { size: 11 },
     axis: { label: '#d4dbea', line: '#94a3b8', grid: '#475569' },
@@ -142,8 +143,10 @@ export function defaultGraphStyle(): GraphStyle {
 }
 
 export function defaultPieStyle(): PieStyle {
-  const { axis: _axis, ...style } = defaultGraphStyle();
-  return style;
+  return {
+    color: { legend: '#f6f7fb', title: '#f6f7fb' },
+    font: { size: 11 },
+  };
 }
 
 export function defaultGaugeStyle(): GaugeStyle {

@@ -51,6 +51,20 @@ select:focus-visible {
   gap: 9px;
 }
 
+.data-points-button {
+  width: 100%;
+  min-height: 34px;
+  margin: 16px 0;
+  border: 1px solid #5874ab;
+  border-radius: 7px;
+  background: #eef3fb;
+  color: #36527f;
+  font:
+    600 11px 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+
 .color-fields {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }

@@ -19,6 +19,9 @@
       changed.emit({ style: { ...style(), font: { ...style().font, size: number($event) } } })
     "
 /></label>
+<button type="button" class="data-points-button" (click)="isDataDialogOpen.set(true)">
+  Edit data points
+</button>
 @if (element().type === 'pie' || element().type === 'donut') {
   <label class="toggle-row"
     ><span><strong>Show legend</strong><small>Display labels for chart data</small></span
@@ -36,7 +39,26 @@
       "
   /></label>
 }
+@if (isDataDialogOpen()) {
+  <app-data-points-dialog
+    [points]="element().data"
+    (saved)="saveData($event)"
+    (closed)="isDataDialogOpen.set(false)"
+  />
+}
 @if (element().type === 'bar' || element().type === 'line') {
+  @if (element().type === 'line') {
+    <label
+      >Line color<input
+        type="color"
+        [value]="style().color.line"
+        (input)="
+          changed.emit({
+            style: { ...style(), color: { ...style().color, line: value($event) } },
+          })
+        "
+    /></label>
+  }
   <label
     >Axis labels<input
       type="color"

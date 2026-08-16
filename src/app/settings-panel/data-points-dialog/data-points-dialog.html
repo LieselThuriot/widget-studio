@@ -1,0 +1,77 @@
+<div
+  class="data-points-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="data-points-title"
+  tabindex="0"
+  (click)="close()"
+  (keydown)="onKeyDown($event)"
+>
+  <section
+    class="data-points-dialog"
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+    (keydown)="onKeyDown($event)"
+  >
+    <header>
+      <div>
+        <p class="eyebrow">Chart data</p>
+        <h2 id="data-points-title">Edit data points</h2>
+      </div>
+      <button
+        type="button"
+        class="close-button"
+        aria-label="Close data point editor"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+    <div class="points-list">
+      @for (point of draft(); track $index; let index = $index) {
+        <div class="point-row">
+          <label
+            >Label<input
+              required
+              [class.invalid]="invalidLabel(point)"
+              [value]="point.label"
+              (input)="update(index, { label: value($event) })"
+          /></label>
+          <label
+            >Value<input
+              required
+              type="number"
+              [class.invalid]="invalidValue(point)"
+              [value]="point.value"
+              (input)="update(index, { value: number($event) })"
+          /></label>
+          <label class="color-field"
+            >Color<input
+              type="color"
+              [value]="point.color ?? '#7dd3fc'"
+              (input)="update(index, { color: value($event) })"
+          /></label>
+          <button
+            type="button"
+            class="remove-button"
+            [attr.aria-label]="'Remove ' + (point.label || 'data point')"
+            (click)="remove(index)"
+          >
+            Remove
+          </button>
+        </div>
+      } @empty {
+        <p class="empty-state">No data points yet.</p>
+      }
+    </div>
+    <footer>
+      <button type="button" class="add-button" (click)="add()">Add data point</button>
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" (click)="close()">Cancel</button>
+        <button type="button" class="primary-button" [disabled]="!canSave()" (click)="save()">
+          Save changes
+        </button>
+      </div>
+    </footer>
+  </section>
+</div>

@@ -11,6 +11,7 @@ const defaultGraphStyle = {
   color: {
     legend: '#f6f7fb',
     title: '#f6f7fb',
+    line: '#7dd3fc',
     axisLabel: '#d4dbea',
     axisLine: '#94a3b8',
     grid: '#475569',
@@ -208,6 +209,10 @@ export function normalizeChartElement(
     grid,
     style: {
       ...sharedStyle,
+      color: {
+        ...sharedStyle.color,
+        line: color['line'] ?? style['lineColor'] ?? defaultGraphStyle.color.line,
+      },
       axis: {
         ...defaultGraphStyle.axis,
         ...axis,
