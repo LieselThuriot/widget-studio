@@ -26,7 +26,7 @@
   place-items: center;
   border: 1px dashed #cbd4e3;
   border-radius: 14px;
-  background: #f2f5f9;
+  background-color: transparent;
   background-image: radial-gradient(#d5dce8 1px, transparent 1px);
   background-size: 14px 14px;
 }
@@ -97,6 +97,33 @@
 }
 .shortcut-popover dd {
   color: #8794ad;
+}
+:host-context(html[data-theme='dark']) .canvas-toolbar {
+  color: #aebbd1;
+}
+:host-context(html[data-theme='dark']) .dimensions,
+:host-context(html[data-theme='dark']) .shortcut-popover dd {
+  color: #9aa9c3;
+}
+:host-context(html[data-theme='dark']) .canvas {
+  border-color: #526483;
+  background-color: transparent;
+  background-image: radial-gradient(#2d3d5d 1px, transparent 1px);
+}
+:host-context(html[data-theme='dark']) .shortcut-help kbd,
+:host-context(html[data-theme='dark']) .shortcut-help-trigger {
+  border-color: #3a4b6e;
+  background: #1d2b49;
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .shortcut-popover {
+  border-color: #3a4b6e;
+  background: #17233c;
+  color: #aebbd1;
+  box-shadow: 0 10px 24px #080e1f80;
+}
+:host-context(html[data-theme='dark']) .shortcut-popover strong {
+  color: #b7cdf5;
 }
 @media (max-width: 700px) {
   .canvas {

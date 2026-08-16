@@ -44,6 +44,7 @@
     >
       <widget-renderer
         [widget]="widget()"
+        [darkMode]="darkMode()"
         [loading]="previewLoading()"
         (refreshRequested)="refreshRequested.emit()"
         (actionRequested)="actionRequested.emit($event)"

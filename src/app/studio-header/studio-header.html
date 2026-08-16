@@ -4,6 +4,16 @@
     <p class="eyebrow">Widget studio</p>
     <h1>Compose a widget</h1>
   </div>
+  <button
+    type="button"
+    class="theme-button"
+    [attr.aria-label]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+    [attr.aria-pressed]="darkMode()"
+    (click)="darkModeToggled.emit()"
+  >
+    <span aria-hidden="true">{{ darkMode() ? '☀' : '☾' }}</span>
+    {{ darkMode() ? 'Light' : 'Dark' }}
+  </button>
   <button type="button" class="preview-button" (click)="previewRequested.emit()">
     <span class="live-dot" aria-hidden="true"></span> Preview
   </button>

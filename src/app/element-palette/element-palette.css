@@ -53,3 +53,23 @@
   color: #a6b0c0;
   font-size: 18px;
 }
+:host-context(html[data-theme='dark']) .palette-item {
+  border-color: #3a4b6e;
+  background: #1d2b49;
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) .palette-item:hover,
+:host-context(html[data-theme='dark']) .palette-item:focus-visible {
+  border-color: #5874ab;
+  background: #263b63;
+}
+:host-context(html[data-theme='dark']) .palette-icon {
+  background: #293b61;
+  color: #a9c1ed;
+}
+:host-context(html[data-theme='dark']) .palette-item small {
+  color: #9aa9c3;
+}
+:host-context(html[data-theme='dark']) .add {
+  color: #a9b9d3;
+}

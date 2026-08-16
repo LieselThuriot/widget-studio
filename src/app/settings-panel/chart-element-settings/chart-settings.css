@@ -147,6 +147,23 @@ select:focus-visible {
   outline: 2px solid #8da6d4;
   outline-offset: 2px;
 }
+:host-context(html[data-theme='dark']) input,
+:host-context(html[data-theme='dark']) select {
+  border-color: #3a4b6e;
+  background: #10182c;
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) .data-points-button {
+  border-color: #5874ab;
+  background: #293b61;
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .toggle-row {
+  border-color: #2d3d5d;
+}
+:host-context(html[data-theme='dark']) .toggle {
+  background: #526483;
+}
 
 @media (max-width: 360px) {
   .field-row {

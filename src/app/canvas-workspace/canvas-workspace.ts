@@ -14,6 +14,7 @@ import { EditorCanvas } from '../editor-canvas/editor-canvas';
 })
 export class CanvasWorkspace {
   readonly widget = input.required<Widget>();
+  readonly darkMode = input(false);
   readonly selectedId = input<string | null>(null);
   readonly elementDropped = output<DragEvent>();
   readonly widgetSelected = output<void>();

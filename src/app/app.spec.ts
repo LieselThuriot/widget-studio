@@ -3,6 +3,15 @@ import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
+    const values = new Map<string, string>();
+    Object.defineProperty(globalThis, 'localStorage', {
+      configurable: true,
+      value: {
+        getItem: (key: string) => values.get(key) ?? null,
+        setItem: (key: string, value: string) => values.set(key, value),
+        removeItem: (key: string) => values.delete(key),
+      },
+    });
     await TestBed.configureTestingModule({
       imports: [App],
     }).compileComponents();
@@ -24,6 +33,39 @@ describe('App', () => {
       'Widget editor canvas',
     );
     expect(compiled.querySelector('.topbar-meta')).toBeNull();
+  });
+
+  it('should toggle and persist dark mode', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const themeButton = fixture.nativeElement.querySelector('.theme-button') as HTMLButtonElement;
+    expect(themeButton.getAttribute('aria-pressed')).toBe('false');
+
+    themeButton.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(themeButton.getAttribute('aria-pressed')).toBe('true');
+    expect(fixture.nativeElement.classList.contains('is-dark')).toBe(true);
+    expect(localStorage.getItem('widget-studio-theme')).toBe('dark');
+
+    const previewButton = fixture.nativeElement.querySelector(
+      '.preview-button',
+    ) as HTMLButtonElement;
+    previewButton.click();
+    fixture.detectChanges();
+    const loadingToggle = fixture.nativeElement.querySelector(
+      '.loading-toggle',
+    ) as HTMLButtonElement;
+    loadingToggle.click();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector(
+        '.preview-dialog .widget-skeleton.is-dark, .preview-window .widget-skeleton.is-dark',
+      ),
+    ).toBeTruthy();
   });
 
   it('should omit internal element IDs from the output contract', async () => {

@@ -27,6 +27,19 @@
   font-weight: 600;
   cursor: pointer;
 }
+.theme-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid #d8deeb;
+  border-radius: 7px;
+  background: transparent;
+  color: #66738b;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
 .live-dot {
   width: 7px;
   height: 7px;

@@ -17,6 +17,7 @@
 >
   <widget-renderer
     [widget]="widget()"
+    [darkMode]="darkMode()"
     (refreshRequested)="refreshRequested.emit()"
     (actionRequested)="actionRequested.emit($event)"
   />

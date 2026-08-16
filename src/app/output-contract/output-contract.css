@@ -47,6 +47,15 @@ pre {
     11px/1.65 'DM Mono',
     monospace;
 }
+:host-context(html[data-theme='dark']) .model-panel {
+  border-color: #2d3d5d;
+  background: #17233c;
+  box-shadow: 0 8px 24px #080e1f40;
+}
+:host-context(html[data-theme='dark']) .json-badge {
+  border-color: #3a4b6e;
+  color: #aebbd1;
+}
 @media (max-width: 700px) {
   pre {
     font-size: 9px;

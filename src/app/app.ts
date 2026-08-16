@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudioHeader } from './studio-header/studio-header';
 import { ElementPalette } from './element-palette/element-palette';
@@ -28,11 +28,13 @@ import { EditorStateStore } from './editor-state-store';
   templateUrl: './app.html',
   styleUrl: './app.css',
   host: {
+    '[class.is-dark]': 'darkMode()',
     '(document:click)': 'selectCanvasBackground($event)',
     '(document:keydown)': 'onDocumentKeyDown($event)',
   },
 })
 export class App {
+  protected readonly darkMode = signal(readThemePreference());
   private readonly editorState = new EditorStateStore();
   protected readonly widget = this.editorState.widget;
   protected readonly selectedId = this.editorState.selectedId;
@@ -41,6 +43,23 @@ export class App {
   protected readonly selectedElement = this.editorState.selectedElement;
   protected readonly modelJson = this.editorState.modelJson;
   protected readonly palette = widgetElementPalette;
+
+  constructor() {
+    effect(() => {
+      const darkMode = this.darkMode();
+      document.documentElement.dataset['theme'] = darkMode ? 'dark' : 'light';
+    });
+  }
+
+  protected toggleDarkMode(): void {
+    const darkMode = !this.darkMode();
+    this.darkMode.set(darkMode);
+    try {
+      localStorage.setItem(themeStorageKey, darkMode ? 'dark' : 'light');
+    } catch {
+      // Ignore unavailable storage and keep the in-memory preference.
+    }
+  }
 
   protected addElement(type: WidgetElement['type']): void {
     this.editorState.addElement(type);
@@ -162,4 +181,17 @@ export class App {
   protected onAction(event: { element: ButtonElement; event: Event }): void {
     this.editorState.onAction(event);
   }
+}
+
+const themeStorageKey = 'widget-studio-theme';
+
+function readThemePreference(): boolean {
+  try {
+    const storedTheme = localStorage.getItem(themeStorageKey);
+    if (storedTheme === 'dark') return true;
+    if (storedTheme === 'light') return false;
+  } catch {
+    // Fall back to the operating system preference.
+  }
+  return typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches;
 }

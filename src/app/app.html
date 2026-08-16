@@ -1,5 +1,9 @@
 <main class="workspace">
-  <app-studio-header (previewRequested)="openPreview()" />
+  <app-studio-header
+    [darkMode]="darkMode()"
+    (darkModeToggled)="toggleDarkMode()"
+    (previewRequested)="openPreview()"
+  />
   <div class="studio-grid">
     <aside class="panel palette-panel" aria-label="Widget elements">
       <div class="panel-heading">
@@ -29,6 +33,7 @@
     <div class="canvas-column">
       <app-canvas-workspace
         [widget]="widget()"
+        [darkMode]="darkMode()"
         [selectedId]="selectedId()"
         (elementDropped)="dropElement($event)"
         (widgetSelected)="selectWidget()"
@@ -59,6 +64,7 @@
 @if (isPreviewOpen()) {
   <app-preview-dialog
     [widget]="widget()"
+    [darkMode]="darkMode()"
     (closed)="closePreview()"
     (refreshRequested)="onRefresh()"
     (actionRequested)="onAction($event)"

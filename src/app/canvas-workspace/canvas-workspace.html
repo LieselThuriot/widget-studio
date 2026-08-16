@@ -56,6 +56,7 @@
   <div class="canvas" (dragover)="$event.preventDefault()" (drop)="elementDropped.emit($event)">
     <app-editor-canvas
       [widget]="widget()"
+      [darkMode]="darkMode()"
       [selectedId]="selectedId()"
       (widgetSelected)="widgetSelected.emit()"
       (elementSelected)="elementSelected.emit($event)"

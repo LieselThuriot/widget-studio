@@ -42,3 +42,15 @@ button.active {
   color: #36527f;
   outline: none;
 }
+:host-context(html[data-theme='dark']) .anchor-control,
+:host-context(html[data-theme='dark']) button {
+  border-color: #3a4b6e;
+  background: #10182c;
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) button:hover,
+:host-context(html[data-theme='dark']) button:focus-visible,
+:host-context(html[data-theme='dark']) button.active {
+  background: #293b61;
+  color: #b7cdf5;
+}

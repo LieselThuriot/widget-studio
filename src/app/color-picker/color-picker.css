@@ -69,3 +69,12 @@ input {
 .clear-button:disabled {
   cursor: default;
 }
+:host-context(html[data-theme='dark']) input {
+  border-color: #3a4b6e;
+  background: #10182c;
+}
+:host-context(html[data-theme='dark']) .clear-button:hover:not(:disabled),
+:host-context(html[data-theme='dark']) .clear-button:focus-visible {
+  background: #4a2635;
+  color: #f19aa4;
+}

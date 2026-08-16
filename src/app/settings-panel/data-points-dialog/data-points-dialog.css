@@ -145,6 +145,34 @@ input.invalid {
   color: #8794ad;
   text-align: center;
 }
+:host-context(html[data-theme='dark']) .data-points-dialog,
+:host-context(html[data-theme='dark']) header,
+:host-context(html[data-theme='dark']) footer,
+:host-context(html[data-theme='dark']) .point-row {
+  border-color: #2d3d5d;
+  background: #17233c;
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) header {
+  border-bottom-color: #2d3d5d;
+}
+:host-context(html[data-theme='dark']) footer {
+  border-top-color: #2d3d5d;
+}
+:host-context(html[data-theme='dark']) h2,
+:host-context(html[data-theme='dark']) label {
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) button,
+:host-context(html[data-theme='dark']) input {
+  border-color: #3a4b6e;
+  background: #10182c;
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) .primary-button {
+  background: #5874ab;
+  color: #fff;
+}
 @media (max-width: 560px) {
   .point-row {
     grid-template-columns: 1fr 1fr;

@@ -12,6 +12,7 @@ export class PreviewDialog {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly previouslyFocused = document.activeElement;
   readonly widget = input.required<Widget>();
+  readonly darkMode = input(false);
   readonly closed = output<void>();
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();

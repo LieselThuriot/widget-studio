@@ -39,6 +39,7 @@ import { elementForEvent, trackAt } from './editor-canvas-interaction';
 export class EditorCanvas {
   private readonly hostElement = inject(ElementRef<HTMLElement>);
   readonly widget = input.required<Widget>();
+  readonly darkMode = input(false);
   readonly selectedId = input<string | null>(null);
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();

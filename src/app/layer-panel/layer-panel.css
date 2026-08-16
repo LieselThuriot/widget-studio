@@ -151,3 +151,41 @@ h2 {
   background: #fbecef;
   color: #a43e52;
 }
+:host-context(html[data-theme='dark']) .layer:hover,
+:host-context(html[data-theme='dark']) .layer.selected {
+  background: #263b63;
+}
+:host-context(html[data-theme='dark']) .layer-select {
+  color: #aebbd1;
+}
+:host-context(html[data-theme='dark']) .layer.selected .layer-select,
+:host-context(html[data-theme='dark']) .layer-actions-trigger:hover,
+:host-context(html[data-theme='dark']) .layer-actions-trigger:focus-visible,
+:host-context(html[data-theme='dark']) .layer.selected .layer-actions-trigger {
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .layer-actions-trigger:hover,
+:host-context(html[data-theme='dark']) .layer-actions-trigger:focus-visible,
+:host-context(html[data-theme='dark']) .layer.selected .layer-actions-trigger {
+  border-color: #5874ab;
+  background: #1d2b49;
+}
+:host-context(html[data-theme='dark']) .layer-actions {
+  border-color: #3a4b6e;
+  background: #17233c;
+  box-shadow: 0 10px 24px #080e1f80;
+}
+:host-context(html[data-theme='dark']) .layer-actions button {
+  color: #aebbd1;
+}
+:host-context(html[data-theme='dark']) .layer-actions button:hover,
+:host-context(html[data-theme='dark']) .layer-actions button:focus-visible {
+  background: #263b63;
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .layer-menu-divider {
+  background: #3a4b6e;
+}
+:host-context(html[data-theme='dark']) .layer-actions .layer-menu-delete {
+  color: #f19aa4;
+}
