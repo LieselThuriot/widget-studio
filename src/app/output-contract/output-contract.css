@@ -56,6 +56,11 @@ pre {
   border-color: #3a4b6e;
   color: #aebbd1;
 }
+:host-context(html[data-theme='dark']) pre {
+  border: 1px solid #2d3d5d;
+  background: #10182c;
+  color: #d7e1f2;
+}
 @media (max-width: 700px) {
   pre {
     font-size: 9px;
