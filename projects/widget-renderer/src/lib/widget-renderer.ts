@@ -25,6 +25,7 @@ export type WidgetLoading = boolean | Widget['size'];
 export class WidgetRenderer {
   readonly widget = input<WidgetInput | null>(null);
   readonly loading = input<WidgetLoading>(false);
+  readonly darkMode = input(false);
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);

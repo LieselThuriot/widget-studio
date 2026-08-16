@@ -15,12 +15,21 @@
 .widget-skeleton.is-wide {
   width: 530px;
 }
+.widget-skeleton.is-dark {
+  background: #182236;
+}
 .skeleton-line,
 .skeleton-chart,
 .skeleton-button {
   background: linear-gradient(100deg, #dfe5ee 20%, #f2f5f9 45%, #dfe5ee 70%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.8s linear infinite;
+}
+.widget-skeleton.is-dark .skeleton-line,
+.widget-skeleton.is-dark .skeleton-chart,
+.widget-skeleton.is-dark .skeleton-button {
+  background: linear-gradient(100deg, #182236 20%, #2b3b59 45%, #182236 70%);
+  background-size: 200% 100%;
 }
 .skeleton-toolbar {
   position: absolute;
@@ -30,6 +39,9 @@
   height: 28px;
   border-radius: 8px;
   background: #c4cedd;
+}
+.widget-skeleton.is-dark .skeleton-toolbar {
+  background: #2b3b59;
 }
 .skeleton-content {
   display: flex;

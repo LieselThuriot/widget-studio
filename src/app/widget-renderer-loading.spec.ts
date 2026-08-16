@@ -24,6 +24,23 @@ describe('widget renderer loading state', () => {
     expect(fixture.nativeElement.querySelector('.widget-skeleton.is-wide')).toBeTruthy();
   });
 
+  it('uses the light skeleton by default', async () => {
+    const fixture = TestBed.createComponent(WidgetRenderer);
+    fixture.componentRef.setInput('loading', true);
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('.widget-skeleton.is-dark')).toBeNull();
+  });
+
+  it('renders a dark skeleton when dark mode is enabled', async () => {
+    const fixture = TestBed.createComponent(WidgetRenderer);
+    fixture.componentRef.setInput('loading', true);
+    fixture.componentRef.setInput('darkMode', true);
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('.widget-skeleton.is-dark')).toBeTruthy();
+  });
+
   it('renders the widget shell when loading is disabled', async () => {
     const fixture = TestBed.createComponent(WidgetRenderer);
     fixture.componentRef.setInput('loading', false);
