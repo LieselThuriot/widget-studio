@@ -48,6 +48,25 @@
   color: #9aa5b7;
   font-size: 10px;
 }
+.edit-grid-button {
+  width: 100%;
+  min-height: 34px;
+  margin: 16px 0;
+  border: 1px solid #5874ab;
+  border-radius: 7px;
+  background: #eef3fb;
+  color: #36527f;
+  font:
+    600 11px 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+.edit-grid-button:hover,
+.edit-grid-button:focus-visible {
+  border-color: #5874ab;
+  background: #e2ebf9;
+  outline: none;
+}
 label {
   display: block;
   margin: 13px 0;
@@ -120,4 +139,29 @@ textarea {
 }
 .toggle-row input:checked + .toggle:after {
   transform: translateX(12px);
+}
+
+:host-context(html[data-theme='dark']) .selected-chip,
+:host-context(html[data-theme='dark']) label {
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .edit-grid-button {
+  border-color: #5874ab;
+  background: #293b61;
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .edit-grid-button:hover,
+:host-context(html[data-theme='dark']) .edit-grid-button:focus-visible {
+  background: #354b78;
+}
+:host-context(html[data-theme='dark']) input,
+:host-context(html[data-theme='dark']) textarea,
+:host-context(html[data-theme='dark']) select {
+  border-color: #3a4b6e;
+  background: #10182c;
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) .widget-setting-section,
+:host-context(html[data-theme='dark']) .toggle-row {
+  border-color: #2d3d5d;
 }

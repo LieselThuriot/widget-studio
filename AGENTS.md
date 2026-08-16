@@ -27,3 +27,4 @@
 - The editor uses `Widget` internal models with IDs; normal library/API consumers use `WidgetContract` without IDs. Do not require callers to hydrate API data before rendering.
 - Renderer button actions and refresh events are emitted to the consuming application; the library must not make those network requests itself.
 - ECharts is a peer dependency of `widget-renderer`; chart tests use `src/test-setup.ts` because ECharts probes canvas support even when charts render as SVG.
+- Preserve dark-mode support for every new editor, dialog, button, form control, and visual preview. Add `:host-context(html[data-theme='dark'])` styles and verify both light and dark themes when changing UI.

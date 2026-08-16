@@ -1,0 +1,142 @@
+<div
+  class="grid-editor-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="grid-editor-title"
+  tabindex="0"
+  (click)="close()"
+  (keydown)="onKeyDown($event)"
+>
+  <section
+    class="grid-editor-dialog"
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+    (keydown)="onKeyDown($event)"
+  >
+    <header>
+      <div>
+        <p class="eyebrow">Widget layout</p>
+        <h2 id="grid-editor-title">Edit grid</h2>
+      </div>
+      <button type="button" class="close-button" aria-label="Close grid editor" (click)="close()">
+        ×
+      </button>
+    </header>
+    <div class="editor-body">
+      <div
+        class="grid-preview"
+        aria-label="Grid preview"
+        [style.grid-template-columns]="previewColumns()"
+        [style.grid-template-rows]="previewRows()"
+      >
+        <div class="grid-corner"></div>
+        @for (track of columns(); track $index; let index = $index) {
+          <div class="track-label column-label">
+            {{ trackLabel(track) }}
+            <button
+              type="button"
+              class="delete-track"
+              [disabled]="columns().length === 1"
+              [attr.aria-label]="'Remove column ' + (index + 1)"
+              (click)="remove('columns', index)"
+            >
+              ×
+            </button>
+          </div>
+        }
+        <button type="button" class="add-track column-add" (click)="add('columns')">+</button>
+        @for (row of rows(); track $index; let rowIndex = $index) {
+          <div class="track-label row-label">
+            {{ trackLabel(row) }}
+            <button
+              type="button"
+              class="delete-track"
+              [disabled]="rows().length === 1"
+              [attr.aria-label]="'Remove row ' + (rowIndex + 1)"
+              (click)="remove('rows', rowIndex)"
+            >
+              ×
+            </button>
+          </div>
+          @for (column of columns(); track $index; let columnIndex = $index) {
+            <button
+              type="button"
+              class="grid-cell"
+              [class.selected]="
+                selectedCell().row === rowIndex && selectedCell().column === columnIndex
+              "
+              [attr.aria-label]="'Select row ' + (rowIndex + 1) + ', column ' + (columnIndex + 1)"
+              (click)="selectCell(rowIndex, columnIndex)"
+            >
+              <span class="visually-hidden">{{ trackLabel(row) }} by {{ trackLabel(column) }}</span>
+            </button>
+          }
+          <div class="row-end"></div>
+        }
+        <button type="button" class="add-track row-add" (click)="add('rows')">+</button>
+        @for (column of columns(); track $index) {
+          <div class="column-bottom-spacer"></div>
+        }
+      </div>
+      <section class="selection-editor" aria-label="Selected cell grid tracks">
+        <p class="eyebrow">Selected cell</p>
+        <div class="selection-fields">
+          <label for="selected-row-size"
+            >Row size
+            @if (selectedRow().unit === 'auto') {
+              <input id="selected-row-size" type="text" value="auto" disabled />
+            } @else {
+              <input
+                id="selected-row-size"
+                type="number"
+                min="1"
+                [value]="selectedRow().size"
+                (input)="updateSelected('rows', { size: number($event) })"
+              />
+            }
+          </label>
+          <label for="selected-row-unit"
+            >Row unit<select
+              id="selected-row-unit"
+              [value]="selectedRow().unit"
+              (change)="updateSelected('rows', { unit: unit($event) })"
+            >
+              <option value="star">Star</option>
+              <option value="pixel">Pixel</option>
+              <option value="auto">Auto</option>
+            </select></label
+          >
+          <label for="selected-column-size"
+            >Column size
+            @if (selectedColumn().unit === 'auto') {
+              <input id="selected-column-size" type="text" value="auto" disabled />
+            } @else {
+              <input
+                id="selected-column-size"
+                type="number"
+                min="1"
+                [value]="selectedColumn().size"
+                (input)="updateSelected('columns', { size: number($event) })"
+              />
+            }
+          </label>
+          <label for="selected-column-unit"
+            >Column unit<select
+              id="selected-column-unit"
+              [value]="selectedColumn().unit"
+              (change)="updateSelected('columns', { unit: unit($event) })"
+            >
+              <option value="star">Star</option>
+              <option value="pixel">Pixel</option>
+              <option value="auto">Auto</option>
+            </select></label
+          >
+        </div>
+      </section>
+    </div>
+    <footer>
+      <button type="button" class="secondary-button" (click)="close()">Cancel</button>
+      <button type="button" class="primary-button" (click)="save()">Save changes</button>
+    </footer>
+  </section>
+</div>

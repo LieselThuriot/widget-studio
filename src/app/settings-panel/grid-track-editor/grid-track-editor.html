@@ -8,6 +8,7 @@
       type="number"
       min="1"
       [value]="track.size"
+      [disabled]="track.unit === 'auto'"
       (input)="sizeChanged.emit({ index: $index, value: number($event) })"
     /><select
       [value]="track.unit"

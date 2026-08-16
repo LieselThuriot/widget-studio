@@ -5,6 +5,9 @@
       >{{ widget().rows.length }} rows · {{ widget().columns.length }} columns</span
     >
   </div>
+  <button type="button" class="edit-grid-button" (click)="isGridDialogOpen.set(true)">
+    Edit grid
+  </button>
   <label
     >Widget size<select
       [value]="widget().size"
@@ -14,28 +17,11 @@
       <option value="wide">Wide · 530 × 245</option>
     </select></label
   >
-  <app-grid-track-editor
-    kind="rows"
-    [tracks]="widget().rows"
-    (added)="trackAdded.emit('rows')"
-    (removed)="trackRemoved.emit({ kind: 'rows', index: $event })"
-    (sizeChanged)="
-      trackChanged.emit({ kind: 'rows', index: $event.index, patch: { size: $event.value } })
-    "
-    (unitChanged)="
-      trackChanged.emit({ kind: 'rows', index: $event.index, patch: { unit: $event.value } })
-    "
-  />
-  <app-grid-track-editor
-    kind="columns"
-    [tracks]="widget().columns"
-    (added)="trackAdded.emit('columns')"
-    (removed)="trackRemoved.emit({ kind: 'columns', index: $event })"
-    (sizeChanged)="
-      trackChanged.emit({ kind: 'columns', index: $event.index, patch: { size: $event.value } })
-    "
-    (unitChanged)="
-      trackChanged.emit({ kind: 'columns', index: $event.index, patch: { unit: $event.value } })
-    "
-  />
+  @if (isGridDialogOpen()) {
+    <app-grid-editor-dialog
+      [widget]="widget()"
+      (saved)="saveGrid($event)"
+      (closed)="isGridDialogOpen.set(false)"
+    />
+  }
 </section>

@@ -44,6 +44,11 @@ select {
   color: #34425c;
   font: 12px inherit;
 }
+input:disabled {
+  background: #f1f4f8;
+  color: #9aa5b7;
+  cursor: not-allowed;
+}
 button:not(.small-add) {
   width: 24px;
   height: 28px;

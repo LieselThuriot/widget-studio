@@ -1,0 +1,301 @@
+:host {
+  display: contents;
+}
+.grid-editor-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: #10182ce8;
+}
+.grid-editor-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(760px, 100%);
+  max-height: min(760px, calc(100dvh - 40px));
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f7f9fc;
+  box-shadow: 0 24px 70px #080e1f80;
+}
+header,
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  background: #fff;
+}
+header {
+  border-bottom: 1px solid #e2e7f0;
+}
+footer {
+  border-top: 1px solid #e2e7f0;
+  justify-content: flex-end;
+}
+.eyebrow {
+  margin: 0;
+  color: #8794ad;
+  font:
+    700 10px/1.2 'DM Sans',
+    sans-serif;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+h2 {
+  margin: 5px 0 0;
+  color: #25324b;
+  font:
+    700 17px/1.1 'DM Sans',
+    sans-serif;
+}
+button {
+  min-height: 32px;
+  border: 1px solid #dfe5ee;
+  border-radius: 7px;
+  padding: 0 11px;
+  background: #fff;
+  color: #36527f;
+  font:
+    600 11px 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+button:hover,
+button:focus-visible {
+  border-color: #5874ab;
+  outline: none;
+}
+.close-button {
+  width: 32px;
+  padding: 0;
+  color: #63718a;
+  font-size: 22px;
+}
+.editor-body {
+  overflow: auto;
+  padding: 22px;
+}
+.grid-preview {
+  display: grid;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 24px;
+  min-height: 220px;
+  max-width: 100%;
+  overflow: auto;
+}
+.grid-corner,
+.column-bottom-spacer,
+.row-end {
+  min-height: 30px;
+}
+.track-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 30px;
+  color: #67738a;
+  font:
+    600 11px 'DM Sans',
+    sans-serif;
+}
+.delete-track,
+.add-track {
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.delete-track {
+  color: #bd8290;
+  font-size: 18px;
+}
+.delete-track:hover,
+.delete-track:focus-visible {
+  background: #f8e8ec;
+}
+.delete-track:disabled {
+  color: #cbd3df;
+  cursor: not-allowed;
+}
+.add-track {
+  justify-self: center;
+  border: 1px dashed #b8c7dc;
+  border-radius: 5px;
+  color: #5874ab;
+  font-size: 17px;
+}
+.add-track:hover,
+.add-track:focus-visible {
+  background: #eef3fb;
+}
+.grid-cell {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid #b8c7dc;
+  border-radius: 4px;
+  background: #eaf0f9;
+  cursor: pointer;
+}
+.grid-cell:hover {
+  background: #dbe7f7;
+}
+.grid-cell.selected {
+  border-color: #5874ab;
+  background: #d4e2f6;
+  box-shadow: 0 0 0 2px #5874ab44;
+}
+input,
+select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 32px;
+  padding: 7px 8px;
+  border: 1px solid #dfe5ee;
+  border-radius: 6px;
+  background: #fff;
+  color: #34425c;
+  font:
+    12px 'DM Sans',
+    sans-serif;
+}
+input:disabled {
+  background: #f1f4f8;
+  color: #9aa5b7;
+  cursor: not-allowed;
+}
+.primary-button {
+  border-color: #5874ab;
+  background: #5874ab;
+  color: #fff;
+}
+.secondary-button {
+  color: #63718a;
+}
+.selection-editor {
+  padding-top: 18px;
+  border-top: 1px solid #e2e7f0;
+}
+.selection-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 10px;
+}
+label {
+  color: #67738a;
+  font-size: 11px;
+  font-weight: 600;
+}
+label input,
+label select {
+  margin-top: 6px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .grid-preview {
+    min-width: 520px;
+  }
+  .selection-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  header,
+  footer,
+  .editor-body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+:host-context(html[data-theme='dark']) .grid-editor-dialog,
+:host-context(html[data-theme='dark']) header,
+:host-context(html[data-theme='dark']) footer {
+  background: #17233c;
+}
+:host-context(html[data-theme='dark']) header {
+  border-bottom-color: #2d3d5d;
+}
+:host-context(html[data-theme='dark']) footer {
+  border-top-color: #2d3d5d;
+}
+:host-context(html[data-theme='dark']) h2,
+:host-context(html[data-theme='dark']) .track-label,
+:host-context(html[data-theme='dark']) label {
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) input,
+:host-context(html[data-theme='dark']) select {
+  border-color: #3a4b6e;
+  background: #10182c;
+  color: #e7ecf5;
+}
+:host-context(html[data-theme='dark']) input:disabled {
+  background: #253451;
+  color: #8794ad;
+}
+:host-context(html[data-theme='dark']) .grid-cell {
+  border-color: #5874ab;
+  background: #202f50;
+}
+:host-context(html[data-theme='dark']) .grid-cell:hover {
+  background: #2d426d;
+}
+:host-context(html[data-theme='dark']) .grid-cell.selected {
+  border-color: #9db7e4;
+  background: #354b78;
+  box-shadow: 0 0 0 2px #9db7e466;
+}
+:host-context(html[data-theme='dark']) .add-track {
+  border-color: #5874ab;
+  color: #9db7e4;
+}
+:host-context(html[data-theme='dark']) .add-track:hover,
+:host-context(html[data-theme='dark']) .add-track:focus-visible {
+  background: #293b61;
+}
+:host-context(html[data-theme='dark']) button {
+  border-color: #3a4b6e;
+  background: #17233c;
+  color: #d7e1f2;
+}
+:host-context(html[data-theme='dark']) .delete-track {
+  border-color: transparent;
+  background: transparent;
+}
+:host-context(html[data-theme='dark']) .delete-track:hover,
+:host-context(html[data-theme='dark']) .delete-track:focus-visible {
+  background: #4a2c3b;
+}
+:host-context(html[data-theme='dark']) .selection-editor {
+  border-top-color: #2d3d5d;
+}
+:host-context(html[data-theme='dark']) .primary-button {
+  border-color: #5874ab;
+  background: #5874ab;
+  color: #fff;
+}

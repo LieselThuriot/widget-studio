@@ -666,16 +666,80 @@ describe('App', () => {
     size.value = 'wide';
     size.dispatchEvent(new Event('change', { bubbles: true }));
     fixture.detectChanges();
+    const editGrid = fixture.nativeElement.querySelector('.edit-grid-button') as HTMLButtonElement;
+    editGrid.click();
+    fixture.detectChanges();
+
     const addRow = fixture.nativeElement.querySelector(
-      'app-grid-track-editor[kind="rows"] .small-add',
+      '.grid-editor-dialog .row-add',
     ) as HTMLButtonElement;
     addRow.click();
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('530');
+    expect(fixture.nativeElement.querySelectorAll('.grid-editor-dialog .row-label')).toHaveLength(
+      4,
+    );
+    expect(fixture.nativeElement.querySelectorAll('.grid-editor-dialog .grid-cell')).toHaveLength(
+      12,
+    );
     expect(
-      fixture.nativeElement.querySelectorAll('app-grid-track-editor[kind="rows"] .track-row'),
-    ).toHaveLength(4);
+      fixture.nativeElement.querySelectorAll('.grid-editor-dialog .grid-cell.selected'),
+    ).toHaveLength(1);
+    const preview = fixture.nativeElement.querySelector(
+      '.grid-editor-dialog .grid-preview',
+    ) as HTMLElement;
+    expect(preview.style.gridTemplateColumns).toContain('1fr');
+    expect(preview.style.gridTemplateRows).toContain('1fr');
+
+    const firstRowSize = fixture.nativeElement.querySelector(
+      '.selection-editor label:first-child input',
+    ) as HTMLInputElement;
+    firstRowSize.value = '20';
+    firstRowSize.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('.grid-editor-dialog .row-label')?.textContent,
+    ).toContain('20*');
+
+    const secondCell = fixture.nativeElement.querySelectorAll(
+      '.grid-editor-dialog .grid-cell',
+    )[1] as HTMLButtonElement;
+    secondCell.click();
+    fixture.detectChanges();
+    expect(secondCell.classList.contains('selected')).toBe(true);
+
+    (
+      fixture.nativeElement.querySelector(
+        '.grid-editor-dialog .primary-button',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.grid-editor-dialog')).toBeNull();
+  });
+
+  it('should display auto grid tracks without their stored size', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.canvas') as HTMLElement).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.edit-grid-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const columnUnit = fixture.nativeElement.querySelector(
+      '#selected-column-unit',
+    ) as HTMLSelectElement;
+    columnUnit.value = 'auto';
+    columnUnit.dispatchEvent(new Event('change', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.column-label')?.textContent).toContain('auto');
+    expect(fixture.nativeElement.querySelector('.column-label')?.textContent).not.toContain('1');
+    expect(
+      (fixture.nativeElement.querySelector('.grid-editor-dialog .grid-preview') as HTMLElement)
+        .style.gridTemplateColumns,
+    ).toContain('auto');
   });
 
   it('should mark the widget background as sensitive', async () => {
