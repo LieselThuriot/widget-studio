@@ -11,17 +11,11 @@
 }
 widget-renderer {
   pointer-events: none;
+  --widget-renderer-actions-pointer-events: auto;
+  --widget-renderer-action-cursor: grab;
 }
-:host ::ng-deep widget-renderer .widget-toolbar,
-:host ::ng-deep widget-renderer .icon-button,
-:host ::ng-deep widget-renderer .action-button {
-  pointer-events: auto;
-}
-:host ::ng-deep widget-renderer .action-button {
-  cursor: grab;
-}
-:host ::ng-deep .editor-canvas.is-dragging widget-renderer .action-button {
-  cursor: grabbing;
+.editor-canvas.is-dragging widget-renderer {
+  --widget-renderer-action-cursor: grabbing;
 }
 .editor-grid {
   position: absolute;

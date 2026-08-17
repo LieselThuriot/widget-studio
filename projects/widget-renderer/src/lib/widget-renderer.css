@@ -214,6 +214,12 @@ img {
     opacity 160ms ease,
     transform 160ms ease;
 }
+
+.widget-toolbar,
+.icon-button,
+.action-button {
+  pointer-events: var(--widget-renderer-actions-pointer-events, auto);
+}
 .widget-shell:hover .widget-toolbar,
 .widget-shell:focus-within .widget-toolbar {
   opacity: 1;
@@ -251,7 +257,7 @@ img {
   border-radius: 8px;
   padding: 6px 10px;
   font: 600 12px/1.1 inherit;
-  cursor: pointer;
+  cursor: var(--widget-renderer-action-cursor, pointer);
 }
 .action-button.solid {
   border: 1px solid #151515;
