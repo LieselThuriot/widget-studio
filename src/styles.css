@@ -3,6 +3,7 @@
 @import './styles/editor-theme.css';
 @import './styles/editor-base.css';
 @import './styles/editor-global.css';
+@import './styles/editor-buttons.css';
 
 html[data-theme='dark'] .panel,
 html[data-theme='dark'] .preview-window,

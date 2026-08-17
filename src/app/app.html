@@ -68,7 +68,12 @@
 @if (shareLoadMessage(); as message) {
   <div class="share-load-message" role="alert">
     <span>{{ message }}</span>
-    <button type="button" aria-label="Dismiss message" (click)="dismissShareLoadMessage()">
+    <button
+      type="button"
+      class="editor-button editor-button--icon editor-button--subtle"
+      aria-label="Dismiss message"
+      (click)="dismissShareLoadMessage()"
+    >
       ×
     </button>
   </div>

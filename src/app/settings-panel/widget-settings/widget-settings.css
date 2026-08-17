@@ -52,19 +52,8 @@
   width: 100%;
   min-height: 34px;
   margin: 16px 0;
-  border: 1px solid #5874ab;
-  border-radius: 7px;
   background: #eef3fb;
   color: #36527f;
-  font:
-    600 11px 'DM Sans',
-    sans-serif;
-  cursor: pointer;
-}
-.edit-grid-button:is(:hover, :focus-visible) {
-  border-color: #5874ab;
-  background: #e2ebf9;
-  outline: none;
 }
 label {
   display: block;
@@ -145,12 +134,8 @@ textarea {
   color: #d7e1f2;
 }
 :host-context(html[data-theme='dark']) .edit-grid-button {
-  border-color: #5874ab;
   background: #293b61;
   color: #d7e1f2;
-}
-:host-context(html[data-theme='dark']) .edit-grid-button:is(:hover, :focus-visible) {
-  background: #354b78;
 }
 :host-context(html[data-theme='dark']) input,
 :host-context(html[data-theme='dark']) textarea,

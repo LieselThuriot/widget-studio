@@ -31,17 +31,6 @@
 }
 
 .element-actions-menu button {
-  width: 100%;
-  padding: 6px 7px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--editor-text-menu);
-  text-align: left;
-  font:
-    10px 'DM Sans',
-    sans-serif;
-  cursor: pointer;
 }
 
 .canvas-menu button {
@@ -50,23 +39,13 @@
   font-size: 11px;
 }
 
-.element-actions-menu button:is(:hover, :focus-visible) {
-  background: var(--editor-surface-menu-hover);
-  color: var(--editor-accent-strong);
-}
-
 .element-actions-menu button:disabled {
   color: #b8c0ce;
   cursor: not-allowed;
 }
 
 .menu-delete {
-  color: #b64d60 !important;
-}
-
-.menu-delete:is(:hover, :focus-visible) {
-  background: #fbecef !important;
-  color: #a43e52 !important;
+  color: var(--editor-danger-strong) !important;
 }
 
 .menu-divider {
@@ -85,15 +64,6 @@
   box-shadow: 0 10px 24px #080e1f80;
 }
 
-:host-context(html[data-theme='dark']) .element-actions-menu button {
-  color: #aebbd1;
-}
-
-:host-context(html[data-theme='dark']) .element-actions-menu button:is(:hover, :focus-visible) {
-  background: #263b63;
-  color: #d7e1f2;
-}
-
 :host-context(html[data-theme='dark']) .element-actions-menu button:disabled,
 :host-context(html[data-theme='dark']) .element-actions-menu button:disabled:hover,
 :host-context(html[data-theme='dark']) .element-actions-menu button:disabled:focus-visible {
@@ -105,8 +75,4 @@
 
 :host-context(html[data-theme='dark']) .menu-divider {
   background: #3a4b6e;
-}
-
-:host-context(html[data-theme='dark']) .menu-delete {
-  color: #f19aa4 !important;
 }

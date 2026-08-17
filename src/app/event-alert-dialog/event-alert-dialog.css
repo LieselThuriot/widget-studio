@@ -84,17 +84,7 @@ h2 {
   font-family: 'DM Mono', monospace;
 }
 .alert-close {
-  padding: 9px 14px;
-  border: 0;
-  border-radius: 7px;
-  background: #17233c;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.alert-close:is(:hover, :focus-visible) {
-  background: #263b63;
+  padding-inline: 14px;
 }
 :host-context(html[data-theme='dark']) .event-alert {
   border-color: #3a4b6e;
@@ -120,13 +110,6 @@ h2 {
 }
 :host-context(html[data-theme='dark']) .event-data dd {
   color: #d7e1f2;
-}
-:host-context(html[data-theme='dark']) .alert-close {
-  background: #5874ab;
-  color: #fff;
-}
-:host-context(html[data-theme='dark']) .alert-close:is(:hover, :focus-visible) {
-  background: #6b8bc8;
 }
 @media (max-width: 700px) {
   .alert-overlay {

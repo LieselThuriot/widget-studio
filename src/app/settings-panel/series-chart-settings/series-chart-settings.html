@@ -19,7 +19,7 @@
       changed.emit({ style: { ...style(), font: { ...style().font, size: number($event) } } })
     "
 /></label>
-<button type="button" class="data-points-button" (click)="isDataDialogOpen.set(true)">
+<button type="button" class="editor-button data-points-button" (click)="isDataDialogOpen.set(true)">
   Edit data points
 </button>
 @if (element().type === 'pie' || element().type === 'donut') {

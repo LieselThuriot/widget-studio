@@ -1,0 +1,100 @@
+.editor-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  gap: 8px;
+  padding: 0 11px;
+  border: 1px solid var(--editor-button-border);
+  border-radius: var(--editor-radius-button);
+  background: var(--editor-button-background);
+  color: var(--editor-button-text);
+  font: 600 11px/1.1 var(--editor-font-sans);
+  cursor: pointer;
+  transition:
+    border-color var(--editor-duration-fast) var(--editor-ease-standard),
+    background-color var(--editor-duration-fast) var(--editor-ease-standard),
+    color var(--editor-duration-fast) var(--editor-ease-standard);
+}
+
+.editor-button:is(:hover, :focus-visible) {
+  border-color: var(--editor-button-border-hover);
+  background: var(--editor-button-background-hover);
+  color: var(--editor-button-text-hover);
+  outline: none;
+}
+
+.editor-button:focus-visible {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 1px;
+}
+
+.editor-button:disabled {
+  border-color: var(--editor-border-control);
+  background: var(--editor-control-disabled);
+  color: var(--editor-control-disabled-text);
+  cursor: not-allowed;
+}
+
+.editor-button--primary {
+  border-color: var(--editor-accent);
+  background: var(--editor-accent);
+  color: var(--editor-text-on-accent);
+}
+
+.editor-button--primary:is(:hover, :focus-visible) {
+  border-color: var(--editor-accent-strong);
+  background: var(--editor-accent-strong);
+  color: var(--editor-text-on-accent);
+}
+
+.editor-button--secondary {
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-secondary);
+}
+
+.editor-button--subtle {
+  background: transparent;
+}
+
+.editor-button--icon {
+  width: 32px;
+  min-height: 32px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.editor-button--danger {
+  color: var(--editor-danger-strong);
+}
+
+.editor-button--danger:is(:hover, :focus-visible) {
+  border-color: var(--editor-danger-border);
+  background: var(--editor-danger-surface);
+  color: var(--editor-danger-strong);
+}
+
+.editor-button--menu {
+  width: 100%;
+  justify-content: flex-start;
+  min-height: 0;
+  padding: 6px 7px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--editor-text-menu);
+  text-align: start;
+  font-size: 10px;
+}
+
+.editor-button--menu:is(:hover, :focus-visible) {
+  border-color: transparent;
+  background: var(--editor-surface-menu-hover);
+  color: var(--editor-accent-strong);
+}
+
+.editor-button--menu:disabled {
+  border-color: transparent;
+  background: transparent;
+}

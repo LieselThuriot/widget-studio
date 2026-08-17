@@ -27,7 +27,12 @@
           <h2 id="share-title">Share widget</h2>
         </div>
       </div>
-      <button type="button" class="share-close" aria-label="Close share dialog" (click)="close()">
+      <button
+        type="button"
+        class="editor-button editor-button--icon share-close"
+        aria-label="Close share dialog"
+        (click)="close()"
+      >
         ×
       </button>
     </header>
@@ -45,7 +50,7 @@
           />
           <button
             type="button"
-            class="copy-button"
+            class="editor-button editor-button--primary copy-button"
             [disabled]="!shareUrl() || isCopying()"
             (click)="copyLink()"
           >

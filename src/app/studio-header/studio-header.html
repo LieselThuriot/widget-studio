@@ -5,10 +5,18 @@
     <h1>Compose a widget</h1>
   </div>
   <div class="header-actions">
-    <button type="button" class="preview-button" (click)="previewRequested.emit()">
+    <button
+      type="button"
+      class="editor-button editor-button--subtle preview-button"
+      (click)="previewRequested.emit()"
+    >
       <span class="live-dot" aria-hidden="true"></span> Preview
     </button>
-    <button type="button" class="share-button" (click)="shareRequested.emit()">
+    <button
+      type="button"
+      class="editor-button editor-button--subtle share-button"
+      (click)="shareRequested.emit()"
+    >
       <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
         <circle cx="18" cy="5" r="2.5"></circle>
         <circle cx="6" cy="12" r="2.5"></circle>
@@ -19,7 +27,7 @@
     </button>
     <button
       type="button"
-      class="theme-button"
+      class="editor-button editor-button--subtle theme-button"
       [attr.aria-label]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
       [attr.aria-pressed]="darkMode()"
       (click)="darkModeToggled.emit()"

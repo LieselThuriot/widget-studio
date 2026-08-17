@@ -18,7 +18,12 @@
         <p class="eyebrow">Widget layout</p>
         <h2 id="grid-editor-title">Edit grid</h2>
       </div>
-      <button type="button" class="close-button" aria-label="Close grid editor" (click)="close()">
+      <button
+        type="button"
+        class="editor-button editor-button--icon close-button"
+        aria-label="Close grid editor"
+        (click)="close()"
+      >
         ×
       </button>
     </header>
@@ -135,8 +140,20 @@
       </section>
     </div>
     <footer>
-      <button type="button" class="secondary-button" (click)="close()">Cancel</button>
-      <button type="button" class="primary-button" (click)="save()">Save changes</button>
+      <button
+        type="button"
+        class="editor-button editor-button--secondary secondary-button"
+        (click)="close()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="editor-button editor-button--primary primary-button"
+        (click)="save()"
+      >
+        Save changes
+      </button>
     </footer>
   </section>
 </div>

@@ -42,38 +42,13 @@ h1 {
 }
 .preview-button,
 .share-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
-  border: 1px solid var(--editor-border-control);
-  border-radius: var(--editor-radius-button);
-  background: transparent;
-  color: var(--editor-text-secondary);
+  padding-block: 7px;
   font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
 }
 .theme-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 10px;
-  border: 1px solid var(--editor-border-control);
-  border-radius: var(--editor-radius-button);
-  background: transparent;
-  color: var(--editor-text-secondary);
+  padding-block: 7px;
   font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.theme-button:is(:hover, :focus-visible),
-.preview-button:is(:hover, :focus-visible),
-.share-button:is(:hover, :focus-visible) {
-  border-color: var(--editor-focus-ring);
-  background: var(--editor-surface-accent-hover);
-  color: var(--editor-accent-strong);
-  outline: none;
+  gap: 7px;
 }
 .share-button svg {
   width: 14px;

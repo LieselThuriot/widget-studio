@@ -52,6 +52,15 @@
   --editor-focus-ring: #8da6d4;
   --editor-selection: #f5c451;
   --editor-danger: #e87984;
+  --editor-danger-surface: #fbecef;
+  --editor-danger-border: #e4a0aa;
+  --editor-danger-strong: #b64d60;
+  --editor-button-background: #fff;
+  --editor-button-background-hover: #f8faff;
+  --editor-button-border: #dfe5ee;
+  --editor-button-border-hover: #8da6d4;
+  --editor-button-text: #36527f;
+  --editor-button-text-hover: #36527f;
   --editor-control-disabled: #f1f4f8;
   --editor-control-disabled-text: #9aa5b7;
   --editor-toggle-off: #cbd3df;

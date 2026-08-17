@@ -51,39 +51,17 @@ h2 {
     sans-serif;
 }
 .preview-close {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid #dfe5ee;
-  border-radius: 8px;
   background: var(--editor-surface-panel);
   color: #63718a;
-  font-size: 22px;
-  cursor: pointer;
-}
-.preview-close:is(:hover, :focus-visible) {
-  border-color: #5874ab;
-  color: #36527f;
-  outline: none;
 }
 .loading-toggle {
   order: -1;
-  min-height: 32px;
-  padding: 0 11px;
-  border: 1px solid #dfe5ee;
-  border-radius: 8px;
   background: var(--editor-surface-panel);
   color: #36527f;
-  font:
-    600 11px/1 'DM Sans',
-    sans-serif;
-  cursor: pointer;
 }
 .loading-toggle:is(:hover, :focus-visible),
 .loading-toggle[aria-pressed='true'] {
-  border-color: #5874ab;
+  border-color: var(--editor-accent);
   background: var(--editor-surface-accent);
   outline: none;
 }

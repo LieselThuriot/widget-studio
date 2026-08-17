@@ -35,6 +35,15 @@ html[data-theme='dark'] {
   --editor-border-code: #2d3d5d;
   --editor-accent: #5874ab;
   --editor-accent-strong: #d7e1f2;
+  --editor-danger-surface: #4a2635;
+  --editor-danger-border: #9b5367;
+  --editor-danger-strong: #f19aa4;
+  --editor-button-background: #17233c;
+  --editor-button-background-hover: #263b63;
+  --editor-button-border: #3a4b6e;
+  --editor-button-border-hover: #9db7e4;
+  --editor-button-text: #d7e1f2;
+  --editor-button-text-hover: #fff;
   --editor-focus-ring: #9db7e4;
   --editor-control-disabled: #253451;
   --editor-control-disabled-text: #8794ad;

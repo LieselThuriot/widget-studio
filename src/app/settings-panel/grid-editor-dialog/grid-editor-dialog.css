@@ -53,27 +53,9 @@ h2 {
     700 17px/1.1 'DM Sans',
     sans-serif;
 }
-button {
-  min-height: 32px;
-  border: 1px solid var(--editor-border-control);
-  border-radius: var(--editor-radius-button);
-  padding: 0 11px;
-  background: var(--editor-surface-panel);
-  color: var(--editor-accent-strong);
-  font:
-    600 11px 'DM Sans',
-    sans-serif;
-  cursor: pointer;
-}
-button:is(:hover, :focus-visible) {
-  border-color: #5874ab;
-  outline: none;
-}
 .close-button {
-  width: 32px;
   padding: 0;
   color: #63718a;
-  font-size: 22px;
 }
 .editor-body {
   overflow: auto;
@@ -177,14 +159,6 @@ input:disabled {
   color: var(--editor-control-disabled-text);
   cursor: not-allowed;
 }
-.primary-button {
-  border-color: var(--editor-accent);
-  background: var(--editor-accent);
-  color: #fff;
-}
-.secondary-button {
-  color: #63718a;
-}
 .selection-editor {
   padding-top: 18px;
   border-top: 1px solid #e2e7f0;
@@ -274,11 +248,6 @@ label select {
 :host-context(html[data-theme='dark']) .add-track:is(:hover, :focus-visible) {
   background: #293b61;
 }
-:host-context(html[data-theme='dark']) button {
-  border-color: #3a4b6e;
-  background: #17233c;
-  color: #d7e1f2;
-}
 :host-context(html[data-theme='dark']) .delete-track {
   border-color: transparent;
   background: transparent;
@@ -288,9 +257,4 @@ label select {
 }
 :host-context(html[data-theme='dark']) .selection-editor {
   border-top-color: #2d3d5d;
-}
-:host-context(html[data-theme='dark']) .primary-button {
-  border-color: #5874ab;
-  background: #5874ab;
-  color: #fff;
 }

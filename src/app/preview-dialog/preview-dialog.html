@@ -21,7 +21,7 @@
       <div class="preview-header-actions">
         <button
           type="button"
-          class="preview-close"
+          class="editor-button editor-button--icon preview-close"
           aria-label="Close live preview"
           (click)="close()"
         >
@@ -29,7 +29,7 @@
         </button>
         <button
           type="button"
-          class="loading-toggle"
+          class="editor-button loading-toggle"
           [attr.aria-pressed]="previewLoading() !== false"
           (click)="toggleLoading()"
         >

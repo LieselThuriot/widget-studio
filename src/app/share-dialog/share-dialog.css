@@ -58,14 +58,8 @@
     sans-serif;
 }
 .share-close {
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--editor-border);
-  border-radius: 8px;
   background: var(--editor-surface-raised);
   color: var(--editor-text-primary);
-  font-size: 22px;
-  cursor: pointer;
 }
 .share-content {
   padding: 20px 24px 24px;
@@ -106,20 +100,7 @@
 }
 .copy-button {
   flex: 0 0 auto;
-  min-height: 32px;
-  padding: 0 11px;
-  border: 1px solid var(--editor-accent);
-  border-radius: var(--editor-radius-button);
-  background: var(--editor-accent);
-  color: var(--editor-text-on-accent);
   font: 600 11px var(--editor-font-sans);
-  cursor: pointer;
-}
-.copy-button:disabled {
-  border-color: var(--editor-border-control);
-  background: var(--editor-control-disabled);
-  color: var(--editor-control-disabled-text);
-  cursor: wait;
 }
 .share-status {
   margin: 8px 0 0;
@@ -134,10 +115,6 @@
 .share-link-row input:focus-visible {
   border-color: var(--editor-focus-ring);
   outline: none;
-}
-.copy-button:is(:hover, :focus-visible) {
-  background: var(--editor-accent-strong);
-  color: var(--editor-text-on-accent);
 }
 :host-context(html[data-theme='dark']) .share-window {
   border-color: var(--editor-border-raised);
