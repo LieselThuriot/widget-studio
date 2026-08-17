@@ -28,3 +28,14 @@
 - Renderer button actions and refresh events are emitted to the consuming application; the library must not make those network requests itself.
 - ECharts is a peer dependency of `widget-renderer`; chart tests use `src/test-setup.ts` because ECharts probes canvas support even when charts render as SVG.
 - Preserve dark-mode support for every new editor, dialog, button, form control, and visual preview. Add `:host-context(html[data-theme='dark'])` styles and verify both light and dark themes when changing UI.
+
+### CSS
+
+- Use plain modern CSS. Do not migrate stylesheets to SCSS or add PostCSS without an explicit decision.
+- Define shared editor design tokens in `src/styles/` and keep them semantic. Do not import editor styles or tokens into `widget-renderer`.
+- Keep component styles colocated and compatible with Angular emulated encapsulation. Do not use native CSS nesting in Angular component styles; Angular 22 disables nesting for these stylesheets.
+- Prefer CSS custom properties, `:is()`, logical properties, `min()`, `max()`, and `calc()` when they provide clear value without changing behavior.
+- Use `@supports`, `color-mix()`, container queries, `light-dark()`, and other newer features only with a concrete use case and an appropriate fallback. Do not add `@layer` casually because it changes cascade precedence.
+- Preserve explicit `html[data-theme='light'|'dark']` behavior and the existing `:host-context(html[data-theme='dark'])` support. Verify theme transitions and both themes after CSS changes.
+- Avoid `::ng-deep`. For editor integration with renderer internals, use an explicit host-level contract or namespaced CSS custom properties instead.
+- Keep renderer CSS independently styled and defaulted for external consumers. Run `npm run build:library` and `npm run verify:library-package` for renderer-facing style changes.
