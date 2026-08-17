@@ -1,43 +1,23 @@
-pre,
-.points-list,
-.preview-stage,
-html,
-body {
-  scrollbar-color: var(--editor-scrollbar-thumb) var(--editor-scrollbar-track);
+* {
+  scrollbar-color: var(--editor-scrollbar-thumb) transparent;
   scrollbar-width: thin;
 }
 
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-pre::-webkit-scrollbar,
-.points-list::-webkit-scrollbar,
-.preview-stage::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track,
-pre::-webkit-scrollbar-track,
-.points-list::-webkit-scrollbar-track,
-.preview-stage::-webkit-scrollbar-track {
-  background: var(--editor-scrollbar-track);
+*::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb,
-pre::-webkit-scrollbar-thumb,
-.points-list::-webkit-scrollbar-thumb,
-.preview-stage::-webkit-scrollbar-thumb {
-  border: 2px solid var(--editor-scrollbar-track);
+*::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
   border-radius: var(--editor-radius-pill);
   background: var(--editor-scrollbar-thumb);
 }
 
-html::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover,
-pre::-webkit-scrollbar-thumb:hover,
-.points-list::-webkit-scrollbar-thumb:hover,
-.preview-stage::-webkit-scrollbar-thumb:hover {
+*::-webkit-scrollbar-thumb:hover {
   background: var(--editor-scrollbar-thumb-hover);
 }
