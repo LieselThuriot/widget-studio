@@ -18,16 +18,16 @@
   overflow: hidden;
   border: 1px solid #ffffff1f;
   border-radius: 18px;
-  background: #f2f5f9;
-  box-shadow: 0 24px 70px #080e1f80;
+  background: var(--editor-surface-subtle);
+  box-shadow: var(--editor-shadow-dialog);
 }
 .preview-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   padding: 22px 26px;
-  background: #fff;
-  border-bottom: 1px solid #e2e7f0;
+  background: var(--editor-surface-panel);
+  border-bottom: 1px solid var(--editor-border);
 }
 .preview-header-actions {
   display: flex;
@@ -58,7 +58,7 @@ h2 {
   padding: 0;
   border: 1px solid #dfe5ee;
   border-radius: 8px;
-  background: #fff;
+  background: var(--editor-surface-panel);
   color: #63718a;
   font-size: 22px;
   cursor: pointer;
@@ -75,7 +75,7 @@ h2 {
   padding: 0 11px;
   border: 1px solid #dfe5ee;
   border-radius: 8px;
-  background: #fff;
+  background: var(--editor-surface-panel);
   color: #36527f;
   font:
     600 11px/1 'DM Sans',
@@ -95,13 +95,13 @@ h2 {
   place-items: center;
   min-height: 380px;
   padding: 40px;
-  background: #fff;
+  background: var(--editor-surface-panel);
 }
 .preview-hint {
   margin: 0;
   padding: 14px 20px;
-  border-top: 1px solid #e2e7f0;
-  background: #fff;
+  border-top: 1px solid var(--editor-border);
+  background: var(--editor-surface-panel);
   color: #8794ad;
   text-align: center;
   font-size: 11px;

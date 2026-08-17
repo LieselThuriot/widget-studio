@@ -1,10 +1,10 @@
 .model-panel {
   margin-top: 28px;
   padding: 20px 22px;
-  background: #fff;
-  border: 1px solid #e2e7f0;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px #25365708;
+  background: var(--editor-surface-panel);
+  border: 1px solid var(--editor-border);
+  border-radius: var(--editor-radius-card);
+  box-shadow: var(--editor-shadow-panel);
 }
 .model-heading {
   display: flex;
@@ -41,7 +41,7 @@ pre {
   margin: 18px 0 0;
   padding: 18px;
   border-radius: 9px;
-  background: #17233c;
+  background: var(--editor-surface-code);
   color: #b9c9e6;
   font:
     11px/1.65 'DM Mono',

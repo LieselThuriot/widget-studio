@@ -5,10 +5,10 @@
 .panel {
   min-height: 408px;
   padding: 20px;
-  background: #fff;
-  border: 1px solid #e2e7f0;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px #25365708;
+  background: var(--editor-surface-panel);
+  border: 1px solid var(--editor-border);
+  border-radius: var(--editor-radius-card);
+  box-shadow: var(--editor-shadow-panel);
 }
 .panel-heading,
 .widget-setting-section-heading {

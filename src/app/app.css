@@ -127,10 +127,10 @@ h2 {
   min-width: 0;
 }
 .panel {
-  background: #fff;
-  border: 1px solid #e2e7f0;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px #25365708;
+  background: var(--editor-surface-panel);
+  border: 1px solid var(--editor-border);
+  border-radius: var(--editor-radius-card);
+  box-shadow: var(--editor-shadow-panel);
   padding: 20px;
   min-height: 408px;
 }

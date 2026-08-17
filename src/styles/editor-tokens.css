@@ -17,6 +17,8 @@
   --editor-surface-page: #f8fafc;
   --editor-surface-panel: #fff;
   --editor-surface-subtle: #f2f5f9;
+  --editor-surface-dialog: #f7f9fc;
+  --editor-surface-code: #17233c;
   --editor-surface-accent: #edf2fb;
   --editor-surface-accent-hover: #f8faff;
   --editor-text-primary: #25324b;
@@ -28,6 +30,8 @@
   --editor-border-subtle: #e9edf3;
   --editor-accent: #5874ab;
   --editor-accent-strong: #36527f;
+  --editor-shadow-panel: 0 8px 24px #25365708;
+  --editor-shadow-dialog: 0 24px 70px #080e1f80;
   --editor-scrollbar-track: #f2f5f9;
   --editor-scrollbar-thumb: #cbd4e3;
   --editor-scrollbar-thumb-hover: #5874ab;

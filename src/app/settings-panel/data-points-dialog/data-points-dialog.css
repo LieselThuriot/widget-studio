@@ -16,9 +16,9 @@
   width: min(760px, 100%);
   max-height: min(720px, calc(100dvh - 40px));
   overflow: hidden;
-  border-radius: 14px;
-  background: #f7f9fc;
-  box-shadow: 0 24px 70px #080e1f80;
+  border-radius: var(--editor-radius-card);
+  background: var(--editor-surface-dialog);
+  box-shadow: var(--editor-shadow-dialog);
 }
 header,
 footer {
@@ -28,13 +28,13 @@ footer {
   justify-content: space-between;
   gap: 12px;
   padding: 18px 22px;
-  background: #fff;
+  background: var(--editor-surface-panel);
 }
 header {
-  border-bottom: 1px solid #e2e7f0;
+  border-bottom: 1px solid var(--editor-border);
 }
 footer {
-  border-top: 1px solid #e2e7f0;
+  border-top: 1px solid var(--editor-border);
 }
 .eyebrow {
   margin: 0;
@@ -95,9 +95,9 @@ button:disabled {
   align-items: end;
   gap: 9px;
   padding: 12px;
-  border: 1px solid #e2e7f0;
+  border: 1px solid var(--editor-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--editor-surface-panel);
 }
 label {
   color: #67738a;
