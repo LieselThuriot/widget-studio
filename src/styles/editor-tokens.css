@@ -27,6 +27,12 @@
   --editor-surface-menu: #fff;
   --editor-surface-menu-hover: #edf2fb;
   --editor-surface-selection: #edf2fb;
+  --editor-surface-overlay: #f8fafccc;
+  --editor-surface-alert-overlay: #f8fafc99;
+  --editor-surface-preview-stage: #fff;
+  --editor-surface-grid-cell: #eaf0f9;
+  --editor-surface-grid-cell-hover: #dbe7f7;
+  --editor-surface-grid-cell-selected: #d4e2f6;
   --editor-text-primary: #25324b;
   --editor-text-secondary: #67738a;
   --editor-text-control: #34425c;

@@ -13,6 +13,12 @@ html[data-theme='dark'] {
   --editor-surface-menu: #17233c;
   --editor-surface-menu-hover: #263b63;
   --editor-surface-selection: #263b63;
+  --editor-surface-overlay: #293b618c;
+  --editor-surface-alert-overlay: #293b6159;
+  --editor-surface-preview-stage: #17233c;
+  --editor-surface-grid-cell: #202f50;
+  --editor-surface-grid-cell-hover: #2d426d;
+  --editor-surface-grid-cell-selected: #354b78;
   --editor-text-primary: #e7ecf5;
   --editor-text-secondary: #aebbd1;
   --editor-text-control: #e7ecf5;

@@ -8,7 +8,7 @@
   display: grid;
   place-items: center;
   padding: 20px;
-  background: #10182ce8;
+  background: var(--editor-surface-overlay);
 }
 .grid-editor-dialog {
   display: flex;
@@ -16,6 +16,7 @@
   width: min(760px, 100%);
   max-height: min(760px, calc(100dvh - 40px));
   overflow: hidden;
+  border: 1px solid var(--editor-border);
   border-radius: var(--editor-radius-card);
   background: var(--editor-surface-dialog);
   box-shadow: var(--editor-shadow-dialog);
@@ -146,15 +147,15 @@ button:is(:hover, :focus-visible) {
   min-height: 0;
   border: 1px solid #b8c7dc;
   border-radius: 4px;
-  background: #eaf0f9;
+  background: var(--editor-surface-grid-cell);
   cursor: pointer;
 }
 .grid-cell:hover {
-  background: #dbe7f7;
+  background: var(--editor-surface-grid-cell-hover);
 }
 .grid-cell.selected {
   border-color: #5874ab;
-  background: #d4e2f6;
+  background: var(--editor-surface-grid-cell-selected);
   box-shadow: 0 0 0 2px #5874ab44;
 }
 input,
@@ -231,7 +232,7 @@ label select {
 :host-context(html[data-theme='dark']) .grid-editor-dialog,
 :host-context(html[data-theme='dark']) header,
 :host-context(html[data-theme='dark']) footer {
-  background: #17233c;
+  background: var(--editor-surface-dialog);
 }
 :host-context(html[data-theme='dark']) header {
   border-bottom-color: #2d3d5d;
@@ -247,7 +248,7 @@ label select {
 :host-context(html[data-theme='dark']) input,
 :host-context(html[data-theme='dark']) select {
   border-color: #3a4b6e;
-  background: #10182c;
+  background: var(--editor-surface-input);
   color: #e7ecf5;
 }
 :host-context(html[data-theme='dark']) input:disabled {
@@ -256,14 +257,14 @@ label select {
 }
 :host-context(html[data-theme='dark']) .grid-cell {
   border-color: #5874ab;
-  background: #202f50;
+  background: var(--editor-surface-grid-cell);
 }
 :host-context(html[data-theme='dark']) .grid-cell:hover {
-  background: #2d426d;
+  background: var(--editor-surface-grid-cell-hover);
 }
 :host-context(html[data-theme='dark']) .grid-cell.selected {
   border-color: #9db7e4;
-  background: #354b78;
+  background: var(--editor-surface-grid-cell-selected);
   box-shadow: 0 0 0 2px #9db7e466;
 }
 :host-context(html[data-theme='dark']) .add-track {

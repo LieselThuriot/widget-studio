@@ -8,7 +8,7 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #10182c99;
+  background: var(--editor-surface-overlay);
 }
 .event-alert {
   display: flex;
@@ -98,7 +98,7 @@ h2 {
 }
 :host-context(html[data-theme='dark']) .event-alert {
   border-color: #3a4b6e;
-  background: #17233c;
+  background: var(--editor-surface-dialog);
   color: #e7ecf5;
   box-shadow: 0 20px 55px #080e1f80;
 }

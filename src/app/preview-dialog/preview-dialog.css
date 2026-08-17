@@ -8,7 +8,7 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #10182ce8;
+  background: var(--editor-surface-overlay);
 }
 .preview-window {
   display: flex;
@@ -16,7 +16,7 @@
   width: min(100%, 1060px);
   min-height: min(620px, calc(100dvh - 48px));
   overflow: hidden;
-  border: 1px solid #ffffff1f;
+  border: 1px solid var(--editor-border);
   border-radius: 18px;
   background: var(--editor-surface-subtle);
   box-shadow: var(--editor-shadow-dialog);
@@ -26,7 +26,7 @@
   align-items: flex-start;
   justify-content: space-between;
   padding: 22px 26px;
-  background: var(--editor-surface-panel);
+  background: var(--editor-surface-preview-stage);
   border-bottom: 1px solid var(--editor-border);
 }
 .preview-header-actions {
@@ -84,7 +84,7 @@ h2 {
 .loading-toggle:is(:hover, :focus-visible),
 .loading-toggle[aria-pressed='true'] {
   border-color: #5874ab;
-  background: #eef3fb;
+  background: var(--editor-surface-accent);
   outline: none;
 }
 .preview-stage {
