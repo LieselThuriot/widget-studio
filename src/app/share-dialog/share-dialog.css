@@ -1,0 +1,181 @@
+:host {
+  display: contents;
+}
+.share-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--editor-surface-overlay);
+}
+.share-window {
+  width: min(100%, 620px);
+  overflow: hidden;
+  border: 1px solid var(--editor-border);
+  border-radius: var(--editor-radius-card);
+  background: var(--editor-surface-panel);
+  box-shadow: var(--editor-shadow-dialog);
+}
+.share-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--editor-border);
+}
+.share-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.share-icon {
+  display: grid;
+  flex: 0 0 34px;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent);
+}
+.share-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+.share-header h2 {
+  margin: 0;
+  color: var(--editor-text-primary);
+  font:
+    700 17px/1.1 'DM Sans',
+    sans-serif;
+}
+.share-close {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--editor-border);
+  border-radius: 8px;
+  background: var(--editor-surface-raised);
+  color: var(--editor-text-primary);
+  font-size: 22px;
+  cursor: pointer;
+}
+.share-content {
+  padding: 20px 24px 24px;
+}
+.share-description {
+  margin: 0 0 14px;
+  color: var(--editor-text-muted);
+  font-size: 13px;
+}
+.share-link-card {
+  padding: 14px;
+  border: 1px solid var(--editor-border);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-subtle);
+}
+.share-content label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--editor-text-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.share-link-row {
+  display: flex;
+  gap: 8px;
+}
+.share-link-row input {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 32px;
+  flex: 1;
+  padding: 7px 8px;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-input);
+  color: var(--editor-text-control);
+  font: 12px var(--editor-font-mono);
+}
+.copy-button {
+  flex: 0 0 auto;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--editor-accent);
+  border-radius: var(--editor-radius-button);
+  background: var(--editor-accent);
+  color: var(--editor-text-on-accent);
+  font: 600 11px var(--editor-font-sans);
+  cursor: pointer;
+}
+.copy-button:disabled {
+  border-color: var(--editor-border-control);
+  background: var(--editor-control-disabled);
+  color: var(--editor-control-disabled-text);
+  cursor: wait;
+}
+.share-status {
+  margin: 8px 0 0;
+  color: var(--editor-text-muted);
+  font-size: 12px;
+}
+.share-status.is-error {
+  color: var(--editor-danger);
+}
+.share-close:is(:hover, :focus-visible),
+.copy-button:is(:hover, :focus-visible),
+.share-link-row input:focus-visible {
+  border-color: var(--editor-focus-ring);
+  outline: none;
+}
+.copy-button:is(:hover, :focus-visible) {
+  background: var(--editor-accent-strong);
+  color: var(--editor-text-on-accent);
+}
+:host-context(html[data-theme='dark']) .share-window {
+  border-color: var(--editor-border-raised);
+  background: var(--editor-surface-dialog);
+}
+:host-context(html[data-theme='dark']) .share-header {
+  border-bottom-color: var(--editor-border-raised);
+}
+:host-context(html[data-theme='dark']) .share-icon {
+  background: #293b61;
+  color: #b7cdf5;
+}
+:host-context(html[data-theme='dark']) .share-link-card {
+  border-color: var(--editor-border-raised);
+  background: var(--editor-surface-subtle);
+}
+:host-context(html[data-theme='dark']) .share-header h2,
+:host-context(html[data-theme='dark']) .share-content label {
+  color: var(--editor-text-primary);
+}
+:host-context(html[data-theme='dark']) .share-close,
+:host-context(html[data-theme='dark']) .share-link-row input {
+  border-color: var(--editor-border-raised);
+  background: var(--editor-surface-input);
+  color: var(--editor-text-primary);
+}
+:host-context(html[data-theme='dark']) .copy-button {
+  background: var(--editor-accent);
+  color: var(--editor-text-on-accent);
+}
+@media (max-width: 600px) {
+  .share-overlay {
+    padding: 12px;
+  }
+  .share-link-row {
+    flex-direction: column;
+  }
+  .copy-button {
+    min-height: 38px;
+  }
+}

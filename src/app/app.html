@@ -3,6 +3,7 @@
     [darkMode]="darkMode()"
     (darkModeToggled)="toggleDarkMode()"
     (previewRequested)="openPreview()"
+    (shareRequested)="openShare()"
   />
   <div class="studio-grid">
     <aside class="panel palette-panel" aria-label="Widget elements">
@@ -64,6 +65,14 @@
     />
   </div>
 </main>
+@if (shareLoadMessage(); as message) {
+  <div class="share-load-message" role="alert">
+    <span>{{ message }}</span>
+    <button type="button" aria-label="Dismiss message" (click)="dismissShareLoadMessage()">
+      ×
+    </button>
+  </div>
+}
 @if (isPreviewOpen()) {
   <app-preview-dialog
     [widget]="widget()"
@@ -72,5 +81,8 @@
     (refreshRequested)="onRefresh()"
     (actionRequested)="onAction($event)"
   />
+}
+@if (isShareOpen()) {
+  <app-share-dialog [modelJson]="modelJson()" (closed)="closeShare()" />
 }
 <app-event-alert-dialog [alert]="actionAlert()" (closed)="closeActionAlert()" />

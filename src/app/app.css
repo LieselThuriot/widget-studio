@@ -27,6 +27,30 @@
   font-weight: 600;
   cursor: pointer;
 }
+.share-load-message {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 40;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border: 1px solid var(--editor-border);
+  border-radius: 9px;
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-primary);
+  box-shadow: var(--editor-shadow-dialog);
+  font-size: 12px;
+}
+.share-load-message button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
 .theme-button {
   display: inline-flex;
   align-items: center;

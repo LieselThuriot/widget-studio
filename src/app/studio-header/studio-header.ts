@@ -9,4 +9,5 @@ export class StudioHeader {
   readonly darkMode = input(false);
   readonly darkModeToggled = output<void>();
   readonly previewRequested = output<void>();
+  readonly shareRequested = output<void>();
 }

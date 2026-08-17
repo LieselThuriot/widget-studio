@@ -7,6 +7,12 @@
   gap: 14px;
   margin-bottom: 34px;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-inline-start: auto;
+}
 .brand-mark {
   display: grid;
   place-items: center;
@@ -34,11 +40,11 @@ h1 {
     sans-serif;
   letter-spacing: -0.04em;
 }
-.preview-button {
+.preview-button,
+.share-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-inline-start: auto;
   padding: 7px 10px;
   border: 1px solid var(--editor-border-control);
   border-radius: var(--editor-radius-button);
@@ -62,11 +68,21 @@ h1 {
   cursor: pointer;
 }
 .theme-button:is(:hover, :focus-visible),
-.preview-button:is(:hover, :focus-visible) {
+.preview-button:is(:hover, :focus-visible),
+.share-button:is(:hover, :focus-visible) {
   border-color: var(--editor-focus-ring);
   background: var(--editor-surface-accent-hover);
   color: var(--editor-accent-strong);
   outline: none;
+}
+.share-button svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 .live-dot {
   width: 7px;
@@ -94,9 +110,14 @@ h1 {
     align-items: flex-start;
     flex-wrap: wrap;
   }
-  .preview-button {
+  .header-actions {
     width: 100%;
+    justify-content: flex-end;
+  }
+  .preview-button,
+  .share-button,
+  .theme-button {
+    flex: 1 1 auto;
     justify-content: center;
-    margin-inline-start: 56px;
   }
 }

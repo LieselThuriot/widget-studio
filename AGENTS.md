@@ -18,6 +18,7 @@
 ## Conventions
 
 - Keep strict TypeScript settings intact; prefer inferred types and avoid `any` when `unknown` or a specific type is possible.
+- Reuse existing components, classes, design tokens, and interaction patterns before creating new UI styles or controls. New UI must be fully styled, including form controls, buttons, focus states, responsive behavior, and light/dark themes.
 - Use the existing Angular patterns: standalone components, signals for local state, `inject()`, signal/input/output APIs, external colocated HTML/CSS, and native `@if`/`@for`/`@switch` control flow.
 - Do not add `standalone: true` or explicit `OnPush`; both are defaults in this Angular 22 workspace.
 - Put host event bindings in a component or directive decorator's `host` object instead of using `@HostBinding` or `@HostListener`.

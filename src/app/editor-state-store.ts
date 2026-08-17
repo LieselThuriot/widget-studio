@@ -17,7 +17,7 @@ import {
 } from './editor-state';
 import { normalizeWidget } from './widget-normalization';
 import { sampleWidgets } from './sample-widget';
-import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
+import { ButtonElement, hydrateWidget, Widget, WidgetElement } from 'widget-renderer';
 
 export class EditorStateStore {
   readonly widget = signal<Widget>(normalizeWidget(structuredClone(sampleWidgets[0].widget)));
@@ -47,6 +47,20 @@ export class EditorStateStore {
     this.selectedId.set(widget.elements[0]?.id ?? null);
     this.isPreviewOpen.set(false);
     this.actionAlert.set(null);
+  }
+
+  loadSharedWidget(value: unknown): boolean {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+    const widget = value as Widget;
+    if (!Array.isArray(widget.elements)) return false;
+    if (!widget.elements.every((element) => element && typeof element === 'object')) return false;
+    const hydratedWidget = hydrateWidget(widget);
+    this.widget.set(hydratedWidget);
+    const elements = hydratedWidget.elements;
+    this.selectedId.set(typeof elements[0]?.id === 'string' ? elements[0].id : null);
+    this.isPreviewOpen.set(false);
+    this.actionAlert.set(null);
+    return true;
   }
 
   addElement(type: WidgetElement['type']): void {

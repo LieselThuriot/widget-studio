@@ -1,0 +1,68 @@
+<div
+  class="share-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="share-title"
+  tabindex="-1"
+  (click)="close()"
+  (keydown)="onKeyDown($event)"
+>
+  <section
+    class="share-window"
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+    (keydown)="onKeyDown($event)"
+  >
+    <header class="share-header">
+      <div class="share-heading">
+        <div class="share-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <circle cx="18" cy="5" r="2.5"></circle>
+            <circle cx="6" cy="12" r="2.5"></circle>
+            <circle cx="18" cy="19" r="2.5"></circle>
+            <path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"></path>
+          </svg>
+        </div>
+        <div>
+          <h2 id="share-title">Share widget</h2>
+        </div>
+      </div>
+      <button type="button" class="share-close" aria-label="Close share dialog" (click)="close()">
+        ×
+      </button>
+    </header>
+    <div class="share-content">
+      <p class="share-description">Anyone with this link can open this widget configuration.</p>
+      <div class="share-link-card">
+        <label for="share-url">Share link</label>
+        <div class="share-link-row">
+          <input
+            id="share-url"
+            type="text"
+            readonly
+            [value]="shareUrl() ?? ''"
+            aria-describedby="share-status"
+          />
+          <button
+            type="button"
+            class="copy-button"
+            [disabled]="!shareUrl() || isCopying()"
+            (click)="copyLink()"
+          >
+            {{ isCopying() ? 'Copying...' : 'Copy link' }}
+          </button>
+        </div>
+        @if (status(); as status) {
+          <p
+            id="share-status"
+            class="share-status"
+            [class.is-error]="status.includes('failed')"
+            role="status"
+          >
+            {{ status }}
+          </p>
+        }
+      </div>
+    </div>
+  </section>
+</div>

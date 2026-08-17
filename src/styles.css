@@ -19,6 +19,7 @@ html[data-theme='dark'] .color-picker-popover {
 }
 html[data-theme='dark'] .topbar .theme-button,
 html[data-theme='dark'] .topbar .preview-button,
+html[data-theme='dark'] .topbar .share-button,
 html[data-theme='dark'] .shortcut-help-trigger,
 html[data-theme='dark'] .loading-toggle,
 html[data-theme='dark'] .preview-close {
@@ -30,6 +31,8 @@ html[data-theme='dark'] .topbar .theme-button:hover,
 html[data-theme='dark'] .topbar .theme-button:focus-visible,
 html[data-theme='dark'] .topbar .preview-button:hover,
 html[data-theme='dark'] .topbar .preview-button:focus-visible,
+html[data-theme='dark'] .topbar .share-button:hover,
+html[data-theme='dark'] .topbar .share-button:focus-visible,
 html[data-theme='dark'] .shortcut-help-trigger:hover,
 html[data-theme='dark'] .shortcut-help-trigger:focus-visible,
 html[data-theme='dark'] .loading-toggle:hover,

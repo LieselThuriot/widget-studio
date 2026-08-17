@@ -12,6 +12,8 @@ import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
 import { widgetElementPalette } from './widget-element-metadata';
 import { EditorStateStore } from './editor-state-store';
 import { sampleWidgets } from './sample-widget';
+import { decodeWidgetShareHash } from './widget-sharing';
+import { ShareDialog } from './share-dialog/share-dialog';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +27,7 @@ import { sampleWidgets } from './sample-widget';
     PreviewDialog,
     EventAlertDialog,
     SettingsPanel,
+    ShareDialog,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -40,18 +43,37 @@ export class App {
   protected readonly widget = this.editorState.widget;
   protected readonly selectedId = this.editorState.selectedId;
   protected readonly isPreviewOpen = this.editorState.isPreviewOpen;
+  protected readonly isShareOpen = signal(false);
   protected readonly actionAlert = this.editorState.actionAlert;
   protected readonly selectedElement = this.editorState.selectedElement;
   protected readonly modelJson = this.editorState.modelJson;
   protected readonly palette = widgetElementPalette;
   protected readonly samples = sampleWidgets;
   protected readonly widgetSampleId = signal(sampleWidgets[0].id);
+  protected readonly shareLoadMessage = signal<string | null>(null);
 
   constructor() {
     effect(() => {
       const darkMode = this.darkMode();
       document.documentElement.dataset['theme'] = darkMode ? 'dark' : 'light';
     });
+    void this.loadSharedWidget();
+  }
+
+  private async loadSharedWidget(): Promise<void> {
+    if (!location.hash.startsWith('#widget=')) return;
+    try {
+      const model = await decodeWidgetShareHash(location.hash);
+      if (!this.editorState.loadSharedWidget(model)) {
+        this.shareLoadMessage.set('This shared widget is not a valid model.');
+      }
+    } catch {
+      this.shareLoadMessage.set('This shared widget link could not be loaded.');
+    }
+  }
+
+  protected dismissShareLoadMessage(): void {
+    this.shareLoadMessage.set(null);
   }
 
   protected toggleDarkMode(): void {
@@ -167,6 +189,14 @@ export class App {
 
   protected openPreview(): void {
     this.editorState.openPreview();
+  }
+
+  protected async openShare(): Promise<void> {
+    this.isShareOpen.set(true);
+  }
+
+  protected closeShare(): void {
+    this.isShareOpen.set(false);
   }
 
   protected closePreview(): void {
