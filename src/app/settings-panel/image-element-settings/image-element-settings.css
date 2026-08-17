@@ -1,27 +1,6 @@
 :host {
   display: block;
 }
-label {
-  display: block;
-  margin: 13px 0;
-  color: var(--editor-text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-}
-input,
-textarea,
-select {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  margin-top: 6px;
-  padding: 8px 9px;
-  border: 1px solid var(--editor-border-control);
-  border-radius: var(--editor-radius-control);
-  background: var(--editor-surface-panel);
-  color: var(--editor-text-control);
-  font: 12px inherit;
-}
 textarea {
   min-height: 57px;
   resize: vertical;

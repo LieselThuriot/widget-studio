@@ -95,6 +95,8 @@ input.invalid {
 }
 .remove-button {
   min-height: 32px;
+  align-self: end;
+  margin-block-end: 13px;
 }
 .dialog-actions {
   display: flex;

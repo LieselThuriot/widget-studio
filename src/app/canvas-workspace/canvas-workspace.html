@@ -4,7 +4,7 @@
     <span class="shortcut-help">
       <button
         type="button"
-        class="shortcut-help-trigger"
+        class="editor-button editor-button--subtle shortcut-help-trigger"
         aria-label="Show keyboard shortcuts"
         [attr.aria-expanded]="shortcutsOpen()"
         (click)="toggleShortcuts($event)"
@@ -54,7 +54,7 @@
     <span class="sample-menu">
       <button
         type="button"
-        class="sample-menu-trigger"
+        class="editor-button editor-button--subtle sample-menu-trigger"
         aria-haspopup="menu"
         [attr.aria-expanded]="samplesOpen()"
         (click)="toggleSamples($event)"

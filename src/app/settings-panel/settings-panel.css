@@ -6,21 +6,6 @@
   min-height: 408px;
   padding: 20px;
 }
-.panel-heading,
-.widget-setting-section-heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.eyebrow {
-  margin: 0;
-  color: #8794ad;
-  font:
-    700 10px/1.2 'DM Sans',
-    sans-serif;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
 h2 {
   margin: 0;
   font:
@@ -51,35 +36,9 @@ h2 {
   color: #9aa5b7;
   font-size: 10px;
 }
-label {
-  display: block;
-  margin: 13px 0;
-  color: var(--editor-text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-}
-input,
-textarea,
-select {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  margin-top: 6px;
-  padding: 8px 9px;
-  border: 1px solid var(--editor-border-control);
-  border-radius: var(--editor-radius-control);
-  background: var(--editor-surface-panel);
-  color: var(--editor-text-control);
-  font: 12px inherit;
-}
 textarea {
   min-height: 57px;
   resize: vertical;
-}
-.field-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
 }
 .formatting-tools {
   display: flex;
@@ -99,13 +58,6 @@ textarea {
   border-color: #5874ab;
   background: #edf2fb;
   color: #36527f;
-}
-.text-layout-settings,
-.placement,
-.widget-setting-section {
-  margin-top: 13px;
-  padding-top: 12px;
-  border-top: 1px solid var(--editor-divider);
 }
 .placement {
   margin-top: 18px;
@@ -229,7 +181,6 @@ textarea {
   transform: translateX(12px);
 }
 :host-context(html[data-theme='dark']) .selected-chip,
-:host-context(html[data-theme='dark']) label,
 :host-context(html[data-theme='dark']) .anchor-field {
   color: #aebbd1;
 }
@@ -239,9 +190,6 @@ textarea {
   background: #293b61;
   color: #b7cdf5;
 }
-:host-context(html[data-theme='dark']) input,
-:host-context(html[data-theme='dark']) textarea,
-:host-context(html[data-theme='dark']) select,
 :host-context(html[data-theme='dark']) .formatting-tools button,
 :host-context(html[data-theme='dark']) .anchor-control,
 :host-context(html[data-theme='dark']) .anchor-control button {
@@ -249,7 +197,6 @@ textarea {
   background: #10182c;
   color: #e7ecf5;
 }
-:host-context(html[data-theme='dark']) .text-layout-settings,
 :host-context(html[data-theme='dark']) .placement,
 :host-context(html[data-theme='dark']) .widget-setting-section,
 :host-context(html[data-theme='dark']) .toggle-row {

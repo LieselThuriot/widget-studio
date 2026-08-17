@@ -5,6 +5,7 @@
 @import './styles/editor-global.css';
 @import './styles/editor-buttons.css';
 @import './styles/editor-overlays.css';
+@import './styles/editor-inspector.css';
 
 html[data-theme='dark'] .panel,
 html[data-theme='dark'] .preview-window,

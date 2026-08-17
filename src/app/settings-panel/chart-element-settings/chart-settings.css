@@ -4,29 +4,6 @@
   font-size: 11px;
 }
 
-label {
-  display: block;
-  margin: 13px 0;
-  color: var(--editor-text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-input,
-select {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 32px;
-  margin-top: 6px;
-  padding: 8px 9px;
-  border: 1px solid var(--editor-border-control);
-  border-radius: var(--editor-radius-control);
-  background: var(--editor-surface-panel);
-  color: var(--editor-text-control);
-  font: 12px inherit;
-}
-
 input[type='color'] {
   min-height: 32px;
   padding: 3px;
@@ -41,12 +18,6 @@ input[type='color'] {
   outline: 2px solid var(--editor-focus-ring);
   outline-offset: 1px;
   border-color: var(--editor-accent);
-}
-
-.field-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
 }
 
 .data-points-button {
@@ -138,12 +109,6 @@ input[type='color'] {
 .toggle-row input:focus-visible + .toggle {
   outline: 2px solid var(--editor-focus-ring);
   outline-offset: 2px;
-}
-:host-context(html[data-theme='dark']) input,
-:host-context(html[data-theme='dark']) select {
-  border-color: #3a4b6e;
-  background: #10182c;
-  color: #e7ecf5;
 }
 :host-context(html[data-theme='dark']) .data-points-button {
   background: #293b61;

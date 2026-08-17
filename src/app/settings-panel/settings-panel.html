@@ -1,7 +1,7 @@
-<aside class="editor-panel panel settings-panel" aria-label="Element settings">
-  <div class="panel-heading">
+<aside class="editor-panel editor-inspector panel settings-panel" aria-label="Element settings">
+  <div class="editor-section-heading panel-heading">
     <div>
-      <p class="eyebrow">Inspector</p>
+      <p class="editor-eyebrow eyebrow">Inspector</p>
       <h2>Settings</h2>
     </div>
   </div>
@@ -38,9 +38,9 @@
         [checked]="element.sensitive"
         (change)="elementChanged.emit({ sensitive: checked($event) })" /><span class="toggle"></span
     ></label>
-    <div class="placement">
-      <p class="eyebrow">Grid placement</p>
-      <div class="field-row">
+    <div class="editor-section placement">
+      <p class="editor-eyebrow eyebrow">Grid placement</p>
+      <div class="editor-field-row field-row">
         <label
           >Row<input
             type="number"
@@ -57,7 +57,7 @@
             (input)="placementChanged.emit({ kind: 'column', value: number($event) })"
         /></label>
       </div>
-      <div class="field-row">
+      <div class="editor-field-row field-row">
         <label
           >Row span<input
             type="number"

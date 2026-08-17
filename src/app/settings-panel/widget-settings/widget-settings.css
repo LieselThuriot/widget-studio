@@ -34,15 +34,6 @@
   align-items: center;
   justify-content: space-between;
 }
-.eyebrow {
-  margin: 0;
-  color: #8794ad;
-  font:
-    700 10px/1.2 'DM Sans',
-    sans-serif;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
 .summary-value {
   margin-inline-start: auto;
   color: #9aa5b7;
@@ -54,27 +45,6 @@
   margin: 16px 0;
   background: #eef3fb;
   color: #36527f;
-}
-label {
-  display: block;
-  margin: 13px 0;
-  color: var(--editor-text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-}
-input,
-textarea,
-select {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  margin-top: 6px;
-  padding: 8px 9px;
-  border: 1px solid var(--editor-border-control);
-  border-radius: var(--editor-radius-control);
-  background: var(--editor-surface-panel);
-  color: var(--editor-text-control);
-  font: 12px inherit;
 }
 textarea {
   min-height: 57px;
@@ -129,22 +99,10 @@ textarea {
   transform: translateX(12px);
 }
 
-:host-context(html[data-theme='dark']) .selected-chip,
-:host-context(html[data-theme='dark']) label {
+:host-context(html[data-theme='dark']) .selected-chip {
   color: #d7e1f2;
 }
 :host-context(html[data-theme='dark']) .edit-grid-button {
   background: #293b61;
   color: #d7e1f2;
-}
-:host-context(html[data-theme='dark']) input,
-:host-context(html[data-theme='dark']) textarea,
-:host-context(html[data-theme='dark']) select {
-  border-color: #3a4b6e;
-  background: #10182c;
-  color: #e7ecf5;
-}
-:host-context(html[data-theme='dark']) .widget-setting-section,
-:host-context(html[data-theme='dark']) .toggle-row {
-  border-color: #2d3d5d;
 }

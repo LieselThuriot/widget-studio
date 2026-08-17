@@ -1,0 +1,108 @@
+.editor-section-heading,
+.editor-inspector .panel-heading,
+.editor-inspector .widget-setting-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.editor-eyebrow,
+.editor-inspector .eyebrow {
+  margin: 0;
+  color: var(--editor-text-muted);
+  font: 700 10px/1.2 var(--editor-font-sans);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.editor-helper,
+.editor-inspector .helper {
+  margin: 14px 0 18px;
+  color: var(--editor-text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.editor-inspector label:not(.toggle-row) {
+  display: block;
+  margin: 13px 0;
+  color: var(--editor-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.editor-inspector
+  input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='range']),
+.editor-inspector textarea,
+.editor-inspector select {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 9px;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-control);
+  font: 12px inherit;
+}
+
+.editor-inspector input[type='color'] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 32px;
+  margin-top: 6px;
+  padding: 3px;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
+  cursor: pointer;
+}
+
+.editor-field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.editor-inspector .field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.editor-section {
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid var(--editor-divider);
+}
+
+.editor-inspector .widget-setting-section,
+.editor-inspector .text-layout-settings {
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid var(--editor-divider);
+}
+
+html[data-theme='dark']
+  .editor-inspector
+  input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='range']),
+html[data-theme='dark'] .editor-inspector textarea,
+html[data-theme='dark'] .editor-inspector select {
+  border-color: var(--editor-border-control);
+  background: var(--editor-surface-input);
+  color: var(--editor-text-control);
+}
+
+html[data-theme='dark'] .editor-inspector input[type='color'] {
+  border-color: var(--editor-border-control);
+  background: var(--editor-surface-input);
+}
+
+@media (max-width: 360px) {
+  .editor-field-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

@@ -5,18 +5,15 @@
 .element-actions-menu {
   z-index: 20;
   display: grid;
-  width: 132px;
+  width: 145px;
   gap: 2px;
-  padding: 4px;
+  padding: 5px;
   border-radius: var(--editor-radius-button);
 }
 
 .canvas-menu {
   position: absolute;
   z-index: 10;
-  min-width: 145px;
-  width: auto;
-  padding: 5px;
   transform: translate(-4px, -4px);
 }
 
@@ -26,18 +23,17 @@
   right: 3px;
 }
 
-.canvas-menu button {
-  padding: 7px 9px;
-  border-radius: 5px;
-  font-size: 11px;
-}
-
 .element-actions-menu button:disabled {
   color: #b8c0ce;
   cursor: not-allowed;
 }
 
 .menu-delete {
+  color: var(--editor-danger-strong) !important;
+}
+
+.menu-delete:is(:hover, :focus-visible) {
+  background: var(--editor-danger-surface) !important;
   color: var(--editor-danger-strong) !important;
 }
 
