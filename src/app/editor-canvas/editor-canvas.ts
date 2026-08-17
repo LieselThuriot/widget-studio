@@ -67,6 +67,9 @@ export class EditorCanvas implements AfterViewInit, OnDestroy {
   private readonly resolvedRows = signal<string | null>(null);
   private readonly resolvedColumns = signal<string | null>(null);
   private resizeObserver: ResizeObserver | null = null;
+  private mutationObserver: MutationObserver | null = null;
+  private measurementFrame: number | null = null;
+  private followUpMeasurementFrame: number | null = null;
 
   protected readonly overlayRows = computed(() => this.resolvedRows() ?? this.gridRows());
   protected readonly overlayColumns = computed(() => this.resolvedColumns() ?? this.gridColumns());
@@ -82,7 +85,7 @@ export class EditorCanvas implements AfterViewInit, OnDestroy {
     });
     effect(() => {
       this.widget();
-      queueMicrotask(() => this.syncOverlayGrid());
+      this.scheduleOverlayGridSync();
     });
   }
 
@@ -91,14 +94,43 @@ export class EditorCanvas implements AfterViewInit, OnDestroy {
       'widget-renderer .widget-grid',
     ) as HTMLElement | null;
     if (!grid) return;
-    if (typeof ResizeObserver === 'undefined') return;
-    this.resizeObserver = new ResizeObserver(() => this.syncOverlayGrid());
-    this.resizeObserver.observe(grid);
-    this.syncOverlayGrid();
+    this.scheduleOverlayGridSync();
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => this.scheduleOverlayGridSync());
+      this.resizeObserver.observe(grid);
+      this.observeGridChildren(grid);
+    }
+    if (typeof MutationObserver !== 'undefined') {
+      this.mutationObserver = new MutationObserver(() => {
+        this.observeGridChildren(grid);
+        this.scheduleOverlayGridSync();
+      });
+      this.mutationObserver.observe(grid, { childList: true });
+    }
   }
 
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
+    this.mutationObserver?.disconnect();
+    if (this.measurementFrame !== null) cancelAnimationFrame(this.measurementFrame);
+    if (this.followUpMeasurementFrame !== null) cancelAnimationFrame(this.followUpMeasurementFrame);
+  }
+
+  private scheduleOverlayGridSync(): void {
+    if (this.measurementFrame !== null || this.followUpMeasurementFrame !== null) return;
+    this.measurementFrame = requestAnimationFrame(() => {
+      this.measurementFrame = null;
+      this.followUpMeasurementFrame = requestAnimationFrame(() => {
+        this.followUpMeasurementFrame = null;
+        this.syncOverlayGrid();
+      });
+    });
+  }
+
+  private observeGridChildren(grid: HTMLElement): void {
+    if (!this.resizeObserver) return;
+    for (const child of grid.children) this.resizeObserver.observe(child);
   }
 
   private syncOverlayGrid(): void {
