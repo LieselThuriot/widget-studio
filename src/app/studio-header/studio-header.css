@@ -25,13 +25,7 @@
   letter-spacing: -0.05em;
 }
 .eyebrow {
-  margin: 0 0 4px;
-  color: var(--editor-text-muted);
-  font:
-    700 10px/1.2 'DM Sans',
-    sans-serif;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 h1 {
   margin: 0;

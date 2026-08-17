@@ -20,7 +20,7 @@
       </div>
       <div class="alert-content">
         @if (alert.kind === 'refresh') {
-          <p class="eyebrow">Refresh event</p>
+          <p class="editor-eyebrow eyebrow">Refresh event</p>
           <h2 id="event-alert-title">Refresh requested</h2>
           <p class="alert-description">The renderer emitted the configured refresh event.</p>
           <dl class="event-data">
@@ -34,7 +34,7 @@
             </div>
           </dl>
         } @else {
-          <p class="eyebrow">Action event</p>
+          <p class="editor-eyebrow eyebrow">Action event</p>
           <h2 id="event-alert-title">{{ alert.element.label }} was clicked</h2>
           <p class="alert-description">The renderer passed this data to the action handler.</p>
           <dl class="event-data">
