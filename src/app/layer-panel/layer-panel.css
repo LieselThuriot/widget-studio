@@ -8,7 +8,7 @@
 }
 .eyebrow {
   margin: 0;
-  color: #8794ad;
+  color: var(--editor-text-muted);
   font:
     700 10px/1.2 'DM Sans',
     sans-serif;
@@ -53,7 +53,7 @@ h2 {
 }
 .layer:hover,
 .layer.selected {
-  background: #edf2fb;
+  background: var(--editor-surface-selection);
 }
 .layer-select {
   display: flex;
@@ -63,13 +63,13 @@ h2 {
   padding: 5px;
   border: 0;
   background: transparent;
-  color: #66738b;
+  color: var(--editor-text-secondary);
   text-align: left;
   font-size: 11px;
   cursor: inherit;
 }
 .layer.selected .layer-select {
-  color: #36527f;
+  color: var(--editor-accent-strong);
 }
 .layer-select span {
   width: 18px;
@@ -92,7 +92,7 @@ h2 {
   border: 1px solid transparent;
   border-radius: 5px;
   background: transparent;
-  color: #8794ad;
+  color: var(--editor-text-muted);
   font-size: 14px;
   line-height: 1;
   cursor: pointer;
@@ -100,9 +100,9 @@ h2 {
 .layer-actions-trigger:hover,
 .layer-actions-trigger:focus-visible,
 .layer.selected .layer-actions-trigger {
-  border-color: #cbd5e5;
-  background: #fff;
-  color: #36527f;
+  border-color: var(--editor-border-control);
+  background: var(--editor-surface-panel);
+  color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .layer:hover,
 :host-context(html[data-theme='dark']) .layer.selected {

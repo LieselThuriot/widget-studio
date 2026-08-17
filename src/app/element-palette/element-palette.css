@@ -1,6 +1,6 @@
 .helper {
   margin: 14px 0 18px;
-  color: #8490a7;
+  color: var(--editor-text-muted);
   font-size: 12px;
   line-height: 1.45;
 }
@@ -14,17 +14,17 @@
   gap: 10px;
   width: 100%;
   padding: 10px;
-  border: 1px solid #e4e8f0;
+  border: 1px solid var(--editor-border-control);
   border-radius: 9px;
-  background: #fff;
-  color: #25324b;
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-primary);
   text-align: left;
   cursor: pointer;
 }
 .palette-item:hover,
 .palette-item:focus-visible {
-  border-color: #a8bae1;
-  background: #f8faff;
+  border-color: var(--editor-focus-ring);
+  background: var(--editor-surface-accent-hover);
 }
 .palette-icon {
   display: grid;
@@ -32,8 +32,8 @@
   width: 26px;
   height: 26px;
   border-radius: 7px;
-  background: #edf2fb;
-  color: #5874ab;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent);
   font-weight: 700;
 }
 .palette-item strong,

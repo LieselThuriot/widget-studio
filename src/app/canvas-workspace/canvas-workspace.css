@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 4px 14px;
-  color: #56647d;
+  color: var(--editor-text-menu);
   font:
     700 12px 'DM Sans',
     sans-serif;
@@ -24,18 +24,18 @@
   min-height: 430px;
   display: grid;
   place-items: center;
-  border: 1px dashed #cbd4e3;
-  border-radius: 14px;
+  border: 1px dashed var(--editor-scrollbar-thumb);
+  border-radius: var(--editor-radius-card);
   background-color: transparent;
-  background-image: radial-gradient(#d5dce8 1px, transparent 1px);
+  background-image: radial-gradient(var(--editor-border-control) 1px, transparent 1px);
   background-size: 14px 14px;
 }
 .shortcut-help kbd {
   padding: 2px 5px;
-  border: 1px solid #d6dce6;
+  border: 1px solid var(--editor-border-control);
   border-radius: 4px;
-  background: #fff;
-  color: #66738b;
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-secondary);
   font: 700 10px/1.2 inherit;
 }
 .shortcut-help {
@@ -49,17 +49,17 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 1px solid #cbd4e3;
+  border: 1px solid var(--editor-scrollbar-thumb);
   border-radius: 5px;
-  background: #fff;
-  color: #53627b;
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-menu);
   font-weight: 700;
   cursor: pointer;
 }
 .shortcut-help-trigger:hover,
 .shortcut-help-trigger:focus-visible {
-  border-color: #36527f;
-  color: #36527f;
+  border-color: var(--editor-accent-strong);
+  color: var(--editor-accent-strong);
 }
 .shortcut-popover {
   position: absolute;
@@ -68,15 +68,15 @@
   z-index: 20;
   width: 270px;
   padding: 13px 14px;
-  border: 1px solid #d4dce8;
+  border: 1px solid var(--editor-border-menu);
   border-radius: 9px;
-  background: #fff;
-  color: #53627b;
-  box-shadow: 0 10px 24px #27365326;
+  background: var(--editor-surface-menu);
+  color: var(--editor-text-menu);
+  box-shadow: var(--editor-shadow-menu);
   text-align: left;
 }
 .shortcut-popover strong {
-  color: #36527f;
+  color: var(--editor-accent-strong);
   font-size: 12px;
 }
 .shortcut-popover dl {
@@ -96,7 +96,7 @@
   font-size: 10px;
 }
 .shortcut-popover dd {
-  color: #8794ad;
+  color: var(--editor-text-muted);
 }
 :host-context(html[data-theme='dark']) .canvas-toolbar {
   color: #aebbd1;

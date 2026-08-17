@@ -20,7 +20,7 @@
 
 .editor-element.selected {
   border-color: #fff;
-  box-shadow: 0 0 0 2px #f5c451;
+  box-shadow: 0 0 0 2px var(--editor-selection);
 }
 
 .editor-element.is-dragging {
@@ -38,7 +38,7 @@
   z-index: 5;
   display: block;
   pointer-events: auto;
-  background: #f5c451;
+  background: var(--editor-selection);
   border: 1px solid #17233c;
   border-radius: 3px;
 }

@@ -8,10 +8,10 @@
   width: 132px;
   gap: 2px;
   padding: 4px;
-  border: 1px solid #d4dce8;
-  border-radius: 7px;
-  background: #fff;
-  box-shadow: 0 8px 18px #27365326;
+  border: 1px solid var(--editor-border-menu);
+  border-radius: var(--editor-radius-button);
+  background: var(--editor-surface-menu);
+  box-shadow: var(--editor-shadow-menu);
 }
 
 .canvas-menu {
@@ -36,7 +36,7 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #53627b;
+  color: var(--editor-text-menu);
   text-align: left;
   font:
     10px 'DM Sans',
@@ -52,8 +52,8 @@
 
 .element-actions-menu button:hover,
 .element-actions-menu button:focus-visible {
-  background: #edf2fb;
-  color: #36527f;
+  background: var(--editor-surface-menu-hover);
+  color: var(--editor-accent-strong);
 }
 
 .element-actions-menu button:disabled {
@@ -74,7 +74,7 @@
 .menu-divider {
   height: 1px;
   margin: 3px 2px;
-  background: #e3e8f0;
+  background: var(--editor-border-menu);
 }
 
 .canvas-menu .menu-divider {
