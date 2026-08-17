@@ -83,6 +83,17 @@ export class WidgetRenderer {
   protected isElementSensitive(element: WidgetElement): boolean {
     return element.sensitive && !this.sensitiveVisible();
   }
+  protected sensitiveBlur(element: WidgetElement): string | null {
+    if (!element.sensitive) {
+      return null;
+    }
+    if (element.type !== 'text') {
+      return '2px';
+    }
+
+    const blur = Math.min(Math.max(element.style.font.size * 0.25, 2), 10);
+    return `${blur}px`;
+  }
   protected elementAlt(element: ImageElement): string {
     return this.isElementSensitive(element) ? '' : element.alt;
   }

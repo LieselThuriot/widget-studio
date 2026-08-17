@@ -92,6 +92,7 @@
           <div
             class="element-content"
             [class.is-sensitive]="isElementSensitive(element)"
+            [style.--sensitive-blur]="sensitiveBlur(element)"
             [style.justify-content]="
               isChart(element) && element.type !== 'progress'
                 ? 'stretch'

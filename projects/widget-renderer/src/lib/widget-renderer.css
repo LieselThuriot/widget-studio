@@ -164,7 +164,7 @@
   height: auto;
 }
 .element-content.is-sensitive {
-  filter: blur(2px);
+  filter: blur(var(--sensitive-blur, 2px));
   user-select: none;
 }
 .text-element {

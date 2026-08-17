@@ -25,6 +25,13 @@ const widget: WidgetContract = {
       url: '/secret',
       style: 'solid',
     },
+    {
+      type: 'text',
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+      sensitive: false,
+      text: 'Public text',
+      style: { color: '#fff', font: { size: 32 }, align: 'left', wrap: true },
+    },
   ],
 };
 
@@ -46,5 +53,43 @@ describe('sensitive renderer content', () => {
     expect(fixture.nativeElement.querySelector('.text-element')?.textContent).toContain(
       'Secret text',
     );
+  });
+
+  it('scales blur for sensitive text and omits it from public content', async () => {
+    const fixture = TestBed.createComponent(WidgetRenderer);
+    fixture.componentRef.setInput('widget', widget);
+    await fixture.whenStable();
+
+    const sensitiveText = fixture.nativeElement.querySelector(
+      '.widget-element:nth-child(1) .element-content',
+    ) as HTMLElement;
+    const publicText = fixture.nativeElement.querySelector(
+      '.widget-element:nth-child(3) .element-content',
+    ) as HTMLElement;
+
+    expect(sensitiveText.style.getPropertyValue('--sensitive-blur')).toBe('2.75px');
+    expect(publicText.style.getPropertyValue('--sensitive-blur')).toBe('');
+    expect(sensitiveText.parentElement?.classList.contains('is-sensitive')).toBe(true);
+    expect(publicText.parentElement?.classList.contains('is-sensitive')).toBe(false);
+  });
+
+  it('uses the maximum blur for large sensitive text', async () => {
+    const fixture = TestBed.createComponent(WidgetRenderer);
+    fixture.componentRef.setInput('widget', {
+      ...widget,
+      elements: [
+        {
+          type: 'text',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: true,
+          text: 'Large secret',
+          style: { color: '#fff', font: { size: 64 }, align: 'left', wrap: true },
+        },
+      ],
+    });
+    await fixture.whenStable();
+
+    const sensitiveText = fixture.nativeElement.querySelector('.element-content') as HTMLElement;
+    expect(sensitiveText.style.getPropertyValue('--sensitive-blur')).toBe('10px');
   });
 });
