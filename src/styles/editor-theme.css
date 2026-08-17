@@ -1,0 +1,20 @@
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --editor-surface-page: #10182c;
+  --editor-surface-panel: #17233c;
+  --editor-surface-subtle: #10182c;
+  --editor-surface-accent: #293b61;
+  --editor-surface-accent-hover: #263b63;
+  --editor-text-primary: #e7ecf5;
+  --editor-text-secondary: #aebbd1;
+  --editor-text-muted: #9aa9c3;
+  --editor-text-tertiary: #9aa9c3;
+  --editor-border: #2d3d5d;
+  --editor-border-control: #3a4b6e;
+  --editor-border-subtle: #2d3d5d;
+  --editor-accent: #5874ab;
+  --editor-accent-strong: #d7e1f2;
+  --editor-scrollbar-track: #10182c;
+  --editor-scrollbar-thumb: #526483;
+  --editor-scrollbar-thumb-hover: #6b8bc8;
+}

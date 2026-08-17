@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--editor-surface-page);
+  color: var(--editor-text-primary);
+  font-family: var(--editor-font-sans);
+  transition:
+    background-color var(--editor-duration-fast) var(--editor-ease-standard),
+    color var(--editor-duration-fast) var(--editor-ease-standard);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}

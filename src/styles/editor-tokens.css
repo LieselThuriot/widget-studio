@@ -1,0 +1,34 @@
+:root {
+  --editor-font-sans: 'DM Sans', Arial, sans-serif;
+  --editor-font-mono: 'DM Mono', monospace;
+  --editor-duration-fast: 160ms;
+  --editor-duration-toggle: 120ms;
+  --editor-ease-standard: ease;
+  --editor-radius-control: 6px;
+  --editor-radius-button: 7px;
+  --editor-radius-card: 14px;
+  --editor-radius-pill: 999px;
+  --editor-space-1: 4px;
+  --editor-space-2: 8px;
+  --editor-space-3: 12px;
+  --editor-space-4: 16px;
+  --editor-space-5: 20px;
+  --editor-space-6: 24px;
+  --editor-surface-page: #f8fafc;
+  --editor-surface-panel: #fff;
+  --editor-surface-subtle: #f2f5f9;
+  --editor-surface-accent: #edf2fb;
+  --editor-surface-accent-hover: #f8faff;
+  --editor-text-primary: #25324b;
+  --editor-text-secondary: #67738a;
+  --editor-text-muted: #8794ad;
+  --editor-text-tertiary: #9aa5b7;
+  --editor-border: #e2e7f0;
+  --editor-border-control: #dfe5ee;
+  --editor-border-subtle: #e9edf3;
+  --editor-accent: #5874ab;
+  --editor-accent-strong: #36527f;
+  --editor-scrollbar-track: #f2f5f9;
+  --editor-scrollbar-thumb: #cbd4e3;
+  --editor-scrollbar-thumb-hover: #5874ab;
+}
