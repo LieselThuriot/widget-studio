@@ -51,6 +51,39 @@
         </div>
       }
     </span>
+    <span class="sample-menu">
+      <button
+        type="button"
+        class="sample-menu-trigger"
+        aria-haspopup="menu"
+        [attr.aria-expanded]="samplesOpen()"
+        (click)="toggleSamples($event)"
+      >
+        <span>Load sample</span>
+        <span class="sample-menu-chevron" aria-hidden="true"></span>
+      </button>
+      @if (samplesOpen()) {
+        <div class="sample-menu-popover" role="menu" aria-label="Load sample widget">
+          @for (sample of samples(); track sample.id) {
+            <button
+              type="button"
+              class="sample-menu-option"
+              role="menuitem"
+              [class.is-selected]="sample.id === selectedSampleId()"
+              (click)="selectSample(sample.id)"
+            >
+              <span class="sample-menu-copy">
+                <strong>{{ sample.name }}</strong>
+                <small>{{ sample.description }}</small>
+              </span>
+              @if (sample.id === selectedSampleId()) {
+                <span class="sample-menu-check" aria-label="Current sample">✓</span>
+              }
+            </button>
+          }
+        </div>
+      }
+    </span>
     <span class="dimensions">{{ widget().size === 'wide' ? '530' : '265' }} × 245 px</span>
   </div>
   <div class="canvas" (dragover)="$event.preventDefault()" (drop)="elementDropped.emit($event)">

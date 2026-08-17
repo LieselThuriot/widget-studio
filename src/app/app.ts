@@ -11,6 +11,7 @@ import { SettingsPanel } from './settings-panel/settings-panel';
 import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
 import { widgetElementPalette } from './widget-element-metadata';
 import { EditorStateStore } from './editor-state-store';
+import { sampleWidgets } from './sample-widget';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +44,8 @@ export class App {
   protected readonly selectedElement = this.editorState.selectedElement;
   protected readonly modelJson = this.editorState.modelJson;
   protected readonly palette = widgetElementPalette;
+  protected readonly samples = sampleWidgets;
+  protected readonly widgetSampleId = signal(sampleWidgets[0].id);
 
   constructor() {
     effect(() => {
@@ -59,6 +62,11 @@ export class App {
     } catch {
       // Ignore unavailable storage and keep the in-memory preference.
     }
+  }
+
+  protected loadSample(sampleId: string): void {
+    this.editorState.loadSample(sampleId);
+    this.widgetSampleId.set(sampleId);
   }
 
   protected addElement(type: WidgetElement['type']): void {

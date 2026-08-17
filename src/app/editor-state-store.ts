@@ -16,11 +16,11 @@ import {
   updateTrack,
 } from './editor-state';
 import { normalizeWidget } from './widget-normalization';
-import { sampleWidget } from './sample-widget';
+import { sampleWidgets } from './sample-widget';
 import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
 
 export class EditorStateStore {
-  readonly widget = signal<Widget>(normalizeWidget(structuredClone(sampleWidget)));
+  readonly widget = signal<Widget>(normalizeWidget(structuredClone(sampleWidgets[0].widget)));
   readonly selectedId = signal<string | null>('headline');
   readonly isPreviewOpen = signal(false);
   readonly actionAlert = signal<ActionAlert | null>(null);
@@ -38,6 +38,16 @@ export class EditorStateStore {
       2,
     );
   });
+
+  loadSample(sampleId: string): void {
+    const sample = sampleWidgets.find((candidate) => candidate.id === sampleId);
+    if (!sample) return;
+    const widget = normalizeWidget(structuredClone(sample.widget));
+    this.widget.set(widget);
+    this.selectedId.set(widget.elements[0]?.id ?? null);
+    this.isPreviewOpen.set(false);
+    this.actionAlert.set(null);
+  }
 
   addElement(type: WidgetElement['type']): void {
     const id = `${type}-${crypto.randomUUID()}`;

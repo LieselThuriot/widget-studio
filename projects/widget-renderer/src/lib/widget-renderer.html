@@ -112,7 +112,7 @@
                 [style.font-style]="element.style.font.style"
                 [style.text-decoration]="element.style.font.decoration"
                 [style.text-align]="element.style.align"
-                [style.white-space]="element.style.wrap ? 'normal' : 'nowrap'"
+                [style.white-space]="element.style.wrap ? 'pre-wrap' : 'pre'"
                 >{{ element.text }}</span
               >
             } @else if (isImage(element)) {

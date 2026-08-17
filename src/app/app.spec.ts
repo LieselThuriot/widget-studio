@@ -700,7 +700,7 @@ describe('App', () => {
     fixture.detectChanges();
     expect(
       fixture.nativeElement.querySelector('.grid-editor-dialog .row-label')?.textContent,
-    ).toContain('20*');
+    ).toContain('auto');
 
     const secondCell = fixture.nativeElement.querySelectorAll(
       '.grid-editor-dialog .grid-cell',

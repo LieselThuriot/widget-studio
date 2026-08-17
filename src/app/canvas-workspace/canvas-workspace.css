@@ -5,16 +5,105 @@
 .canvas-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 0 4px 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 4px 8px;
   color: var(--editor-text-menu);
   font:
     700 12px 'DM Sans',
     sans-serif;
 }
 .canvas-toolbar > .shortcut-help {
-  margin-inline-end: auto;
-  margin-inline-start: 8px;
+  margin-inline-start: 0;
+}
+.sample-menu {
+  position: relative;
+  margin-inline-start: auto;
+}
+.sample-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 24px;
+  padding: 2px 9px;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-button);
+  background: transparent;
+  color: var(--editor-text-secondary);
+  font:
+    600 12px/1.1 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+.sample-menu-chevron {
+  width: 6px;
+  height: 6px;
+  margin-block-start: -3px;
+  border-inline-end: 1.5px solid currentColor;
+  border-block-end: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 140ms ease;
+}
+.sample-menu-trigger[aria-expanded='true'] .sample-menu-chevron {
+  margin-block-start: 3px;
+  transform: rotate(225deg);
+}
+.sample-menu-trigger:is(:hover, :focus-visible),
+.sample-menu-trigger[aria-expanded='true'] {
+  border-color: var(--editor-focus-ring);
+  background: var(--editor-surface-accent-hover);
+  color: var(--editor-accent-strong);
+  outline: none;
+}
+.sample-menu-popover {
+  position: absolute;
+  display: grid;
+  gap: 3px;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  width: 245px;
+  padding: 5px;
+  border: 1px solid var(--editor-border-menu);
+  border-radius: 9px;
+  background: var(--editor-surface-menu);
+  box-shadow: var(--editor-shadow-menu);
+}
+.sample-menu-option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--editor-text-menu);
+  text-align: left;
+  cursor: pointer;
+}
+.sample-menu-option:is(:hover, :focus-visible),
+.sample-menu-option.is-selected {
+  background: var(--editor-surface-accent-hover);
+  outline: none;
+}
+.sample-menu-copy {
+  display: grid;
+  gap: 3px;
+}
+.sample-menu-copy strong {
+  color: var(--editor-accent-strong);
+  font-size: 12px;
+}
+.sample-menu-copy small {
+  color: var(--editor-text-muted);
+  font-size: 10px;
+  font-weight: 500;
+}
+.sample-menu-check {
+  color: var(--editor-accent-strong);
+  font-weight: 700;
 }
 .dimensions {
   color: #a1aabd;
@@ -125,6 +214,9 @@
   color: #b7cdf5;
 }
 @media (max-width: 700px) {
+  .sample-menu {
+    margin-inline-start: auto;
+  }
   .canvas {
     min-height: 340px;
   }

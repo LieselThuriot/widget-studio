@@ -17,7 +17,8 @@
     ></span>
     @if (progressShowLegend(progress(element()))) {
       <span class="progress-label" [style.text-align]="progressTextAlign(progress(element()))"
-        >{{ progress(element()).data.label }} {{ progress(element()).data.value }}</span
+        >{{ progress(element()).data.value }} of {{ progress(element()).data.max }}
+        {{ progress(element()).data.label }}</span
       >
     }
     @if (!progress(element()).sensitive) {

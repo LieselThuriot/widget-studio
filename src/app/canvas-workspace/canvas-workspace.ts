@@ -1,6 +1,7 @@
 import { Component, input, output, signal } from '@angular/core';
 import { ButtonElement, Widget } from 'widget-renderer';
 import { EditorCanvas } from '../editor-canvas/editor-canvas';
+import { WidgetSample } from '../sample-widget';
 
 @Component({
   selector: 'app-canvas-workspace',
@@ -16,6 +17,8 @@ export class CanvasWorkspace {
   readonly widget = input.required<Widget>();
   readonly darkMode = input(false);
   readonly selectedId = input<string | null>(null);
+  readonly samples = input<readonly WidgetSample[]>([]);
+  readonly selectedSampleId = input('');
   readonly elementDropped = output<DragEvent>();
   readonly widgetSelected = output<void>();
   readonly elementSelected = output<string>();
@@ -25,7 +28,9 @@ export class CanvasWorkspace {
   readonly elementStackChanged = output<{ id: string; action: 'up' | 'down' | 'front' | 'back' }>();
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
+  readonly sampleSelected = output<string>();
   protected readonly shortcutsOpen = signal(false);
+  protected readonly samplesOpen = signal(false);
 
   protected toggleShortcuts(event: Event): void {
     event.stopPropagation();
@@ -34,9 +39,25 @@ export class CanvasWorkspace {
 
   protected closeShortcuts(): void {
     this.shortcutsOpen.set(false);
+    this.samplesOpen.set(false);
+  }
+
+  protected toggleSamples(event: Event): void {
+    event.stopPropagation();
+    this.samplesOpen.update((open) => !open);
+  }
+
+  protected selectSample(sampleId: string): void {
+    this.sampleSelected.emit(sampleId);
+    this.samplesOpen.set(false);
+  }
+
+  protected closeSamples(): void {
+    this.samplesOpen.set(false);
   }
 
   protected closeShortcutsOnOutside(event: MouseEvent): void {
     if (!(event.target as HTMLElement).closest('.shortcut-help')) this.closeShortcuts();
+    if (!(event.target as HTMLElement).closest('.sample-menu')) this.closeSamples();
   }
 }

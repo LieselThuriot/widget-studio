@@ -60,7 +60,7 @@ describe('editor state transformations', () => {
     const element = updated.elements.find((candidate) => candidate.id === 'message');
 
     expect(element?.grid.row).toBe(2);
-    expect(element?.grid.column).toBe(1);
+    expect(element?.grid.column).toBe(0);
   });
 
   it('clamps element resizing to one track and the remaining grid space', () => {
