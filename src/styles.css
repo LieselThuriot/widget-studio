@@ -4,9 +4,6 @@
 @import './styles/editor-base.css';
 @import './styles/editor-global.css';
 
-html[data-theme='dark'] .workspace {
-  background: var(--editor-surface-page);
-}
 html[data-theme='dark'] .panel,
 html[data-theme='dark'] .preview-window,
 html[data-theme='dark'] .preview-header,
