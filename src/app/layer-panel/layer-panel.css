@@ -103,18 +103,18 @@ h2 {
   color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .layer:is(:hover, .selected) {
-  background: #263b63;
+  background: var(--editor-surface-selection);
 }
 :host-context(html[data-theme='dark']) .layer-select {
-  color: #aebbd1;
+  color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) .layer.selected .layer-select,
 :host-context(html[data-theme='dark']) .layer-actions-trigger:is(:hover, :focus-visible),
 :host-context(html[data-theme='dark']) .layer.selected .layer-actions-trigger {
-  color: #d7e1f2;
+  color: var(--editor-text-primary);
 }
 :host-context(html[data-theme='dark']) .layer-actions-trigger:is(:hover, :focus-visible),
 :host-context(html[data-theme='dark']) .layer.selected .layer-actions-trigger {
-  border-color: #5874ab;
-  background: #1d2b49;
+  border-color: var(--editor-accent);
+  background: var(--editor-surface-raised);
 }

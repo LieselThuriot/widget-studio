@@ -31,13 +31,13 @@ pre {
     monospace;
 }
 :host-context(html[data-theme='dark']) .json-badge {
-  border-color: #3a4b6e;
-  color: #aebbd1;
+  border-color: var(--editor-border-control);
+  color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) pre {
   border-color: var(--editor-border-code);
-  background: #10182c;
-  color: #d7e1f2;
+  background: var(--editor-surface-code);
+  color: var(--editor-text-primary);
 }
 @media (max-width: 700px) {
   pre {

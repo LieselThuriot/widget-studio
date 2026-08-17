@@ -79,27 +79,27 @@ h2 {
   padding-inline: 14px;
 }
 :host-context(html[data-theme='dark']) .event-alert {
-  color: #e7ecf5;
+  color: var(--editor-text-primary);
   box-shadow: 0 20px 55px #080e1f80;
 }
 :host-context(html[data-theme='dark']) .alert-icon {
-  background: #293b61;
-  color: #b7cdf5;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .alert-description {
-  color: #aebbd1;
+  color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) .event-data {
-  border-color: #526483;
+  border-color: var(--editor-border-control);
 }
 :host-context(html[data-theme='dark']) .event-data div {
-  border-bottom-color: #3a4b6e;
+  border-bottom-color: var(--editor-border-control);
 }
 :host-context(html[data-theme='dark']) .event-data dt {
-  color: #aebbd1;
+  color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) .event-data dd {
-  color: #d7e1f2;
+  color: var(--editor-text-primary);
 }
 @media (max-width: 700px) {
   .alert-overlay {

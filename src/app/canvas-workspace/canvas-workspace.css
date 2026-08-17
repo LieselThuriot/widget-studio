@@ -161,25 +161,25 @@
   color: var(--editor-text-muted);
 }
 :host-context(html[data-theme='dark']) .canvas-toolbar {
-  color: #aebbd1;
+  color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) .dimensions,
 :host-context(html[data-theme='dark']) .shortcut-popover dd {
-  color: #9aa9c3;
+  color: var(--editor-text-muted);
 }
 :host-context(html[data-theme='dark']) .canvas {
   border-color: #526483;
   background-color: transparent;
-  background-image: radial-gradient(#2d3d5d 1px, transparent 1px);
+  background-image: radial-gradient(var(--editor-border) 1px, transparent 1px);
 }
 :host-context(html[data-theme='dark']) .shortcut-help kbd,
 :host-context(html[data-theme='dark']) .shortcut-help-trigger {
-  border-color: #3a4b6e;
-  background: #1d2b49;
-  color: #d7e1f2;
+  border-color: var(--editor-border-control);
+  background: var(--editor-surface-raised);
+  color: var(--editor-text-primary);
 }
 :host-context(html[data-theme='dark']) .shortcut-popover {
-  color: #aebbd1;
+  color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) .shortcut-popover strong {
   color: #b7cdf5;

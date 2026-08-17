@@ -53,17 +53,17 @@
   font-size: 18px;
 }
 :host-context(html[data-theme='dark']) .palette-item {
-  border-color: #3a4b6e;
-  background: #1d2b49;
-  color: #e7ecf5;
+  border-color: var(--editor-border-control);
+  background: var(--editor-surface-raised);
+  color: var(--editor-text-primary);
 }
 :host-context(html[data-theme='dark']) .palette-item:is(:hover, :focus-visible) {
-  border-color: #5874ab;
-  background: #263b63;
+  border-color: var(--editor-accent);
+  background: var(--editor-surface-hover);
 }
 :host-context(html[data-theme='dark']) .palette-icon {
-  background: #293b61;
-  color: #a9c1ed;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .palette-item small {
   color: #9aa9c3;
