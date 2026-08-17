@@ -58,7 +58,7 @@ h2 {
 label {
   display: block;
   margin: 13px 0;
-  color: #67738a;
+  color: var(--editor-text-secondary);
   font-size: 11px;
   font-weight: 600;
 }
@@ -70,10 +70,10 @@ select {
   width: 100%;
   margin-top: 6px;
   padding: 8px 9px;
-  border: 1px solid #dfe5ee;
-  border-radius: 6px;
-  background: #fff;
-  color: #34425c;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-control);
   font: 12px inherit;
 }
 textarea {
@@ -93,9 +93,9 @@ textarea {
 .formatting-tools button {
   width: 29px;
   height: 28px;
-  border: 1px solid #dfe5ee;
-  border-radius: 6px;
-  background: #fff;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
   color: #63718a;
   cursor: pointer;
 }
@@ -109,7 +109,7 @@ textarea {
 .widget-setting-section {
   margin-top: 13px;
   padding-top: 12px;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid var(--editor-divider);
 }
 .placement {
   margin-top: 18px;
@@ -158,7 +158,7 @@ textarea {
   grid-template-columns: repeat(3, 28px);
   width: max-content;
   margin-top: 6px;
-  border: 1px solid #dfe5ee;
+  border: 1px solid var(--editor-border-control);
   border-radius: 5px;
   overflow: hidden;
 }
@@ -167,9 +167,9 @@ textarea {
   height: 26px;
   padding: 0;
   border: 0;
-  border-right: 1px solid #dfe5ee;
-  border-bottom: 1px solid #dfe5ee;
-  background: #fff;
+  border-right: 1px solid var(--editor-border-control);
+  border-bottom: 1px solid var(--editor-border-control);
+  background: var(--editor-surface-panel);
   color: #63718a;
   font-size: 17px;
   cursor: pointer;
@@ -189,7 +189,7 @@ textarea {
   align-items: center;
   gap: 8px;
   padding: 12px 0 2px;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid var(--editor-divider);
 }
 .toggle-row span:first-child {
   flex: 1;
@@ -213,8 +213,8 @@ textarea {
   position: relative;
   width: 29px;
   height: 17px;
-  border-radius: 20px;
-  background: #cbd3df;
+  border-radius: var(--editor-radius-pill);
+  background: var(--editor-toggle-off);
 }
 .toggle:after {
   content: '';
@@ -224,10 +224,10 @@ textarea {
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--editor-control-thumb);
 }
 .toggle-row input:checked + .toggle {
-  background: #5874ab;
+  background: var(--editor-toggle-on);
 }
 .toggle-row input:checked + .toggle:after {
   transform: translateX(12px);

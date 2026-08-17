@@ -1,13 +1,13 @@
 :host {
   display: block;
-  color: #67738a;
+  color: var(--editor-text-secondary);
   font-size: 11px;
 }
 
 label {
   display: block;
   margin: 13px 0;
-  color: #67738a;
+  color: var(--editor-text-secondary);
   font-size: 11px;
   font-weight: 600;
 }
@@ -20,10 +20,10 @@ select {
   min-height: 32px;
   margin-top: 6px;
   padding: 8px 9px;
-  border: 1px solid #dfe5ee;
-  border-radius: 6px;
-  background: #fff;
-  color: #34425c;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-control);
   font: 12px inherit;
 }
 
@@ -40,9 +40,9 @@ select:hover {
 
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid #8da6d4;
+  outline: 2px solid var(--editor-focus-ring);
   outline-offset: 1px;
-  border-color: #5874ab;
+  border-color: var(--editor-accent);
 }
 
 .field-row {
@@ -80,7 +80,7 @@ select:focus-visible {
   gap: 8px;
   margin: 18px 0 0;
   padding: 12px 0 2px;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid var(--editor-divider);
 }
 
 .toggle-row span:first-child {
@@ -118,9 +118,9 @@ select:focus-visible {
   flex: 0 0 auto;
   width: 29px;
   height: 17px;
-  border-radius: 20px;
-  background: #cbd3df;
-  transition: background 120ms ease;
+  border-radius: var(--editor-radius-pill);
+  background: var(--editor-toggle-off);
+  transition: background var(--editor-duration-toggle) var(--editor-ease-standard);
 }
 
 .toggle::after {
@@ -131,12 +131,12 @@ select:focus-visible {
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: #fff;
-  transition: transform 120ms ease;
+  background: var(--editor-control-thumb);
+  transition: transform var(--editor-duration-toggle) var(--editor-ease-standard);
 }
 
 .toggle-row input:checked + .toggle {
-  background: #5874ab;
+  background: var(--editor-toggle-on);
 }
 
 .toggle-row input:checked + .toggle::after {
@@ -144,7 +144,7 @@ select:focus-visible {
 }
 
 .toggle-row input:focus-visible + .toggle {
-  outline: 2px solid #8da6d4;
+  outline: 2px solid var(--editor-focus-ring);
   outline-offset: 2px;
 }
 :host-context(html[data-theme='dark']) input,

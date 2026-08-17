@@ -3,7 +3,7 @@
 }
 .anchor-field {
   margin: 14px 0;
-  color: #67738a;
+  color: var(--editor-text-secondary);
   font-size: 11px;
   font-weight: 600;
 }
@@ -12,7 +12,7 @@
   grid-template-columns: repeat(3, 28px);
   width: max-content;
   margin-top: 6px;
-  border: 1px solid #dfe5ee;
+  border: 1px solid var(--editor-border-control);
   border-radius: 5px;
   overflow: hidden;
 }
@@ -21,9 +21,9 @@ button {
   height: 26px;
   padding: 0;
   border: 0;
-  border-right: 1px solid #dfe5ee;
-  border-bottom: 1px solid #dfe5ee;
-  background: #fff;
+  border-right: 1px solid var(--editor-border-control);
+  border-bottom: 1px solid var(--editor-border-control);
+  background: var(--editor-surface-panel);
   color: #63718a;
   font-size: 17px;
   line-height: 1;

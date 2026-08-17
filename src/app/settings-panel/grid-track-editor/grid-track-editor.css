@@ -38,15 +38,15 @@ select {
   width: 100%;
   margin-top: 0;
   padding: 8px 9px;
-  border: 1px solid #dfe5ee;
-  border-radius: 6px;
-  background: #fff;
-  color: #34425c;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-control);
   font: 12px inherit;
 }
 input:disabled {
-  background: #f1f4f8;
-  color: #9aa5b7;
+  background: var(--editor-control-disabled);
+  color: var(--editor-control-disabled-text);
   cursor: not-allowed;
 }
 button:not(.small-add) {

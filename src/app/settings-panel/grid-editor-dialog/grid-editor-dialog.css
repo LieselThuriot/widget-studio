@@ -54,11 +54,11 @@ h2 {
 }
 button {
   min-height: 32px;
-  border: 1px solid #dfe5ee;
-  border-radius: 7px;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-button);
   padding: 0 11px;
-  background: #fff;
-  color: #36527f;
+  background: var(--editor-surface-panel);
+  color: var(--editor-accent-strong);
   font:
     600 11px 'DM Sans',
     sans-serif;
@@ -100,7 +100,7 @@ button:focus-visible {
   gap: 5px;
   min-width: 0;
   min-height: 30px;
-  color: #67738a;
+  color: var(--editor-text-secondary);
   font:
     600 11px 'DM Sans',
     sans-serif;
@@ -166,22 +166,22 @@ select {
   width: 100%;
   min-height: 32px;
   padding: 7px 8px;
-  border: 1px solid #dfe5ee;
-  border-radius: 6px;
-  background: #fff;
-  color: #34425c;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-control);
   font:
     12px 'DM Sans',
     sans-serif;
 }
 input:disabled {
-  background: #f1f4f8;
-  color: #9aa5b7;
+  background: var(--editor-control-disabled);
+  color: var(--editor-control-disabled-text);
   cursor: not-allowed;
 }
 .primary-button {
-  border-color: #5874ab;
-  background: #5874ab;
+  border-color: var(--editor-accent);
+  background: var(--editor-accent);
   color: #fff;
 }
 .secondary-button {
@@ -198,7 +198,7 @@ input:disabled {
   margin-top: 10px;
 }
 label {
-  color: #67738a;
+  color: var(--editor-text-secondary);
   font-size: 11px;
   font-weight: 600;
 }

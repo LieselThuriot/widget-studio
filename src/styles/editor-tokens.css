@@ -23,6 +23,8 @@
   --editor-surface-accent-hover: #f8faff;
   --editor-text-primary: #25324b;
   --editor-text-secondary: #67738a;
+  --editor-text-control: #34425c;
+  --editor-control-thumb: #fff;
   --editor-text-muted: #8794ad;
   --editor-text-tertiary: #9aa5b7;
   --editor-border: #e2e7f0;
@@ -30,6 +32,12 @@
   --editor-border-subtle: #e9edf3;
   --editor-accent: #5874ab;
   --editor-accent-strong: #36527f;
+  --editor-focus-ring: #8da6d4;
+  --editor-control-disabled: #f1f4f8;
+  --editor-control-disabled-text: #9aa5b7;
+  --editor-toggle-off: #cbd3df;
+  --editor-toggle-on: #5874ab;
+  --editor-divider: #edf0f4;
   --editor-shadow-panel: 0 8px 24px #25365708;
   --editor-shadow-dialog: 0 24px 70px #080e1f80;
   --editor-scrollbar-track: #f2f5f9;
