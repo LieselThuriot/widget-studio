@@ -13,8 +13,8 @@
     sans-serif;
 }
 .canvas-toolbar > .shortcut-help {
-  margin-right: auto;
-  margin-left: 8px;
+  margin-inline-end: auto;
+  margin-inline-start: 8px;
 }
 .dimensions {
   color: #a1aabd;

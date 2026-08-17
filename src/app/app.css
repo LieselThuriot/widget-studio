@@ -17,7 +17,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto;
+  margin-inline-start: auto;
   padding: 7px 10px;
   border: 1px solid #d8deeb;
   border-radius: 7px;
@@ -181,6 +181,6 @@ h2 {
   .preview-button {
     width: 100%;
     justify-content: center;
-    margin-left: 56px;
+    margin-inline-start: 56px;
   }
 }

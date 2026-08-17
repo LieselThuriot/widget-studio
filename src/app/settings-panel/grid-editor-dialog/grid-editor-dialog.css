@@ -224,8 +224,7 @@ label select {
   header,
   footer,
   .editor-body {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-inline: 16px;
   }
 }
 

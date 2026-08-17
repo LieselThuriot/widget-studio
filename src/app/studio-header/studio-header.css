@@ -38,7 +38,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto;
+  margin-inline-start: auto;
   padding: 7px 10px;
   border: 1px solid var(--editor-border-control);
   border-radius: var(--editor-radius-button);
@@ -97,6 +97,6 @@ h1 {
   .preview-button {
     width: 100%;
     justify-content: center;
-    margin-left: 56px;
+    margin-inline-start: 56px;
   }
 }
