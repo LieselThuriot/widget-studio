@@ -5,7 +5,7 @@
 @import './styles/editor-global.css';
 
 html[data-theme='dark'] .workspace {
-  background: #10182c;
+  background: var(--editor-surface-page);
 }
 html[data-theme='dark'] .panel,
 html[data-theme='dark'] .preview-window,
@@ -16,18 +16,18 @@ html[data-theme='dark'] .element-card,
 html[data-theme='dark'] .settings-card,
 html[data-theme='dark'] .data-dialog,
 html[data-theme='dark'] .color-picker-popover {
-  background: #17233c;
-  border-color: #2d3d5d;
-  color: #e7ecf5;
+  background: var(--editor-surface-panel);
+  border-color: var(--editor-border);
+  color: var(--editor-text-primary);
 }
 html[data-theme='dark'] .topbar .theme-button,
 html[data-theme='dark'] .topbar .preview-button,
 html[data-theme='dark'] .shortcut-help-trigger,
 html[data-theme='dark'] .loading-toggle,
 html[data-theme='dark'] .preview-close {
-  background: #1d2b49;
-  border-color: #3a4b6e;
-  color: #d7e1f2;
+  background: var(--editor-surface-raised);
+  border-color: var(--editor-border-raised);
+  color: var(--editor-accent-strong);
 }
 html[data-theme='dark'] .topbar .theme-button:hover,
 html[data-theme='dark'] .topbar .theme-button:focus-visible,
@@ -39,22 +39,22 @@ html[data-theme='dark'] .loading-toggle:hover,
 html[data-theme='dark'] .loading-toggle:focus-visible,
 html[data-theme='dark'] .preview-close:hover,
 html[data-theme='dark'] .preview-close:focus-visible {
-  background: #263b63;
-  border-color: #5874ab;
-  color: #fff;
+  background: var(--editor-surface-hover);
+  border-color: var(--editor-accent);
+  color: var(--editor-text-on-accent);
 }
 html[data-theme='dark'] .element-palette button,
 html[data-theme='dark'] .action-button,
 html[data-theme='dark'] .icon-button {
-  border-color: #3a4b6e;
+  border-color: var(--editor-border-raised);
 }
 html[data-theme='dark'] .shortcut-popover,
 html[data-theme='dark'] .context-menu,
 html[data-theme='dark'] .color-picker-popover,
 html[data-theme='dark'] .event-alert {
-  background: #17233c;
-  border-color: #3a4b6e;
-  color: #e7ecf5;
+  background: var(--editor-surface-panel);
+  border-color: var(--editor-border-raised);
+  color: var(--editor-text-primary);
 }
 html[data-theme='dark'] .canvas-area {
   background-color: transparent;
@@ -63,12 +63,12 @@ html[data-theme='dark'] input:not([type='checkbox']):not([type='radio']),
 html[data-theme='dark'] textarea,
 html[data-theme='dark'] select,
 html[data-theme='dark'] .color-input {
-  border-color: #3a4b6e;
-  background: #10182c;
-  color: #e7ecf5;
+  border-color: var(--editor-border-raised);
+  background: var(--editor-surface-input);
+  color: var(--editor-text-control);
 }
 html[data-theme='dark'] button:not(.icon-button):not(.action-button) {
-  border-color: #3a4b6e;
+  border-color: var(--editor-border-raised);
 }
 html[data-theme='dark'] .eyebrow,
 html[data-theme='dark'] .helper,
@@ -76,10 +76,10 @@ html[data-theme='dark'] .count,
 html[data-theme='dark'] .dimensions,
 html[data-theme='dark'] .version,
 html[data-theme='dark'] .json-badge {
-  color: #9aa9c3;
+  color: var(--editor-text-muted);
 }
 html[data-theme='dark'] .panel-divider,
 html[data-theme='dark'] .preview-header,
 html[data-theme='dark'] .preview-hint {
-  border-color: #2d3d5d;
+  border-color: var(--editor-divider);
 }

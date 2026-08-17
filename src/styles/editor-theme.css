@@ -5,6 +5,9 @@ html[data-theme='dark'] {
   --editor-surface-subtle: #10182c;
   --editor-surface-dialog: #17233c;
   --editor-surface-code: #10182c;
+  --editor-surface-raised: #1d2b49;
+  --editor-surface-input: #10182c;
+  --editor-surface-hover: #263b63;
   --editor-surface-accent: #293b61;
   --editor-surface-accent-hover: #263b63;
   --editor-surface-menu: #17233c;
@@ -13,6 +16,7 @@ html[data-theme='dark'] {
   --editor-text-primary: #e7ecf5;
   --editor-text-secondary: #aebbd1;
   --editor-text-control: #e7ecf5;
+  --editor-text-on-accent: #fff;
   --editor-control-thumb: #fff;
   --editor-text-muted: #9aa9c3;
   --editor-text-tertiary: #9aa9c3;
@@ -21,6 +25,7 @@ html[data-theme='dark'] {
   --editor-border-control: #3a4b6e;
   --editor-border-subtle: #2d3d5d;
   --editor-border-menu: #3a4b6e;
+  --editor-border-raised: #3a4b6e;
   --editor-accent: #5874ab;
   --editor-accent-strong: #d7e1f2;
   --editor-focus-ring: #9db7e4;
