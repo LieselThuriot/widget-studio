@@ -64,8 +64,7 @@ button {
     sans-serif;
   cursor: pointer;
 }
-button:hover,
-button:focus-visible {
+button:is(:hover, :focus-visible) {
   border-color: #5874ab;
   outline: none;
 }
@@ -119,8 +118,7 @@ button:focus-visible {
   color: #bd8290;
   font-size: 18px;
 }
-.delete-track:hover,
-.delete-track:focus-visible {
+.delete-track:is(:hover, :focus-visible) {
   background: #f8e8ec;
 }
 .delete-track:disabled {
@@ -134,8 +132,7 @@ button:focus-visible {
   color: #5874ab;
   font-size: 17px;
 }
-.add-track:hover,
-.add-track:focus-visible {
+.add-track:is(:hover, :focus-visible) {
   background: #eef3fb;
 }
 .grid-cell {
@@ -274,8 +271,7 @@ label select {
   border-color: #5874ab;
   color: #9db7e4;
 }
-:host-context(html[data-theme='dark']) .add-track:hover,
-:host-context(html[data-theme='dark']) .add-track:focus-visible {
+:host-context(html[data-theme='dark']) .add-track:is(:hover, :focus-visible) {
   background: #293b61;
 }
 :host-context(html[data-theme='dark']) button {
@@ -287,8 +283,7 @@ label select {
   border-color: transparent;
   background: transparent;
 }
-:host-context(html[data-theme='dark']) .delete-track:hover,
-:host-context(html[data-theme='dark']) .delete-track:focus-visible {
+:host-context(html[data-theme='dark']) .delete-track:is(:hover, :focus-visible) {
   background: #4a2c3b;
 }
 :host-context(html[data-theme='dark']) .selection-editor {

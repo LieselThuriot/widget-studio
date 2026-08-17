@@ -63,8 +63,7 @@ h2 {
   font-size: 22px;
   cursor: pointer;
 }
-.preview-close:hover,
-.preview-close:focus-visible {
+.preview-close:is(:hover, :focus-visible) {
   border-color: #5874ab;
   color: #36527f;
   outline: none;
@@ -82,8 +81,7 @@ h2 {
     sans-serif;
   cursor: pointer;
 }
-.loading-toggle:hover,
-.loading-toggle:focus-visible,
+.loading-toggle:is(:hover, :focus-visible),
 .loading-toggle[aria-pressed='true'] {
   border-color: #5874ab;
   background: #eef3fb;

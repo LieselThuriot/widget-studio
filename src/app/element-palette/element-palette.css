@@ -21,8 +21,7 @@
   text-align: left;
   cursor: pointer;
 }
-.palette-item:hover,
-.palette-item:focus-visible {
+.palette-item:is(:hover, :focus-visible) {
   border-color: var(--editor-focus-ring);
   background: var(--editor-surface-accent-hover);
 }
@@ -58,8 +57,7 @@
   background: #1d2b49;
   color: #e7ecf5;
 }
-:host-context(html[data-theme='dark']) .palette-item:hover,
-:host-context(html[data-theme='dark']) .palette-item:focus-visible {
+:host-context(html[data-theme='dark']) .palette-item:is(:hover, :focus-visible) {
   border-color: #5874ab;
   background: #263b63;
 }

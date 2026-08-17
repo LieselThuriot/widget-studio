@@ -35,8 +35,7 @@ button:nth-child(3n) {
 button:nth-child(n + 7) {
   border-bottom: 0;
 }
-button:hover,
-button:focus-visible,
+button:is(:hover, :focus-visible),
 button.active {
   background: #edf2fb;
   color: #36527f;
@@ -48,8 +47,7 @@ button.active {
   background: #10182c;
   color: #d7e1f2;
 }
-:host-context(html[data-theme='dark']) button:hover,
-:host-context(html[data-theme='dark']) button:focus-visible,
+:host-context(html[data-theme='dark']) button:is(:hover, :focus-visible),
 :host-context(html[data-theme='dark']) button.active {
   background: #293b61;
   color: #b7cdf5;

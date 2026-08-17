@@ -61,8 +61,7 @@
     animation: none;
   }
 }
-.preview-button:hover,
-.preview-button:focus-visible {
+.preview-button:is(:hover, :focus-visible) {
   border-color: #a8bae1;
   background: #f8faff;
   color: #36527f;

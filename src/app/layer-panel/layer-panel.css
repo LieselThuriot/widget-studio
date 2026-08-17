@@ -51,8 +51,7 @@ h2 {
 .layer:active {
   cursor: grabbing;
 }
-.layer:hover,
-.layer.selected {
+.layer:is(:hover, .selected) {
   background: var(--editor-surface-selection);
 }
 .layer-select {
@@ -97,28 +96,24 @@ h2 {
   line-height: 1;
   cursor: pointer;
 }
-.layer-actions-trigger:hover,
-.layer-actions-trigger:focus-visible,
+.layer-actions-trigger:is(:hover, :focus-visible),
 .layer.selected .layer-actions-trigger {
   border-color: var(--editor-border-control);
   background: var(--editor-surface-panel);
   color: var(--editor-accent-strong);
 }
-:host-context(html[data-theme='dark']) .layer:hover,
-:host-context(html[data-theme='dark']) .layer.selected {
+:host-context(html[data-theme='dark']) .layer:is(:hover, .selected) {
   background: #263b63;
 }
 :host-context(html[data-theme='dark']) .layer-select {
   color: #aebbd1;
 }
 :host-context(html[data-theme='dark']) .layer.selected .layer-select,
-:host-context(html[data-theme='dark']) .layer-actions-trigger:hover,
-:host-context(html[data-theme='dark']) .layer-actions-trigger:focus-visible,
+:host-context(html[data-theme='dark']) .layer-actions-trigger:is(:hover, :focus-visible),
 :host-context(html[data-theme='dark']) .layer.selected .layer-actions-trigger {
   color: #d7e1f2;
 }
-:host-context(html[data-theme='dark']) .layer-actions-trigger:hover,
-:host-context(html[data-theme='dark']) .layer-actions-trigger:focus-visible,
+:host-context(html[data-theme='dark']) .layer-actions-trigger:is(:hover, :focus-visible),
 :host-context(html[data-theme='dark']) .layer.selected .layer-actions-trigger {
   border-color: #5874ab;
   background: #1d2b49;

@@ -56,8 +56,7 @@
   font-weight: 700;
   cursor: pointer;
 }
-.shortcut-help-trigger:hover,
-.shortcut-help-trigger:focus-visible {
+.shortcut-help-trigger:is(:hover, :focus-visible) {
   border-color: var(--editor-accent-strong);
   color: var(--editor-accent-strong);
 }

@@ -61,15 +61,8 @@ h1 {
   font-weight: 600;
   cursor: pointer;
 }
-.theme-button:hover,
-.theme-button:focus-visible {
-  border-color: var(--editor-focus-ring);
-  background: var(--editor-surface-accent-hover);
-  color: var(--editor-accent-strong);
-  outline: none;
-}
-.preview-button:hover,
-.preview-button:focus-visible {
+.theme-button:is(:hover, :focus-visible),
+.preview-button:is(:hover, :focus-visible) {
   border-color: var(--editor-focus-ring);
   background: var(--editor-surface-accent-hover);
   color: var(--editor-accent-strong);

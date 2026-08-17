@@ -50,8 +50,7 @@
   font-size: 11px;
 }
 
-.element-actions-menu button:hover,
-.element-actions-menu button:focus-visible {
+.element-actions-menu button:is(:hover, :focus-visible) {
   background: var(--editor-surface-menu-hover);
   color: var(--editor-accent-strong);
 }
@@ -65,8 +64,7 @@
   color: #b64d60 !important;
 }
 
-.menu-delete:hover,
-.menu-delete:focus-visible {
+.menu-delete:is(:hover, :focus-visible) {
   background: #fbecef !important;
   color: #a43e52 !important;
 }
@@ -91,8 +89,7 @@
   color: #aebbd1;
 }
 
-:host-context(html[data-theme='dark']) .element-actions-menu button:hover,
-:host-context(html[data-theme='dark']) .element-actions-menu button:focus-visible {
+:host-context(html[data-theme='dark']) .element-actions-menu button:is(:hover, :focus-visible) {
   background: #263b63;
   color: #d7e1f2;
 }

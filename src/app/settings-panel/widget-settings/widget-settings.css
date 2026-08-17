@@ -61,8 +61,7 @@
     sans-serif;
   cursor: pointer;
 }
-.edit-grid-button:hover,
-.edit-grid-button:focus-visible {
+.edit-grid-button:is(:hover, :focus-visible) {
   border-color: #5874ab;
   background: #e2ebf9;
   outline: none;
@@ -150,8 +149,7 @@ textarea {
   background: #293b61;
   color: #d7e1f2;
 }
-:host-context(html[data-theme='dark']) .edit-grid-button:hover,
-:host-context(html[data-theme='dark']) .edit-grid-button:focus-visible {
+:host-context(html[data-theme='dark']) .edit-grid-button:is(:hover, :focus-visible) {
   background: #354b78;
 }
 :host-context(html[data-theme='dark']) input,

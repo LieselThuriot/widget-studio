@@ -64,8 +64,7 @@ button {
     sans-serif;
   cursor: pointer;
 }
-button:hover,
-button:focus-visible {
+button:is(:hover, :focus-visible) {
   border-color: #5874ab;
   outline: none;
 }

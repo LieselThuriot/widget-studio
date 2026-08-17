@@ -93,8 +93,7 @@ h2 {
   font-weight: 700;
   cursor: pointer;
 }
-.alert-close:hover,
-.alert-close:focus-visible {
+.alert-close:is(:hover, :focus-visible) {
   background: #263b63;
 }
 :host-context(html[data-theme='dark']) .event-alert {
@@ -126,8 +125,7 @@ h2 {
   background: #5874ab;
   color: #fff;
 }
-:host-context(html[data-theme='dark']) .alert-close:hover,
-:host-context(html[data-theme='dark']) .alert-close:focus-visible {
+:host-context(html[data-theme='dark']) .alert-close:is(:hover, :focus-visible) {
   background: #6b8bc8;
 }
 @media (max-width: 700px) {
