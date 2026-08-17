@@ -40,9 +40,7 @@ html[data-theme='dark'] .preview-close:focus-visible {
   border-color: var(--editor-accent);
   color: var(--editor-text-on-accent);
 }
-html[data-theme='dark'] .element-palette button,
-html[data-theme='dark'] .action-button,
-html[data-theme='dark'] .icon-button {
+html[data-theme='dark'] .element-palette button {
   border-color: var(--editor-border-raised);
 }
 html[data-theme='dark'] .shortcut-popover,
