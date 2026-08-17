@@ -40,6 +40,7 @@ pre {
   overflow: auto;
   margin: 18px 0 0;
   padding: 18px;
+  border: 1px solid var(--editor-border-code);
   border-radius: 9px;
   background: var(--editor-surface-code);
   color: #b9c9e6;
@@ -57,7 +58,7 @@ pre {
   color: #aebbd1;
 }
 :host-context(html[data-theme='dark']) pre {
-  border: 1px solid #2d3d5d;
+  border-color: var(--editor-border-code);
   background: #10182c;
   color: #d7e1f2;
 }

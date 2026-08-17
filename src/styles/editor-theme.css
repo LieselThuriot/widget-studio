@@ -26,6 +26,7 @@ html[data-theme='dark'] {
   --editor-border-subtle: #2d3d5d;
   --editor-border-menu: #3a4b6e;
   --editor-border-raised: #3a4b6e;
+  --editor-border-code: #2d3d5d;
   --editor-accent: #5874ab;
   --editor-accent-strong: #d7e1f2;
   --editor-focus-ring: #9db7e4;
