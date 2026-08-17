@@ -2,21 +2,12 @@
   display: contents;
 }
 .share-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  display: grid;
-  place-items: center;
   padding: 24px;
-  background: var(--editor-surface-overlay);
 }
 .share-window {
   width: min(100%, 620px);
   overflow: hidden;
-  border: 1px solid var(--editor-border);
-  border-radius: var(--editor-radius-card);
   background: var(--editor-surface-panel);
-  box-shadow: var(--editor-shadow-dialog);
 }
 .share-header {
   display: flex;
@@ -115,10 +106,6 @@
 .share-link-row input:focus-visible {
   border-color: var(--editor-focus-ring);
   outline: none;
-}
-:host-context(html[data-theme='dark']) .share-window {
-  border-color: var(--editor-border-raised);
-  background: var(--editor-surface-dialog);
 }
 :host-context(html[data-theme='dark']) .share-header {
   border-bottom-color: var(--editor-border-raised);

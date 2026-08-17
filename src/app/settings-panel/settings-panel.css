@@ -5,10 +5,6 @@
 .panel {
   min-height: 408px;
   padding: 20px;
-  background: var(--editor-surface-panel);
-  border: 1px solid var(--editor-border);
-  border-radius: var(--editor-radius-card);
-  box-shadow: var(--editor-shadow-panel);
 }
 .panel-heading,
 .widget-setting-section-heading {
@@ -231,11 +227,6 @@ textarea {
 }
 .toggle-row input:checked + .toggle:after {
   transform: translateX(12px);
-}
-:host-context(html[data-theme='dark']) .panel {
-  border-color: #2d3d5d;
-  background: #17233c;
-  box-shadow: 0 8px 24px #080e1f40;
 }
 :host-context(html[data-theme='dark']) .selected-chip,
 :host-context(html[data-theme='dark']) label,

@@ -2,13 +2,7 @@
   display: contents;
 }
 .data-points-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  display: grid;
-  place-items: center;
   padding: 20px;
-  background: var(--editor-surface-overlay);
 }
 .data-points-dialog {
   display: flex;
@@ -16,10 +10,6 @@
   width: min(760px, 100%);
   max-height: min(720px, calc(100dvh - 40px));
   overflow: hidden;
-  border: 1px solid var(--editor-border);
-  border-radius: var(--editor-radius-card);
-  background: var(--editor-surface-dialog);
-  box-shadow: var(--editor-shadow-dialog);
 }
 header,
 footer {
@@ -100,8 +90,8 @@ input[type='color'] {
   cursor: pointer;
 }
 input.invalid {
-  border-color: #c94f61;
-  box-shadow: 0 0 0 1px #c94f6126;
+  border-color: var(--editor-danger-input);
+  box-shadow: 0 0 0 1px var(--editor-danger-input-ring);
 }
 .remove-button {
   min-height: 32px;
@@ -116,7 +106,6 @@ input.invalid {
   color: #8794ad;
   text-align: center;
 }
-:host-context(html[data-theme='dark']) .data-points-dialog,
 :host-context(html[data-theme='dark']) header,
 :host-context(html[data-theme='dark']) footer,
 :host-context(html[data-theme='dark']) .point-row {

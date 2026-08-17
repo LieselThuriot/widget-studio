@@ -1,5 +1,5 @@
 <div
-  class="grid-editor-overlay"
+  class="editor-overlay grid-editor-overlay"
   role="dialog"
   aria-modal="true"
   aria-labelledby="grid-editor-title"
@@ -8,12 +8,12 @@
   (keydown)="onKeyDown($event)"
 >
   <section
-    class="grid-editor-dialog"
+    class="editor-overlay__panel grid-editor-dialog"
     tabindex="-1"
     (click)="$event.stopPropagation()"
     (keydown)="onKeyDown($event)"
   >
-    <header>
+    <header class="editor-overlay__header">
       <div>
         <p class="eyebrow">Widget layout</p>
         <h2 id="grid-editor-title">Edit grid</h2>
@@ -139,7 +139,7 @@
         </div>
       </section>
     </div>
-    <footer>
+    <footer class="editor-overlay__footer">
       <button
         type="button"
         class="editor-button editor-button--secondary secondary-button"

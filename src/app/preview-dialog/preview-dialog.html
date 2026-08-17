@@ -1,5 +1,5 @@
 <div
-  class="preview-overlay"
+  class="editor-overlay preview-overlay"
   role="dialog"
   aria-modal="true"
   aria-labelledby="preview-title"
@@ -8,7 +8,7 @@
   (keydown)="onKeyDown($event)"
 >
   <div
-    class="preview-window"
+    class="editor-overlay__panel preview-window"
     tabindex="-1"
     (click)="$event.stopPropagation()"
     (keydown)="onKeyDown($event)"

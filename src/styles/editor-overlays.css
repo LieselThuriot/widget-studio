@@ -1,0 +1,55 @@
+.editor-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: var(--editor-surface-overlay);
+}
+
+.editor-overlay__panel {
+  border: 1px solid var(--editor-border);
+  border-radius: var(--editor-radius-card);
+  background: var(--editor-surface-dialog);
+  box-shadow: var(--editor-shadow-dialog);
+}
+
+.editor-overlay__header,
+.editor-overlay__footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  background: var(--editor-surface-panel);
+}
+
+.editor-overlay__header {
+  justify-content: space-between;
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.editor-overlay__footer {
+  justify-content: flex-end;
+  border-top: 1px solid var(--editor-border);
+}
+
+.editor-popover {
+  border: 1px solid var(--editor-border-menu);
+  border-radius: 9px;
+  background: var(--editor-surface-menu);
+  box-shadow: var(--editor-shadow-menu);
+}
+
+.editor-panel {
+  background: var(--editor-surface-panel);
+  border: 1px solid var(--editor-border);
+  border-radius: var(--editor-radius-card);
+  box-shadow: var(--editor-shadow-panel);
+}
+
+@media (max-width: 700px) {
+  .editor-overlay {
+    padding: 12px;
+  }
+}

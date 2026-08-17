@@ -2,13 +2,8 @@
   display: contents;
 }
 .preview-overlay {
-  position: fixed;
-  inset: 0;
   z-index: 20;
-  display: grid;
-  place-items: center;
   padding: 24px;
-  background: var(--editor-surface-overlay);
 }
 .preview-window {
   display: flex;
@@ -16,10 +11,8 @@
   width: min(100%, 1060px);
   min-height: min(620px, calc(100dvh - 48px));
   overflow: hidden;
-  border: 1px solid var(--editor-border);
   border-radius: 18px;
   background: var(--editor-surface-subtle);
-  box-shadow: var(--editor-shadow-dialog);
 }
 .preview-header {
   display: flex;

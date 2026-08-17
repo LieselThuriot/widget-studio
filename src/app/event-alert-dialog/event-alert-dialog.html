@@ -1,13 +1,13 @@
 @if (alert(); as alert) {
   <div
-    class="alert-overlay"
+    class="editor-overlay alert-overlay"
     role="presentation"
     tabindex="-1"
     (click)="close()"
     (keydown)="$event.stopPropagation()"
   >
     <section
-      class="event-alert"
+      class="editor-overlay__panel event-alert"
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="event-alert-title"

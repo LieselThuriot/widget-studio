@@ -2,13 +2,7 @@
   display: contents;
 }
 .grid-editor-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  display: grid;
-  place-items: center;
   padding: 20px;
-  background: var(--editor-surface-overlay);
 }
 .grid-editor-dialog {
   display: flex;
@@ -16,10 +10,6 @@
   width: min(760px, 100%);
   max-height: min(760px, calc(100dvh - 40px));
   overflow: hidden;
-  border: 1px solid var(--editor-border);
-  border-radius: var(--editor-radius-card);
-  background: var(--editor-surface-dialog);
-  box-shadow: var(--editor-shadow-dialog);
 }
 header,
 footer {
@@ -203,7 +193,6 @@ label select {
   }
 }
 
-:host-context(html[data-theme='dark']) .grid-editor-dialog,
 :host-context(html[data-theme='dark']) header,
 :host-context(html[data-theme='dark']) footer {
   background: var(--editor-surface-dialog);

@@ -64,10 +64,6 @@
   z-index: 20;
   width: 245px;
   padding: 5px;
-  border: 1px solid var(--editor-border-menu);
-  border-radius: 9px;
-  background: var(--editor-surface-menu);
-  box-shadow: var(--editor-shadow-menu);
 }
 .sample-menu-option {
   display: flex;
@@ -156,11 +152,7 @@
   z-index: 20;
   width: 270px;
   padding: 13px 14px;
-  border: 1px solid var(--editor-border-menu);
-  border-radius: 9px;
-  background: var(--editor-surface-menu);
   color: var(--editor-text-menu);
-  box-shadow: var(--editor-shadow-menu);
   text-align: left;
 }
 .shortcut-popover strong {
@@ -205,10 +197,7 @@
   color: #d7e1f2;
 }
 :host-context(html[data-theme='dark']) .shortcut-popover {
-  border-color: #3a4b6e;
-  background: #17233c;
   color: #aebbd1;
-  box-shadow: 0 10px 24px #080e1f80;
 }
 :host-context(html[data-theme='dark']) .shortcut-popover strong {
   color: #b7cdf5;

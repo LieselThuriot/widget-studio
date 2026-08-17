@@ -35,6 +35,8 @@ html[data-theme='dark'] {
   --editor-border-code: #2d3d5d;
   --editor-accent: #5874ab;
   --editor-accent-strong: #d7e1f2;
+  --editor-danger-input: #ff5c6c;
+  --editor-danger-input-ring: #ff5c6c80;
   --editor-danger-surface: #4a2635;
   --editor-danger-border: #9b5367;
   --editor-danger-strong: #f19aa4;

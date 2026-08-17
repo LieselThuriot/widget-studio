@@ -52,6 +52,8 @@
   --editor-focus-ring: #8da6d4;
   --editor-selection: #f5c451;
   --editor-danger: #e87984;
+  --editor-danger-input: #c94f61;
+  --editor-danger-input-ring: #c94f6126;
   --editor-danger-surface: #fbecef;
   --editor-danger-border: #e4a0aa;
   --editor-danger-strong: #b64d60;

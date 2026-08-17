@@ -1,5 +1,5 @@
 <div
-  class="share-overlay"
+  class="editor-overlay share-overlay"
   role="dialog"
   aria-modal="true"
   aria-labelledby="share-title"
@@ -8,12 +8,12 @@
   (keydown)="onKeyDown($event)"
 >
   <section
-    class="share-window"
+    class="editor-overlay__panel share-window"
     tabindex="-1"
     (click)="$event.stopPropagation()"
     (keydown)="onKeyDown($event)"
   >
-    <header class="share-header">
+    <header class="editor-overlay__header share-header">
       <div class="share-heading">
         <div class="share-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" focusable="false">
