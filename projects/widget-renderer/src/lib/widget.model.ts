@@ -32,6 +32,13 @@ export interface TextStyle {
   font: FontStyle;
   align: 'left' | 'center' | 'right';
   wrap: boolean;
+  background?: string;
+  radius?: number;
+  padding?: TextPadding | null;
+}
+export interface TextPadding {
+  vertical: number;
+  horizontal: number;
 }
 export interface ElementGrid {
   row: number;

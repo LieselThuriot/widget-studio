@@ -113,3 +113,33 @@
   [value]="element().style.color"
   (changed)="changed.emit({ style: { ...element().style, color: $event } })"
 />
+<app-color-picker
+  label="Background"
+  [value]="element().style.background"
+  [clearable]="true"
+  (changed)="changed.emit({ style: { ...element().style, background: $event } })"
+  (cleared)="clearBackground()"
+/>
+<label
+  >Corner radius (px)<input
+    type="number"
+    min="0"
+    [value]="element().style.radius ?? 0"
+    (input)="changed.emit({ style: { ...element().style, radius: number($event) } })"
+/></label>
+<label
+  >Vertical padding (px)<input
+    type="number"
+    min="0"
+    step="1"
+    [value]="padding('vertical')"
+    (input)="updatePadding('vertical', $event)"
+/></label>
+<label
+  >Horizontal padding (px)<input
+    type="number"
+    min="0"
+    step="1"
+    [value]="padding('horizontal')"
+    (input)="updatePadding('horizontal', $event)"
+/></label>

@@ -114,6 +114,16 @@
                 [style.text-decoration]="element.style.font.decoration"
                 [style.text-align]="element.style.align"
                 [style.white-space]="element.style.wrap ? 'pre-wrap' : 'pre'"
+                [style.background-color]="element.style.background || null"
+                [style.border-radius.px]="element.style.radius"
+                [style.padding]="
+                  element.style.padding
+                    ? element.style.padding.vertical +
+                      'px ' +
+                      element.style.padding.horizontal +
+                      'px'
+                    : null
+                "
                 >{{ element.text }}</span
               >
             } @else if (isImage(element)) {

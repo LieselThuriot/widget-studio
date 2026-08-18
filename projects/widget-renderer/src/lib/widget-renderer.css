@@ -178,6 +178,7 @@
   user-select: none;
 }
 .text-element {
+  display: inline-block;
   overflow: hidden;
   line-height: 1.2;
 }

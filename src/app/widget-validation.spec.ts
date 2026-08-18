@@ -18,6 +18,88 @@ describe('widget contract validation', () => {
     expect(result).toEqual({ success: true, data: validContract });
   });
 
+  it('accepts optional badge styling on text elements', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'text',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          text: 'Status',
+          style: {
+            color: '#fff',
+            font: { size: 11 },
+            align: 'left',
+            wrap: false,
+            background: '#2563eb',
+            radius: 999,
+            padding: { vertical: 4, horizontal: 8 },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts omitted, null, and zero text padding', () => {
+    const text = {
+      type: 'text' as const,
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+      sensitive: false,
+      text: 'Status',
+      style: { color: '#fff', font: { size: 11 }, align: 'left' as const, wrap: false },
+    };
+
+    expect(safeParseWidgetInput({ ...validContract, elements: [text] }).success).toBe(true);
+    expect(
+      safeParseWidgetInput({
+        ...validContract,
+        elements: [{ ...text, style: { ...text.style, padding: null } }],
+      }).success,
+    ).toBe(true);
+    expect(
+      safeParseWidgetInput({
+        ...validContract,
+        elements: [
+          {
+            ...text,
+            style: { ...text.style, padding: { vertical: 0, horizontal: 0 } },
+          },
+        ],
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects negative text padding values', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'text',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          text: 'Status',
+          style: {
+            color: '#fff',
+            font: { size: 11 },
+            align: 'left',
+            wrap: false,
+            padding: { vertical: -1, horizontal: 0 },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.issues.map((issue) => issue.path)).toContain(
+        'elements[0].style.padding.vertical',
+      );
+    }
+  });
+
   it('accepts an empty background image URL', () => {
     const result = safeParseWidgetInput({
       ...validContract,

@@ -13,6 +13,20 @@ import {
 import { normalizeChartElement, normalizeGaugeElement } from './widget-normalization';
 
 describe('editor state transformations', () => {
+  it('clears an optional text background when patched as undefined', () => {
+    const widget = structuredClone(sampleWidget);
+    const withBackground = patchElement(widget, 'headline', {
+      style: { background: '#2563eb' } as never,
+    });
+    const cleared = patchElement(withBackground, 'headline', {
+      style: { background: undefined } as never,
+    });
+    const headline = cleared.elements.find((element) => element.id === 'headline');
+
+    expect(headline?.type).toBe('text');
+    if (headline?.type === 'text') expect(headline.style.background).toBeUndefined();
+  });
+
   it('patches only the requested element', () => {
     const widget = structuredClone(sampleWidget);
     const updated = patchElement(widget, 'headline', { sensitive: true });

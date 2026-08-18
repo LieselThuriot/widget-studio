@@ -21,6 +21,20 @@ export class TextElementSettings {
     return eventNumber(event);
   }
 
+  protected padding(axis: 'vertical' | 'horizontal'): number {
+    return this.element().style.padding?.[axis] ?? 0;
+  }
+
+  protected updatePadding(axis: 'vertical' | 'horizontal', event: Event): void {
+    const vertical = axis === 'vertical' ? this.number(event) : this.padding('vertical');
+    const horizontal = axis === 'horizontal' ? this.number(event) : this.padding('horizontal');
+    this.changed.emit({ style: { ...this.element().style, padding: { vertical, horizontal } } });
+  }
+
+  protected clearBackground(): void {
+    this.changed.emit({ style: { ...this.element().style, background: undefined } });
+  }
+
   protected checked(event: Event): boolean {
     return eventChecked(event);
   }

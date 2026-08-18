@@ -45,4 +45,33 @@ describe('text renderer whitespace', () => {
     expect(text.style.whiteSpace).toBe('pre');
     expect(text.textContent).toContain('First line\nSecond line');
   });
+
+  it('renders optional badge styling on text', async () => {
+    const fixture = TestBed.createComponent(WidgetRenderer);
+    const baseText = textWidget(false).elements[0];
+    fixture.componentRef.setInput('widget', {
+      ...textWidget(false),
+      elements: [
+        {
+          ...baseText,
+          text: 'New badge',
+          style: {
+            color: '#fff',
+            font: { size: 11 },
+            align: 'left',
+            wrap: false,
+            background: '#2563eb',
+            radius: 999,
+            padding: { vertical: 4, horizontal: 8 },
+          },
+        },
+      ],
+    });
+    await fixture.whenStable();
+
+    const text = fixture.nativeElement.querySelector('.text-element') as HTMLElement;
+    expect(text.style.backgroundColor).toBe('rgb(37, 99, 235)');
+    expect(text.style.borderRadius).toBe('999px');
+    expect(text.style.padding).toBe('4px 8px');
+  });
 });

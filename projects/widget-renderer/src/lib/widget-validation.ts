@@ -237,6 +237,19 @@ function validateElement(
       validateStyle(value['style'], `${issuePath}.style`, issues);
       if (!isRecord(value['style'])) break;
       requiredString(value['style']['color'], `${issuePath}.style.color`, issues, true);
+      if (value['style']['background'] !== undefined)
+        requiredString(value['style']['background'], `${issuePath}.style.background`, issues, true);
+      if (value['style']['padding'] !== undefined) {
+        const padding = value['style']['padding'];
+        if (padding !== null && !isRecord(padding)) {
+          addIssue(issues, `${issuePath}.style.padding`, 'must be an object or null');
+        } else if (padding !== null) {
+          requiredNumber(padding['vertical'], `${issuePath}.style.padding.vertical`, issues);
+          requiredNumber(padding['horizontal'], `${issuePath}.style.padding.horizontal`, issues);
+        }
+      }
+      if (value['style']['radius'] !== undefined)
+        requiredNumber(value['style']['radius'], `${issuePath}.style.radius`, issues);
       if (!isOneOf(value['style']['align'], ['left', 'center', 'right'] as const))
         addIssue(issues, `${issuePath}.style.align`, 'has an unsupported value');
       requiredBoolean(value['style']['wrap'], `${issuePath}.style.wrap`, issues);

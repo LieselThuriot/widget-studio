@@ -23,6 +23,9 @@ function hydrateElement(
   const id = elementId(element);
   return {
     ...element,
+    ...(element.type === 'text' && !element.style.padding
+      ? { style: { ...element.style, padding: { vertical: 0, horizontal: 0 } } }
+      : {}),
     ...(element.type === 'button'
       ? {
           requestRefresh: element.requestRefresh ?? false,
