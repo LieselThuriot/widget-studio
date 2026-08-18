@@ -20,24 +20,35 @@
       />
     } @else if (element.type === 'button') {
       <app-button-element-settings [element]="element" (changed)="elementChanged.emit($event)" />
+    } @else if (element.type === 'divider') {
+      <app-divider-element-settings [element]="element" (changed)="elementChanged.emit($event)" />
     } @else {
       <app-chart-element-settings [element]="element" (changed)="elementChanged.emit($event)" />
     }
-    @if (element.type === 'progress' || element.type === 'text' || element.type === 'button') {
+    @if (
+      element.type === 'progress' ||
+      element.type === 'text' ||
+      element.type === 'button' ||
+      element.type === 'divider'
+    ) {
       <app-anchor-control
         [value]="element.grid.anchor ?? 'top left'"
         ariaLabel="Element anchor"
         (changed)="elementChanged.emit({ grid: { ...element.grid, anchor: $event } })"
       />
     }
-    <label class="toggle-row"
-      ><span
-        ><strong>Sensitive content</strong><small>Blur until the eye control is used</small></span
-      ><input
-        type="checkbox"
-        [checked]="element.sensitive"
-        (change)="elementChanged.emit({ sensitive: checked($event) })" /><span class="toggle"></span
-    ></label>
+    @if (element.type !== 'divider') {
+      <label class="toggle-row"
+        ><span
+          ><strong>Sensitive content</strong><small>Blur until the eye control is used</small></span
+        ><input
+          type="checkbox"
+          [checked]="element.sensitive"
+          (change)="elementChanged.emit({ sensitive: checked($event) })" /><span
+          class="toggle"
+        ></span
+      ></label>
+    }
     <div class="editor-section placement">
       <p class="editor-eyebrow eyebrow">Grid placement</p>
       <div class="editor-field-row field-row">

@@ -9,6 +9,7 @@ import { WidgetSettings } from './widget-settings/widget-settings';
 import { eventChecked, eventNumber } from './form-events';
 import { ChartElementSettings } from './chart-element-settings/chart-element-settings';
 import { elementIcon } from '../widget-element-metadata';
+import { DividerElementSettings } from './divider-element-settings/divider-element-settings';
 
 export interface TrackChange {
   kind: 'rows' | 'columns';
@@ -36,6 +37,7 @@ export interface SpanChange {
     ButtonElementSettings,
     WidgetSettings,
     ChartElementSettings,
+    DividerElementSettings,
   ],
   templateUrl: './settings-panel.html',
   styleUrl: './settings-panel.css',

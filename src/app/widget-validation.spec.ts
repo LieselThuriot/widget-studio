@@ -1,4 +1,4 @@
-import { parseWidgetInput, safeParseWidgetInput } from 'widget-renderer';
+import { hydrateWidget, parseWidgetInput, safeParseWidgetInput } from 'widget-renderer';
 import { WidgetContract } from 'widget-renderer';
 
 const validContract: WidgetContract = {
@@ -30,6 +30,42 @@ describe('widget contract validation', () => {
     });
 
     expect(result.success).toBe(true);
+  });
+
+  it('accepts a divider contract without sensitive', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'divider',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'center' },
+          orientation: 'horizontal',
+          style: { color: '#64748b' },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('normalizes divider sensitivity to false when the input includes true', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'divider',
+          sensitive: true,
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          orientation: 'horizontal',
+          style: { color: '#64748b' },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(hydrateWidget(result.data).elements[0].sensitive).toBe(false);
+    }
   });
 
   it('allows the background image URL to be omitted', () => {

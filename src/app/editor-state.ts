@@ -70,7 +70,9 @@ export function resizeElement(
 
 function mergeElementStyle(element: WidgetElement, patch: object): object {
   const currentStyle =
-    'style' in element && isRecord(element.style) ? element.style : ({} as Record<string, unknown>);
+    'style' in element && isRecord(element.style)
+      ? (element.style as Record<string, unknown>)
+      : ({} as Record<string, unknown>);
   const merged = { ...currentStyle, ...patch } as Record<string, unknown>;
   const patchRecord = patch as Record<string, unknown>;
   if (isRecord(currentStyle['font']) && isRecord(patchRecord['font'])) {

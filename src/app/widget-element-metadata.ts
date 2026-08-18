@@ -11,6 +11,7 @@ export const widgetElementPalette: PaletteItem[] = [
   { type: 'text', label: 'Text', icon: 'T', description: 'Formatted content' },
   { type: 'image', label: 'Image', icon: '▧', description: 'Remote image' },
   { type: 'button', label: 'Action', icon: '↗', description: 'GET or POST' },
+  { type: 'divider', label: 'Divider', icon: '—', description: 'Visual separator' },
   { type: 'pie', label: 'Pie', icon: '◔', description: 'Part-to-whole' },
   { type: 'donut', label: 'Donut', icon: '◉', description: 'Part-to-whole' },
   { type: 'gauge', label: 'Gauge', icon: '◌', description: 'Single value' },
@@ -30,7 +31,9 @@ export function elementLabel(element: WidgetElement): string {
       ? element.alt
       : element.type === 'button'
         ? element.label
-        : element.type === 'progress'
-          ? element.data.label
-          : element.title;
+        : element.type === 'divider'
+          ? 'Divider'
+          : element.type === 'progress'
+            ? element.data.label
+            : element.title;
 }

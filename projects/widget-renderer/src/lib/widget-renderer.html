@@ -156,6 +156,14 @@
               >
                 {{ element.label }}
               </button>
+            } @else if (element.type === 'divider') {
+              <div
+                class="divider-element"
+                [class.is-vertical]="element.orientation === 'vertical'"
+                role="separator"
+                [attr.aria-orientation]="element.orientation"
+                [style.background-color]="element.style.color"
+              ></div>
             } @else if (isChart(element)) {
               @defer (on immediate) {
                 <widget-chart-element

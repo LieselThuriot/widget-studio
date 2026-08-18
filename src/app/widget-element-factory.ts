@@ -5,6 +5,7 @@ import {
   GaugeStyle,
   GraphStyle,
   ImageElement,
+  DividerElement,
   PieStyle,
   ProgressElement,
   SeriesElement,
@@ -59,11 +60,21 @@ export function createWidgetElement(type: WidgetElement['type'], id: string): Wi
     } as ButtonElement;
   }
 
+  if (type === 'divider') {
+    return {
+      ...base,
+      type,
+      orientation: 'horizontal',
+      grid: { ...base.grid, anchor: 'center' as const },
+      style: { color: '#64748b' },
+    } as DividerElement;
+  }
+
   return createChartElement(type, base);
 }
 
 function createChartElement(
-  type: Exclude<WidgetElement['type'], 'text' | 'image' | 'button'>,
+  type: Exclude<WidgetElement['type'], 'text' | 'image' | 'button' | 'divider'>,
   base: Omit<WidgetElementBase, 'type'>,
 ): ChartElement | ProgressElement {
   const data = [

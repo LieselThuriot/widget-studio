@@ -163,6 +163,16 @@
 .element-content > widget-chart-element.is-progress {
   height: auto;
 }
+.divider-element {
+  width: 100%;
+  height: 2px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+}
+.divider-element.is-vertical {
+  width: 2px;
+  height: 100%;
+}
 .element-content.is-sensitive {
   filter: blur(var(--sensitive-blur, 2px));
   user-select: none;

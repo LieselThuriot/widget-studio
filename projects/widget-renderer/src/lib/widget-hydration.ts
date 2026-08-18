@@ -23,6 +23,7 @@ function hydrateElement(
   const id = elementId(element);
   return {
     ...element,
+    sensitive: element.type === 'divider' ? false : element.sensitive,
     id: id ?? (previous?.type === element.type ? previous.id : createElementId(element.type)),
   } as WidgetElement;
 }

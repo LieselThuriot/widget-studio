@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+.divider-orientation {
+  margin: 14px 0;
+  color: var(--editor-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+.orientation-toggle {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+}
+button {
+  flex: 1;
+  min-height: 30px;
+  border: 1px solid var(--editor-border-control);
+  border-radius: var(--editor-radius-control);
+  background: var(--editor-surface-panel);
+  color: var(--editor-text-secondary);
+  cursor: pointer;
+  font: inherit;
+}
+button:is(:hover, :focus-visible),
+button.active {
+  border-color: #5874ab;
+  background: #edf2fb;
+  color: #36527f;
+  outline: none;
+}
+:host-context(html[data-theme='dark']) button:is(:hover, :focus-visible),
+:host-context(html[data-theme='dark']) button.active {
+  background: #293b61;
+  color: #b7cdf5;
+}

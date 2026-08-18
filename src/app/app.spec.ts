@@ -221,6 +221,28 @@ describe('App', () => {
     expect(progressElement?.['active']).toBe(false);
   });
 
+  it('should add a divider with its public defaults', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const divider = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-item') as NodeListOf<HTMLButtonElement>,
+    ).find((item) => item.textContent?.includes('Divider')) as HTMLButtonElement;
+
+    divider.click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { elements: Record<string, unknown>[] };
+    const dividerElement = contract.elements.find((element) => element['type'] === 'divider');
+
+    expect(dividerElement).toMatchObject({
+      orientation: 'horizontal',
+      style: { color: '#64748b' },
+    });
+    expect(dividerElement).not.toHaveProperty('sensitive');
+  });
+
   it('should update progress legend and active settings', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

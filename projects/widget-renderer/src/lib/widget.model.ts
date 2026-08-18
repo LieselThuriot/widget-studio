@@ -1,6 +1,6 @@
 export type GridUnit = 'pixel' | 'auto' | 'star';
 export type WidgetElementType =
-  'text' | 'image' | 'button' | 'pie' | 'donut' | 'gauge' | 'bar' | 'line' | 'progress';
+  'text' | 'image' | 'button' | 'divider' | 'pie' | 'donut' | 'gauge' | 'bar' | 'line' | 'progress';
 export type ButtonMethod = 'get' | 'post';
 export type WidgetSize = 'square' | 'wide';
 export type ElementAnchor =
@@ -72,6 +72,11 @@ export interface ButtonElement extends WidgetElementBase {
   url: string;
   body?: string;
   style: 'solid' | 'outline';
+}
+export interface DividerElement extends WidgetElementBase {
+  type: 'divider';
+  orientation: 'horizontal' | 'vertical';
+  style: { color: string };
 }
 export interface ChartDataPoint {
   label: string;
@@ -148,16 +153,18 @@ export interface ProgressElement extends WidgetElementBase {
 }
 export type ChartElement = PieElement | GaugeElement | SeriesElement;
 export type WidgetElement =
-  TextElement | ImageElement | ButtonElement | ChartElement | ProgressElement;
+  TextElement | ImageElement | ButtonElement | DividerElement | ChartElement | ProgressElement;
 export type TextElementContract = Omit<TextElement, 'id'>;
 export type ImageElementContract = Omit<ImageElement, 'id'> & OptionalElementId;
 export type ButtonElementContract = Omit<ButtonElement, 'id'> & OptionalElementId;
+export type DividerElementContract = Omit<DividerElement, 'id' | 'sensitive'> & OptionalElementId;
 export type ChartElementContract = Omit<ChartElement, 'id'> & OptionalElementId;
 export type ProgressElementContract = Omit<ProgressElement, 'id'> & OptionalElementId;
 export type WidgetElementContract =
   | (TextElementContract & OptionalElementId)
   | ImageElementContract
   | ButtonElementContract
+  | DividerElementContract
   | ChartElementContract
   | ProgressElementContract;
 export interface Widget {

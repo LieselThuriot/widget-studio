@@ -1,0 +1,24 @@
+<div class="divider-orientation">
+  <span>Orientation</span>
+  <div class="orientation-toggle" role="group" aria-label="Divider orientation">
+    <button
+      type="button"
+      [class.active]="element().orientation === 'horizontal'"
+      (click)="changed.emit({ orientation: 'horizontal' })"
+    >
+      Horizontal
+    </button>
+    <button
+      type="button"
+      [class.active]="element().orientation === 'vertical'"
+      (click)="changed.emit({ orientation: 'vertical' })"
+    >
+      Vertical
+    </button>
+  </div>
+</div>
+<app-color-picker
+  label="Line color"
+  [value]="element().style.color"
+  (changed)="changed.emit({ style: { color: $event } })"
+/>

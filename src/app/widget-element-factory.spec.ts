@@ -46,6 +46,16 @@ describe('widget element factory', () => {
     expect(bar).toMatchObject({ id: 'bar-id', type: 'bar', title: 'Comparison' });
   });
 
+  it('creates a horizontal divider default', () => {
+    expect(createWidgetElement('divider', 'divider-id')).toMatchObject({
+      id: 'divider-id',
+      type: 'divider',
+      orientation: 'horizontal',
+      style: { color: '#64748b' },
+      grid: { anchor: 'center' },
+    });
+  });
+
   it('returns fresh default style objects', () => {
     expect(defaultGraphStyle()).toEqual(defaultGraphStyle());
     expect(defaultGaugeStyle()).toEqual(defaultGaugeStyle());

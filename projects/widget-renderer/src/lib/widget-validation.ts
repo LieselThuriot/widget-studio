@@ -46,6 +46,7 @@ const elementTypes: WidgetElementType[] = [
   'text',
   'image',
   'button',
+  'divider',
   'pie',
   'donut',
   'gauge',
@@ -227,7 +228,9 @@ function validateElement(
     return;
   }
   validateGrid(value['grid'], `${issuePath}.grid`, issues);
-  requiredBoolean(value['sensitive'], `${issuePath}.sensitive`, issues);
+  if (value['type'] !== 'divider' || value['sensitive'] !== undefined) {
+    requiredBoolean(value['sensitive'], `${issuePath}.sensitive`, issues);
+  }
   switch (value['type']) {
     case 'text':
       requiredString(value['text'], `${issuePath}.text`, issues, true);
@@ -252,6 +255,12 @@ function validateElement(
       requiredString(value['url'], `${issuePath}.url`, issues, true);
       if (!isOneOf(value['style'], ['solid', 'outline'] as const))
         addIssue(issues, `${issuePath}.style`, 'has an unsupported value');
+      break;
+    case 'divider':
+      if (!isOneOf(value['orientation'], ['horizontal', 'vertical'] as const))
+        addIssue(issues, `${issuePath}.orientation`, 'has an unsupported value');
+      if (!isRecord(value['style'])) addIssue(issues, `${issuePath}.style`, 'must be an object');
+      else requiredString(value['style']['color'], `${issuePath}.style.color`, issues);
       break;
     case 'gauge':
       requiredString(value['title'], `${issuePath}.title`, issues, true);

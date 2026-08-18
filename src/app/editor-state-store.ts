@@ -32,7 +32,13 @@ export class EditorStateStore {
     return JSON.stringify(
       {
         ...publicWidget,
-        elements: elements.map(({ id: _id, ...element }) => element),
+        elements: elements.map(({ id: _id, ...element }) => {
+          if (element.type === 'divider') {
+            const { sensitive: _sensitive, ...publicDivider } = element;
+            return publicDivider;
+          }
+          return element;
+        }),
       },
       null,
       2,
