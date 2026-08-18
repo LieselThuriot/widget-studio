@@ -158,7 +158,14 @@ export type WidgetElement =
   TextElement | ImageElement | ButtonElement | DividerElement | ChartElement | ProgressElement;
 export type TextElementContract = Omit<TextElement, 'id'>;
 export type ImageElementContract = Omit<ImageElement, 'id'> & OptionalElementId;
-export type ButtonElementContract = Omit<ButtonElement, 'id'> & OptionalElementId;
+export type ButtonElementContract = Omit<
+  ButtonElement,
+  'id' | 'requestRefresh' | 'showOnlyOnHover'
+> &
+  OptionalElementId & {
+    requestRefresh?: boolean;
+    showOnlyOnHover?: boolean;
+  };
 export type DividerElementContract = Omit<DividerElement, 'id' | 'sensitive'> & OptionalElementId;
 export type ChartElementContract = Omit<ChartElement, 'id'> & OptionalElementId;
 export type ProgressElementContract = Omit<ProgressElement, 'id'> & OptionalElementId;

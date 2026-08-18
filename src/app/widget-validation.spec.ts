@@ -82,6 +82,28 @@ describe('widget contract validation', () => {
     ).toBe(false);
   });
 
+  it('accepts omitted button display flags and hydrates them as false', () => {
+    const button = {
+      type: 'button' as const,
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+      sensitive: false,
+      label: 'Open',
+      method: 'get' as const,
+      url: '/open',
+      style: 'solid' as const,
+    };
+    const result = safeParseWidgetInput({ ...validContract, elements: [button] });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      const hydrated = hydrateWidget(result.data);
+      expect(hydrated.elements[0]).toMatchObject({
+        requestRefresh: false,
+        showOnlyOnHover: false,
+      });
+    }
+  });
+
   it('normalizes divider sensitivity to false when the input includes true', () => {
     const result = safeParseWidgetInput({
       ...validContract,

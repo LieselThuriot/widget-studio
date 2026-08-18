@@ -257,8 +257,10 @@ function validateElement(
         addIssue(issues, `${issuePath}.body`, 'must be a string or null');
       if (value['method'] === 'get' && value['body'] !== undefined && value['body'] !== null)
         addIssue(issues, `${issuePath}.body`, 'must be empty for GET buttons');
-      requiredBoolean(value['requestRefresh'], `${issuePath}.requestRefresh`, issues);
-      requiredBoolean(value['showOnlyOnHover'], `${issuePath}.showOnlyOnHover`, issues);
+      if (value['requestRefresh'] !== undefined)
+        requiredBoolean(value['requestRefresh'], `${issuePath}.requestRefresh`, issues);
+      if (value['showOnlyOnHover'] !== undefined)
+        requiredBoolean(value['showOnlyOnHover'], `${issuePath}.showOnlyOnHover`, issues);
       if (!isOneOf(value['style'], ['solid', 'outline'] as const))
         addIssue(issues, `${issuePath}.style`, 'has an unsupported value');
       break;

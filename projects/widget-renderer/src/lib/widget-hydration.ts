@@ -23,6 +23,12 @@ function hydrateElement(
   const id = elementId(element);
   return {
     ...element,
+    ...(element.type === 'button'
+      ? {
+          requestRefresh: element.requestRefresh ?? false,
+          showOnlyOnHover: element.showOnlyOnHover ?? false,
+        }
+      : {}),
     sensitive: element.type === 'divider' ? false : element.sensitive,
     id: id ?? (previous?.type === element.type ? previous.id : createElementId(element.type)),
   } as WidgetElement;
