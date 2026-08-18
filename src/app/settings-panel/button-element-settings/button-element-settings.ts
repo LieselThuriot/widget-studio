@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { ButtonElement } from 'widget-renderer';
-import { eventValue } from '../form-events';
+import { eventChecked, eventValue } from '../form-events';
 
 @Component({
   selector: 'app-button-element-settings',
@@ -17,6 +17,15 @@ export class ButtonElementSettings {
 
   protected method(event: Event): ButtonElement['method'] {
     return eventValue(event) === 'post' ? 'post' : 'get';
+  }
+
+  protected methodChanged(event: Event): Partial<ButtonElement> {
+    const method = this.method(event);
+    return method === 'get' ? { method, body: undefined } : { method };
+  }
+
+  protected checked(event: Event): boolean {
+    return eventChecked(event);
   }
 
   protected style(event: Event): ButtonElement['style'] {

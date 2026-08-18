@@ -70,7 +70,8 @@ export interface ButtonElement extends WidgetElementBase {
   label: string;
   method: ButtonMethod;
   url: string;
-  body?: string;
+  body?: string | null;
+  requestRefresh: boolean;
   style: 'solid' | 'outline';
 }
 export interface DividerElement extends WidgetElementBase {

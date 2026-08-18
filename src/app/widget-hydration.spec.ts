@@ -55,6 +55,7 @@ describe('hydrateWidget', () => {
       label: 'Open',
       method: 'get',
       url: '/',
+      requestRefresh: false,
       style: 'solid',
     };
 

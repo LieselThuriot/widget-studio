@@ -253,6 +253,11 @@ function validateElement(
       if (!isOneOf(value['method'], ['get', 'post'] as const))
         addIssue(issues, `${issuePath}.method`, 'has an unsupported value');
       requiredString(value['url'], `${issuePath}.url`, issues, true);
+      if (value['body'] !== undefined && value['body'] !== null && !isString(value['body']))
+        addIssue(issues, `${issuePath}.body`, 'must be a string or null');
+      if (value['method'] === 'get' && value['body'] !== undefined && value['body'] !== null)
+        addIssue(issues, `${issuePath}.body`, 'must be empty for GET buttons');
+      requiredBoolean(value['requestRefresh'], `${issuePath}.requestRefresh`, issues);
       if (!isOneOf(value['style'], ['solid', 'outline'] as const))
         addIssue(issues, `${issuePath}.style`, 'has an unsupported value');
       break;

@@ -3,7 +3,7 @@
 /></label>
 <div class="field-row">
   <label
-    >Method<select [value]="element().method" (change)="changed.emit({ method: method($event) })">
+    >Method<select [value]="element().method" (change)="changed.emit(methodChanged($event))">
       <option value="get">GET</option>
       <option value="post">POST</option>
     </select></label
@@ -18,3 +18,18 @@
 <label
   >Request URL<input [value]="element().url" (input)="changed.emit({ url: value($event) })"
 /></label>
+@if (element().method === 'post') {
+  <label
+    >Request body<textarea
+      [value]="element().body ?? ''"
+      (input)="changed.emit({ body: value($event) })"
+    ></textarea>
+  </label>
+}
+<label class="toggle-row"
+  ><span><strong>Refresh on click</strong><small>Emit a refresh request</small></span
+  ><input
+    type="checkbox"
+    [checked]="element().requestRefresh"
+    (change)="changed.emit({ requestRefresh: checked($event) })" /><span class="toggle"></span
+></label>

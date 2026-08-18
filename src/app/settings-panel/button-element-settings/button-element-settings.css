@@ -6,3 +6,85 @@
   grid-template-columns: 1fr 1fr;
   gap: 9px;
 }
+
+.toggle-row {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 12px 0 2px;
+  border-top: 1px solid var(--editor-divider);
+}
+
+.toggle-row span:first-child {
+  flex: 1;
+}
+
+.toggle-row strong,
+.toggle-row small {
+  display: block;
+}
+
+.toggle-row small {
+  margin-top: 3px;
+  color: #9aa5b7;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.toggle-row input {
+  position: absolute;
+  width: 1px !important;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.toggle {
+  position: relative;
+  flex: 0 0 auto;
+  width: 29px;
+  height: 17px;
+  border-radius: var(--editor-radius-pill);
+  background: var(--editor-toggle-off);
+  transition: background var(--editor-duration-toggle) var(--editor-ease-standard);
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--editor-control-thumb);
+  transition: transform var(--editor-duration-toggle) var(--editor-ease-standard);
+}
+
+.toggle-row input:checked + .toggle {
+  background: var(--editor-toggle-on);
+}
+
+.toggle-row input:checked + .toggle::after {
+  transform: translateX(12px);
+}
+
+.toggle-row input:focus-visible + .toggle {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 2px;
+}
+
+:host-context(html[data-theme='dark']) .toggle-row {
+  border-color: #2d3d5d;
+}
+
+:host-context(html[data-theme='dark']) .toggle {
+  background: #526483;
+}

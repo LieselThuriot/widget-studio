@@ -23,6 +23,7 @@ const widget: WidgetContract = {
       label: 'Secret action',
       method: 'get',
       url: '/secret',
+      requestRefresh: false,
       style: 'solid',
     },
     {

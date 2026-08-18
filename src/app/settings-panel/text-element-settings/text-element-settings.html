@@ -94,15 +94,19 @@
       <option value="center">Center</option>
       <option value="right">Right</option>
     </select></label
-  ><label class="toggle-row"
-    ><span>Wrap text</span
-    ><input
+  >
+  <label class="toggle-row">
+    <span>
+      <strong>Wrap text</strong>
+      <small>Keep text on multiple lines</small>
+    </span>
+    <input
       type="checkbox"
       [checked]="element().style.wrap"
-      (change)="changed.emit({ style: { ...element().style, wrap: checked($event) } })" /><span
-      class="toggle"
-    ></span
-  ></label>
+      (change)="changed.emit({ style: { ...element().style, wrap: checked($event) } })"
+    />
+    <span class="toggle"></span>
+  </label>
 </div>
 <app-color-picker
   label="Color"

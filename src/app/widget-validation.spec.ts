@@ -48,6 +48,35 @@ describe('widget contract validation', () => {
     expect(result.success).toBe(true);
   });
 
+  it('validates button request bodies and refresh settings', () => {
+    const button = {
+      type: 'button' as const,
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+      sensitive: false,
+      label: 'Submit',
+      method: 'post' as const,
+      url: '/submit',
+      body: '{}',
+      requestRefresh: true,
+      style: 'solid' as const,
+    };
+
+    expect(safeParseWidgetInput({ ...validContract, elements: [button] }).success).toBe(true);
+    expect(
+      safeParseWidgetInput({ ...validContract, elements: [{ ...button, method: 'get' }] }).success,
+    ).toBe(false);
+    expect(
+      safeParseWidgetInput({
+        ...validContract,
+        elements: [{ ...button, method: 'get', body: null }],
+      }).success,
+    ).toBe(true);
+    expect(
+      safeParseWidgetInput({ ...validContract, elements: [{ ...button, requestRefresh: 'yes' }] })
+        .success,
+    ).toBe(false);
+  });
+
   it('normalizes divider sensitivity to false when the input includes true', () => {
     const result = safeParseWidgetInput({
       ...validContract,

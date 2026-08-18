@@ -56,6 +56,7 @@ export function createWidgetElement(type: WidgetElement['type'], id: string): Wi
       label: 'New action',
       method: 'get',
       url: '/',
+      requestRefresh: false,
       style: 'solid',
     } as ButtonElement;
   }

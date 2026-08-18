@@ -204,6 +204,7 @@ protected handleAction(event: { element: ButtonElement; event: Event }): void {
   event.element.method; // 'get' or 'post'
   event.element.url;
   event.element.body;
+  event.element.requestRefresh; // whether the host should refresh after the click
 }
 ```
 
