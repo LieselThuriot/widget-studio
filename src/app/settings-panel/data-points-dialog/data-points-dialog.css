@@ -80,7 +80,7 @@ input {
     sans-serif;
 }
 input.invalid {
-  border-color: var(--editor-danger-input);
+  --editor-border-control: var(--editor-danger-input);
   box-shadow: 0 0 0 1px var(--editor-danger-input-ring);
 }
 .remove-button {
