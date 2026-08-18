@@ -1,9 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { GaugeElement } from 'widget-renderer';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
+import { ColorPicker } from '../../color-picker/color-picker';
 
 @Component({
   selector: 'app-gauge-element-settings',
+  imports: [ColorPicker],
   templateUrl: './gauge-element-settings.html',
   styleUrl: '../chart-element-settings/chart-settings.css',
 })

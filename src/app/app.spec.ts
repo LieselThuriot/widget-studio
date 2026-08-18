@@ -284,11 +284,11 @@ describe('App', () => {
 
     const legendColor = Array.from(
       fixture.nativeElement.querySelectorAll(
-        'app-chart-element-settings input[type="color"]',
-      ) as NodeListOf<HTMLInputElement>,
-    ).find((input) =>
-      input.parentElement?.textContent?.includes('Legend color'),
-    ) as HTMLInputElement;
+        'app-chart-element-settings app-color-picker',
+      ) as NodeListOf<HTMLElement>,
+    )
+      .find((input) => input.textContent?.includes('Legend color'))
+      ?.querySelector('input[type="color"]') as HTMLInputElement;
     legendColor.value = '#ff0000';
     legendColor.dispatchEvent(new Event('input', { bubbles: true }));
     fixture.detectChanges();
@@ -346,11 +346,11 @@ describe('App', () => {
 
     const legendColor = Array.from(
       fixture.nativeElement.querySelectorAll(
-        'app-chart-element-settings input[type="color"]',
-      ) as NodeListOf<HTMLInputElement>,
-    ).find((input) =>
-      input.parentElement?.textContent?.includes('Legend color'),
-    ) as HTMLInputElement;
+        'app-chart-element-settings app-color-picker',
+      ) as NodeListOf<HTMLElement>,
+    )
+      .find((input) => input.textContent?.includes('Legend color'))
+      ?.querySelector('input[type="color"]') as HTMLInputElement;
     legendColor.value = '#ff0000';
     legendColor.dispatchEvent(new Event('input', { bubbles: true }));
     fixture.detectChanges();
@@ -376,21 +376,26 @@ describe('App', () => {
     const settings = fixture.nativeElement.querySelector(
       'app-chart-element-settings',
     ) as HTMLElement;
-    const labels = Array.from(settings.querySelectorAll('label')).map((label) =>
-      label.textContent?.replace(/\s+/g, ' ').trim(),
-    );
+    const labels = [
+      ...Array.from(settings.querySelectorAll('label')).map((label) =>
+        label.textContent?.replace(/\s+/g, ' ').trim(),
+      ),
+      ...Array.from(settings.querySelectorAll('app-color-picker .color-picker-label span')).map(
+        (label) => label.textContent?.replace(/\s+/g, ' ').trim(),
+      ),
+    ];
 
     expect(labels).toEqual([
       'Title',
-      'Title color',
       'Value',
       'Minimum',
       'Maximum',
+      'Show legendDisplay gauge labels and value',
+      'Font size',
+      'Title color',
       'Fill color',
       'Track color',
-      'Show legendDisplay gauge labels and value',
       'Legend color',
-      'Font size',
     ]);
   });
 

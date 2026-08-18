@@ -10,16 +10,40 @@
   align-items: center;
   gap: 4px;
 }
-input {
+.color-input {
+  position: relative;
   display: block;
   box-sizing: border-box;
   width: 100%;
   height: 29px;
   margin-top: 6px;
-  padding: 2px 9px;
   border: 1px solid var(--editor-border-control);
   border-radius: var(--editor-radius-control);
-  background: var(--editor-surface-panel);
+}
+.color-input input {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.color-input.is-transparent {
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #d8dce4 25%, transparent 25%),
+    linear-gradient(-45deg, #d8dce4 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d8dce4 75%),
+    linear-gradient(-45deg, transparent 75%, #d8dce4 75%);
+  background-position:
+    0 0,
+    0 5px,
+    5px -5px,
+    -5px 0;
+  background-size: 10px 10px;
 }
 .alpha-control {
   margin-top: 8px;
@@ -69,9 +93,8 @@ input {
 .clear-button:disabled {
   cursor: default;
 }
-:host-context(html[data-theme='dark']) input {
+:host-context(html[data-theme='dark']) .color-input {
   border-color: #3a4b6e;
-  background: #10182c;
 }
 :host-context(html[data-theme='dark']) .clear-button:hover:not(:disabled),
 :host-context(html[data-theme='dark']) .clear-button:focus-visible {

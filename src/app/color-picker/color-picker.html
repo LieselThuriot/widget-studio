@@ -14,12 +14,18 @@
       </button>
     }
   </div>
-  <input
-    type="color"
-    [value]="inputValue()"
-    [attr.aria-label]="label()"
-    (input)="onInput($event)"
-  />
+  <div
+    class="color-input"
+    [class.is-transparent]="isTransparent()"
+    [style.background-color]="inputValue()"
+  >
+    <input
+      type="color"
+      [value]="inputValue()"
+      [attr.aria-label]="label()"
+      (input)="onInput($event)"
+    />
+  </div>
   @if (withAlpha()) {
     <div class="alpha-control">
       <label [for]="alphaId"

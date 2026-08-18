@@ -1,14 +1,11 @@
 <label
   >Title<input [value]="element().title" (input)="changed.emit({ title: value($event) })"
 /></label>
-<label
-  >Title color<input
-    type="color"
-    [value]="style().color.title"
-    (input)="
-      changed.emit({ style: { ...style(), color: { ...style().color, title: value($event) } } })
-    "
-/></label>
+<app-color-picker
+  label="Title color"
+  [value]="style().color.title"
+  (changed)="changed.emit({ style: { ...style(), color: { ...style().color, title: $event } } })"
+/>
 <label
   >Font size<input
     type="number"
@@ -30,14 +27,11 @@
       [checked]="element().showLegend"
       (change)="changed.emit({ showLegend: checked($event) })" /><span class="toggle"></span
   ></label>
-  <label
-    >Legend color<input
-      type="color"
-      [value]="style().color.legend"
-      (input)="
-        changed.emit({ style: { ...style(), color: { ...style().color, legend: value($event) } } })
-      "
-  /></label>
+  <app-color-picker
+    label="Legend color"
+    [value]="style().color.legend"
+    (changed)="changed.emit({ style: { ...style(), color: { ...style().color, legend: $event } } })"
+  />
 }
 @if (isDataDialogOpen()) {
   <app-data-points-dialog
@@ -48,39 +42,25 @@
 }
 @if (element().type === 'bar' || element().type === 'line') {
   @if (element().type === 'line') {
-    <label
-      >Line color<input
-        type="color"
-        [value]="style().color.line"
-        (input)="
-          changed.emit({
-            style: { ...style(), color: { ...style().color, line: value($event) } },
-          })
-        "
-    /></label>
+    <app-color-picker
+      label="Line color"
+      [value]="style().color.line"
+      (changed)="changed.emit({ style: { ...style(), color: { ...style().color, line: $event } } })"
+    />
   }
-  <label
-    >Axis labels<input
-      type="color"
-      [value]="style().axis.label"
-      (input)="
-        changed.emit({ style: { ...style(), axis: { ...style().axis, label: value($event) } } })
-      "
-  /></label>
-  <label
-    >Axis line<input
-      type="color"
-      [value]="style().axis.line"
-      (input)="
-        changed.emit({ style: { ...style(), axis: { ...style().axis, line: value($event) } } })
-      "
-  /></label>
-  <label
-    >Grid<input
-      type="color"
-      [value]="style().axis.grid"
-      (input)="
-        changed.emit({ style: { ...style(), axis: { ...style().axis, grid: value($event) } } })
-      "
-  /></label>
+  <app-color-picker
+    label="Axis labels"
+    [value]="style().axis.label"
+    (changed)="changed.emit({ style: { ...style(), axis: { ...style().axis, label: $event } } })"
+  />
+  <app-color-picker
+    label="Axis line"
+    [value]="style().axis.line"
+    (changed)="changed.emit({ style: { ...style(), axis: { ...style().axis, line: $event } } })"
+  />
+  <app-color-picker
+    label="Grid"
+    [value]="style().axis.grid"
+    (changed)="changed.emit({ style: { ...style(), axis: { ...style().axis, grid: $event } } })"
+  />
 }

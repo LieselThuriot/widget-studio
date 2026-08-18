@@ -45,12 +45,12 @@
               [value]="point.value"
               (input)="update(index, { value: number($event) })"
           /></label>
-          <label class="color-field"
-            >Color<input
-              type="color"
-              [value]="point.color ?? '#7dd3fc'"
-              (input)="update(index, { color: value($event) })"
-          /></label>
+          <app-color-picker
+            class="color-field"
+            label="Color"
+            [value]="point.color ?? '#7dd3fc'"
+            (changed)="update(index, { color: $event })"
+          />
           <button
             type="button"
             class="editor-button editor-button--danger remove-button"

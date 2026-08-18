@@ -2,10 +2,11 @@ import { Component, input, output, signal } from '@angular/core';
 import { ChartDataPoint, ChartElement, GraphStyle, SeriesElement } from 'widget-renderer';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { DataPointsDialog } from '../data-points-dialog/data-points-dialog';
+import { ColorPicker } from '../../color-picker/color-picker';
 
 @Component({
   selector: 'app-series-chart-settings',
-  imports: [DataPointsDialog],
+  imports: [DataPointsDialog, ColorPicker],
   templateUrl: './series-chart-settings.html',
   styleUrl: '../chart-element-settings/chart-settings.css',
 })

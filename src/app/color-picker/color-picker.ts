@@ -16,7 +16,13 @@ export class ColorPicker {
   readonly cleared = output<void>();
 
   protected inputValue(): string {
-    return this.value()?.slice(0, 7) || '#000000';
+    const value = this.value()?.trim().toLowerCase();
+    return value && /^#[0-9a-f]{6}(?:[0-9a-f]{2})?$/.test(value) ? value.slice(0, 7) : '#ffffff';
+  }
+
+  protected isTransparent(): boolean {
+    const value = this.value()?.trim().toLowerCase();
+    return !value || value === 'transparent' || /^#[0-9a-f]{6}00$/.test(value);
   }
 
   protected onInput(event: Event): void {

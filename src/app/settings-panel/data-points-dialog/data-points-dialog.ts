@@ -11,9 +11,11 @@ import {
 import { ChartDataPoint } from 'widget-renderer';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../../dialog-focus';
 import { eventNumber, eventValue } from '../form-events';
+import { ColorPicker } from '../../color-picker/color-picker';
 
 @Component({
   selector: 'app-data-points-dialog',
+  imports: [ColorPicker],
   templateUrl: './data-points-dialog.html',
   styleUrl: './data-points-dialog.css',
 })

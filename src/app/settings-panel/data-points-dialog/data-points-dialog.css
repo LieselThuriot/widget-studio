@@ -79,10 +79,6 @@ input {
     12px 'DM Sans',
     sans-serif;
 }
-input[type='color'] {
-  padding: 3px;
-  cursor: pointer;
-}
 input.invalid {
   border-color: var(--editor-danger-input);
   box-shadow: 0 0 0 1px var(--editor-danger-input-ring);

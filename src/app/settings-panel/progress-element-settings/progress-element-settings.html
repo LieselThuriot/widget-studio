@@ -24,26 +24,24 @@
   /></label>
 </div>
 <div class="field-row color-fields stacked-fields">
-  <label
-    >Fill<input
-      type="color"
-      [value]="element().style.color.fill"
-      (input)="
-        changed.emit({
-          style: { ...element().style, color: { ...element().style.color, fill: value($event) } },
-        })
-      "
-  /></label>
-  <label
-    >Track<input
-      type="color"
-      [value]="element().style.color.track"
-      (input)="
-        changed.emit({
-          style: { ...element().style, color: { ...element().style.color, track: value($event) } },
-        })
-      "
-  /></label>
+  <app-color-picker
+    label="Fill"
+    [value]="element().style.color.fill"
+    (changed)="
+      changed.emit({
+        style: { ...element().style, color: { ...element().style.color, fill: $event } },
+      })
+    "
+  />
+  <app-color-picker
+    label="Track"
+    [value]="element().style.color.track"
+    (changed)="
+      changed.emit({
+        style: { ...element().style, color: { ...element().style.color, track: $event } },
+      })
+    "
+  />
 </div>
 <label class="toggle-row"
   ><span><strong>Show legend</strong><small>Display the label and value</small></span
@@ -52,16 +50,15 @@
     [checked]="element().showLegend"
     (change)="changed.emit({ showLegend: checked($event) })" /><span class="toggle"></span
 ></label>
-<label
-  >Legend color<input
-    type="color"
-    [value]="element().style.color.legend"
-    (input)="
-      changed.emit({
-        style: { ...element().style, color: { ...element().style.color, legend: value($event) } },
-      })
-    "
-/></label>
+<app-color-picker
+  label="Legend color"
+  [value]="element().style.color.legend"
+  (changed)="
+    changed.emit({
+      style: { ...element().style, color: { ...element().style.color, legend: $event } },
+    })
+  "
+/>
 <label
   >Font size<input
     type="number"
