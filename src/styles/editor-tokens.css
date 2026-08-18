@@ -19,6 +19,7 @@
   --editor-surface-subtle: #f2f5f9;
   --editor-surface-dialog: #f7f9fc;
   --editor-surface-code: #17233c;
+  --editor-text-code: #b9c9e6;
   --editor-surface-raised: #fff;
   --editor-surface-input: #fff;
   --editor-surface-hover: #f8faff;
@@ -51,6 +52,9 @@
   --editor-accent-strong: #36527f;
   --editor-focus-ring: #8da6d4;
   --editor-selection: #f5c451;
+  --editor-success: #43b879;
+  --editor-brand: #f5c451;
+  --editor-text-on-brand: #16213b;
   --editor-danger: #e87984;
   --editor-danger-input: #b83d52;
   --editor-danger-input-ring: #b83d524d;
@@ -68,6 +72,12 @@
   --editor-toggle-off: #cbd3df;
   --editor-toggle-on: #5874ab;
   --editor-divider: #edf0f4;
+  --editor-text-link: #36527f;
+  --editor-pattern-light: #d8dce4;
+  --editor-overlay-light: #ffffff80;
+  --editor-overlay-subtle: #ffffff0d;
+  --editor-danger-surface-subtle: #f8e8ec;
+  --editor-border-control-muted: #b8c7dc;
   --editor-shadow-panel: 0 8px 24px #25365708;
   --editor-shadow-dialog: 0 24px 70px #080e1f80;
   --editor-shadow-menu: 0 10px 24px #27365326;

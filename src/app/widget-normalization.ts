@@ -5,19 +5,20 @@ import {
   ProgressElement,
   Widget,
   WidgetElement,
+  chartColors,
 } from 'widget-renderer';
 
 const defaultGraphStyle = {
   color: {
-    legend: '#f6f7fb',
-    title: '#f6f7fb',
-    line: '#7dd3fc',
-    axisLabel: '#d4dbea',
-    axisLine: '#94a3b8',
-    grid: '#475569',
+    legend: chartColors.legend,
+    title: chartColors.title,
+    line: chartColors.line,
+    axisLabel: chartColors.axisLabel,
+    axisLine: chartColors.axisLine,
+    grid: chartColors.grid,
   },
   font: { size: 11 },
-  axis: { label: '#d4dbea', line: '#94a3b8', grid: '#475569' },
+  axis: { label: chartColors.axisLabel, line: chartColors.axisLine, grid: chartColors.grid },
 };
 const chartTypes = ['pie', 'donut', 'gauge', 'bar', 'line'] as const;
 const seriesTypes = ['pie', 'donut', 'bar', 'line'] as const;
@@ -120,17 +121,17 @@ export function normalizeProgressElement(
         legend:
           (color['legend'] as string | undefined) ??
           (style['legendColor'] as string | undefined) ??
-          '#f6f7fb',
+          chartColors.legend,
         fill:
           (color['fill'] as string | undefined) ??
           (style['fillColor'] as string | undefined) ??
           legacy.color ??
-          '#7dd3fc',
+          chartColors.fill,
         track:
           (color['track'] as string | undefined) ??
           (style['trackColor'] as string | undefined) ??
           legacy.trackColor ??
-          '#334155',
+          chartColors.track,
       },
       font: { size: (style['fontSize'] as number | undefined) ?? 11 },
     },
@@ -159,19 +160,19 @@ export function normalizeGaugeElement(
         legend:
           (color['legend'] as string | undefined) ??
           (style['legendColor'] as string | undefined) ??
-          '#f6f7fb',
+          chartColors.legend,
         title:
           (color['title'] as string | undefined) ??
           (style['titleColor'] as string | undefined) ??
-          '#f6f7fb',
+          chartColors.title,
         fill:
           (color['fill'] as string | undefined) ??
           (style['fillColor'] as string | undefined) ??
-          '#7dd3fc',
+          chartColors.fill,
         track:
           (color['track'] as string | undefined) ??
           (style['trackColor'] as string | undefined) ??
-          '#334155',
+          chartColors.track,
       },
       font: { size: (style['fontSize'] as number | undefined) ?? 11 },
     },

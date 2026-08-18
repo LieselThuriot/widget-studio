@@ -32,12 +32,12 @@
   cursor: pointer;
 }
 .color-input.is-transparent {
-  background-color: #fff;
+  background-color: var(--editor-surface-panel);
   background-image:
-    linear-gradient(45deg, #d8dce4 25%, transparent 25%),
-    linear-gradient(-45deg, #d8dce4 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #d8dce4 75%),
-    linear-gradient(-45deg, transparent 75%, #d8dce4 75%);
+    linear-gradient(45deg, var(--editor-pattern-light) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--editor-pattern-light) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--editor-pattern-light) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--editor-pattern-light) 75%);
   background-position:
     0 0,
     0 5px,
@@ -56,7 +56,7 @@
   font-weight: 600;
 }
 .alpha-control output {
-  color: #9aa5b7;
+  color: var(--editor-text-tertiary);
   font-weight: 400;
 }
 .alpha-control input[type='range'] {
@@ -64,7 +64,7 @@
   margin-top: 3px;
   padding: 0;
   border: 0;
-  accent-color: #5874ab;
+  accent-color: var(--editor-accent);
 }
 .clear-button {
   display: inline-grid;
@@ -76,7 +76,7 @@
   border-radius: 5px;
   visibility: hidden;
   background: transparent;
-  color: #bd8290;
+  color: var(--editor-danger-strong);
   font:
     700 16px/1 Arial,
     sans-serif;
@@ -87,17 +87,17 @@
 }
 .clear-button:hover:not(:disabled),
 .clear-button:focus-visible {
-  background: #fbecef;
-  color: #b64d60;
+  background: var(--editor-danger-surface);
+  color: var(--editor-danger-strong);
 }
 .clear-button:disabled {
   cursor: default;
 }
 :host-context(html[data-theme='dark']) .color-input {
-  border-color: #3a4b6e;
+  border-color: var(--editor-border-control);
 }
 :host-context(html[data-theme='dark']) .clear-button:hover:not(:disabled),
 :host-context(html[data-theme='dark']) .clear-button:focus-visible {
-  background: #4a2635;
-  color: #f19aa4;
+  background: var(--editor-danger-surface);
+  color: var(--editor-danger-strong);
 }

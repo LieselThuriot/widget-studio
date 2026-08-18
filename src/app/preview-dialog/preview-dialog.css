@@ -32,19 +32,19 @@
 }
 h2 {
   margin: 5px 0 0;
-  color: #25324b;
+  color: var(--editor-text-primary);
   font:
     700 17px/1.1 'DM Sans',
     sans-serif;
 }
 .preview-close {
   background: var(--editor-surface-panel);
-  color: #63718a;
+  color: var(--editor-text-secondary);
 }
 .loading-toggle {
   order: -1;
   background: var(--editor-surface-panel);
-  color: #36527f;
+  color: var(--editor-accent-strong);
 }
 .loading-toggle:is(:hover, :focus-visible),
 .loading-toggle[aria-pressed='true'] {
@@ -65,7 +65,7 @@ h2 {
   padding: 14px 20px;
   border-top: 1px solid var(--editor-border);
   background: var(--editor-surface-panel);
-  color: #8794ad;
+  color: var(--editor-text-muted);
   text-align: center;
   font-size: 11px;
 }

@@ -44,12 +44,12 @@
 }
 .palette-item small {
   margin-top: 2px;
-  color: #8b96a9;
+  color: var(--editor-text-muted);
   font-size: 10px;
 }
 .add {
   margin-inline-start: auto;
-  color: #a6b0c0;
+  color: var(--editor-text-secondary);
   font-size: 18px;
 }
 :host-context(html[data-theme='dark']) .palette-item {
@@ -66,8 +66,8 @@
   color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .palette-item small {
-  color: #9aa9c3;
+  color: var(--editor-text-muted);
 }
 :host-context(html[data-theme='dark']) .add {
-  color: #a9b9d3;
+  color: var(--editor-text-secondary);
 }

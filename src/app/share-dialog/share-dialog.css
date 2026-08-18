@@ -111,8 +111,8 @@
   border-bottom-color: var(--editor-border-raised);
 }
 :host-context(html[data-theme='dark']) .share-icon {
-  background: #293b61;
-  color: #b7cdf5;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .share-link-card {
   border-color: var(--editor-border-raised);

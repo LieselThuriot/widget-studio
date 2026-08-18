@@ -17,7 +17,7 @@ h2 {
   align-items: center;
   gap: 7px;
   margin: 18px 0 20px;
-  color: #51617c;
+  color: var(--editor-text-menu);
   font-size: 11px;
 }
 .chip-icon {
@@ -26,14 +26,14 @@ h2 {
   width: 24px;
   height: 24px;
   border-radius: 6px;
-  background: #edf2fb;
-  color: #5874ab;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent);
   font-weight: 700;
 }
 .chip-id,
 .summary-value {
   margin-inline-start: auto;
-  color: #9aa5b7;
+  color: var(--editor-text-tertiary);
   font-size: 10px;
 }
 textarea {
@@ -51,13 +51,13 @@ textarea {
   border: 1px solid var(--editor-border-control);
   border-radius: var(--editor-radius-control);
   background: var(--editor-surface-panel);
-  color: #63718a;
+  color: var(--editor-text-secondary);
   cursor: pointer;
 }
 .formatting-tools button.active {
-  border-color: #5874ab;
-  background: #edf2fb;
-  color: #36527f;
+  border-color: var(--editor-accent);
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 .placement {
   margin-top: 18px;
@@ -71,7 +71,7 @@ textarea {
 .small-add {
   border: 0;
   background: transparent;
-  color: #5874ab;
+  color: var(--editor-accent);
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
@@ -92,12 +92,12 @@ textarea {
   height: 28px;
   border: 0;
   background: transparent;
-  color: #bd8290;
+  color: var(--editor-danger-strong);
   cursor: pointer;
 }
 .anchor-field {
   margin: 14px 0;
-  color: #67738a;
+  color: var(--editor-text-secondary);
   font-size: 11px;
   font-weight: 600;
 }
@@ -118,7 +118,7 @@ textarea {
   border-right: 1px solid var(--editor-border-control);
   border-bottom: 1px solid var(--editor-border-control);
   background: var(--editor-surface-panel);
-  color: #63718a;
+  color: var(--editor-text-secondary);
   font-size: 17px;
   cursor: pointer;
 }
@@ -129,8 +129,8 @@ textarea {
   border-bottom: 0;
 }
 .anchor-control button.active {
-  background: #edf2fb;
-  color: #36527f;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 .toggle-row {
   display: flex !important;
@@ -148,7 +148,7 @@ textarea {
 }
 .toggle-row small {
   margin-top: 3px;
-  color: #9aa5b7;
+  color: var(--editor-text-tertiary);
   font-size: 10px;
   font-weight: 400;
 }
@@ -182,28 +182,28 @@ textarea {
 }
 :host-context(html[data-theme='dark']) .selected-chip,
 :host-context(html[data-theme='dark']) .anchor-field {
-  color: #aebbd1;
+  color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) .chip-icon,
 :host-context(html[data-theme='dark']) .formatting-tools button.active,
 :host-context(html[data-theme='dark']) .anchor-control button.active {
-  background: #293b61;
-  color: #b7cdf5;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .formatting-tools button,
 :host-context(html[data-theme='dark']) .anchor-control,
 :host-context(html[data-theme='dark']) .anchor-control button {
-  border-color: #3a4b6e;
-  background: #10182c;
-  color: #e7ecf5;
+  border-color: var(--editor-border-control);
+  background: var(--editor-surface-code);
+  color: var(--editor-text-primary);
 }
 :host-context(html[data-theme='dark']) .placement,
 :host-context(html[data-theme='dark']) .widget-setting-section,
 :host-context(html[data-theme='dark']) .toggle-row {
-  border-color: #2d3d5d;
+  border-color: var(--editor-border);
 }
 :host-context(html[data-theme='dark']) .toggle {
-  background: #526483;
+  background: var(--editor-toggle-off);
 }
 
 @media (max-width: 1050px) {

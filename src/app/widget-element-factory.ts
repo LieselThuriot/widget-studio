@@ -12,6 +12,8 @@ import {
   TextElement,
   WidgetElement,
   WidgetElementBase,
+  chartColors,
+  randomPastelColor,
 } from 'widget-renderer';
 
 export function createWidgetElement(type: WidgetElement['type'], id: string): WidgetElement {
@@ -28,7 +30,7 @@ export function createWidgetElement(type: WidgetElement['type'], id: string): Wi
       type,
       text: 'New text',
       style: {
-        color: '#f6f7fb',
+        color: chartColors.legend,
         font: { size: 14, weight: 400, style: 'normal', decoration: 'none' },
         align: 'left',
         wrap: true,
@@ -68,7 +70,7 @@ export function createWidgetElement(type: WidgetElement['type'], id: string): Wi
       type,
       orientation: 'horizontal',
       grid: { ...base.grid, anchor: 'center' as const },
-      style: { color: '#64748b' },
+      style: { color: chartColors.divider },
     } as DividerElement;
   }
 
@@ -79,9 +81,10 @@ function createChartElement(
   type: Exclude<WidgetElement['type'], 'text' | 'image' | 'button' | 'divider'>,
   base: Omit<WidgetElementBase, 'type'>,
 ): ChartElement | ProgressElement {
+  const firstColor = randomPastelColor();
   const data = [
-    { label: 'Complete', value: 72, color: '#7dd3fc' },
-    { label: 'Remaining', value: 28, color: '#334155' },
+    { label: 'Complete', value: 72, color: firstColor },
+    { label: 'Remaining', value: 28, color: randomPastelColor([firstColor]) },
   ];
 
   if (type === 'progress') {
@@ -90,7 +93,7 @@ function createChartElement(
       type,
       data: { label: 'Progress', value: 72, min: 0, max: 100 },
       style: {
-        color: { legend: '#f6f7fb', fill: '#7dd3fc', track: '#334155' },
+        color: { legend: chartColors.legend, fill: chartColors.fill, track: chartColors.track },
         font: { size: 11 },
       },
       showLegend: true,
@@ -146,18 +149,18 @@ function chartGrid(
 export function defaultGraphStyle(): GraphStyle {
   return {
     color: {
-      legend: '#f6f7fb',
-      title: '#f6f7fb',
-      line: '#7dd3fc',
+      legend: chartColors.legend,
+      title: chartColors.title,
+      line: chartColors.line,
     },
     font: { size: 11 },
-    axis: { label: '#d4dbea', line: '#94a3b8', grid: '#475569' },
+    axis: { label: chartColors.axisLabel, line: chartColors.axisLine, grid: chartColors.grid },
   };
 }
 
 export function defaultPieStyle(): PieStyle {
   return {
-    color: { legend: '#f6f7fb', title: '#f6f7fb' },
+    color: { legend: chartColors.legend, title: chartColors.title },
     font: { size: 11 },
   };
 }
@@ -165,10 +168,10 @@ export function defaultPieStyle(): PieStyle {
 export function defaultGaugeStyle(): GaugeStyle {
   return {
     color: {
-      legend: '#f6f7fb',
-      title: '#f6f7fb',
-      fill: '#7dd3fc',
-      track: '#334155',
+      legend: chartColors.legend,
+      title: chartColors.title,
+      fill: chartColors.fill,
+      track: chartColors.track,
     },
     font: { size: 11 },
   };

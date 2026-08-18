@@ -24,7 +24,7 @@ button {
   border-right: 1px solid var(--editor-border-control);
   border-bottom: 1px solid var(--editor-border-control);
   background: var(--editor-surface-panel);
-  color: #63718a;
+  color: var(--editor-text-secondary);
   font-size: 17px;
   line-height: 1;
   cursor: pointer;
@@ -37,18 +37,18 @@ button:nth-child(n + 7) {
 }
 button:is(:hover, :focus-visible),
 button.active {
-  background: #edf2fb;
-  color: #36527f;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
   outline: none;
 }
 :host-context(html[data-theme='dark']) .anchor-control,
 :host-context(html[data-theme='dark']) button {
-  border-color: #3a4b6e;
-  background: #10182c;
-  color: #d7e1f2;
+  border-color: var(--editor-border-control);
+  background: var(--editor-surface-code);
+  color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) button:is(:hover, :focus-visible),
 :host-context(html[data-theme='dark']) button.active {
-  background: #293b61;
-  color: #b7cdf5;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }

@@ -32,14 +32,14 @@ footer {
 }
 h2 {
   margin: 5px 0 0;
-  color: #25324b;
+  color: var(--editor-text-primary);
   font:
     700 17px/1.1 'DM Sans',
     sans-serif;
 }
 .close-button {
   padding: 0;
-  color: #63718a;
+  color: var(--editor-text-secondary);
 }
 .points-list {
   flex: 1 1 auto;
@@ -95,30 +95,30 @@ input.invalid {
 .empty-state {
   margin: 0;
   padding: 20px;
-  color: #8794ad;
+  color: var(--editor-text-muted);
   text-align: center;
 }
 :host-context(html[data-theme='dark']) header,
 :host-context(html[data-theme='dark']) footer,
 :host-context(html[data-theme='dark']) .point-row {
-  border-color: #2d3d5d;
+  border-color: var(--editor-border);
   background: var(--editor-surface-dialog);
-  color: #e7ecf5;
+  color: var(--editor-text-primary);
 }
 :host-context(html[data-theme='dark']) header {
-  border-bottom-color: #2d3d5d;
+  border-bottom-color: var(--editor-border);
 }
 :host-context(html[data-theme='dark']) footer {
-  border-top-color: #2d3d5d;
+  border-top-color: var(--editor-border);
 }
 :host-context(html[data-theme='dark']) h2,
 :host-context(html[data-theme='dark']) label {
-  color: #e7ecf5;
+  color: var(--editor-text-primary);
 }
 :host-context(html[data-theme='dark']) input {
-  border-color: #3a4b6e;
+  border-color: var(--editor-border-control);
   background: var(--editor-surface-input);
-  color: #e7ecf5;
+  color: var(--editor-text-primary);
 }
 @media (max-width: 560px) {
   .point-row {

@@ -9,10 +9,10 @@ h2 {
     sans-serif;
 }
 .json-badge {
-  border: 1px solid #d8deeb;
+  border: 1px solid var(--editor-border-raised);
   border-radius: 5px;
   padding: 3px 6px;
-  color: #71809b;
+  color: var(--editor-text-menu);
   font:
     700 10px 'DM Sans',
     sans-serif;
@@ -25,7 +25,7 @@ pre {
   border: 1px solid var(--editor-border-code);
   border-radius: 9px;
   background: var(--editor-surface-code);
-  color: #b9c9e6;
+  color: var(--editor-text-code);
   font:
     11px/1.65 'DM Mono',
     monospace;
@@ -37,7 +37,7 @@ pre {
 :host-context(html[data-theme='dark']) pre {
   border-color: var(--editor-border-code);
   background: var(--editor-surface-code);
-  color: var(--editor-text-primary);
+  color: var(--editor-text-code);
 }
 @media (max-width: 700px) {
   pre {

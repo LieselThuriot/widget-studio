@@ -27,7 +27,7 @@
 
 .toggle-row small {
   margin-top: 3px;
-  color: #9aa5b7;
+  color: var(--editor-text-tertiary);
   font-size: 10px;
   font-weight: 400;
 }
@@ -82,9 +82,9 @@
 }
 
 :host-context(html[data-theme='dark']) .toggle-row {
-  border-color: #2d3d5d;
+  border-color: var(--editor-border);
 }
 
 :host-context(html[data-theme='dark']) .toggle {
-  background: #526483;
+  background: var(--editor-toggle-off);
 }

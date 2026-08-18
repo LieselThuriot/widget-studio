@@ -24,7 +24,7 @@
 }
 
 .element-actions-menu button:disabled {
-  color: #b8c0ce;
+  color: var(--editor-text-muted);
   cursor: not-allowed;
 }
 
@@ -51,11 +51,11 @@
 :host-context(html[data-theme='dark']) .element-actions-menu button:disabled:hover,
 :host-context(html[data-theme='dark']) .element-actions-menu button:disabled:focus-visible {
   background: transparent;
-  color: #64718a;
+  color: var(--editor-text-muted);
   opacity: 0.7;
   cursor: not-allowed;
 }
 
 :host-context(html[data-theme='dark']) .menu-divider {
-  background: #3a4b6e;
+  background: var(--editor-border-control);
 }

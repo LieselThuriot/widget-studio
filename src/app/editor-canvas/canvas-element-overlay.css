@@ -14,12 +14,12 @@
 }
 
 .editor-element:hover {
-  border-color: #ffffff80;
-  background: #ffffff0d;
+  border-color: var(--editor-overlay-light);
+  background: var(--editor-overlay-subtle);
 }
 
 .editor-element.selected {
-  border-color: #fff;
+  border-color: var(--editor-text-on-accent);
   box-shadow: 0 0 0 2px var(--editor-selection);
 }
 
@@ -29,8 +29,8 @@
 }
 
 .editor-element.show-guides {
-  border-color: #f5c451b8;
-  background: #f5c45112;
+  border-color: color-mix(in srgb, var(--editor-selection) 72%, transparent);
+  background: color-mix(in srgb, var(--editor-selection) 7%, transparent);
 }
 
 .resize-handle {
@@ -39,7 +39,7 @@
   display: block;
   pointer-events: auto;
   background: var(--editor-selection);
-  border: 1px solid #17233c;
+  border: 1px solid var(--editor-surface-code);
   border-radius: 3px;
 }
 
@@ -68,10 +68,10 @@
   width: 19px;
   height: 19px;
   padding: 0;
-  border: 2px solid #17233c;
+  border: 2px solid var(--editor-surface-code);
   border-radius: 50%;
-  background: #e87984;
-  color: #fff;
+  background: var(--editor-danger);
+  color: var(--editor-text-on-accent);
   cursor: pointer;
   pointer-events: auto;
   line-height: 15px;

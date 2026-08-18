@@ -8,7 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { ChartDataPoint } from 'widget-renderer';
+import { ChartDataPoint, randomPastelColor } from 'widget-renderer';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../../dialog-focus';
 import { eventNumber, eventValue } from '../form-events';
 import { ColorPicker } from '../../color-picker/color-picker';
@@ -61,36 +61,14 @@ export class DataPointsDialog {
   protected add(): void {
     this.draft.update((points) => [
       ...points,
-      { label: '', value: 0, color: DataPointsDialog.randomPastelColor() },
+      {
+        label: '',
+        value: 0,
+        color: randomPastelColor(
+          points.map((point) => point.color).filter((color): color is string => Boolean(color)),
+        ),
+      },
     ]);
-  }
-
-  private static randomPastelColor(): string {
-    const hue = Math.floor(Math.random() * 360);
-    const saturation = 65 + Math.random() * 20;
-    const lightness = 75 + Math.random() * 10;
-    const chroma = ((1 - Math.abs((2 * lightness) / 100 - 1)) * saturation) / 100;
-    const hueSegment = hue / 60;
-    const secondComponent = chroma * (1 - Math.abs((hueSegment % 2) - 1));
-    const [red, green, blue] =
-      hueSegment < 1
-        ? [chroma, secondComponent, 0]
-        : hueSegment < 2
-          ? [secondComponent, chroma, 0]
-          : hueSegment < 3
-            ? [0, chroma, secondComponent]
-            : hueSegment < 4
-              ? [0, secondComponent, chroma]
-              : hueSegment < 5
-                ? [secondComponent, 0, chroma]
-                : [chroma, 0, secondComponent];
-    const lightnessAdjustment = lightness / 100 - chroma / 2;
-    const toHex = (channel: number) =>
-      Math.round((channel + lightnessAdjustment) * 255)
-        .toString(16)
-        .padStart(2, '0');
-
-    return `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
   }
 
   protected remove(index: number): void {

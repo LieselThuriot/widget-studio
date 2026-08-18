@@ -10,7 +10,7 @@
 .small-add {
   border: 0;
   background: transparent;
-  color: #5874ab;
+  color: var(--editor-accent);
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
@@ -45,6 +45,6 @@ button:not(.small-add) {
   height: 28px;
   border: 0;
   background: transparent;
-  color: #bd8290;
+  color: var(--editor-danger-strong);
   cursor: pointer;
 }

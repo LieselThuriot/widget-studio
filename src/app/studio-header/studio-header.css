@@ -20,7 +20,7 @@
   height: 42px;
   border-radius: 12px;
   background: var(--editor-selection);
-  color: #16213b;
+  color: var(--editor-text-on-brand);
   font: 800 15px/1 inherit;
   letter-spacing: -0.05em;
 }
@@ -57,8 +57,8 @@ h1 {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #43b879;
-  box-shadow: 0 0 0 0 #43b87966;
+  background: var(--editor-success);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--editor-success) 40%, transparent);
   animation: live-pulse 2s ease-out infinite;
 }
 @keyframes live-pulse {

@@ -43,8 +43,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #43b879;
-  box-shadow: 0 0 0 0 #43b87966;
+  background: var(--editor-success);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--editor-success) 40%, transparent);
   animation: live-pulse 2s ease-out infinite;
 }
 @keyframes live-pulse {
@@ -66,8 +66,8 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #f5c451;
-  color: #16213b;
+  background: var(--editor-brand);
+  color: var(--editor-text-on-brand);
   font: 800 15px/1 inherit;
   letter-spacing: -0.05em;
 }
@@ -89,7 +89,7 @@ h2 {
   letter-spacing: -0.025em;
 }
 .eyebrow {
-  color: #8794ad;
+  color: var(--editor-text-muted);
   font:
     700 10px/1.2 'DM Sans',
     sans-serif;
@@ -101,10 +101,10 @@ h2 {
 }
 .version,
 .json-badge {
-  border: 1px solid #d8deeb;
+  border: 1px solid var(--editor-border-raised);
   border-radius: 5px;
   padding: 3px 6px;
-  color: #71809b;
+  color: var(--editor-text-menu);
   font:
     700 10px 'DM Sans',
     sans-serif;
@@ -132,19 +132,19 @@ h2 {
   margin-top: 2px;
 }
 .count {
-  color: #8390a9;
+  color: var(--editor-text-muted);
   font-size: 12px;
 }
 .helper {
   margin: 14px 0 18px;
-  color: #8490a7;
+  color: var(--editor-text-secondary);
   font-size: 12px;
   line-height: 1.45;
 }
 .panel-divider {
   height: 1px;
   margin: 22px 0 18px;
-  background: #e9edf3;
+  background: var(--editor-divider);
 }
 @media (max-width: 1050px) {
   .studio-grid {

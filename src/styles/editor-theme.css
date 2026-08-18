@@ -5,6 +5,7 @@ html[data-theme='dark'] {
   --editor-surface-subtle: #10182c;
   --editor-surface-dialog: #17233c;
   --editor-surface-code: #10182c;
+  --editor-text-code: #e7ecf5;
   --editor-surface-raised: #1d2b49;
   --editor-surface-input: #10182c;
   --editor-surface-hover: #263b63;
@@ -34,6 +35,9 @@ html[data-theme='dark'] {
   --editor-border-raised: #3a4b6e;
   --editor-border-code: #2d3d5d;
   --editor-accent: #5874ab;
+  --editor-success: #43b879;
+  --editor-brand: #f5c451;
+  --editor-text-on-brand: #16213b;
   --editor-accent-strong: #d7e1f2;
   --editor-danger-input: #ff5c6c;
   --editor-danger-input-ring: #ff5c6c80;

@@ -24,13 +24,13 @@ button {
 }
 button:is(:hover, :focus-visible),
 button.active {
-  border-color: #5874ab;
-  background: #edf2fb;
-  color: #36527f;
+  border-color: var(--editor-accent);
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
   outline: none;
 }
 :host-context(html[data-theme='dark']) button:is(:hover, :focus-visible),
 :host-context(html[data-theme='dark']) button.active {
-  background: #293b61;
-  color: #b7cdf5;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }

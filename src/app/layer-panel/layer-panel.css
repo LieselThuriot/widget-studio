@@ -25,13 +25,13 @@ h2 {
 .clear-layers {
   border: 0;
   background: transparent;
-  color: #bd8290;
+  color: var(--editor-danger-strong);
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
 }
 .clear-layers:disabled {
-  color: #cbd2de;
+  color: var(--editor-text-muted);
   cursor: default;
 }
 .layer-list {
@@ -72,12 +72,12 @@ h2 {
 }
 .layer-select span {
   width: 18px;
-  color: #a2aec2;
+  color: var(--editor-text-muted);
   font-weight: 700;
 }
 .layer-select .layer-grip {
   width: 10px;
-  color: #c0c8d5;
+  color: var(--editor-text-secondary);
   font-size: 13px;
   letter-spacing: -4px;
 }

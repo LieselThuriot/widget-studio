@@ -5,3 +5,4 @@ export * from './lib/widget-layout';
 export * from './lib/widget-renderer';
 export * from './lib/chart-element-renderer';
 export * from './lib/chart-accessibility';
+export * from './lib/colors';

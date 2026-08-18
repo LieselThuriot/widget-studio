@@ -11,7 +11,7 @@ input[type='color'] {
 }
 
 :is(input, select):hover {
-  border-color: #b9c6da;
+  border-color: var(--editor-border-control-muted);
 }
 
 :is(input, select):focus-visible {
@@ -24,8 +24,8 @@ input[type='color'] {
   width: 100%;
   min-height: 34px;
   margin: 16px 0;
-  background: #eef3fb;
-  color: #36527f;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 
 .color-fields {
@@ -57,7 +57,7 @@ input[type='color'] {
 
 .toggle-row small {
   margin-top: 3px;
-  color: #9aa5b7;
+  color: var(--editor-text-tertiary);
   font-size: 10px;
   font-weight: 400;
 }
@@ -111,14 +111,14 @@ input[type='color'] {
   outline-offset: 2px;
 }
 :host-context(html[data-theme='dark']) .data-points-button {
-  background: #293b61;
-  color: #d7e1f2;
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 :host-context(html[data-theme='dark']) .toggle-row {
-  border-color: #2d3d5d;
+  border-color: var(--editor-border);
 }
 :host-context(html[data-theme='dark']) .toggle {
-  background: #526483;
+  background: var(--editor-toggle-off);
 }
 
 @media (max-width: 360px) {

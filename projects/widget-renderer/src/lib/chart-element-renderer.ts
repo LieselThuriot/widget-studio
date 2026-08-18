@@ -19,6 +19,7 @@ import { SVGRenderer } from 'echarts/renderers';
 import { init, type ECharts, type EChartsCoreOption } from 'echarts/core';
 import { ChartElement, ProgressElement, WidgetElement } from './widget.model';
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
+import { chartColors } from './colors';
 
 use([
   BarChart,
@@ -84,9 +85,9 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
     );
     return {
       '--progress-value': `${percent}%`,
-      '--progress-color': element.style?.color.fill ?? '#7dd3fc',
-      '--progress-track': element.style?.color.track ?? '#334155',
-      '--progress-legend-color': element.style?.color.legend ?? '#f6f7fb',
+      '--progress-color': element.style?.color.fill ?? chartColors.fill,
+      '--progress-track': element.style?.color.track ?? chartColors.track,
+      '--progress-legend-color': element.style?.color.legend ?? chartColors.legend,
       '--progress-font-size': `${element.style?.font.size ?? 11}px`,
     };
   }
@@ -129,7 +130,7 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
         element.type === 'donut' ||
         element.type === 'bar' ||
         element.type === 'line'
-          ? element.data.map((point) => point.color ?? '#7dd3fc')
+          ? element.data.map((point) => point.color ?? chartColors.line)
           : undefined,
       title: element.title
         ? {
@@ -288,11 +289,11 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
           })),
           itemStyle:
             seriesElement.type === 'line'
-              ? { color: seriesElement.style.color.line ?? '#7dd3fc' }
+              ? { color: seriesElement.style.color.line ?? chartColors.line }
               : undefined,
           lineStyle:
             seriesElement.type === 'line'
-              ? { color: seriesElement.style.color.line ?? '#7dd3fc' }
+              ? { color: seriesElement.style.color.line ?? chartColors.line }
               : undefined,
           symbol: seriesElement.type === 'line' ? 'circle' : undefined,
           smooth: seriesElement.type === 'line',

@@ -16,14 +16,14 @@ textarea {
   border: 1px solid var(--editor-border-control);
   border-radius: var(--editor-radius-control);
   background: var(--editor-surface-panel);
-  color: #63718a;
+  color: var(--editor-text-secondary);
   cursor: pointer;
 }
 .formatting-tools button.active,
 .formatting-tools button:focus-visible {
-  border-color: #5874ab;
-  background: #edf2fb;
-  color: #36527f;
+  border-color: var(--editor-accent);
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
 }
 .toggle-row {
   display: flex !important;
@@ -44,7 +44,7 @@ textarea {
 
 .toggle-row small {
   margin-top: 3px;
-  color: #9aa5b7;
+  color: var(--editor-text-tertiary);
   font-size: 10px;
   font-weight: 400;
 }
@@ -95,9 +95,9 @@ textarea {
 }
 
 :host-context(html[data-theme='dark']) .toggle-row {
-  border-color: #2d3d5d;
+  border-color: var(--editor-border);
 }
 
 :host-context(html[data-theme='dark']) .toggle {
-  background: #526483;
+  background: var(--editor-toggle-off);
 }

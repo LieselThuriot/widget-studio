@@ -92,7 +92,7 @@
   font-weight: 700;
 }
 .dimensions {
-  color: #a1aabd;
+  color: var(--editor-text-tertiary);
   font-weight: 500;
 }
 .canvas {
@@ -168,7 +168,7 @@
   color: var(--editor-text-muted);
 }
 :host-context(html[data-theme='dark']) .canvas {
-  border-color: #526483;
+  border-color: var(--editor-scrollbar-thumb);
   background-color: transparent;
   background-image: radial-gradient(var(--editor-border) 1px, transparent 1px);
 }
@@ -182,7 +182,7 @@
   color: var(--editor-text-secondary);
 }
 :host-context(html[data-theme='dark']) .shortcut-popover strong {
-  color: #b7cdf5;
+  color: var(--editor-accent-strong);
 }
 @media (max-width: 700px) {
   .sample-menu {
