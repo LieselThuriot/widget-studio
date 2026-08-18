@@ -205,6 +205,7 @@ protected handleAction(event: { element: ButtonElement; event: Event }): void {
   event.element.url;
   event.element.body;
   event.element.requestRefresh; // whether the host should refresh after the click
+  event.element.showOnlyOnHover; // whether the button is hidden until widget hover
 }
 ```
 

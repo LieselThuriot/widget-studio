@@ -72,6 +72,7 @@ export interface ButtonElement extends WidgetElementBase {
   url: string;
   body?: string | null;
   requestRefresh: boolean;
+  showOnlyOnHover: boolean;
   style: 'solid' | 'outline';
 }
 export interface DividerElement extends WidgetElementBase {

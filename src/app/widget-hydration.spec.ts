@@ -56,6 +56,7 @@ describe('hydrateWidget', () => {
       method: 'get',
       url: '/',
       requestRefresh: false,
+      showOnlyOnHover: false,
       style: 'solid',
     };
 

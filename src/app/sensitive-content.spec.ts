@@ -24,6 +24,7 @@ const widget: WidgetContract = {
       method: 'get',
       url: '/secret',
       requestRefresh: false,
+      showOnlyOnHover: false,
       style: 'solid',
     },
     {

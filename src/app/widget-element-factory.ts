@@ -57,6 +57,7 @@ export function createWidgetElement(type: WidgetElement['type'], id: string): Wi
       method: 'get',
       url: '/',
       requestRefresh: false,
+      showOnlyOnHover: false,
       style: 'solid',
     } as ButtonElement;
   }

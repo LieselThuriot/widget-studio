@@ -151,6 +151,7 @@
                 class="action-button"
                 [class.solid]="element.style === 'solid'"
                 [class.outline]="element.style === 'outline'"
+                [class.show-only-on-hover]="element.showOnlyOnHover"
                 (click)="actionRequested.emit({ element, event: $event })"
                 [tabindex]="isElementSensitive(element) ? -1 : 0"
               >

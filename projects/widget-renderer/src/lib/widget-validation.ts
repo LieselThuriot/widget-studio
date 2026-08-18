@@ -258,6 +258,7 @@ function validateElement(
       if (value['method'] === 'get' && value['body'] !== undefined && value['body'] !== null)
         addIssue(issues, `${issuePath}.body`, 'must be empty for GET buttons');
       requiredBoolean(value['requestRefresh'], `${issuePath}.requestRefresh`, issues);
+      requiredBoolean(value['showOnlyOnHover'], `${issuePath}.showOnlyOnHover`, issues);
       if (!isOneOf(value['style'], ['solid', 'outline'] as const))
         addIssue(issues, `${issuePath}.style`, 'has an unsupported value');
       break;

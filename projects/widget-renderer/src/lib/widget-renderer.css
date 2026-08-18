@@ -269,6 +269,25 @@ img {
   font: 600 12px/1.1 inherit;
   cursor: var(--widget-renderer-action-cursor, pointer);
 }
+.action-button.show-only-on-hover {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+.widget-shell:hover .action-button.show-only-on-hover,
+.widget-shell:focus-within .action-button.show-only-on-hover {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .action-button.show-only-on-hover {
+    transition: none;
+  }
+}
 .action-button.solid {
   border: 1px solid #151515;
   background: #151515;

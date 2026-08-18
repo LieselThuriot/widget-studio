@@ -58,6 +58,7 @@ describe('widget contract validation', () => {
       url: '/submit',
       body: '{}',
       requestRefresh: true,
+      showOnlyOnHover: false,
       style: 'solid' as const,
     };
 
@@ -73,6 +74,10 @@ describe('widget contract validation', () => {
     ).toBe(true);
     expect(
       safeParseWidgetInput({ ...validContract, elements: [{ ...button, requestRefresh: 'yes' }] })
+        .success,
+    ).toBe(false);
+    expect(
+      safeParseWidgetInput({ ...validContract, elements: [{ ...button, showOnlyOnHover: 'yes' }] })
         .success,
     ).toBe(false);
   });

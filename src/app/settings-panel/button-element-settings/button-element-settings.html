@@ -33,3 +33,10 @@
     [checked]="element().requestRefresh"
     (change)="changed.emit({ requestRefresh: checked($event) })" /><span class="toggle"></span
 ></label>
+<label class="toggle-row"
+  ><span><strong>Show on hover</strong><small>Hide this button until hover</small></span
+  ><input
+    type="checkbox"
+    [checked]="element().showOnlyOnHover"
+    (change)="changed.emit({ showOnlyOnHover: checked($event) })" /><span class="toggle"></span
+></label>
