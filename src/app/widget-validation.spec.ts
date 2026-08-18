@@ -338,6 +338,57 @@ describe('widget contract validation', () => {
       expect(result.issues.map((issue) => issue.path)).toContain('elements[0].style.axis');
   });
 
+  it('requires colors for pie, donut, and bar data points', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'bar',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          title: 'Comparison',
+          showLegend: false,
+          data: [{ label: 'A', value: 1 }],
+          style: {
+            color: { legend: '#fff', title: '#fff', line: '#0ff' },
+            font: { size: 11 },
+            axis: { label: '#fff', line: '#fff', grid: '#fff' },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success)
+      expect(result.issues.map((issue) => issue.path)).toContain('elements[0].data[0].color');
+  });
+
+  it('allows omitted and null colors for line data points', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'line',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          title: 'Trend',
+          showLegend: false,
+          data: [
+            { label: 'A', value: 1 },
+            { label: 'B', value: 2, color: null },
+          ],
+          style: {
+            color: { legend: '#fff', title: '#fff', line: '#0ff' },
+            font: { size: 11 },
+            axis: { label: '#fff', line: '#fff', grid: '#fff' },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
   it('throws a validation error from the throwing parser', () => {
     expect(() => parseWidgetInput(null)).toThrow(/must be an object/);
   });

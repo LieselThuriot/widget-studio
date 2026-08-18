@@ -90,7 +90,7 @@ export interface DividerElement extends WidgetElementBase {
 export interface ChartDataPoint {
   label: string;
   value: number;
-  color?: string;
+  color?: string | null;
 }
 export interface ChartElementBase extends WidgetElementBase {
   type: 'pie' | 'donut' | 'gauge' | 'bar' | 'line';

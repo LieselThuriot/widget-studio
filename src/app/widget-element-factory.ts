@@ -12,9 +12,8 @@ import {
   TextElement,
   WidgetElement,
   WidgetElementBase,
-  chartColors,
-  randomPastelColor,
 } from 'widget-renderer';
+import { chartColors, randomPastelColor } from './colors';
 
 export function createWidgetElement(type: WidgetElement['type'], id: string): WidgetElement {
   const base = {

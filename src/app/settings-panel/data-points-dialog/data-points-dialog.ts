@@ -8,7 +8,8 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { ChartDataPoint, randomPastelColor } from 'widget-renderer';
+import { ChartDataPoint } from 'widget-renderer';
+import { randomPastelColor } from '../../colors';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../../dialog-focus';
 import { eventNumber, eventValue } from '../form-events';
 import { ColorPicker } from '../../color-picker/color-picker';

@@ -188,7 +188,12 @@ function validateStyle(
   }
 }
 
-function validateDataPoints(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
+function validateDataPoints(
+  value: unknown,
+  path: string,
+  issues: WidgetValidationIssue[],
+  allowNullColor: boolean,
+): void {
   if (!Array.isArray(value)) {
     addIssue(issues, path, 'must be an array');
     return;
@@ -201,8 +206,11 @@ function validateDataPoints(value: unknown, path: string, issues: WidgetValidati
     }
     requiredString(point['label'], `${pointPath}.label`, issues, true);
     requiredNumber(point['value'], `${pointPath}.value`, issues);
-    if (point['color'] !== undefined)
-      requiredString(point['color'], `${pointPath}.color`, issues, true);
+    if (point['color'] === undefined) {
+      if (!allowNullColor) addIssue(issues, `${pointPath}.color`, 'must be a string');
+    } else if (point['color'] === null) {
+      if (!allowNullColor) addIssue(issues, `${pointPath}.color`, 'must be a string');
+    } else requiredString(point['color'], `${pointPath}.color`, issues, true);
   });
 }
 
@@ -301,7 +309,7 @@ function validateElement(
     case 'line':
       requiredString(value['title'], `${issuePath}.title`, issues, true);
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
-      validateDataPoints(value['data'], `${issuePath}.data`, issues);
+      validateDataPoints(value['data'], `${issuePath}.data`, issues, value['type'] === 'line');
       validateStyle(
         value['style'],
         `${issuePath}.style`,

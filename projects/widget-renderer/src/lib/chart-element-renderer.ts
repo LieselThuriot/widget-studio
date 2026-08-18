@@ -19,7 +19,6 @@ import { SVGRenderer } from 'echarts/renderers';
 import { init, type ECharts, type EChartsCoreOption } from 'echarts/core';
 import { ChartElement, ProgressElement, WidgetElement } from './widget.model';
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
-import { chartColors } from './colors';
 
 use([
   BarChart,
@@ -85,9 +84,9 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
     );
     return {
       '--progress-value': `${percent}%`,
-      '--progress-color': element.style?.color.fill ?? chartColors.fill,
-      '--progress-track': element.style?.color.track ?? chartColors.track,
-      '--progress-legend-color': element.style?.color.legend ?? chartColors.legend,
+      '--progress-color': element.style.color.fill,
+      '--progress-track': element.style.color.track,
+      '--progress-legend-color': element.style.color.legend,
       '--progress-font-size': `${element.style?.font.size ?? 11}px`,
     };
   }
@@ -125,13 +124,6 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
   private options(element: ChartElement): EChartsCoreOption {
     const base = {
       animation: false,
-      color:
-        element.type === 'pie' ||
-        element.type === 'donut' ||
-        element.type === 'bar' ||
-        element.type === 'line'
-          ? element.data.map((point) => point.color ?? chartColors.line)
-          : undefined,
       title: element.title
         ? {
             text: element.title,
@@ -285,16 +277,14 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
           type: seriesElement.type,
           data: seriesElement.data.map(({ value, color }) => ({
             value,
-            ...(color ? { itemStyle: { color } } : {}),
+            ...(seriesElement.type === 'line'
+              ? { itemStyle: { color: color ?? seriesElement.style.color.line } }
+              : { itemStyle: { color } }),
           })),
           itemStyle:
-            seriesElement.type === 'line'
-              ? { color: seriesElement.style.color.line ?? chartColors.line }
-              : undefined,
+            seriesElement.type === 'line' ? { color: seriesElement.style.color.line } : undefined,
           lineStyle:
-            seriesElement.type === 'line'
-              ? { color: seriesElement.style.color.line ?? chartColors.line }
-              : undefined,
+            seriesElement.type === 'line' ? { color: seriesElement.style.color.line } : undefined,
           symbol: seriesElement.type === 'line' ? 'circle' : undefined,
           smooth: seriesElement.type === 'line',
         },

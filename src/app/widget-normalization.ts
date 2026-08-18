@@ -5,8 +5,8 @@ import {
   ProgressElement,
   Widget,
   WidgetElement,
-  chartColors,
 } from 'widget-renderer';
+import { chartColors } from './colors';
 
 const defaultGraphStyle = {
   color: {
