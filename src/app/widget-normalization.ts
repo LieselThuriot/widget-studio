@@ -1,6 +1,5 @@
 import {
   ChartElement,
-  FontStyle,
   GaugeElement,
   ProgressElement,
   Widget,
@@ -70,23 +69,23 @@ export function normalizeTextElement(
           (style['fontSize'] as number | undefined) ??
           legacy.fontSize ??
           element.style.font?.size,
-        weight:
-          (legacyFont['weight'] as 400 | 500 | 600 | 700 | undefined) ??
-          (style['fontWeight'] as 400 | 500 | 600 | 700 | undefined) ??
-          legacy.fontWeight ??
-          element.style.font?.weight,
-        style:
-          (legacyFont['style'] as 'normal' | 'italic' | undefined) ??
-          (legacy.italic ? 'italic' : 'normal'),
-        decoration:
-          (legacyFont['decoration'] as FontStyle['decoration'] | undefined) ??
-          (legacy.underline && legacy.strikethrough
-            ? 'underline line-through'
-            : legacy.underline
-              ? 'underline'
-              : legacy.strikethrough
-                ? 'line-through'
-                : 'none'),
+        bold:
+          (legacyFont['bold'] as boolean | undefined) ??
+          ((legacyFont['weight'] as number | undefined) ??
+            (style['fontWeight'] as number | undefined) ??
+            legacy.fontWeight ??
+            400) >= 600,
+        italic:
+          (legacyFont['italic'] as boolean | undefined) ??
+          ((legacyFont['style'] as string | undefined) === 'italic' || legacy.italic === true),
+        underline:
+          (legacyFont['underline'] as boolean | undefined) ??
+          (legacyFont['decoration'] as string | undefined)?.includes('underline') ??
+          legacy.underline === true,
+        strikethrough:
+          (legacyFont['strikethrough'] as boolean | undefined) ??
+          (legacyFont['decoration'] as string | undefined)?.includes('line-through') ??
+          legacy.strikethrough === true,
       },
     },
   };

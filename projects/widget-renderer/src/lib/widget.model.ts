@@ -29,7 +29,7 @@ export interface BackgroundConfig {
 }
 export interface TextStyle {
   color: string;
-  font: FontStyle;
+  font: TextFontStyle;
   align: 'left' | 'center' | 'right';
   wrap: boolean;
   background?: string;
@@ -47,11 +47,15 @@ export interface ElementGrid {
   columnSpan: number;
   anchor?: ElementAnchor;
 }
-export interface FontStyle {
+export interface TextFontStyle {
   size: number;
-  weight?: 400 | 500 | 600 | 700;
-  style?: 'normal' | 'italic';
-  decoration?: 'none' | 'underline' | 'line-through' | 'underline line-through';
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
+}
+export interface ChartFontStyle {
+  size: number;
 }
 export interface WidgetElementBase {
   id: string;
@@ -101,7 +105,7 @@ export interface DataVisualStyle {
   color: {
     legend: string;
   };
-  font: FontStyle;
+  font: ChartFontStyle;
 }
 export interface PieStyle extends DataVisualStyle {
   color: DataVisualStyle['color'] & { title: string };

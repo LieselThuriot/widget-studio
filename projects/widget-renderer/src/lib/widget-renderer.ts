@@ -71,6 +71,22 @@ export class WidgetRenderer {
   protected isText(element: WidgetElement): element is TextElement {
     return element.type === 'text';
   }
+  protected textFontWeight(element: TextElement): number {
+    return element.style.font.bold ? 700 : 400;
+  }
+  protected textFontStyle(element: TextElement): 'normal' | 'italic' {
+    return element.style.font.italic ? 'italic' : 'normal';
+  }
+  protected textFontDecoration(element: TextElement): string {
+    return (
+      [
+        element.style.font.underline && 'underline',
+        element.style.font.strikethrough && 'line-through',
+      ]
+        .filter(Boolean)
+        .join(' ') || 'none'
+    );
+  }
   protected isImage(element: WidgetElement): element is ImageElement {
     return element.type === 'image';
   }

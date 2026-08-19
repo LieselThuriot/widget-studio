@@ -35,7 +35,7 @@ export function createWidgetElement(
       text: 'New text',
       style: {
         color: textColor,
-        font: { size: 14, weight: 400, style: 'normal', decoration: 'none' },
+        font: { size: 14, bold: false, italic: false, underline: false, strikethrough: false },
         align: 'left',
         wrap: true,
       },

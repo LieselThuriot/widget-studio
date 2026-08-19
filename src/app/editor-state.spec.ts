@@ -38,14 +38,14 @@ describe('editor state transformations', () => {
   it('preserves nested style fields when patching one style value', () => {
     const widget = structuredClone(sampleWidget);
     const updated = patchElement(widget, 'headline', {
-      style: { font: { weight: 700 } } as never,
+      style: { font: { bold: true } } as never,
     });
     const headline = updated.elements.find((element) => element.id === 'headline');
 
     expect(headline?.type).toBe('text');
     if (headline?.type === 'text') {
       expect(headline.style.font.size).toBe(10);
-      expect(headline.style.font.weight).toBe(700);
+      expect(headline.style.font.bold).toBe(true);
     }
   });
 
@@ -169,9 +169,10 @@ describe('editor state transformations', () => {
     if (normalizedText?.type === 'text') {
       expect(normalizedText.style.font).toEqual({
         size: 18,
-        weight: 700,
-        style: 'italic',
-        decoration: 'underline line-through',
+        bold: true,
+        italic: true,
+        underline: true,
+        strikethrough: true,
       });
     }
   });

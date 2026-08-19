@@ -39,7 +39,7 @@ const dailyBrief: Widget = {
       text: 'TODAY · 09:42',
       style: {
         color: '#d4dbea',
-        font: { size: 10, weight: 600, style: 'normal', decoration: 'none' },
+        font: { size: 10, bold: true, italic: false, underline: false, strikethrough: false },
         align: 'left',
         wrap: true,
       },
@@ -52,7 +52,7 @@ const dailyBrief: Widget = {
       text: 'Your daily brief',
       style: {
         color: '#f6f7fb',
-        font: { size: 21, weight: 700, style: 'normal', decoration: 'none' },
+        font: { size: 21, bold: true, italic: false, underline: false, strikethrough: false },
         align: 'left',
         wrap: true,
       },
@@ -65,7 +65,7 @@ const dailyBrief: Widget = {
       text: 'A focused view of what needs your attention.',
       style: {
         color: '#e2e6ef',
-        font: { size: 12, weight: 500, style: 'normal', decoration: 'none' },
+        font: { size: 12, bold: false, italic: false, underline: false, strikethrough: false },
         align: 'left',
         wrap: true,
       },
@@ -117,7 +117,7 @@ const payslip: Widget = {
       grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'top left' },
       sensitive: false,
       text: 'PAYROLL · JUNE 2026',
-      style: { color: '#4d8064', font: { size: 9, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#4d8064', font: { size: 9, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'payslip-image',
@@ -136,7 +136,7 @@ const payslip: Widget = {
       grid: { row: 1, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'center left' },
       sensitive: false,
       text: 'Your payslip',
-      style: { color: '#20372a', font: { size: 19, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#20372a', font: { size: 19, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'payslip-net-label',
@@ -144,7 +144,7 @@ const payslip: Widget = {
       grid: { row: 2, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'bottom left' },
       sensitive: false,
       text: 'NET PAY',
-      style: { color: '#4d8064', font: { size: 9, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#4d8064', font: { size: 9, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'payslip-amount',
@@ -152,7 +152,7 @@ const payslip: Widget = {
       grid: { row: 3, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'center left' },
       sensitive: true,
       text: '€2,480.00',
-      style: { color: '#173d2b', font: { size: 32, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#173d2b', font: { size: 32, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'payslip-employee',
@@ -160,7 +160,7 @@ const payslip: Widget = {
       grid: { row: 4, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'bottom left' },
       sensitive: true,
       text: 'Alex Morgan · Product Design',
-      style: { color: '#4b6656', font: { size: 10, weight: 600 }, align: 'left', wrap: true },
+      style: { color: '#4b6656', font: { size: 10, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'payslip-open',
@@ -207,7 +207,7 @@ const clockedIn: Widget = {
       grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'top left' },
       sensitive: false,
       text: 'WORKDAY · TUESDAY 16 JUNE',
-      style: { color: '#9be7d1', font: { size: 10, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#9be7d1', font: { size: 10, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'clock-title',
@@ -215,7 +215,7 @@ const clockedIn: Widget = {
       grid: { row: 1, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'center left' },
       sensitive: false,
       text: 'Clocked in\nKeep the momentum going.',
-      style: { color: '#f4fffb', font: { size: 22, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#f4fffb', font: { size: 22, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'clock-progress',
@@ -275,7 +275,7 @@ const holidayBalance: Widget = {
       grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'top left' },
       sensitive: false,
       text: 'TIME AWAY · 2026 ALLOWANCE',
-      style: { color: '#c9f1ff', font: { size: 10, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#c9f1ff', font: { size: 10, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'holiday-title',
@@ -283,7 +283,7 @@ const holidayBalance: Widget = {
       grid: { row: 1, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'center left' },
       sensitive: false,
       text: 'A little more\nroom to roam.',
-      style: { color: '#ffffff', font: { size: 23, weight: 700 }, align: 'left', wrap: true },
+      style: { color: '#ffffff', font: { size: 23, bold: true }, align: 'left', wrap: true },
     },
     {
       id: 'holiday-chart',
@@ -304,7 +304,7 @@ const holidayBalance: Widget = {
       grid: { row: 2, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'bottom left' },
       sensitive: false,
       text: '25 days available · 7 booked',
-      style: { color: '#d8f2fb', font: { size: 11, weight: 600 }, align: 'left', wrap: true },
+      style: { color: '#d8f2fb', font: { size: 11, bold: true }, align: 'left', wrap: true },
     },
   ],
 };

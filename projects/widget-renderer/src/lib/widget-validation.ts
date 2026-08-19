@@ -119,29 +119,23 @@ function requiredNumber(
   return true;
 }
 
-function validateFont(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
+function validateTextFont(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
   if (!isRecord(value)) {
     addIssue(issues, path, 'must be an object');
     return;
   }
   requiredNumber(value['size'], `${path}.size`, issues, 1);
-  if (value['weight'] !== undefined && ![400, 500, 600, 700].includes(value['weight'] as number)) {
-    addIssue(issues, `${path}.weight`, 'must be 400, 500, 600, or 700');
+  for (const key of ['bold', 'italic', 'underline', 'strikethrough']) {
+    if (value[key] !== undefined) requiredBoolean(value[key], `${path}.${key}`, issues);
   }
-  if (value['style'] !== undefined && !isOneOf(value['style'], ['normal', 'italic'] as const)) {
-    addIssue(issues, `${path}.style`, 'must be normal or italic');
+}
+
+function validateChartFont(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
+  if (!isRecord(value)) {
+    addIssue(issues, path, 'must be an object');
+    return;
   }
-  if (
-    value['decoration'] !== undefined &&
-    !isOneOf(value['decoration'], [
-      'none',
-      'underline',
-      'line-through',
-      'underline line-through',
-    ] as const)
-  ) {
-    addIssue(issues, `${path}.decoration`, 'has an unsupported value');
-  }
+  requiredNumber(value['size'], `${path}.size`, issues, 1);
 }
 
 function validateGrid(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
@@ -163,12 +157,17 @@ function validateStyle(
   path: string,
   issues: WidgetValidationIssue[],
   axisMode: 'required' | 'forbidden' | 'optional' = 'optional',
+  fontMode: 'text' | 'chart' = 'chart',
 ): void {
   if (!isRecord(value)) {
     addIssue(issues, path, 'must be an object');
     return;
   }
-  validateFont(value['font'], `${path}.font`, issues);
+  (fontMode === 'text' ? validateTextFont : validateChartFont)(
+    value['font'],
+    `${path}.font`,
+    issues,
+  );
   const color = value['color'];
   if (isRecord(color)) {
     for (const key of ['legend', 'title', 'line', 'fill', 'track']) {
@@ -242,7 +241,7 @@ function validateElement(
   switch (value['type']) {
     case 'text':
       requiredString(value['text'], `${issuePath}.text`, issues, true);
-      validateStyle(value['style'], `${issuePath}.style`, issues);
+      validateStyle(value['style'], `${issuePath}.style`, issues, 'optional', 'text');
       if (!isRecord(value['style'])) break;
       requiredString(value['style']['color'], `${issuePath}.style.color`, issues, true);
       if (value['style']['background'] !== undefined)

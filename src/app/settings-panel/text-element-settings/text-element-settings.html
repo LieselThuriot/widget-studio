@@ -6,7 +6,7 @@
 <div class="formatting-tools" aria-label="Text formatting">
   <button
     type="button"
-    [class.active]="(element().style.font.weight ?? 400) >= 600"
+    [class.active]="element().style.font.bold === true"
     aria-label="Toggle bold"
     (click)="
       changed.emit({
@@ -14,7 +14,7 @@
           ...element().style,
           font: {
             ...element().style.font,
-            weight: (element().style.font.weight ?? 400) >= 600 ? 400 : 700,
+            bold: !element().style.font.bold,
           },
         },
       })
@@ -23,7 +23,7 @@
     <strong>B</strong></button
   ><button
     type="button"
-    [class.active]="element().style.font.style === 'italic'"
+    [class.active]="element().style.font.italic === true"
     aria-label="Toggle italic"
     (click)="
       changed.emit({
@@ -31,7 +31,7 @@
           ...element().style,
           font: {
             ...element().style.font,
-            style: element().style.font.style === 'italic' ? 'normal' : 'italic',
+            italic: !element().style.font.italic,
           },
         },
       })
@@ -40,7 +40,7 @@
     <em>I</em></button
   ><button
     type="button"
-    [class.active]="element().style.font.decoration?.includes('underline')"
+    [class.active]="element().style.font.underline === true"
     aria-label="Toggle underline"
     (click)="
       changed.emit({
@@ -48,7 +48,7 @@
           ...element().style,
           font: {
             ...element().style.font,
-            decoration: toggleDecoration('underline'),
+            underline: !element().style.font.underline,
           },
         },
       })
@@ -57,7 +57,7 @@
     <u>U</u></button
   ><button
     type="button"
-    [class.active]="element().style.font.decoration?.includes('line-through')"
+    [class.active]="element().style.font.strikethrough === true"
     aria-label="Toggle strikethrough"
     (click)="
       changed.emit({
@@ -65,7 +65,7 @@
           ...element().style,
           font: {
             ...element().style.font,
-            decoration: toggleDecoration('line-through'),
+            strikethrough: !element().style.font.strikethrough,
           },
         },
       })

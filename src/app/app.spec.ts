@@ -644,10 +644,10 @@ describe('App', () => {
 
     const contract = JSON.parse(
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
-    ) as { elements: { id?: string; type: string; style?: { font?: { weight?: number } } }[] };
+    ) as { elements: { id?: string; type: string; style?: { font?: { bold?: boolean } } }[] };
     const headline = contract.elements.find((element) => element.type === 'text');
 
-    expect(headline?.style?.font?.weight).toBe(400);
+    expect(headline?.style?.font?.bold).toBe(false);
   });
 
   it('should preserve the remaining text decoration when toggling another', async () => {
@@ -667,18 +667,30 @@ describe('App', () => {
 
     const contract = JSON.parse(
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
-    ) as { elements: { type: string; style?: { font?: { decoration?: string } } }[] };
+    ) as {
+      elements: {
+        type: string;
+        style?: { font?: { underline?: boolean; strikethrough?: boolean } };
+      }[];
+    };
     const headline = contract.elements.find((element) => element.type === 'text');
-    expect(headline?.style?.font?.decoration).toBe('underline line-through');
+    expect(headline?.style?.font?.underline).toBe(true);
+    expect(headline?.style?.font?.strikethrough).toBe(true);
 
     underline.click();
     fixture.detectChanges();
     const updatedContract = JSON.parse(
       fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
-    ) as { elements: { type: string; style?: { font?: { decoration?: string } } }[] };
+    ) as {
+      elements: {
+        type: string;
+        style?: { font?: { underline?: boolean; strikethrough?: boolean } };
+      }[];
+    };
     const updatedHeadline = updatedContract.elements.find((element) => element.type === 'text');
 
-    expect(updatedHeadline?.style?.font?.decoration).toBe('line-through');
+    expect(updatedHeadline?.style?.font?.underline).toBe(false);
+    expect(updatedHeadline?.style?.font?.strikethrough).toBe(true);
   });
 
   it('should update widget size and add a grid track', async () => {
