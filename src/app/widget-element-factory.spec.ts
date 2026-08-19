@@ -46,6 +46,16 @@ describe('widget element factory', () => {
     expect(bar).toMatchObject({ id: 'bar-id', type: 'bar', title: 'Comparison' });
   });
 
+  it('uses text colors that contrast with the widget background', () => {
+    const lightGauge = createWidgetElement('gauge', 'light-gauge', '#edf4ef');
+    const darkGauge = createWidgetElement('gauge', 'dark-gauge', '#101827');
+    const lightText = createWidgetElement('text', 'light-text', '#edf4ef');
+
+    expect(lightGauge).toMatchObject({ style: { color: { title: '#172033', legend: '#172033' } } });
+    expect(darkGauge).toMatchObject({ style: { color: { title: '#f6f7fb', legend: '#f6f7fb' } } });
+    expect(lightText).toMatchObject({ style: { color: '#172033' } });
+  });
+
   it('creates a horizontal divider default', () => {
     expect(createWidgetElement('divider', 'divider-id')).toMatchObject({
       id: 'divider-id',

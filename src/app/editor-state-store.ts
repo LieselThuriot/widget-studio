@@ -71,7 +71,7 @@ export class EditorStateStore {
 
   addElement(type: WidgetElement['type']): void {
     const id = `${type}-${crypto.randomUUID()}`;
-    const element = createWidgetElement(type, id);
+    const element = createWidgetElement(type, id, this.widget().background.color);
     this.widget.update((widget) => ({ ...widget, elements: [...widget.elements, element] }));
     this.selectedId.set(id);
   }

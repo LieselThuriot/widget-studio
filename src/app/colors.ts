@@ -10,6 +10,11 @@ export const chartColors = {
   divider: '#64748b',
 } as const;
 
+export function readableTextColor(backgroundColor?: string): string {
+  const luminance = colorLuminance(backgroundColor);
+  return luminance === null || luminance < 0.5 ? chartColors.legend : '#172033';
+}
+
 export function randomPastelColor(existingColors: readonly string[] = []): string {
   const existingHues = existingColors.map(colorHue).filter((hue): hue is number => hue !== null);
   const hue = selectDistinctHue(existingHues);
@@ -77,4 +82,18 @@ function colorHue(color: string): number | null {
         : (red - green) / delta + 4;
   hue *= 60;
   return hue < 0 ? hue + 360 : hue;
+}
+
+function colorLuminance(color: string | undefined): number | null {
+  const value = color?.trim().match(/^#([\da-f]{3,8})$/i)?.[1];
+  if (!value || (value.length !== 3 && value.length !== 6 && value.length !== 8)) return null;
+
+  const channels =
+    value.length === 3
+      ? [value[0] + value[0], value[1] + value[1], value[2] + value[2]]
+      : [value.slice(0, 2), value.slice(2, 4), value.slice(4, 6)];
+  const [red, green, blue] = channels.map((channel) => parseInt(channel, 16) / 255);
+  const linear = (channel: number) =>
+    channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue);
 }

@@ -13,9 +13,14 @@ import {
   WidgetElement,
   WidgetElementBase,
 } from 'widget-renderer';
-import { chartColors, randomPastelColor } from './colors';
+import { chartColors, randomPastelColor, readableTextColor } from './colors';
 
-export function createWidgetElement(type: WidgetElement['type'], id: string): WidgetElement {
+export function createWidgetElement(
+  type: WidgetElement['type'],
+  id: string,
+  backgroundColor?: string,
+): WidgetElement {
+  const textColor = readableTextColor(backgroundColor);
   const base = {
     id,
     type,
@@ -29,7 +34,7 @@ export function createWidgetElement(type: WidgetElement['type'], id: string): Wi
       type,
       text: 'New text',
       style: {
-        color: chartColors.legend,
+        color: textColor,
         font: { size: 14, weight: 400, style: 'normal', decoration: 'none' },
         align: 'left',
         wrap: true,
@@ -73,13 +78,15 @@ export function createWidgetElement(type: WidgetElement['type'], id: string): Wi
     } as DividerElement;
   }
 
-  return createChartElement(type, base);
+  return createChartElement(type, base, backgroundColor);
 }
 
 function createChartElement(
   type: Exclude<WidgetElement['type'], 'text' | 'image' | 'button' | 'divider'>,
   base: Omit<WidgetElementBase, 'type'>,
+  backgroundColor?: string,
 ): ChartElement | ProgressElement {
+  const textColor = readableTextColor(backgroundColor);
   const firstColor = randomPastelColor();
   const data = [
     { label: 'Complete', value: 72, color: firstColor },
@@ -92,7 +99,7 @@ function createChartElement(
       type,
       data: { label: 'Progress', value: 72, min: 0, max: 100 },
       style: {
-        color: { legend: chartColors.legend, fill: chartColors.fill, track: chartColors.track },
+        color: { legend: textColor, fill: chartColors.fill, track: chartColors.track },
         font: { size: 11 },
       },
       showLegend: true,
@@ -108,7 +115,7 @@ function createChartElement(
       title: 'Performance',
       data: { value: 72, min: 0, max: 100 },
       showLegend: true,
-      style: defaultGaugeStyle(),
+      style: defaultGaugeStyle(backgroundColor),
     } as GaugeElement;
   }
 
@@ -119,7 +126,10 @@ function createChartElement(
     title: createTitle(type),
     data,
     showLegend: type === 'pie' || type === 'donut',
-    style: type === 'pie' || type === 'donut' ? defaultPieStyle() : defaultGraphStyle(),
+    style:
+      type === 'pie' || type === 'donut'
+        ? defaultPieStyle(backgroundColor)
+        : defaultGraphStyle(backgroundColor),
   } as SeriesElement;
 }
 
@@ -145,30 +155,33 @@ function chartGrid(
   return grid;
 }
 
-export function defaultGraphStyle(): GraphStyle {
+export function defaultGraphStyle(backgroundColor?: string): GraphStyle {
+  const textColor = readableTextColor(backgroundColor);
   return {
     color: {
-      legend: chartColors.legend,
-      title: chartColors.title,
+      legend: textColor,
+      title: textColor,
       line: chartColors.line,
     },
     font: { size: 11 },
-    axis: { label: chartColors.axisLabel, line: chartColors.axisLine, grid: chartColors.grid },
+    axis: { label: textColor, line: chartColors.axisLine, grid: chartColors.grid },
   };
 }
 
-export function defaultPieStyle(): PieStyle {
+export function defaultPieStyle(backgroundColor?: string): PieStyle {
+  const textColor = readableTextColor(backgroundColor);
   return {
-    color: { legend: chartColors.legend, title: chartColors.title },
+    color: { legend: textColor, title: textColor },
     font: { size: 11 },
   };
 }
 
-export function defaultGaugeStyle(): GaugeStyle {
+export function defaultGaugeStyle(backgroundColor?: string): GaugeStyle {
+  const textColor = readableTextColor(backgroundColor);
   return {
     color: {
-      legend: chartColors.legend,
-      title: chartColors.title,
+      legend: textColor,
+      title: textColor,
       fill: chartColors.fill,
       track: chartColors.track,
     },
