@@ -97,7 +97,7 @@ function createChartElement(
     return {
       ...base,
       type,
-      data: { label: 'Progress', value: 72, min: 0, max: 100 },
+      data: { label: 'Progress', value: 72, min: 0, max: 100, separator: ' of ', suffix: '' },
       style: {
         color: { legend: textColor, fill: chartColors.fill, track: chartColors.track },
         font: { size: 11 },

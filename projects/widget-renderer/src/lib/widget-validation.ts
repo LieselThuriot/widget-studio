@@ -331,6 +331,10 @@ function validateRange(
     return;
   }
   if (hasLabel) requiredString(value['label'], `${path}.label`, issues, true);
+  if (hasLabel) {
+    optionalString(value['separator'], `${path}.separator`, issues);
+    optionalString(value['suffix'], `${path}.suffix`, issues);
+  }
   requiredNumber(value['value'], `${path}.value`, issues);
   requiredNumber(value['min'], `${path}.min`, issues);
   requiredNumber(value['max'], `${path}.max`, issues);
@@ -340,6 +344,12 @@ function validateRange(
     value['min'] >= value['max']
   ) {
     addIssue(issues, path, 'minimum must be less than maximum');
+  }
+}
+
+function optionalString(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
+  if (value !== undefined && value !== null && !isString(value)) {
+    addIssue(issues, path, 'must be a string, null, or undefined');
   }
 }
 

@@ -107,6 +107,14 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
         : 'center';
   }
 
+  protected progressSeparator(element: ProgressElement): string {
+    return element.data.separator ?? ' - ';
+  }
+
+  protected progressSuffix(element: ProgressElement): string {
+    return element.data.suffix ?? '';
+  }
+
   protected ariaLabel(element: ChartElement | ProgressElement): string {
     return chartAriaLabel(element);
   }

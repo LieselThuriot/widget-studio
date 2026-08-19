@@ -198,7 +198,14 @@ describe('editor state transformations', () => {
 
     expect(progress?.type).toBe('progress');
     if (progress?.type === 'progress') {
-      expect(progress.data).toEqual({ label: 'Done', value: 75, min: 10, max: 90 });
+      expect(progress.data).toEqual({
+        label: 'Done',
+        value: 75,
+        min: 10,
+        max: 90,
+        separator: ' of ',
+        suffix: '',
+      });
       expect(progress.style.color.fill).toBe('#22c55e');
       expect(progress.style.color.track).toBe('#172033');
       expect(progress.style.font.size).toBe(14);

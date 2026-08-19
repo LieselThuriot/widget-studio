@@ -115,6 +115,8 @@ export function normalizeProgressElement(
       value: element.data?.value ?? legacy.value ?? 0,
       min: element.data?.min ?? legacy.min ?? 0,
       max: element.data?.max ?? legacy.max ?? 100,
+      separator: element.data?.separator ?? ' of ',
+      suffix: element.data?.suffix ?? '',
     },
     style: {
       color: {

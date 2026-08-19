@@ -57,7 +57,7 @@ describe('chart accessibility summaries', () => {
       type: 'progress',
       grid: base.grid,
       sensitive: false,
-      data: { label: 'Complete', value: 4, min: 0, max: 10 },
+      data: { label: 'Complete', value: 4, min: 0, max: 10, separator: ' of ', suffix: '' },
       style: { color: { legend: '#fff', fill: '#0ff', track: '#000' }, font: { size: 11 } },
       showLegend: true,
       active: false,
@@ -65,5 +65,22 @@ describe('chart accessibility summaries', () => {
 
     expect(chartAriaLabel(element)).toContain('Complete');
     expect(chartAccessibilitySummary(element)).toContain('maximum 10');
+  });
+
+  it('uses renderer defaults for missing progress separator and suffix', () => {
+    const element = {
+      ...({
+        id: 'progress',
+        type: 'progress',
+        grid: base.grid,
+        sensitive: false,
+        data: { label: 'Complete', value: 4, min: 0, max: 10 },
+        style: { color: { legend: '#fff', fill: '#0ff', track: '#000' }, font: { size: 11 } },
+        showLegend: true,
+        active: false,
+      } satisfies ProgressElement),
+    } as ProgressElement;
+
+    expect(chartAriaLabel(element)).toContain('4 - 10.');
   });
 });

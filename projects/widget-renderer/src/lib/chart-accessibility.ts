@@ -16,9 +16,17 @@ function points(data: { label: string; value: number }[]): string {
   return remaining > 0 ? `${visible.join('; ')}; ${remaining} more points.` : visible.join('; ');
 }
 
+function progressSeparator(element: ProgressElement): string {
+  return element.data.separator ?? ' - ';
+}
+
+function progressSuffix(element: ProgressElement): string {
+  return element.data.suffix ?? '';
+}
+
 export function chartAriaLabel(element: ChartElement | ProgressElement): string {
   if (element.type === 'progress') {
-    return `${element.data.label || 'Progress'}, ${number(element.data.value)} of ${number(element.data.max)}.`;
+    return `${element.data.label || 'Progress'}, ${number(element.data.value)}${progressSeparator(element)}${number(element.data.max)}${progressSuffix(element)}.`;
   }
   if (element.type === 'gauge') {
     return `${element.title || 'Gauge'}, ${number(element.data.value)} of ${number(element.data.max)}.`;

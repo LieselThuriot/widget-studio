@@ -125,6 +125,8 @@ export interface ProgressData {
   value: number;
   min: number;
   max: number;
+  separator?: string | null;
+  suffix?: string | null;
 }
 export interface GaugeData {
   value: number;

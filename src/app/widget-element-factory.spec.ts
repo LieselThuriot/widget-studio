@@ -36,6 +36,7 @@ describe('widget element factory', () => {
     expect(progress).toMatchObject({
       id: 'progress-id',
       type: 'progress',
+      data: { separator: ' of ', suffix: '' },
       showLegend: true,
       active: false,
     });

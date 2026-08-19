@@ -1,8 +1,15 @@
-<label
-  >Label<input
-    [value]="element().data.label"
-    (input)="changed.emit({ data: { ...element().data, label: value($event) } })"
-/></label>
+<div class="field-row">
+  <label
+    >Label<input
+      [value]="element().data.label"
+      (input)="changed.emit({ data: { ...element().data, label: value($event) } })"
+  /></label>
+  <label
+    >Separator<input
+      [value]="element().data.separator ?? ' of '"
+      (input)="changed.emit({ data: { ...element().data, separator: value($event) } })"
+  /></label>
+</div>
 <div class="field-row">
   <label
     >Minimum<input
@@ -21,6 +28,11 @@
       type="number"
       [value]="element().data.max"
       (input)="changed.emit({ data: { ...element().data, max: number($event) } })"
+  /></label>
+  <label
+    >Suffix<input
+      [value]="element().data.suffix ?? ''"
+      (input)="changed.emit({ data: { ...element().data, suffix: value($event) } })"
   /></label>
 </div>
 <div class="field-row color-fields stacked-fields">
