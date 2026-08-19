@@ -170,20 +170,19 @@ export type ChartElement = PieElement | GaugeElement | SeriesElement;
 export type WidgetElement =
   TextElement | ImageElement | ButtonElement | DividerElement | ChartElement | ProgressElement;
 export type TextElementContract = Omit<TextElement, 'id'>;
-export type ImageElementContract = Omit<ImageElement, 'id'> & OptionalElementId;
+export type ImageElementContract = Omit<ImageElement, 'id'>;
 export type ButtonElementContract = Omit<
   ButtonElement,
   'id' | 'requestRefresh' | 'showOnlyOnHover'
-> &
-  OptionalElementId & {
-    requestRefresh?: boolean;
-    showOnlyOnHover?: boolean;
-  };
-export type DividerElementContract = Omit<DividerElement, 'id' | 'sensitive'> & OptionalElementId;
-export type ChartElementContract = Omit<ChartElement, 'id'> & OptionalElementId;
-export type ProgressElementContract = Omit<ProgressElement, 'id'> & OptionalElementId;
+> & {
+  requestRefresh?: boolean;
+  showOnlyOnHover?: boolean;
+};
+export type DividerElementContract = Omit<DividerElement, 'id' | 'sensitive'>;
+export type ChartElementContract = Omit<ChartElement, 'id'>;
+export type ProgressElementContract = Omit<ProgressElement, 'id'>;
 export type WidgetElementContract =
-  | (TextElementContract & OptionalElementId)
+  | TextElementContract
   | ImageElementContract
   | ButtonElementContract
   | DividerElementContract
@@ -202,7 +201,3 @@ export type WidgetContract = Omit<Widget, 'elements'> & {
   elements: WidgetElementContract[];
 };
 export type WidgetInput = Widget | WidgetContract;
-
-export interface OptionalElementId {
-  id?: string | null;
-}

@@ -4,6 +4,7 @@ import {
   ProgressElement,
   Widget,
   WidgetElement,
+  WidgetInput,
 } from 'widget-renderer';
 import { chartColors } from './colors';
 
@@ -32,6 +33,19 @@ type LegacyLayout = WidgetElement & {
 
 export function normalizeWidget(widget: Widget): Widget {
   return { ...widget, elements: widget.elements.map(normalizeElement) };
+}
+
+export function assignEditorIds(widget: WidgetInput): Widget {
+  return {
+    ...widget,
+    elements: widget.elements.map((element, index) => ({
+      ...element,
+      id:
+        'id' in element && typeof element.id === 'string'
+          ? element.id
+          : `${element.type}-${index}-${crypto.randomUUID()}`,
+    })),
+  } as Widget;
 }
 
 export function normalizeElement(element: WidgetElement): WidgetElement {

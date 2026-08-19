@@ -80,11 +80,6 @@ function addIssue(issues: WidgetValidationIssue[], path: string, message: string
   issues.push({ path, message });
 }
 
-function elementPath(path: string, id: string): string {
-  const elementsPath = path.slice(0, path.lastIndexOf('['));
-  return `${elementsPath}[${JSON.stringify(id)}]`;
-}
-
 function requiredString(
   value: unknown,
   path: string,
@@ -213,23 +208,12 @@ function validateDataPoints(
   });
 }
 
-function validateElement(
-  value: unknown,
-  path: string,
-  issues: WidgetValidationIssue[],
-  ids: Set<string>,
-): void {
+function validateElement(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
   if (!isRecord(value)) {
     addIssue(issues, path, 'must be an object');
     return;
   }
-  let issuePath = path;
-  if (value['id'] !== undefined && value['id'] !== null && value['id'] !== '') {
-    if (!requiredString(value['id'], `${path}.id`, issues)) return;
-    issuePath = elementPath(path, value['id']);
-    if (ids.has(value['id'])) addIssue(issues, `${issuePath}.id`, 'must be unique');
-    ids.add(value['id']);
-  }
+  const issuePath = path;
   if (!isOneOf(value['type'], elementTypes)) {
     addIssue(issues, `${issuePath}.type`, 'has an unsupported value');
     return;
@@ -394,9 +378,8 @@ function validateWidget(value: unknown): WidgetValidationIssue[] {
   }
   if (!Array.isArray(value['elements'])) addIssue(issues, 'elements', 'must be an array');
   else {
-    const ids = new Set<string>();
     value['elements'].forEach((element, index) =>
-      validateElement(element, `elements[${index}]`, issues, ids),
+      validateElement(element, `elements[${index}]`, issues),
     );
   }
   return issues;
@@ -415,7 +398,7 @@ export function parseWidgetInput(value: unknown): WidgetInput {
 
 export function isWidgetContract(value: unknown): value is WidgetContract {
   const result = safeParseWidgetInput(value);
-  return result.success && !('id' in (result.data.elements[0] ?? {}));
+  return result.success;
 }
 
 export function isWidget(value: unknown): value is Widget {

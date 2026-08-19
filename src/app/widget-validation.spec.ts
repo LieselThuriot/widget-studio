@@ -1,4 +1,4 @@
-import { hydrateWidget, parseWidgetInput, safeParseWidgetInput } from 'widget-renderer';
+import { normalizeWidgetInput, parseWidgetInput, safeParseWidgetInput } from 'widget-renderer';
 import { WidgetContract } from 'widget-renderer';
 
 const validContract: WidgetContract = {
@@ -178,8 +178,8 @@ describe('widget contract validation', () => {
 
     expect(result.success).toBe(true);
     if (result.success) {
-      const hydrated = hydrateWidget(result.data);
-      expect(hydrated.elements[0]).toMatchObject({
+      const normalized = normalizeWidgetInput(result.data);
+      expect(normalized.elements[0]).toMatchObject({
         requestRefresh: false,
         showOnlyOnHover: false,
       });
@@ -202,7 +202,7 @@ describe('widget contract validation', () => {
 
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(hydrateWidget(result.data).elements[0].sensitive).toBe(false);
+      expect(normalizeWidgetInput(result.data).elements[0]).toMatchObject({ sensitive: false });
     }
   });
 
@@ -228,7 +228,7 @@ describe('widget contract validation', () => {
     }
   });
 
-  it('rejects invalid ranges and duplicate IDs', () => {
+  it('rejects invalid ranges', () => {
     const result = safeParseWidgetInput({
       ...validContract,
       elements: [
@@ -258,13 +258,11 @@ describe('widget contract validation', () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.issues.map((issue) => issue.path)).toEqual(
-        expect.arrayContaining(['elements["same"].data', 'elements["same"].id']),
-      );
+      expect(result.issues.map((issue) => issue.path)).toContain('elements[0].data');
     }
   });
 
-  it('allows optional IDs and uses an ID in nested issue paths', () => {
+  it('uses positional paths for nested element issues', () => {
     const result = safeParseWidgetInput({
       ...validContract,
       elements: [
@@ -281,13 +279,11 @@ describe('widget contract validation', () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.issues.map((issue) => issue.path)).toContain(
-        'elements["headline.primary"].style.font.size',
-      );
+      expect(result.issues.map((issue) => issue.path)).toContain('elements[0].style.font.size');
     }
   });
 
-  it('accepts null and empty IDs as missing IDs', () => {
+  it('ignores legacy IDs in input payloads', () => {
     const result = safeParseWidgetInput({
       ...validContract,
       elements: [

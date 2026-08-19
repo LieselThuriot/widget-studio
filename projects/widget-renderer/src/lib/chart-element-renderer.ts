@@ -39,6 +39,7 @@ use([
 })
 export class ChartElementRenderer implements AfterViewInit, OnDestroy {
   readonly element = input.required<ChartElement | ProgressElement>();
+  protected readonly summaryId = `chart-summary-${crypto.randomUUID()}`;
   private readonly chartHost = viewChild.required<ElementRef<HTMLDivElement>>('chartHost');
   private chartInstance: ECharts | null = null;
   private resizeObserver: ResizeObserver | null = null;

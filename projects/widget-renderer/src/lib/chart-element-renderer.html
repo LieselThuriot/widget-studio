@@ -3,9 +3,7 @@
     class="progress-element"
     [style]="progressStyle(progress(element()))"
     [attr.aria-label]="ariaLabel(progress(element()))"
-    [attr.aria-describedby]="
-      progress(element()).sensitive ? null : 'chart-summary-' + progress(element()).id
-    "
+    [attr.aria-describedby]="progress(element()).sensitive ? null : summaryId"
     [attr.aria-hidden]="progress(element()).sensitive ? 'true' : null"
     role="progressbar"
     [attr.aria-valuemin]="progress(element()).data.min"
@@ -25,7 +23,7 @@
       >
     }
     @if (!progress(element()).sensitive) {
-      <span class="visually-hidden" [id]="'chart-summary-' + progress(element()).id">{{
+      <span class="visually-hidden" [id]="summaryId">{{
         accessibilitySummary(progress(element()))
       }}</span>
     }
@@ -34,15 +32,13 @@
   <div
     class="chart-chart"
     [attr.aria-label]="ariaLabel(chart(element()))"
-    [attr.aria-describedby]="
-      chart(element()).sensitive ? null : 'chart-summary-' + chart(element()).id
-    "
+    [attr.aria-describedby]="chart(element()).sensitive ? null : summaryId"
     [attr.aria-hidden]="chart(element()).sensitive ? 'true' : null"
     role="img"
   >
     <div #chartHost class="chart-host"></div>
     @if (!chart(element()).sensitive) {
-      <span class="visually-hidden" [id]="'chart-summary-' + chart(element()).id">{{
+      <span class="visually-hidden" [id]="summaryId">{{
         accessibilitySummary(chart(element()))
       }}</span>
     }

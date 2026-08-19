@@ -81,10 +81,10 @@
       [style.grid-template-rows]="gridRows()"
       [style.grid-template-columns]="gridColumns()"
     >
-      @for (element of widget.elements; track element.id) {
+      @for (element of widget.elements; track $index; let index = $index) {
         <div
           class="widget-element"
-          [attr.data-widget-element-id]="element.id"
+          [attr.data-widget-element-id]="'id' in element ? element.id : null"
           [class.is-sensitive]="isElementSensitive(element)"
           [attr.aria-hidden]="isElementSensitive(element) ? 'true' : null"
           [style]="elementStyle(element)"
@@ -127,7 +127,7 @@
                 >{{ element.text }}</span
               >
             } @else if (isImage(element)) {
-              @if (imageFailed(element)) {
+              @if (imageFailed(element, index)) {
                 <div
                   class="image-placeholder"
                   role="img"
@@ -147,7 +147,7 @@
                   [style.object-fit]="element.fit"
                   [style.object-position]="element.grid.anchor ?? 'center'"
                   [style.border-radius.px]="element.radius"
-                  (error)="imageLoadFailed(element)"
+                  (error)="imageLoadFailed(element, index)"
                 />
               }
               <span

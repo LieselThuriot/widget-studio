@@ -10,7 +10,7 @@ import {
   WidgetElement,
   WidgetInput,
 } from './widget.model';
-import { hydrateWidget } from './widget-hydration';
+import { normalizeWidgetInput } from './widget-hydration';
 import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
 import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
 
@@ -30,7 +30,6 @@ export class WidgetRenderer {
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
   private readonly failedImages = signal<Record<string, string>>({});
-  private hydratedWidget: Widget | undefined;
   private readonly parsedWidget = computed(() => {
     const widget = this.widget();
     return widget === null ? { success: false as const, issues: [] } : safeParseWidgetInput(widget);
@@ -46,15 +45,16 @@ export class WidgetRenderer {
   protected readonly renderWidget = computed<Widget>(() => {
     const result = this.parsedWidget();
     if (!result.success) {
-      this.hydratedWidget = emptyWidget;
       return emptyWidget;
     }
-    this.hydratedWidget = hydrateWidget(result.data as WidgetInput, this.hydratedWidget);
-    return this.hydratedWidget;
+    return normalizeWidgetInput(result.data) as Widget;
   });
   readonly hasSensitiveElements = computed(() => {
     const widget = this.renderWidget();
-    return widget.background.sensitive || widget.elements.some((element) => element.sensitive);
+    return (
+      widget.background.sensitive ||
+      widget.elements.some((element) => 'sensitive' in element && element.sensitive)
+    );
   });
   readonly backgroundSensitive = computed(() => {
     const widget = this.renderWidget();
@@ -97,7 +97,7 @@ export class WidgetRenderer {
     return ['pie', 'donut', 'gauge', 'bar', 'line', 'progress'].includes(element.type);
   }
   protected isElementSensitive(element: WidgetElement): boolean {
-    return element.sensitive && !this.sensitiveVisible();
+    return ('sensitive' in element ? element.sensitive : false) && !this.sensitiveVisible();
   }
   protected sensitiveBlur(element: WidgetElement): string | null {
     if (!element.sensitive) {
@@ -113,11 +113,11 @@ export class WidgetRenderer {
   protected elementAlt(element: ImageElement): string {
     return this.isElementSensitive(element) ? '' : element.alt;
   }
-  protected imageFailed(element: ImageElement): boolean {
-    return this.failedImages()[element.id] === element.source;
+  protected imageFailed(element: ImageElement, index: number): boolean {
+    return this.failedImages()[index] === element.source;
   }
-  protected imageLoadFailed(element: ImageElement): void {
-    this.failedImages.update((failed) => ({ ...failed, [element.id]: element.source }));
+  protected imageLoadFailed(element: ImageElement, index: number): void {
+    this.failedImages.update((failed) => ({ ...failed, [index]: element.source }));
   }
   protected horizontalAnchor(anchor: string): string {
     return anchor.endsWith('left')
