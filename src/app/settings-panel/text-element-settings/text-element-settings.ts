@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { TextElement } from 'widget-renderer';
+import { TextElement } from '../../editor-model';
 import { ColorPicker } from '../../color-picker/color-picker';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 

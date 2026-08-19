@@ -17,10 +17,11 @@ import {
 } from './editor-state';
 import { assignEditorIds, normalizeWidget } from './widget-normalization';
 import { sampleWidgets } from './sample-widget';
-import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
+import { Widget, WidgetElement } from './editor-model';
+import { ButtonElement } from 'widget-renderer';
 
 export class EditorStateStore {
-  readonly widget = signal<Widget>(normalizeWidget(structuredClone(sampleWidgets[0].widget)));
+  readonly widget = signal<Widget>(sampleWidgets[0].widget);
   readonly selectedId = signal<string | null>('headline');
   readonly isPreviewOpen = signal(false);
   readonly actionAlert = signal<ActionAlert | null>(null);
@@ -49,8 +50,9 @@ export class EditorStateStore {
     const sample = sampleWidgets.find((candidate) => candidate.id === sampleId);
     if (!sample) return;
     const widget = normalizeWidget(structuredClone(sample.widget));
-    this.widget.set(widget);
-    this.selectedId.set(widget.elements[0]?.id ?? null);
+    const importedWidget = assignEditorIds(widget);
+    this.widget.set(importedWidget);
+    this.selectedId.set(importedWidget.elements[0]?.id ?? null);
     this.isPreviewOpen.set(false);
     this.actionAlert.set(null);
   }
@@ -125,8 +127,8 @@ export class EditorStateStore {
     this.widget.update((widget) => updateElementRadius(widget, id, value));
   }
 
-  updateWidget(patch: Partial<Widget>): void {
-    this.widget.update((widget) => patchWidget(widget, patch));
+  updateWidget(patch: Partial<import('widget-renderer').Widget>): void {
+    this.widget.update((widget) => patchWidget(widget, patch) as Widget);
   }
 
   updateTrack(

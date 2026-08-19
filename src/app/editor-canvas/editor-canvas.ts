@@ -15,11 +15,10 @@ import {
   gridTemplate,
   WIDGET_HEIGHT,
   WIDGET_PADDING,
-  Widget,
-  WidgetElement,
   WidgetRenderer,
   widgetWidth as getWidgetWidth,
 } from 'widget-renderer';
+import { Widget, WidgetElement } from '../editor-model';
 import {
   ElementActionsMenu,
   ElementStackAction,

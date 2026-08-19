@@ -1,4 +1,5 @@
-import { GridTrack, WidgetElement } from 'widget-renderer';
+import { GridTrack } from 'widget-renderer';
+import { WidgetElement } from '../editor-model';
 
 export const CANVAS_GAP = 8;
 

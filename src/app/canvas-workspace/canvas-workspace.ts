@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
-import { ButtonElement, Widget } from 'widget-renderer';
+import { ButtonElement } from 'widget-renderer';
+import { Widget } from '../editor-model';
 import { EditorCanvas } from '../editor-canvas/editor-canvas';
 import { WidgetSample } from '../sample-widget';
 

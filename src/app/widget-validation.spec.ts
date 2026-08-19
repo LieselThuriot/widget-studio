@@ -1,4 +1,9 @@
-import { normalizeWidgetInput, parseWidgetInput, safeParseWidgetInput } from 'widget-renderer';
+import {
+  isWidget,
+  normalizeWidgetInput,
+  parseWidgetInput,
+  safeParseWidgetInput,
+} from 'widget-renderer';
 import { WidgetContract } from 'widget-renderer';
 
 const validContract: WidgetContract = {
@@ -16,6 +21,10 @@ describe('widget contract validation', () => {
     const result = safeParseWidgetInput(validContract);
 
     expect(result).toEqual({ success: true, data: validContract });
+  });
+
+  it('accepts a valid ID-free widget', () => {
+    expect(isWidget(validContract)).toBe(true);
   });
 
   it('accepts optional badge styling on text elements', () => {

@@ -8,7 +8,9 @@ import { OutputContract } from './output-contract/output-contract';
 import { PreviewDialog } from './preview-dialog/preview-dialog';
 import { EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
 import { SettingsPanel } from './settings-panel/settings-panel';
-import { ButtonElement, Widget, WidgetElement } from 'widget-renderer';
+import { ButtonElement } from 'widget-renderer';
+import { Widget as RendererWidget } from 'widget-renderer';
+import { Widget, WidgetElement } from './editor-model';
 import { widgetElementPalette } from './widget-element-metadata';
 import { EditorStateStore } from './editor-state-store';
 import { sampleWidgets } from './sample-widget';
@@ -159,7 +161,7 @@ export class App {
     this.editorState.updateRadius(value);
   }
 
-  protected updateWidget(patch: Partial<Widget>): void {
+  protected updateWidget(patch: Partial<RendererWidget>): void {
     this.editorState.updateWidget(patch);
   }
 

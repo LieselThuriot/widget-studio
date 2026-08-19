@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { WidgetElement } from 'widget-renderer';
+import { WidgetElement } from '../editor-model';
 import { PaletteItem } from '../widget-element-metadata';
 
 export type { PaletteItem } from '../widget-element-metadata';

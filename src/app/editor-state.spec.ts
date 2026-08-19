@@ -218,7 +218,6 @@ describe('editor state transformations', () => {
   it('normalizes legacy gauge and series chart styles', () => {
     const gauge = normalizeGaugeElement(
       {
-        id: 'gauge',
         type: 'gauge',
         grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'center' },
         sensitive: false,
@@ -234,7 +233,6 @@ describe('editor state transformations', () => {
     );
     const chart = normalizeChartElement(
       {
-        id: 'bar',
         type: 'bar',
         grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
         sensitive: false,

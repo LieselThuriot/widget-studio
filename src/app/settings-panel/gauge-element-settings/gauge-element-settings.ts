@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { GaugeElement } from 'widget-renderer';
+import { GaugeElement } from '../../editor-model';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { ColorPicker } from '../../color-picker/color-picker';
 

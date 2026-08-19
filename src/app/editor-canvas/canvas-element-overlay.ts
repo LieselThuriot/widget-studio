@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
-import { elementGridStyle, WidgetElement } from 'widget-renderer';
+import { elementGridStyle } from 'widget-renderer';
+import { WidgetElement } from '../editor-model';
 import { elementLabel } from '../widget-element-metadata';
 
 @Component({

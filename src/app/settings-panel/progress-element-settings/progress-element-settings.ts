@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ProgressElement } from 'widget-renderer';
+import { ProgressElement } from '../../editor-model';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { ColorPicker } from '../../color-picker/color-picker';
 

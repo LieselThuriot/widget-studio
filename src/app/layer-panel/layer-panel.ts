@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { WidgetElement } from 'widget-renderer';
+import { WidgetElement } from '../editor-model';
 import { elementIcon, elementLabel } from '../widget-element-metadata';
 import {
   ElementActionsMenu,

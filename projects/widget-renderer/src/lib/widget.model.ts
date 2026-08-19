@@ -58,7 +58,6 @@ export interface ChartFontStyle {
   size: number;
 }
 export interface WidgetElementBase {
-  id: string;
   type: WidgetElementType;
   grid: ElementGrid;
   sensitive: boolean;
@@ -169,25 +168,17 @@ export interface ProgressElement extends WidgetElementBase {
 export type ChartElement = PieElement | GaugeElement | SeriesElement;
 export type WidgetElement =
   TextElement | ImageElement | ButtonElement | DividerElement | ChartElement | ProgressElement;
-export type TextElementContract = Omit<TextElement, 'id'>;
-export type ImageElementContract = Omit<ImageElement, 'id'>;
-export type ButtonElementContract = Omit<
-  ButtonElement,
-  'id' | 'requestRefresh' | 'showOnlyOnHover'
-> & {
+export type ButtonElementContract = Omit<ButtonElement, 'requestRefresh' | 'showOnlyOnHover'> & {
   requestRefresh?: boolean;
   showOnlyOnHover?: boolean;
 };
-export type DividerElementContract = Omit<DividerElement, 'id' | 'sensitive'>;
-export type ChartElementContract = Omit<ChartElement, 'id'>;
-export type ProgressElementContract = Omit<ProgressElement, 'id'>;
 export type WidgetElementContract =
-  | TextElementContract
-  | ImageElementContract
+  | TextElement
+  | ImageElement
   | ButtonElementContract
-  | DividerElementContract
-  | ChartElementContract
-  | ProgressElementContract;
+  | Omit<DividerElement, 'sensitive'>
+  | ChartElement
+  | ProgressElement;
 export interface Widget {
   version: 2;
   size: WidgetSize;
@@ -200,4 +191,4 @@ export interface Widget {
 export type WidgetContract = Omit<Widget, 'elements'> & {
   elements: WidgetElementContract[];
 };
-export type WidgetInput = Widget | WidgetContract;
+export type WidgetInput = WidgetContract;

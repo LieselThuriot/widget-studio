@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { DividerElement } from 'widget-renderer';
+import { DividerElement } from '../../editor-model';
 import { ColorPicker } from '../../color-picker/color-picker';
 import { eventValue } from '../form-events';
 

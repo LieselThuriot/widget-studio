@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { GridTrack, Widget, WidgetElement, WidgetElementType } from 'widget-renderer';
+import { GridTrack, WidgetElementType } from 'widget-renderer';
+import { Widget as RendererWidget } from 'widget-renderer';
+import { Widget, WidgetElement } from '../editor-model';
 import { AnchorControl } from './anchor-control/anchor-control';
 import { TextElementSettings } from './text-element-settings/text-element-settings';
 import { ImageElementSettings } from './image-element-settings/image-element-settings';
@@ -46,7 +48,7 @@ export class SettingsPanel {
   readonly widget = input.required<Widget>();
   readonly selectedElement = input<WidgetElement | null>(null);
   readonly elementChanged = output<Partial<WidgetElement>>();
-  readonly widgetChanged = output<Partial<Widget>>();
+  readonly widgetChanged = output<Partial<RendererWidget>>();
   readonly placementChanged = output<PlacementChange>();
   readonly spanChanged = output<SpanChange>();
   readonly radiusChanged = output<number>();

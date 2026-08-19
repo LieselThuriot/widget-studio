@@ -2,7 +2,6 @@ import { chartAccessibilitySummary, chartAriaLabel } from 'widget-renderer';
 import { ChartElement, ProgressElement } from 'widget-renderer';
 
 const base = {
-  id: 'chart',
   grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
   sensitive: false,
   title: 'Sales',
@@ -24,7 +23,6 @@ describe('chart accessibility summaries', () => {
 
   it('summarizes gauge ranges', () => {
     const element: ChartElement = {
-      id: 'gauge',
       type: 'gauge',
       grid: base.grid,
       sensitive: false,
@@ -53,7 +51,6 @@ describe('chart accessibility summaries', () => {
 
   it('summarizes progress', () => {
     const element: ProgressElement = {
-      id: 'progress',
       type: 'progress',
       grid: base.grid,
       sensitive: false,
@@ -70,7 +67,6 @@ describe('chart accessibility summaries', () => {
   it('uses renderer defaults for missing progress separator and suffix', () => {
     const element = {
       ...({
-        id: 'progress',
         type: 'progress',
         grid: base.grid,
         sensitive: false,

@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { Widget } from 'widget-renderer';
+import { Widget } from '../../editor-model';
 import { removeTrack } from '../../editor-state';
 import { GridEditorDialog } from '../grid-editor-dialog/grid-editor-dialog';
 import { eventValue } from '../form-events';

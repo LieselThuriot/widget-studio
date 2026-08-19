@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ButtonElement } from 'widget-renderer';
+import { ButtonElement } from '../../editor-model';
 import { eventChecked, eventValue } from '../form-events';
 
 @Component({

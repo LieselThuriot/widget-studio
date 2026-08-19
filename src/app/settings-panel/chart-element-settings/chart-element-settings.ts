@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ChartElement, ProgressElement } from 'widget-renderer';
+import { ChartElement, ProgressElement } from '../../editor-model';
 import { GaugeElementSettings } from '../gauge-element-settings/gauge-element-settings';
 import { ProgressElementSettings } from '../progress-element-settings/progress-element-settings';
 import { SeriesChartSettings } from '../series-chart-settings/series-chart-settings';

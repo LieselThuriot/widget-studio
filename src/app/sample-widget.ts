@@ -1,4 +1,4 @@
-import { Widget } from 'widget-renderer';
+import { Widget } from './editor-model';
 
 export interface WidgetSample {
   id: string;

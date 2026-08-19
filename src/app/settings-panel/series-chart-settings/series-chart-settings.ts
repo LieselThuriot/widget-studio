@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
-import { ChartDataPoint, ChartElement, GraphStyle, SeriesElement } from 'widget-renderer';
+import { ChartDataPoint, GraphStyle } from 'widget-renderer';
+import { ChartElement, SeriesElement } from '../../editor-model';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { DataPointsDialog } from '../data-points-dialog/data-points-dialog';
 import { ColorPicker } from '../../color-picker/color-picker';

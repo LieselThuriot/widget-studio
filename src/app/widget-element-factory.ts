@@ -11,8 +11,8 @@ import {
   SeriesElement,
   TextElement,
   WidgetElement,
-  WidgetElementBase,
-} from 'widget-renderer';
+} from './editor-model';
+import { WidgetElementBase } from 'widget-renderer';
 import { chartColors, randomPastelColor, readableTextColor } from './colors';
 
 export function createWidgetElement(

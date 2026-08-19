@@ -403,5 +403,5 @@ export function isWidgetContract(value: unknown): value is WidgetContract {
 
 export function isWidget(value: unknown): value is Widget {
   const result = safeParseWidgetInput(value);
-  return result.success && result.data.elements.every((element) => 'id' in element);
+  return result.success;
 }

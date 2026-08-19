@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ImageElement } from 'widget-renderer';
+import { ImageElement } from '../../editor-model';
 import { ColorPicker } from '../../color-picker/color-picker';
 import { AnchorControl } from '../anchor-control/anchor-control';
 import { eventNumber, eventValue } from '../form-events';

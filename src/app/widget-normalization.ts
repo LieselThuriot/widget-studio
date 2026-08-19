@@ -2,11 +2,11 @@ import {
   ChartElement,
   GaugeElement,
   ProgressElement,
-  Widget,
   WidgetElement,
   WidgetInput,
 } from 'widget-renderer';
 import { chartColors } from './colors';
+import { Widget } from './editor-model';
 
 const defaultGraphStyle = {
   color: {
@@ -32,7 +32,7 @@ type LegacyLayout = WidgetElement & {
 };
 
 export function normalizeWidget(widget: Widget): Widget {
-  return { ...widget, elements: widget.elements.map(normalizeElement) };
+  return { ...widget, elements: widget.elements.map(normalizeElement) as Widget['elements'] };
 }
 
 export function assignEditorIds(widget: WidgetInput): Widget {
@@ -55,7 +55,8 @@ export function normalizeElement(element: WidgetElement): WidgetElement {
   if (element.type === 'text') return normalizeTextElement(element, grid);
   if (element.type === 'progress') return normalizeProgressElement(element, grid);
   if (element.type === 'gauge') return normalizeGaugeElement(element, grid);
-  if (isSeriesElement(element)) return normalizeChartElement(element, grid);
+  if (isSeriesElement(element))
+    return normalizeChartElement(element as ChartElement, grid) as WidgetElement;
   return { ...element, grid };
 }
 
@@ -253,13 +254,11 @@ function normalizeGrid(element: WidgetElement, legacyLayout: LegacyLayout) {
     : { ...grid, anchor: grid.anchor ?? legacyLayout.anchor ?? 'top left' };
 }
 
-function isChartElement(element: WidgetElement): element is ChartElement {
+function isChartElement(element: WidgetElement): boolean {
   return chartTypes.includes(element.type as (typeof chartTypes)[number]);
 }
 
-function isSeriesElement(
-  element: WidgetElement,
-): element is Extract<ChartElement, { type: 'pie' | 'donut' | 'bar' | 'line' }> {
+function isSeriesElement(element: WidgetElement): boolean {
   return seriesTypes.includes(element.type as (typeof seriesTypes)[number]);
 }
 
