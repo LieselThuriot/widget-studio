@@ -1,335 +1,224 @@
-# widget-renderer
+# Widget Renderer
 
-`widget-renderer` is an Angular component that displays a widget received from a web API.
+Reusable Angular components for rendering compact, grid-based widgets with text, imagery, actions, charts, progress indicators, loading states, and sensitive-content controls.
 
-It renders the widget on screen. It does not edit the widget, move elements, resize elements, or save changes back to your API.
+The package is designed to receive a plain `WidgetContract` from an API or application. Consumers do not need to add editor-only element IDs or hydrate the data before rendering.
 
-## Install
+## Features
+
+- Render square or wide widgets from a version 2 contract
+- Place elements with configurable rows, columns, spans, and anchors
+- Support text, images, buttons, dividers, pie, donut, gauge, bar, line, and progress elements
+- Render charts with ECharts using SVG output
+- Validate incoming data with structured paths and messages
+- Normalize optional contract fields such as button defaults and text padding
+- Display responsive loading skeletons in square or wide layouts
+- Blur sensitive backgrounds and elements until explicitly revealed
+- Emit refresh and button-action events without making network requests
+- Provide accessible names and text summaries for charts and progress bars
+- Respect reduced-motion preferences for loading and active progress animations
+
+## Installation
 
 ```bash
-npm install widget-renderer
+npm install widget-renderer @angular/common @angular/core echarts
 ```
 
-The consuming Angular application must use Angular 21 or 22. ECharts 6 is also required:
+`@angular/common`, `@angular/core`, and `echarts` are peer dependencies. Use Angular 21 or 22 and ECharts 6.x, as declared by the package metadata.
 
-```bash
-npm install echarts
-```
+## Usage
 
-## How It Works
-
-The normal data flow is:
-
-```text
-Your API
-  |
-  | JSON widget data
-  v
-Your Angular component
-  |
-  | [widget]="widget"
-  v
-<widget-renderer>
-```
-
-Your API does not need to add an ID to every element. IDs are optional, but any
-non-empty IDs that are provided must be unique within the widget.
-
-## Basic Usage
-
-Use `WidgetContract` for data that comes from your API:
+Import the standalone `WidgetRenderer` component into an Angular component and bind a `WidgetContract`:
 
 ```ts
 import { Component } from '@angular/core';
 import { WidgetContract, WidgetRenderer } from 'widget-renderer';
 
 @Component({
-  selector: 'app-widget-page',
+  selector: 'app-dashboard-card',
   imports: [WidgetRenderer],
-  template: ` <widget-renderer [widget]="widget" /> `,
+  template: `
+    <widget-renderer
+      [widget]="widget"
+      [darkMode]="darkMode"
+      [loading]="loading"
+      (refreshRequested)="refreshWidget()"
+      (actionRequested)="handleAction($event)"
+    />
+  `,
 })
-export class WidgetPage {
-  protected readonly widget: WidgetContract = /* data from your API */;
-}
-```
+export class DashboardCard {
+  readonly darkMode = false;
+  readonly loading = false;
 
-Pass the API model directly to the component. You do not need to call a conversion function first.
-
-## Complete Small Example
-
-This is the smallest useful API-shaped widget:
-
-```ts
-import { WidgetContract } from 'widget-renderer';
-
-export const widget: WidgetContract = {
-  version: 2,
-  size: 'square',
-  rows: [{ size: 1, unit: 'star' }],
-  columns: [{ size: 1, unit: 'star' }],
-  background: {
-    color: '#101827',
-    sensitive: false,
-    repeat: false,
-    size: 'cover',
-    anchor: 'center',
-  },
-  refresh: {
-    enabled: false,
-    label: 'Refresh widget',
-  },
-  elements: [
-    {
-      type: 'text',
-      grid: {
-        row: 0,
-        column: 0,
-        rowSpan: 1,
-        columnSpan: 1,
-      },
+  readonly widget: WidgetContract = {
+    version: 2,
+    size: 'square',
+    rows: [{ size: 1, unit: 'star' }],
+    columns: [{ size: 1, unit: 'star' }],
+    background: {
+      color: '#172033',
       sensitive: false,
-      text: 'Hello from the widget',
-      style: {
-        color: '#ffffff',
-        font: { size: 18 },
-        align: 'left',
-        wrap: true,
+      repeat: false,
+      size: 'cover',
+      anchor: 'center',
+    },
+    refresh: { enabled: true, label: 'Refresh widget' },
+    elements: [
+      {
+        type: 'text',
+        grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'center' },
+        sensitive: false,
+        text: 'Hello from Widget Renderer',
+        style: {
+          color: '#ffffff',
+          font: { size: 16, bold: true },
+          align: 'center',
+          wrap: true,
+        },
       },
-    },
-  ],
-};
-```
+    ],
+  };
 
-Then render it:
+  refreshWidget(): void {
+    // Fetch updated data in the consuming application.
+  }
 
-```html
-<widget-renderer [widget]="widget" />
-```
-
-## API Data And IDs
-
-Use `WidgetContract` for API data. Its elements may include an `id`, but do not
-need one:
-
-```ts
-const apiWidget: WidgetContract = {
-  // ...
-  elements: [
-    {
-      type: 'text',
-      // An id is optional. If present, it must be unique in this widget.
-      // ...other text properties
-    },
-  ],
-};
-```
-
-The renderer creates temporary internal IDs for elements without an API ID.
-These IDs are used by Angular and the renderer to keep track of elements and
-are never required from your API.
-
-When API data is refreshed, the renderer uses a non-empty API ID as the
-element's stable identity. Elements without API IDs use their previous
-position and type when possible; otherwise, the renderer creates a new
-temporary ID. This means API IDs preserve identity when elements are reordered,
-while the common no-ID case continues to work without extra API data.
-
-`null` and empty-string IDs are treated the same as a missing ID. Duplicate
-non-empty IDs are invalid and are reported by runtime validation.
-
-You do not need to:
-
-- Add renderer IDs to your API response.
-- Save renderer IDs in your database.
-- Send renderer IDs back to your API.
-- Call `hydrateWidget()` before rendering.
-
-The API only needs to describe the widget and its elements.
-
-## Loading Data From An API
-
-Your Angular service can fetch the response and expose it as a `WidgetContract`:
-
-```ts
-readonly widget = signal<WidgetContract | null>(null);
-readonly loading = signal<boolean | 'square' | 'wide'>(true);
-
-loadWidget(): void {
-  this.http.get<WidgetContract>('/api/widget').subscribe((widget) => {
-    this.widget.set(widget);
-    this.loading.set(false);
-  });
+  handleAction(event: { element: unknown; event: Event }): void {
+    // Handle the configured button request in the consuming application.
+    console.log(event);
+  }
 }
 ```
 
-Pass both values to the renderer. The renderer can show its loading skeleton before the widget data exists:
+> [!IMPORTANT]
+> `WidgetRenderer` emits `refreshRequested` and `actionRequested`; it does not call the configured button URL or perform refresh requests itself.
+
+### Loading state
+
+Set `loading` to `true` for the default square skeleton, or to `'wide'` for a wide skeleton:
 
 ```html
-<widget-renderer [widget]="widget()" [loading]="loading()" />
+<widget-renderer [loading]="'wide'" [darkMode]="true" />
 ```
 
-The `loading` input accepts `boolean | 'square' | 'wide'`:
+### Dark mode
 
-| Value      | Behavior                                                             |
-| ---------- | -------------------------------------------------------------------- |
-| `false`    | Renders the widget.                                                  |
-| `true`     | Shows the square loading skeleton. This is the default loading size. |
-| `'square'` | Shows the square loading skeleton.                                   |
-| `'wide'`   | Shows the wide loading skeleton.                                     |
+Pass `darkMode` to style the loading state for a dark surface. The rendered widget itself uses the colors provided by its contract, so applications can control the surrounding theme and widget palette independently.
 
-The `widget` input may be `null` while loading. Once loading is disabled, provide a valid widget value to render the widget.
+### Outputs
 
-The TypeScript type helps your Angular code. It does not prove that the server actually returned valid JSON. Runtime validation is explained below.
-
-## Renderer Events
-
-The renderer displays the refresh control when `refresh.enabled` is `true`. It does not fetch data by itself.
-
-Handle refresh requests in your application:
-
-```html
-<widget-renderer
-  [widget]="widget"
-  (refreshRequested)="reloadWidget()"
-  (actionRequested)="handleAction($event)"
-/>
-```
-
-The renderer also emits button actions. Your application decides what to do with the button's method, URL, and body:
+`refreshRequested` is emitted when the refresh control is clicked. `actionRequested` is emitted with the clicked `ButtonElement` and DOM event:
 
 ```ts
 import { ButtonElement } from 'widget-renderer';
 
-protected handleAction(event: { element: ButtonElement; event: Event }): void {
-  event.element.method; // 'get' or 'post'
-  event.element.url;
-  event.element.body;
-  event.element.requestRefresh; // whether the host should refresh after the click
-  event.element.showOnlyOnHover; // whether the button is hidden until widget hover
+handleAction(event: { element: ButtonElement; event: Event }): void {
+  event.event.preventDefault();
+  const { method, url, body, requestRefresh } = event.element;
+  // Perform the application-specific request here.
+  console.log(method, url, body, requestRefresh);
 }
 ```
 
-The renderer does not automatically make network requests for button elements.
+## Widget contract
 
-## Supported Elements
+Every input must use `version: 2` and include:
 
-| Type       | Purpose                                                             |
-| ---------- | ------------------------------------------------------------------- |
-| `text`     | Displays formatted text.                                            |
-| `image`    | Displays an image with alt text, fit, overlay, and radius settings. |
-| `button`   | Displays an action button and emits an event when clicked.          |
-| `pie`      | Displays part-to-whole data.                                        |
-| `donut`    | Displays part-to-whole data with a center hole.                     |
-| `gauge`    | Displays one value within a range.                                  |
-| `bar`      | Compares multiple values.                                           |
-| `line`     | Displays a trend.                                                   |
-| `progress` | Displays completion within a range.                                 |
+| Field | Description |
+| --- | --- |
+| `size` | `square` or `wide`; the built-in widths are 265px and 530px |
+| `rows` | Non-empty grid tracks using `pixel`, `auto`, or `star` units |
+| `columns` | Non-empty grid tracks using `pixel`, `auto`, or `star` units |
+| `background` | Color, optional image, sizing, position, repeat, overlay, and sensitivity settings |
+| `refresh` | Whether to show a refresh action and its accessible label |
+| `elements` | An array of supported widget elements |
 
-## Runtime Validation
+Element positions are zero-based. For example, `row: 0` and `column: 0` place an element in the first grid cell.
 
-Most Angular applications can simply use:
+### Supported elements
 
-```html
-<widget-renderer [widget]="widget" />
-```
+- `text`: formatted text with alignment, wrapping, font styling, color, background, radius, and padding
+- `image`: remote or local image with alternative text, fit mode, radius, and overlay color
+- `button`: `get` or `post` action metadata, optional body, solid or outline styling, and hover behavior
+- `divider`: horizontal or vertical separator
+- `pie` and `donut`: labeled data points with optional legends and per-point colors
+- `gauge`: a value within a minimum and maximum range
+- `bar` and `line`: labeled series data with axis and line styling
+- `progress`: a range-based progress bar with label, suffix, legend, and active animation options
 
-The renderer validates its input defensively. If the input is malformed, it renders an empty safe widget instead of rendering a broken or partial widget.
+Editor-only `id` fields are not required. The renderer accepts `WidgetContract` data and normalizes optional button fields and text padding before rendering.
 
-You only need to call the validation helpers yourself if your application wants to show its own API error state or log detailed validation errors.
+### Sensitive content
 
-### Option 1: Return Validation Errors
+Set `sensitive: true` on the background or an element to blur it and remove hidden content from the accessible tree. The renderer provides a local show/hide control when sensitive content is present.
 
-Use `safeParseWidgetInput()` when you want to inspect the errors without throwing:
+> [!WARNING]
+> Sensitive-content handling is a display and privacy feature, not encryption. Sensitive values remain in the JavaScript object supplied by the consuming application.
+
+## Validation and normalization
+
+Use the exported helpers when data enters your application:
 
 ```ts
-const result = safeParseWidgetInput(apiResponse);
+import {
+  normalizeWidgetInput,
+  parseWidgetInput,
+  safeParseWidgetInput,
+} from 'widget-renderer';
 
-if (result.success) {
-  this.widget = result.data;
-} else {
+const result = safeParseWidgetInput(payload);
+
+if (!result.success) {
   console.error(result.issues);
-  this.errorMessage = 'The widget data is invalid.';
+} else {
+  const widget = normalizeWidgetInput(result.data);
 }
+
+// Throws WidgetValidationError when the payload is invalid.
+const parsed = parseWidgetInput(payload);
 ```
 
-Each issue includes a path. An element with an API ID uses that ID in the path,
-for example `elements["headline"].grid.rowSpan`. An element without an ID uses
-its array index, for example `elements[0].grid.rowSpan`.
+`WidgetValidationIssue` entries contain a `path` such as `elements[0].style.font.size` and a human-readable `message`. Invalid input supplied to `WidgetRenderer` produces a safe empty widget and exposes issues through `validationIssues`. `isWidgetContract` and `isWidget` are also available as type guards.
 
-### Option 2: Throw On Invalid Data
+## Public API
 
-Use `parseWidgetInput()` when invalid data should throw:
+The package entry point exports:
 
-```ts
-const widget = parseWidgetInput(apiResponse);
-```
+- Widget model types, including `WidgetContract`, `WidgetInput`, and element types
+- `WidgetRenderer` and `WidgetLoading`
+- `normalizeWidgetInput`
+- `safeParseWidgetInput`, `parseWidgetInput`, `isWidgetContract`, `isWidget`, and validation types
+- Grid layout helpers and widget dimensions
+- `ChartElementRenderer`
+- `chartAriaLabel` and `chartAccessibilitySummary`
 
-Invalid data throws a `WidgetValidationError`. This is useful when your application already has a central error handler.
+Import from `widget-renderer` rather than reaching into internal source files. The complete export list is maintained in [`src/public-api.ts`](src/public-api.ts).
 
-## Renderer And Editor
+## Development
 
-This library is the renderer. It is intended to be used in an Angular application that wants to display widgets.
-
-This repository also contains a separate editor application. The editor helps users create widget layouts, but it is not required to use the library.
-
-Use these types as follows:
-
-| Type             | Use it for                                                                                            |
-| ---------------- | ----------------------------------------------------------------------------------------------------- |
-| `WidgetContract` | API data with optional element IDs. This is the normal input for `WidgetRenderer`.                    |
-| `Widget`         | The internal client-side model, including renderer IDs. Useful for editors and advanced integrations. |
-
-Advanced consumers can call `hydrateWidget()` when they specifically need the internal `Widget` model. Normal renderer consumers should not need it.
-
-## Sensitive Content
-
-Set `sensitive: true` on the background or an element to mark it as sensitive.
-
-The renderer provides a control for showing or hiding sensitive content. Visibility is local to that renderer instance and is not stored in the widget contract.
-
-This is a display and privacy feature. It is not encryption. Sensitive values still exist in the JavaScript model supplied by your application.
-
-## Troubleshooting
-
-### Do API elements need IDs?
-
-No. Use `WidgetContract` and pass it directly to `WidgetRenderer`. If you do
-provide IDs, make them non-empty and unique within the widget.
-
-### What are API IDs used for?
-
-API IDs provide stable element identity when widget data is refreshed or
-reordered. Elements without IDs receive temporary renderer IDs instead.
-
-### Can two API elements share an ID?
-
-No. Duplicate non-empty IDs fail runtime validation. Missing, `null`, and empty
-IDs are allowed and are treated as elements without an API ID.
-
-### Do I need to call `hydrateWidget()`?
-
-No, not for normal rendering. The renderer hydrates API data internally.
-
-### Why is my button not making an HTTP request?
-
-Button requests belong to your application. Listen to `actionRequested` and make the request there.
-
-### Why is the widget empty?
-
-The input may be invalid. Inspect `safeParseWidgetInput(apiResponse).issues` before rendering to find the invalid field.
-
-### Why do I need ECharts?
-
-The renderer uses ECharts for pie, donut, gauge, bar, and line elements. Install the required peer dependency in the consuming application.
-
-## Library Development
-
-From this repository:
+This library is part of the parent Angular workspace. Run these commands from the workspace root:
 
 ```bash
+# Install the locked dependency tree
+npm ci
+
+# Build the library
+npm run build:library
+
+# Build, pack, install into a temporary consumer, and verify the public API
+npm run verify:library-package
+
+# Check formatting, lint, and tests
 npm run format:check
 npm run lint
 npm test -- --watch=false
-npm run build:library
-npm run verify:library-package
 ```
+
+The package output is written to `dist/widget-renderer`. Its Angular entry point is `src/public-api.ts`, and the package is compiled in Angular partial compilation mode for downstream applications.
+
+## Related technologies
+
+- [Angular](https://angular.dev/)
+- [Angular Package Format](https://angular.dev/tools/libraries/creating-libraries)
+- [Apache ECharts](https://echarts.apache.org/)

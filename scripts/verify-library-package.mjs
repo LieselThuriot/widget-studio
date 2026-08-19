@@ -25,7 +25,7 @@ try {
   writeFileSync(
     join(consumer, 'verify.mjs'),
     `import '@angular/compiler';
-import { safeParseWidgetInput, hydrateWidget } from 'widget-renderer';
+ import { normalizeWidgetInput, safeParseWidgetInput } from 'widget-renderer';
 const payload = {
   version: 2,
   size: 'square',
@@ -35,7 +35,7 @@ const payload = {
   refresh: { enabled: false, label: 'Refresh' },
   elements: [],
 };
-if (!safeParseWidgetInput(payload).success || hydrateWidget(payload).elements.length !== 0) process.exit(1);
+ if (!safeParseWidgetInput(payload).success || normalizeWidgetInput(payload).elements.length !== 0) process.exit(1);
 `,
   );
   execFileSync('node', ['verify.mjs'], { cwd: consumer, stdio: 'inherit' });
