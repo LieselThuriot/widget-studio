@@ -49,6 +49,7 @@
             class="color-field"
             label="Color"
             [value]="point.color ?? '#7dd3fc'"
+            [inline]="true"
             (changed)="update(index, { color: $event })"
           />
           <button

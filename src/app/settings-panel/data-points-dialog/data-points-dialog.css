@@ -51,7 +51,7 @@ h2 {
 }
 .point-row {
   display: grid;
-  grid-template-columns: minmax(100px, 1fr) 100px 78px auto;
+  grid-template-columns: minmax(100px, 1fr) 100px 180px auto;
   align-items: end;
   gap: 9px;
   padding: 12px;

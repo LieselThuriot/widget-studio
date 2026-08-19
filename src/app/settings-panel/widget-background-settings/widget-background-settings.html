@@ -16,7 +16,7 @@
     label="Overlay color"
     [value]="widget().background.overlayColor"
     [clearable]="true"
-    [withAlpha]="true"
+    [alphaDefault]="60"
     (changed)="changed.emit({ background: { ...widget().background, overlayColor: $event } })"
     (cleared)="changed.emit({ background: { ...widget().background, overlayColor: undefined } })"
   />

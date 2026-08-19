@@ -1,4 +1,4 @@
-<div class="color-picker">
+<div class="color-picker" [class.is-inline]="inline()">
   <div class="color-picker-label">
     <span>{{ label() }}</span>
     @if (clearable()) {
@@ -26,11 +26,11 @@
       (input)="onInput($event)"
     />
   </div>
-  @if (withAlpha()) {
-    <div class="alpha-control">
-      <label [for]="alphaId"
-        >Opacity <output>{{ alphaValue() }}%</output></label
-      >
+  <div class="alpha-control">
+    <label [for]="alphaId"
+      >Opacity <output>{{ alphaValue() }}%</output></label
+    >
+    <div class="alpha-track" [style.--opacity-color]="inputValue()">
       <input
         [id]="alphaId"
         type="range"
@@ -41,5 +41,5 @@
         (input)="onAlphaInput($event)"
       />
     </div>
-  }
+  </div>
 </div>

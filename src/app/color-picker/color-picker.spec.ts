@@ -4,11 +4,17 @@ import { ColorPicker } from './color-picker';
 
 @Component({
   imports: [ColorPicker],
-  template: `<app-color-picker label="Background" [value]="value" [withAlpha]="withAlpha" />`,
+  template: `<app-color-picker
+    label="Background"
+    [value]="value"
+    [alphaDefault]="alphaDefault"
+    (changed)="changedValue = $event"
+  />`,
 })
 class TestHost {
   value: string | undefined;
-  withAlpha = false;
+  alphaDefault = 100;
+  changedValue: string | undefined;
 }
 
 describe('ColorPicker', () => {
@@ -50,5 +56,25 @@ describe('ColorPicker', () => {
     const input = fixture.nativeElement.querySelector('input[type="color"]') as HTMLInputElement;
     expect(input.value).toBe('#64748b');
     expect(input.parentElement?.classList.contains('is-transparent')).toBe(false);
+  });
+
+  it('defaults to full opacity and emits six-digit colors', () => {
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input[type="color"]') as HTMLInputElement;
+    input.value = '#64748b';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    expect(fixture.componentInstance.changedValue).toBe('#64748b');
+  });
+
+  it('emits eight-digit colors below full opacity', () => {
+    fixture.componentInstance.value = '#64748b';
+    fixture.detectChanges();
+    const opacity = fixture.nativeElement.querySelector('input[type="range"]') as HTMLInputElement;
+    opacity.value = '60';
+    opacity.dispatchEvent(new Event('input', { bubbles: true }));
+
+    expect(fixture.componentInstance.changedValue).toBe('#64748b99');
   });
 });

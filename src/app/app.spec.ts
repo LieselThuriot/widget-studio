@@ -387,10 +387,14 @@ describe('App', () => {
 
     expect(labels).toEqual([
       'Title',
+      'Opacity 100%',
       'Value',
       'Minimum',
       'Maximum',
+      'Opacity 100%',
+      'Opacity 100%',
       'Show legendDisplay gauge labels and value',
+      'Opacity 100%',
       'Font size',
       'Title color',
       'Fill color',

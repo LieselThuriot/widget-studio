@@ -10,6 +10,42 @@
   align-items: center;
   gap: 4px;
 }
+.color-picker.is-inline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: end;
+}
+.color-picker.is-inline .color-picker-label {
+  grid-column: 1;
+  grid-row: 1;
+}
+.color-picker.is-inline .color-input {
+  grid-column: 1;
+  grid-row: 2;
+}
+.color-picker.is-inline .alpha-control {
+  display: contents;
+}
+.color-picker.is-inline .alpha-control label {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+}
+.color-picker.is-inline .alpha-track {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 6px;
+}
+@media (max-width: 360px) {
+  .color-picker.is-inline {
+    display: block;
+  }
+  .color-picker.is-inline .alpha-control {
+    display: block;
+    margin-top: 8px;
+  }
+}
 .color-input {
   position: relative;
   display: block;
@@ -60,11 +96,74 @@
   font-weight: 400;
 }
 .alpha-control input[type='range'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 16px;
-  margin-top: 3px;
+  margin: 0;
   padding: 0;
   border: 0;
-  accent-color: var(--editor-accent);
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.alpha-control input[type='range']::-webkit-slider-runnable-track {
+  height: 16px;
+  background: transparent;
+}
+.alpha-control input[type='range']::-moz-range-track {
+  height: 16px;
+  background: transparent;
+}
+.alpha-control input[type='range']::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: 2px;
+  appearance: none;
+  border: 2px solid var(--editor-text-on-accent);
+  border-radius: 50%;
+  background: var(--editor-accent);
+  box-shadow: 0 0 0 1px var(--editor-border-control);
+}
+.alpha-control input[type='range']::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--editor-text-on-accent);
+  border-radius: 50%;
+  background: var(--editor-accent);
+  box-shadow: 0 0 0 1px var(--editor-border-control);
+}
+.alpha-track {
+  position: relative;
+  height: 16px;
+  margin-top: 3px;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--editor-surface-panel);
+  background-image:
+    linear-gradient(to right, transparent, var(--opacity-color)),
+    linear-gradient(45deg, var(--editor-pattern-light) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--editor-pattern-light) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--editor-pattern-light) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--editor-pattern-light) 75%);
+  background-position:
+    0 0,
+    0 0,
+    0 5px,
+    5px -5px,
+    -5px 0;
+  background-size:
+    100% 100%,
+    10px 10px,
+    10px 10px,
+    10px 10px,
+    10px 10px;
+  outline: 1px solid var(--editor-border-control);
+  outline-offset: -1px;
+}
+.alpha-track:has(input:focus-visible) {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: -2px;
 }
 .clear-button {
   display: inline-grid;

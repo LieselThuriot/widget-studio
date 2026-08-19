@@ -11,7 +11,8 @@ export class ColorPicker {
   readonly label = input.required<string>();
   readonly value = input<string | undefined>();
   readonly clearable = input(false);
-  readonly withAlpha = input(false);
+  readonly alphaDefault = input(100);
+  readonly inline = input(false);
   readonly changed = output<string>();
   readonly cleared = output<void>();
 
@@ -27,26 +28,22 @@ export class ColorPicker {
 
   protected onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    this.changed.emit(this.withAlpha() ? `${value}${this.alphaHex()}` : value);
+    this.emitColor(value, this.alphaValue());
   }
 
   protected alphaValue(): number {
-    const alpha = this.value()?.slice(7, 9);
-    return alpha ? Math.round((parseInt(alpha, 16) / 255) * 100) : 60;
+    const value = this.value()?.trim().toLowerCase();
+    const alpha = value?.match(/^#[0-9a-f]{6}([0-9a-f]{2})$/)?.[1];
+    return alpha ? Math.round((parseInt(alpha, 16) / 255) * 100) : this.alphaDefault();
   }
 
   protected onAlphaInput(event: Event): void {
     const value = Number((event.target as HTMLInputElement).value);
-    this.changed.emit(
-      `${this.inputValue()}${Math.round((value / 100) * 255)
-        .toString(16)
-        .padStart(2, '0')}`,
-    );
+    this.emitColor(this.inputValue(), value);
   }
 
-  private alphaHex(): string {
-    return Math.round((this.alphaValue() / 100) * 255)
-      .toString(16)
-      .padStart(2, '0');
+  private emitColor(color: string, opacity: number): void {
+    const alpha = Math.round((Math.max(0, Math.min(100, opacity)) / 100) * 255);
+    this.changed.emit(alpha === 255 ? color : `${color}${alpha.toString(16).padStart(2, '0')}`);
   }
 }
