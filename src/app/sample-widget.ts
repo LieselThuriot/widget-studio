@@ -351,6 +351,21 @@ const holidayBalance: Widget = {
   ],
 };
 
+const brokenWidget = {
+  version: 3,
+  size: 'invalid',
+  rows: [],
+  columns: [],
+  background: {
+    sensitive: false,
+    repeat: false,
+    size: 'auto',
+    anchor: 'center',
+  },
+  refresh: { enabled: false, label: 'Refresh widget' },
+  elements: [],
+} as unknown as Widget;
+
 export const sampleWidgets: readonly WidgetSample[] = [
   {
     id: 'daily-brief',
@@ -370,6 +385,12 @@ export const sampleWidgets: readonly WidgetSample[] = [
     name: 'Holiday balance',
     description: 'See time away at a glance',
     widget: holidayBalance,
+  },
+  {
+    id: 'broken-widget',
+    name: 'Broken widget',
+    description: 'Show renderer validation errors',
+    widget: brokenWidget,
   },
 ];
 

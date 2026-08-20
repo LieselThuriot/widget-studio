@@ -41,6 +41,19 @@
       class="widget-overlay"
       [style.background-color]="widget.background.overlayColor || 'transparent'"
     ></div>
+    @if (validationIssues().length > 0) {
+      <div class="widget-validation-overlay" role="alert" aria-live="polite">
+        <strong class="widget-validation-title">Widget validation failed</strong>
+        <ul class="widget-validation-issues">
+          @for (issue of validationIssues(); track $index) {
+            <li>
+              <code>{{ issue.path }}</code
+              >: {{ issue.message }}
+            </li>
+          }
+        </ul>
+      </div>
+    }
     <div class="widget-toolbar" aria-label="Widget actions">
       @if (widget.refresh.enabled) {
         <button

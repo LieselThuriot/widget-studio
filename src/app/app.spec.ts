@@ -92,6 +92,26 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('265');
   });
 
+  it('should show renderer validation errors for the broken sample', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (
+      Array.from(fixture.nativeElement.querySelectorAll('.sample-menu-option')).find((button) =>
+        (button as HTMLButtonElement).textContent?.includes('Broken widget'),
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const overlay = fixture.nativeElement.querySelector('.widget-validation-overlay');
+    expect(overlay?.getAttribute('role')).toBe('alert');
+    expect(overlay?.textContent).toContain('version');
+    expect(overlay?.textContent).toContain('size');
+  });
+
   it('should keep the loader open for invalid widget model JSON', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

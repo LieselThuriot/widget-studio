@@ -49,7 +49,10 @@ export class EditorStateStore {
   loadSample(sampleId: string): void {
     const sample = sampleWidgets.find((candidate) => candidate.id === sampleId);
     if (!sample) return;
-    const widget = normalizeWidget(structuredClone(sample.widget));
+    const widget =
+      sample.id === 'broken-widget'
+        ? structuredClone(sample.widget)
+        : normalizeWidget(structuredClone(sample.widget));
     const importedWidget = assignEditorIds(widget);
     this.widget.set(importedWidget);
     this.selectedId.set(importedWidget.elements[0]?.id ?? null);
