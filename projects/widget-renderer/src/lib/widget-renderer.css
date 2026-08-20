@@ -22,6 +22,53 @@
 .widget-skeleton.is-wide {
   width: 530px;
 }
+.widget-skeleton.is-mini {
+  width: 133px;
+  height: 123px;
+}
+.widget-skeleton.is-mega {
+  width: 530px;
+  height: 490px;
+}
+.widget-skeleton.is-hero {
+  width: 1060px;
+  height: 490px;
+}
+.widget-skeleton.is-mini .skeleton-toolbar {
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+}
+.widget-skeleton.is-mini .skeleton-content {
+  box-sizing: border-box;
+  height: 100%;
+  gap: 3px;
+  padding: 24px 12px 8px;
+}
+.widget-skeleton.is-mini .skeleton-line {
+  height: 6px;
+}
+.widget-skeleton.is-mini .skeleton-line-title {
+  height: 10px;
+}
+.widget-skeleton.is-mini .skeleton-chart {
+  flex: 1 1 auto;
+  min-height: 20px;
+  margin-top: 0;
+}
+.widget-skeleton.is-mini .skeleton-button {
+  width: 42px;
+  height: 18px;
+}
+.widget-skeleton:is(.is-mega, .is-hero) .skeleton-content {
+  box-sizing: border-box;
+  height: 100%;
+}
+.widget-skeleton:is(.is-mega, .is-hero) .skeleton-chart {
+  flex: 1 1 auto;
+  min-height: 180px;
+}
 .widget-skeleton.is-dark {
   background: #182236;
 }

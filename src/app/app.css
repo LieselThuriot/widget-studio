@@ -6,6 +6,10 @@
   max-width: 1440px;
   margin: 0 auto;
   padding: 34px 42px 50px;
+  transition: max-width 220ms ease;
+}
+.workspace.is-hero {
+  max-width: 1760px;
 }
 .topbar {
   display: flex;
@@ -114,6 +118,10 @@ h2 {
   grid-template-columns: 238px minmax(400px, 1fr) 276px;
   gap: 20px;
   align-items: start;
+  transition: grid-template-columns 220ms ease;
+}
+.studio-grid.is-hero {
+  grid-template-columns: 238px minmax(1120px, 1fr) 276px;
 }
 .canvas-column {
   min-width: 0;
@@ -147,7 +155,13 @@ h2 {
   background: var(--editor-divider);
 }
 @media (max-width: 1050px) {
+  .workspace.is-hero {
+    max-width: 100%;
+  }
   .studio-grid {
+    grid-template-columns: 210px minmax(360px, 1fr);
+  }
+  .studio-grid.is-hero {
     grid-template-columns: 210px minmax(360px, 1fr);
   }
 }

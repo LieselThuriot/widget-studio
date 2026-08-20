@@ -1,11 +1,11 @@
-<main class="workspace">
+<main class="workspace" [class.is-hero]="widget().size === 'hero'">
   <app-studio-header
     [darkMode]="darkMode()"
     (darkModeToggled)="toggleDarkMode()"
     (previewRequested)="openPreview()"
     (shareRequested)="openShare()"
   />
-  <div class="studio-grid">
+  <div class="studio-grid" [class.is-hero]="widget().size === 'hero'">
     <aside class="editor-panel panel palette-panel" aria-label="Widget elements">
       <div class="editor-section-heading panel-heading">
         <div>

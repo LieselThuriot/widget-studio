@@ -13,9 +13,9 @@ import {
 import {
   ButtonElement,
   gridTemplate,
-  WIDGET_HEIGHT,
   WIDGET_PADDING,
   WidgetRenderer,
+  widgetHeight as getWidgetHeight,
   widgetWidth as getWidgetWidth,
 } from 'widget-renderer';
 import { Widget, WidgetElement } from '../editor-model';
@@ -59,6 +59,7 @@ export class EditorCanvas implements AfterViewInit, OnDestroy {
   readonly gridRows = computed(() => gridTemplate(this.widget().rows));
   readonly gridColumns = computed(() => gridTemplate(this.widget().columns));
   readonly widgetWidth = computed(() => getWidgetWidth(this.widget().size));
+  readonly widgetHeight = computed(() => getWidgetHeight(this.widget().size));
   private dragOffset = { x: 0, y: 0 };
   private activePointerId: number | null = null;
   private resizing: { id: string; axis: 'row' | 'column' } | null = null;
@@ -318,7 +319,7 @@ export class EditorCanvas implements AfterViewInit, OnDestroy {
           : trackAt(
               event.clientY - canvas.top - WIDGET_PADDING,
               this.widget().rows,
-              WIDGET_HEIGHT - WIDGET_PADDING * 2,
+              this.widgetHeight() - WIDGET_PADDING * 2,
               1,
               resolvedTrackSizes(this.hostElement.nativeElement, 'rows'),
             );
@@ -339,7 +340,7 @@ export class EditorCanvas implements AfterViewInit, OnDestroy {
     const row = trackAt(
       event.clientY - canvas.top - this.dragOffset.y - WIDGET_PADDING,
       this.widget().rows,
-      WIDGET_HEIGHT - WIDGET_PADDING * 2,
+      this.widgetHeight() - WIDGET_PADDING * 2,
       element.grid.rowSpan,
       resolvedTrackSizes(this.hostElement.nativeElement, 'rows'),
     );

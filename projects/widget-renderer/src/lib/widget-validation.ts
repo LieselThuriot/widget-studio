@@ -348,8 +348,8 @@ function validateWidget(value: unknown): WidgetValidationIssue[] {
   const issues: WidgetValidationIssue[] = [];
   if (!isRecord(value)) return [{ path: '$', message: 'must be an object' }];
   if (value['version'] !== 2) addIssue(issues, 'version', 'must be 2');
-  if (!isOneOf(value['size'], ['square', 'wide'] as const))
-    addIssue(issues, 'size', 'must be square or wide');
+  if (!isOneOf(value['size'], ['mini', 'square', 'wide', 'mega', 'hero'] as const))
+    addIssue(issues, 'size', 'must be mini, square, wide, mega, or hero');
   for (const key of ['rows', 'columns'] as const) {
     if (!Array.isArray(value[key]) || value[key].length === 0) {
       addIssue(issues, key, 'must be a non-empty array');

@@ -12,7 +12,12 @@ import {
 } from './widget.model';
 import { normalizeWidgetInput } from './widget-hydration';
 import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
-import { elementGridStyle, gridTemplate, widgetWidth as getWidgetWidth } from './widget-layout';
+import {
+  elementGridStyle,
+  gridTemplate,
+  widgetHeight as getWidgetHeight,
+  widgetWidth as getWidgetWidth,
+} from './widget-layout';
 
 export type WidgetLoading = boolean | Widget['size'];
 
@@ -35,9 +40,10 @@ export class WidgetRenderer {
     return widget === null ? { success: false as const, issues: [] } : safeParseWidgetInput(widget);
   });
   protected readonly isLoading = computed(() => this.loading() !== false);
-  protected readonly loadingSize = computed<Widget['size']>(() =>
-    this.loading() === 'wide' ? 'wide' : 'square',
-  );
+  protected readonly loadingSize = computed<Widget['size']>(() => {
+    const loading = this.loading();
+    return typeof loading === 'string' ? loading : 'square';
+  });
   readonly validationIssues = computed<WidgetValidationIssue[]>(() => {
     const result = this.parsedWidget();
     return result.success ? [] : result.issues;
@@ -63,6 +69,7 @@ export class WidgetRenderer {
   readonly gridRows = computed(() => gridTemplate(this.renderWidget().rows));
   readonly gridColumns = computed(() => gridTemplate(this.renderWidget().columns));
   readonly widgetWidth = computed(() => getWidgetWidth(this.renderWidget().size));
+  readonly widgetHeight = computed(() => getWidgetHeight(this.renderWidget().size));
   readonly backgroundImage = computed(() => {
     const image = this.renderWidget().background.image;
     return image ? `url("${image}")` : 'none';

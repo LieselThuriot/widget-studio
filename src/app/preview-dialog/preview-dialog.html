@@ -9,6 +9,7 @@
 >
   <div
     class="editor-overlay__panel preview-window"
+    [class.is-hero]="widget().size === 'hero'"
     tabindex="-1"
     (click)="$event.stopPropagation()"
     (keydown)="onKeyDown($event)"

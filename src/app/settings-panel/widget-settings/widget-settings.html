@@ -1,7 +1,7 @@
 <div class="widget-settings">
   <div class="selected-chip">
     <span class="chip-icon">W</span><span>Widget</span
-    ><span class="chip-id">{{ widget().size === 'wide' ? '530' : '265' }} × 245</span>
+    ><span class="chip-id">{{ width() }} × {{ height() }}</span>
   </div>
   <app-widget-grid-settings
     [widget]="widget()"

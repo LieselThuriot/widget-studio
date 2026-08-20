@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { ButtonElement } from 'widget-renderer';
+import { ButtonElement, widgetHeight, widgetWidth } from 'widget-renderer';
 import { Widget } from '../editor-model';
 import { EditorCanvas } from '../editor-canvas/editor-canvas';
 import { WidgetSample } from '../sample-widget';
@@ -33,6 +33,8 @@ export class CanvasWorkspace {
   readonly modelLoadRequested = output<void>();
   protected readonly shortcutsOpen = signal(false);
   protected readonly samplesOpen = signal(false);
+  protected readonly width = () => widgetWidth(this.widget().size);
+  protected readonly height = () => widgetHeight(this.widget().size);
 
   protected toggleShortcuts(event: Event): void {
     event.stopPropagation();

@@ -23,6 +23,10 @@ describe('widget contract validation', () => {
     expect(result).toEqual({ success: true, data: validContract });
   });
 
+  it.each(['mini', 'square', 'wide', 'mega', 'hero'] as const)('accepts %s size', (size) => {
+    expect(safeParseWidgetInput({ ...validContract, size }).success).toBe(true);
+  });
+
   it('accepts a valid ID-free widget', () => {
     expect(isWidget(validContract)).toBe(true);
   });

@@ -13,6 +13,10 @@
   overflow: hidden;
   border-radius: 18px;
   background: var(--editor-surface-subtle);
+  transition: width 220ms ease;
+}
+.preview-window.is-hero {
+  width: min(100%, 1180px);
 }
 .preview-header {
   display: flex;
@@ -57,7 +61,7 @@ h2 {
   display: grid;
   place-items: center;
   min-height: 380px;
-  padding: 40px;
+  padding: 40px 48px;
   background: var(--editor-surface-panel);
 }
 .preview-hint {

@@ -95,9 +95,14 @@
         </div>
       }
     </span>
-    <span class="dimensions">{{ widget().size === 'wide' ? '530' : '265' }} × 245 px</span>
+    <span class="dimensions">{{ width() }} × {{ height() }} px</span>
   </div>
-  <div class="canvas" (dragover)="$event.preventDefault()" (drop)="elementDropped.emit($event)">
+  <div
+    class="canvas"
+    [class.is-tall]="widget().size === 'mega' || widget().size === 'hero'"
+    (dragover)="$event.preventDefault()"
+    (drop)="elementDropped.emit($event)"
+  >
     <app-editor-canvas
       [widget]="widget()"
       [darkMode]="darkMode()"

@@ -1,4 +1,4 @@
-import { gridTemplate } from 'widget-renderer';
+import { gridTemplate, widgetHeight, widgetWidth } from 'widget-renderer';
 import { trackAt } from './editor-canvas/editor-canvas-interaction';
 
 describe('gridTemplate', () => {
@@ -10,6 +10,19 @@ describe('gridTemplate', () => {
         { size: 4, unit: 'auto' },
       ]),
     ).toBe('120px 1fr auto');
+  });
+});
+
+describe('widget dimensions', () => {
+  it.each([
+    ['mini', 133, 123],
+    ['square', 265, 245],
+    ['wide', 530, 245],
+    ['mega', 530, 490],
+    ['hero', 1060, 490],
+  ] as const)('maps %s to its dimensions', (size, width, height) => {
+    expect(widgetWidth(size)).toBe(width);
+    expect(widgetHeight(size)).toBe(height);
   });
 });
 

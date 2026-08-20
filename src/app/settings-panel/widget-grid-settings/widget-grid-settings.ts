@@ -20,7 +20,10 @@ export class WidgetGridSettings {
   protected readonly isGridDialogOpen = signal(false);
 
   protected size(event: Event): Widget['size'] {
-    return eventValue(event) === 'wide' ? 'wide' : 'square';
+    const value = eventValue(event);
+    return ['mini', 'square', 'wide', 'mega', 'hero'].includes(value)
+      ? (value as Widget['size'])
+      : 'square';
   }
 
   protected saveGrid(

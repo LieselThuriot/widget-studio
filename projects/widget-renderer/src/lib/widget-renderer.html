@@ -1,7 +1,10 @@
 @if (isLoading()) {
   <div
     class="widget-skeleton"
+    [class.is-mini]="loadingSize() === 'mini'"
     [class.is-wide]="loadingSize() === 'wide'"
+    [class.is-mega]="loadingSize() === 'mega'"
+    [class.is-hero]="loadingSize() === 'hero'"
     [class.is-dark]="darkMode()"
     role="status"
     aria-label="Widget loading"
@@ -20,7 +23,7 @@
   <section
     class="widget-shell"
     [style.width.px]="widgetWidth()"
-    [style.height.px]="245"
+    [style.height.px]="widgetHeight()"
     [style.background-color]="widget.background.color || 'transparent'"
   >
     <div
