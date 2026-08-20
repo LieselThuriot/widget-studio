@@ -263,11 +263,12 @@ const clockedIn: Widget = {
       type: 'progress',
       grid: { row: 2, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'bottom left' },
       sensitive: false,
+      title: 'Hours worked',
       data: { label: 'hours worked', value: 3, min: 0, max: 8 },
       showLegend: true,
       active: true,
       style: {
-        color: { legend: '#e7fff7', fill: '#70e0bd', track: '#ffffff38' },
+        color: { legend: '#e7fff7', title: '#e7fff7', fill: '#70e0bd', track: '#ffffff38' },
         font: { size: 11 },
       },
     },

@@ -86,7 +86,6 @@ function createChartElement(
   base: Omit<WidgetElementBase, 'type'>,
   backgroundColor?: string,
 ): ChartElement | ProgressElement {
-  const textColor = readableTextColor(backgroundColor);
   const firstColor = randomPastelColor();
   const data = [
     { label: 'Complete', value: 72, color: firstColor },
@@ -97,11 +96,9 @@ function createChartElement(
     return {
       ...base,
       type,
-      data: { label: 'Progress', value: 72, min: 0, max: 100, separator: ' of ', suffix: '' },
-      style: {
-        color: { legend: textColor, fill: chartColors.fill, track: chartColors.track },
-        font: { size: 11 },
-      },
+      title: 'Completion',
+      data: { label: 'Complete', value: 72, min: 0, max: 100, separator: ' of ', suffix: '%' },
+      style: defaultValueChartStyle(backgroundColor),
       showLegend: true,
       active: false,
     } as ProgressElement;

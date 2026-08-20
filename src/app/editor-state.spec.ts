@@ -184,6 +184,7 @@ describe('editor state transformations', () => {
       type: 'progress',
       grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
       sensitive: false,
+      title: 'Done',
       label: 'Done',
       value: 75,
       min: 10,
@@ -209,6 +210,8 @@ describe('editor state transformations', () => {
       });
       expect(progress.style.color.fill).toBe('#22c55e');
       expect(progress.style.color.track).toBe('#172033');
+      expect(progress.style.color.title).toBe('#f6f7fb');
+      expect(progress.title).toBe('Done');
       expect(progress.style.font.size).toBe(14);
       expect(progress.showLegend).toBe(true);
       expect(progress.active).toBe(false);

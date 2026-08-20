@@ -37,6 +37,14 @@
   border-radius: 999px;
   background: var(--progress-track);
 }
+.progress-title {
+  padding-inline: 6px;
+  overflow: hidden;
+  color: var(--progress-title-color);
+  font-size: var(--progress-font-size);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .progress-fill {
   position: relative;
   display: block;

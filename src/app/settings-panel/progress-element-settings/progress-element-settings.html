@@ -1,3 +1,15 @@
+<label
+  >Title<input [value]="element().title" (input)="changed.emit({ title: value($event) })"
+/></label>
+<app-color-picker
+  label="Title color"
+  [value]="element().style.color.title"
+  (changed)="
+    changed.emit({
+      style: { ...element().style, color: { ...element().style.color, title: $event } },
+    })
+  "
+/>
 <div class="field-row">
   <label
     >Label<input

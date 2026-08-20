@@ -219,6 +219,10 @@ describe('App', () => {
 
     expect(progressElement?.['showLegend']).toBe(true);
     expect(progressElement?.['active']).toBe(false);
+    expect(progressElement?.['title']).toBe('Completion');
+    expect((progressElement?.['style'] as { color: { title: string } }).color.title).toBe(
+      '#f6f7fb',
+    );
   });
 
   it('should add a divider with its public defaults', async () => {

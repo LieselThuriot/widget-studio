@@ -37,5 +37,5 @@ export function elementLabel(element: WidgetElement): string {
           ? 'Divider'
           : element.type === 'progress'
             ? element.data.label
-            : element.title;
+            : (element.title ?? element.type);
 }

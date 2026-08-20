@@ -81,6 +81,78 @@ describe('widget contract validation', () => {
     ).toBe(true);
   });
 
+  it('accepts every chart type without a title', () => {
+    const base = {
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+      sensitive: false,
+      showLegend: true,
+      font: { size: 11 },
+    };
+    const chartElements = [
+      {
+        ...base,
+        type: 'pie' as const,
+        data: [{ label: 'Complete', value: 72, color: '#0f0' }],
+        style: { color: { legend: '#fff', title: '#fff' }, font: base.font },
+      },
+      {
+        ...base,
+        type: 'donut' as const,
+        data: [{ label: 'Complete', value: 72, color: '#0f0' }],
+        style: { color: { legend: '#fff', title: '#fff' }, font: base.font },
+      },
+      {
+        ...base,
+        type: 'funnel' as const,
+        data: [{ label: 'Complete', value: 72, color: '#0f0' }],
+        style: { color: { legend: '#fff', title: '#fff' }, font: base.font },
+      },
+      {
+        ...base,
+        type: 'gauge' as const,
+        data: { value: 72, min: 0, max: 100 },
+        style: {
+          color: { legend: '#fff', title: '#fff', fill: '#0f0', track: '#333' },
+          font: base.font,
+        },
+      },
+      {
+        ...base,
+        type: 'bar' as const,
+        data: [{ label: 'Complete', value: 72, color: '#0f0' }],
+        style: {
+          color: { legend: '#fff', title: '#fff', line: '#0f0' },
+          font: base.font,
+          axis: { label: '#fff', line: '#fff', grid: '#333' },
+        },
+      },
+      {
+        ...base,
+        type: 'line' as const,
+        data: [{ label: 'Complete', value: 72 }],
+        style: {
+          color: { legend: '#fff', title: '#fff', line: '#0f0' },
+          font: base.font,
+          axis: { label: '#fff', line: '#fff', grid: '#333' },
+        },
+      },
+      {
+        ...base,
+        type: 'progress' as const,
+        data: { label: 'Complete', value: 72, min: 0, max: 100 },
+        style: {
+          color: { legend: '#fff', title: '#fff', fill: '#0f0', track: '#333' },
+          font: base.font,
+        },
+        active: false,
+      },
+    ];
+
+    for (const element of chartElements) {
+      expect(safeParseWidgetInput({ ...validContract, elements: [element] }).success).toBe(true);
+    }
+  });
+
   it('rejects negative text padding values', () => {
     const result = safeParseWidgetInput({
       ...validContract,

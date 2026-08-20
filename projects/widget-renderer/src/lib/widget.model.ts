@@ -106,8 +106,8 @@ export interface ChartDataPoint {
   color?: string | null;
 }
 export interface ChartElementBase extends WidgetElementBase {
-  type: 'pie' | 'donut' | 'funnel' | 'gauge' | 'bar' | 'line';
-  title: string;
+  type: 'pie' | 'donut' | 'funnel' | 'gauge' | 'bar' | 'line' | 'progress';
+  title?: string;
   showLegend: boolean;
 }
 export interface DataVisualStyle {
@@ -133,7 +133,6 @@ export interface FillTrackStyle extends DataVisualStyle {
     track: string;
   };
 }
-export type ProgressStyle = FillTrackStyle;
 export interface ProgressData {
   label: string;
   value: number;
@@ -170,11 +169,10 @@ export interface SeriesElement extends ChartElementBase {
   data: ChartDataPoint[];
   style: AxisChartStyle;
 }
-export interface ProgressElement extends WidgetElementBase {
+export interface ProgressElement extends ChartElementBase {
   type: 'progress';
   data: ProgressData;
-  style: ProgressStyle;
-  showLegend: boolean;
+  style: ValueChartStyle;
   active: boolean;
 }
 export type ChartElement = PieElement | FunnelElement | GaugeElement | SeriesElement;

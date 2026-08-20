@@ -66,13 +66,17 @@ describe('chart accessibility summaries', () => {
       type: 'progress',
       grid: base.grid,
       sensitive: false,
+      title: 'Progress',
       data: { label: 'Complete', value: 4, min: 0, max: 10, separator: ' of ', suffix: '' },
-      style: { color: { legend: '#fff', fill: '#0ff', track: '#000' }, font: { size: 11 } },
+      style: {
+        color: { legend: '#fff', title: '#fff', fill: '#0ff', track: '#000' },
+        font: { size: 11 },
+      },
       showLegend: true,
       active: false,
     };
 
-    expect(chartAriaLabel(element)).toContain('Complete');
+    expect(chartAriaLabel(element)).toContain('Progress');
     expect(chartAccessibilitySummary(element)).toContain('maximum 10');
   });
 
@@ -82,8 +86,12 @@ describe('chart accessibility summaries', () => {
         type: 'progress',
         grid: base.grid,
         sensitive: false,
+        title: 'Progress',
         data: { label: 'Complete', value: 4, min: 0, max: 10 },
-        style: { color: { legend: '#fff', fill: '#0ff', track: '#000' }, font: { size: 11 } },
+        style: {
+          color: { legend: '#fff', title: '#fff', fill: '#0ff', track: '#000' },
+          font: { size: 11 },
+        },
         showLegend: true,
         active: false,
       } satisfies ProgressElement),

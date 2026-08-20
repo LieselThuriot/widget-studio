@@ -26,7 +26,7 @@ function progressSuffix(element: ProgressElement): string {
 
 export function chartAriaLabel(element: ChartElement | ProgressElement): string {
   if (element.type === 'progress') {
-    return `${element.data.label || 'Progress'}, ${number(element.data.value)}${progressSeparator(element)}${number(element.data.max)}${progressSuffix(element)}.`;
+    return `${element.title || element.data.label || 'Progress'}, ${number(element.data.value)}${progressSeparator(element)}${number(element.data.max)}${progressSuffix(element)}.`;
   }
   if (element.type === 'gauge') {
     return `${element.title || 'Gauge'}, ${number(element.data.value)} of ${number(element.data.max)}.`;
@@ -36,7 +36,7 @@ export function chartAriaLabel(element: ChartElement | ProgressElement): string 
 
 export function chartAccessibilitySummary(element: ChartElement | ProgressElement): string {
   if (element.type === 'progress') {
-    return `${element.data.label || 'Progress'}: value ${number(element.data.value)}, minimum ${number(element.data.min)}, maximum ${number(element.data.max)}.`;
+    return `${element.title || element.data.label || 'Progress'}: value ${number(element.data.value)}, minimum ${number(element.data.min)}, maximum ${number(element.data.max)}.`;
   }
   if (element.type === 'gauge') {
     const range = Math.max(1, element.data.max - element.data.min);

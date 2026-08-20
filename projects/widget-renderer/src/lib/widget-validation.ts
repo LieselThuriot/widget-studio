@@ -276,12 +276,15 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
       else requiredString(value['style']['color'], `${issuePath}.style.color`, issues);
       break;
     case 'gauge':
-      requiredString(value['title'], `${issuePath}.title`, issues, true);
+      if (value['title'] !== undefined)
+        requiredString(value['title'], `${issuePath}.title`, issues, true);
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
       validateRange(value['data'], `${issuePath}.data`, issues, false);
       validateStyle(value['style'], `${issuePath}.style`, issues);
       break;
     case 'progress':
+      if (value['title'] !== undefined)
+        requiredString(value['title'], `${issuePath}.title`, issues, true);
       validateRange(value['data'], `${issuePath}.data`, issues, true);
       validateStyle(value['style'], `${issuePath}.style`, issues);
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
@@ -292,7 +295,8 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
     case 'funnel':
     case 'bar':
     case 'line':
-      requiredString(value['title'], `${issuePath}.title`, issues, true);
+      if (value['title'] !== undefined)
+        requiredString(value['title'], `${issuePath}.title`, issues, true);
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
       validateDataPoints(value['data'], `${issuePath}.data`, issues, value['type'] === 'line');
       validateStyle(

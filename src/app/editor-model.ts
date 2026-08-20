@@ -13,7 +13,6 @@ import {
   AxisChartStyle,
   ChartStyle,
   FillTrackStyle,
-  ProgressStyle,
   ValueChartStyle,
   WidgetElementBase,
 } from 'widget-renderer';
@@ -39,11 +38,4 @@ export type PieElement = RendererPieElement & EditorElementBase;
 export type ProgressElement = RendererProgressElement & EditorElementBase;
 export type SeriesElement = RendererSeriesElement & EditorElementBase;
 export type TextElement = RendererTextElement & EditorElementBase;
-export type {
-  AxisChartStyle,
-  ChartStyle,
-  FillTrackStyle,
-  ProgressStyle,
-  ValueChartStyle,
-  WidgetElementBase,
-};
+export type { AxisChartStyle, ChartStyle, FillTrackStyle, ValueChartStyle, WidgetElementBase };

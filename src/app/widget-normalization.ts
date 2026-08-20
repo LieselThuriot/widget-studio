@@ -111,6 +111,8 @@ export function normalizeProgressElement(
   grid: WidgetElement['grid'],
 ): ProgressElement {
   const legacy = element as ProgressElement & {
+    title?: string;
+    titleColor?: string;
     color?: string;
     trackColor?: string;
     label?: string;
@@ -125,7 +127,7 @@ export function normalizeProgressElement(
     ...element,
     grid,
     data: {
-      label: element.data?.label ?? legacy.label ?? 'Progress',
+      label: element.data?.label ?? legacy.label ?? 'Complete',
       value: element.data?.value ?? legacy.value ?? 0,
       min: element.data?.min ?? legacy.min ?? 0,
       max: element.data?.max ?? legacy.max ?? 100,
@@ -138,6 +140,11 @@ export function normalizeProgressElement(
           (color['legend'] as string | undefined) ??
           (style['legendColor'] as string | undefined) ??
           chartColors.legend,
+        title:
+          (color['title'] as string | undefined) ??
+          (style['titleColor'] as string | undefined) ??
+          legacy.titleColor ??
+          chartColors.title,
         fill:
           (color['fill'] as string | undefined) ??
           (style['fillColor'] as string | undefined) ??
@@ -151,6 +158,7 @@ export function normalizeProgressElement(
       },
       font: { size: (style['fontSize'] as number | undefined) ?? 11 },
     },
+    title: element.title ?? legacy.title ?? element.data?.label ?? 'Completion',
     showLegend: element.showLegend ?? true,
     active: element.active ?? false,
   };

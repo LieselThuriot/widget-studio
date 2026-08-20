@@ -88,6 +88,7 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
       '--progress-value': `${percent}%`,
       '--progress-color': element.style.color.fill,
       '--progress-track': element.style.color.track,
+      '--progress-title-color': element.style.color.title,
       '--progress-legend-color': element.style.color.legend,
       '--progress-font-size': `${element.style?.font.size ?? 11}px`,
     };
