@@ -97,24 +97,26 @@
     </span>
     <span class="dimensions">{{ width() }} × {{ height() }} px</span>
   </div>
-  <div
-    class="canvas"
-    [class.is-tall]="widget().size === 'mega' || widget().size === 'hero'"
-    (dragover)="$event.preventDefault()"
-    (drop)="elementDropped.emit($event)"
-  >
-    <app-editor-canvas
-      [widget]="widget()"
-      [darkMode]="darkMode()"
-      [selectedId]="selectedId()"
-      (widgetSelected)="widgetSelected.emit()"
-      (elementSelected)="elementSelected.emit($event)"
-      (elementDeleted)="elementDeleted.emit($event)"
-      (elementMoved)="elementMoved.emit($event)"
-      (elementResized)="elementResized.emit($event)"
-      (elementStackChanged)="elementStackChanged.emit($event)"
-      (refreshRequested)="refreshRequested.emit()"
-      (actionRequested)="actionRequested.emit($event)"
-    />
+  <div class="canvas-scroll">
+    <div
+      class="canvas"
+      [class.is-tall]="widget().size === 'mega' || widget().size === 'hero'"
+      (dragover)="$event.preventDefault()"
+      (drop)="elementDropped.emit($event)"
+    >
+      <app-editor-canvas
+        [widget]="widget()"
+        [darkMode]="darkMode()"
+        [selectedId]="selectedId()"
+        (widgetSelected)="widgetSelected.emit()"
+        (elementSelected)="elementSelected.emit($event)"
+        (elementDeleted)="elementDeleted.emit($event)"
+        (elementMoved)="elementMoved.emit($event)"
+        (elementResized)="elementResized.emit($event)"
+        (elementStackChanged)="elementStackChanged.emit($event)"
+        (refreshRequested)="refreshRequested.emit()"
+        (actionRequested)="actionRequested.emit($event)"
+      />
+    </div>
   </div>
 </section>

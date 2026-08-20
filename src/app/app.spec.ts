@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { sampleWidgets } from './sample-widget';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -50,6 +51,36 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('.model-loader-overlay')).toBeTruthy();
+  });
+
+  it('should load the mini, mega, and hero samples at their intended sizes', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const expectedSamples = sampleWidgets.filter(({ id }) =>
+      ['mini-pulse', 'mega-overview', 'hero-launch'].includes(id),
+    );
+
+    for (const sample of expectedSamples) {
+      (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+      fixture.detectChanges();
+      const sampleButton = Array.from(
+        fixture.nativeElement.querySelectorAll('.sample-menu-option'),
+      ).find((button) => (button as HTMLButtonElement).textContent?.includes(sample.name)) as
+        HTMLButtonElement | undefined;
+      sampleButton?.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const dimensions = fixture.nativeElement.querySelector('.dimensions')?.textContent;
+      const expectedDimensions =
+        sample.widget.size === 'mini'
+          ? '133 × 123'
+          : sample.widget.size === 'mega'
+            ? '530 × 490'
+            : '1060 × 490';
+      expect(dimensions).toContain(expectedDimensions);
+      expect(fixture.nativeElement.querySelector('.widget-validation-overlay')).toBeNull();
+    }
   });
 
   it('should load a valid widget model from the loader', async () => {
