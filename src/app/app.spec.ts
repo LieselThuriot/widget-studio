@@ -224,7 +224,7 @@ describe('App', () => {
     await fixture.whenStable();
     const inspector = fixture.nativeElement.querySelector('.settings-panel') as HTMLElement;
 
-    expect(inspector.querySelector('.selected-chip')?.textContent).not.toContain('headline');
+    expect(inspector.querySelector('.selected-chip')?.textContent).not.toContain('today-badge');
   });
 
   it('should select a visible button from the canvas', async () => {
@@ -249,7 +249,7 @@ describe('App', () => {
     await fixture.whenStable();
 
     const target = fixture.nativeElement.querySelector(
-      'widget-renderer [data-widget-element-id="headline"]',
+      'widget-renderer [data-widget-element-id="message"]',
     ) as HTMLElement;
     const canvas = fixture.nativeElement.querySelector('.editor-canvas') as HTMLElement;
     vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 0, 265, 245));
@@ -286,7 +286,7 @@ describe('App', () => {
     text.click();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(5);
+    expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(8);
     expect(fixture.nativeElement.querySelector('.selected-chip')?.textContent).toContain('Text');
   });
 
@@ -330,7 +330,7 @@ describe('App', () => {
 
     expect(dividerElement).toMatchObject({
       orientation: 'horizontal',
-      style: { color: '#64748b' },
+      style: { color: '#ffffff38' },
     });
     expect(dividerElement).not.toHaveProperty('sensitive');
   });
@@ -509,7 +509,7 @@ describe('App', () => {
     deleteButton.click();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(3);
+    expect(fixture.nativeElement.querySelectorAll('.layer').length).toBe(6);
   });
 
   it('should open layer actions from the context menu', async () => {
@@ -528,7 +528,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const target = fixture.nativeElement.querySelector(
-      'widget-renderer [data-widget-element-id="headline"] .element-content',
+      'widget-renderer [data-widget-element-id="message"] .element-content',
     ) as HTMLElement;
     target.dispatchEvent(
       new MouseEvent('contextmenu', { bubbles: true, clientX: 10, clientY: 10 }),
@@ -550,7 +550,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const target = fixture.nativeElement.querySelector(
-      'widget-renderer [data-widget-element-id="headline"] .element-content',
+      'widget-renderer [data-widget-element-id="message"] .element-content',
     ) as HTMLElement;
     target.dispatchEvent(
       new MouseEvent('contextmenu', { bubbles: true, clientX: 10, clientY: 10 }),
@@ -572,16 +572,13 @@ describe('App', () => {
     const elementNodes = Array.from(
       fixture.nativeElement.querySelectorAll('[data-widget-element-id]'),
     ) as HTMLElement[];
-    const rectangles: Record<string, DOMRect> = {
-      headline: new DOMRect(20, 20, 100, 30),
-      message: new DOMRect(20, 58, 70, 40),
-      caption: new DOMRect(20, 106, 70, 40),
-      details: new DOMRect(98, 106, 40, 40),
-    };
+    const rectangles: Record<string, DOMRect> = {};
     for (const node of elementNodes) {
       const id = node.dataset['widgetElementId'];
       if (id) {
-        vi.spyOn(node, 'getBoundingClientRect').mockImplementation(() => rectangles[id]);
+        vi.spyOn(node, 'getBoundingClientRect').mockImplementation(
+          () => rectangles[id] ?? new DOMRect(300, 300, 1, 1),
+        );
       }
     }
 
@@ -813,10 +810,10 @@ describe('App', () => {
 
     expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('530');
     expect(fixture.nativeElement.querySelectorAll('.grid-editor-dialog .row-label')).toHaveLength(
-      4,
+      7,
     );
     expect(fixture.nativeElement.querySelectorAll('.grid-editor-dialog .grid-cell')).toHaveLength(
-      12,
+      21,
     );
     expect(
       fixture.nativeElement.querySelectorAll('.grid-editor-dialog .grid-cell.selected'),
@@ -949,7 +946,7 @@ describe('App', () => {
     ) as { elements: { type: string; grid: { row: number; rowSpan: number } }[] };
     const headline = contract.elements.find((element) => element.type === 'text');
 
-    expect(headline?.grid.row).toBe(2);
+    expect(headline?.grid.row).toBe(5);
     expect(headline?.grid.rowSpan).toBe(1);
   });
 });

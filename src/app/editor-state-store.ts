@@ -21,8 +21,8 @@ import { Widget, WidgetElement } from './editor-model';
 import { ButtonElement, WidgetInput, safeParseWidgetInput } from 'widget-renderer';
 
 export class EditorStateStore {
-  readonly widget = signal<Widget>(sampleWidgets[0].widget);
-  readonly selectedId = signal<string | null>('headline');
+  readonly widget = signal<Widget>(structuredClone(sampleWidgets[0].widget));
+  readonly selectedId = signal<string | null>(sampleWidgets[0].widget.elements[0]?.id ?? null);
   readonly isPreviewOpen = signal(false);
   readonly actionAlert = signal<ActionAlert | null>(null);
   readonly selectedElement = computed(
