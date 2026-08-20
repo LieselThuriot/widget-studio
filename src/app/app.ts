@@ -9,13 +9,14 @@ import { PreviewDialog } from './preview-dialog/preview-dialog';
 import { EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
 import { SettingsPanel } from './settings-panel/settings-panel';
 import { ButtonElement } from 'widget-renderer';
-import { Widget as RendererWidget } from 'widget-renderer';
+import { Widget as RendererWidget, WidgetInput } from 'widget-renderer';
 import { Widget, WidgetElement } from './editor-model';
 import { widgetElementPalette } from './widget-element-metadata';
 import { EditorStateStore } from './editor-state-store';
 import { sampleWidgets } from './sample-widget';
 import { decodeWidgetShareHash } from './widget-sharing';
 import { ShareDialog } from './share-dialog/share-dialog';
+import { ModelLoaderDialog } from './model-loader-dialog/model-loader-dialog';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,7 @@ import { ShareDialog } from './share-dialog/share-dialog';
     EventAlertDialog,
     SettingsPanel,
     ShareDialog,
+    ModelLoaderDialog,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -53,6 +55,7 @@ export class App {
   protected readonly samples = sampleWidgets;
   protected readonly widgetSampleId = signal(sampleWidgets[0].id);
   protected readonly shareLoadMessage = signal<string | null>(null);
+  protected readonly isModelLoaderOpen = signal(false);
 
   constructor() {
     effect(() => {
@@ -91,6 +94,20 @@ export class App {
   protected loadSample(sampleId: string): void {
     this.editorState.loadSample(sampleId);
     this.widgetSampleId.set(sampleId);
+  }
+
+  protected openModelLoader(): void {
+    this.isModelLoaderOpen.set(true);
+  }
+
+  protected closeModelLoader(): void {
+    this.isModelLoaderOpen.set(false);
+  }
+
+  protected loadModel(model: WidgetInput): void {
+    if (!this.editorState.loadWidgetModel(model)) return;
+    this.widgetSampleId.set('');
+    this.closeModelLoader();
   }
 
   protected addElement(type: WidgetElement['type']): void {

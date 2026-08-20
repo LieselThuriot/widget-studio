@@ -81,6 +81,17 @@
               }
             </button>
           }
+          <button
+            type="button"
+            class="sample-menu-option sample-menu-load-model"
+            role="menuitem"
+            (click)="modelLoadRequested.emit(); closeSamples()"
+          >
+            <span class="sample-menu-copy">
+              <strong>Load widget model</strong>
+              <small>Paste JSON or choose a file</small>
+            </span>
+          </button>
         </div>
       }
     </span>

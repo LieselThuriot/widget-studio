@@ -39,6 +39,7 @@
         [samples]="samples"
         [selectedSampleId]="widgetSampleId()"
         (sampleSelected)="loadSample($event)"
+        (modelLoadRequested)="openModelLoader()"
         (elementDropped)="dropElement($event)"
         (widgetSelected)="selectWidget()"
         (elementSelected)="selectElement($event)"
@@ -91,3 +92,6 @@
   <app-share-dialog [modelJson]="modelJson()" (closed)="closeShare()" />
 }
 <app-event-alert-dialog [alert]="actionAlert()" (closed)="closeActionAlert()" />
+@if (isModelLoaderOpen()) {
+  <app-model-loader-dialog (loaded)="loadModel($event)" (closed)="closeModelLoader()" />
+}

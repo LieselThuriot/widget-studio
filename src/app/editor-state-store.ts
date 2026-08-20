@@ -18,7 +18,7 @@ import {
 import { assignEditorIds, normalizeWidget } from './widget-normalization';
 import { sampleWidgets } from './sample-widget';
 import { Widget, WidgetElement } from './editor-model';
-import { ButtonElement } from 'widget-renderer';
+import { ButtonElement, WidgetInput, safeParseWidgetInput } from 'widget-renderer';
 
 export class EditorStateStore {
   readonly widget = signal<Widget>(sampleWidgets[0].widget);
@@ -58,10 +58,13 @@ export class EditorStateStore {
   }
 
   loadSharedWidget(value: unknown): boolean {
-    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-    const widget = value as Widget;
-    if (!Array.isArray(widget.elements)) return false;
-    if (!widget.elements.every((element) => element && typeof element === 'object')) return false;
+    const result = safeParseWidgetInput(value);
+    if (!result.success) return false;
+    return this.loadWidgetModel(result.data);
+  }
+
+  loadWidgetModel(value: WidgetInput): boolean {
+    const widget = normalizeWidget(structuredClone(value) as Widget);
     const importedWidget = assignEditorIds(widget);
     this.widget.set(importedWidget);
     this.selectedId.set(importedWidget.elements[0]?.id ?? null);

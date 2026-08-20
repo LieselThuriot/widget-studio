@@ -91,6 +91,10 @@
   color: var(--editor-accent-strong);
   font-weight: 700;
 }
+.sample-menu-load-model {
+  margin-top: 3px;
+  border-top: 1px solid var(--editor-border);
+}
 .dimensions {
   color: var(--editor-text-tertiary);
   font-weight: 500;

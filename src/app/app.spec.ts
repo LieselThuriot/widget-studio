@@ -35,6 +35,94 @@ describe('App', () => {
     expect(compiled.querySelector('.topbar-meta')).toBeNull();
   });
 
+  it('should open the widget model loader from the sample menu', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    const loadButton = Array.from(
+      fixture.nativeElement.querySelectorAll('.sample-menu-option'),
+    ).find((button) => (button as HTMLButtonElement).textContent?.includes('Load widget model')) as
+      HTMLButtonElement | undefined;
+
+    loadButton?.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.model-loader-overlay')).toBeTruthy();
+  });
+
+  it('should load a valid widget model from the loader', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (
+      Array.from(fixture.nativeElement.querySelectorAll('.sample-menu-option')).find((button) =>
+        (button as HTMLButtonElement).textContent?.includes('Load widget model'),
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    const model = {
+      version: 2,
+      size: 'square',
+      rows: [{ size: 1, unit: 'star' }],
+      columns: [{ size: 1, unit: 'star' }],
+      background: { sensitive: false, repeat: false, size: 'auto', anchor: 'center' },
+      refresh: { enabled: false, label: 'Refresh' },
+      elements: [],
+    };
+    const textarea = fixture.nativeElement.querySelector(
+      '#widget-model-json',
+    ) as HTMLTextAreaElement;
+    textarea.value = JSON.stringify(model);
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+    (
+      fixture.nativeElement.querySelector(
+        '.model-loader-actions .editor-button--primary',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.model-loader-overlay')).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('.layer')).toHaveLength(0);
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('265');
+  });
+
+  it('should keep the loader open for invalid widget model JSON', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (
+      Array.from(fixture.nativeElement.querySelectorAll('.sample-menu-option')).find((button) =>
+        (button as HTMLButtonElement).textContent?.includes('Load widget model'),
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    const textarea = fixture.nativeElement.querySelector(
+      '#widget-model-json',
+    ) as HTMLTextAreaElement;
+    textarea.value = '{ invalid';
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+    (
+      fixture.nativeElement.querySelector(
+        '.model-loader-actions .editor-button--primary',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.model-loader-overlay')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.model-loader-error')?.textContent).toContain(
+      'valid JSON',
+    );
+  });
+
   it('should toggle and persist dark mode', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

@@ -1,0 +1,66 @@
+<div
+  class="editor-overlay model-loader-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="model-loader-title"
+  tabindex="-1"
+  (click)="close()"
+  (keydown)="onKeyDown($event)"
+>
+  <section
+    class="editor-overlay__panel model-loader-window"
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+    (keydown)="onKeyDown($event)"
+  >
+    <header class="editor-overlay__header model-loader-header">
+      <div>
+        <p class="editor-eyebrow eyebrow">Import</p>
+        <h2 id="model-loader-title">Load widget model</h2>
+      </div>
+      <button
+        type="button"
+        class="editor-button editor-button--icon"
+        aria-label="Close model loader"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+    <div class="model-loader-content">
+      <p class="model-loader-description">
+        Paste the JSON model received by the renderer, or choose a JSON file.
+      </p>
+      <label for="widget-model-json">Widget model JSON</label>
+      <textarea
+        id="widget-model-json"
+        rows="12"
+        [value]="json()"
+        (input)="updateJson($event)"
+      ></textarea>
+      <label
+        class="model-dropzone"
+        [class.is-dragging]="isDragging()"
+        (dragenter)="dragEnter($event)"
+        (dragover)="dragEnter($event)"
+        (dragleave)="dragLeave($event)"
+        (drop)="dropFile($event)"
+      >
+        <strong>Drop a JSON file here</strong>
+        <span>or click to browse</span>
+        <input type="file" accept="application/json,.json" (change)="chooseFile($event)" />
+      </label>
+      @if (error(); as error) {
+        <p class="model-loader-error" role="alert">{{ error }}</p>
+      }
+      <div class="model-loader-actions">
+        <button type="button" class="editor-button editor-button--subtle" (click)="close()">
+          Cancel
+        </button>
+        <button type="button" class="editor-button editor-button--primary" (click)="load()">
+          Load model
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

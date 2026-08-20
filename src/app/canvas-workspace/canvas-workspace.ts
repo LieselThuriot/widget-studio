@@ -30,6 +30,7 @@ export class CanvasWorkspace {
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sampleSelected = output<string>();
+  readonly modelLoadRequested = output<void>();
   protected readonly shortcutsOpen = signal(false);
   protected readonly samplesOpen = signal(false);
 
