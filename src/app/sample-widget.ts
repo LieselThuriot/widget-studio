@@ -12,7 +12,10 @@ const dailyBrief: Widget = {
   size: 'square',
   rows: [
     { size: 1, unit: 'auto' },
+    { size: 1, unit: 'auto' },
+    { size: 1, unit: 'auto' },
     { size: 1, unit: 'star' },
+    { size: 1, unit: 'auto' },
     { size: 1, unit: 'auto' },
   ],
   columns: [
@@ -32,16 +35,19 @@ const dailyBrief: Widget = {
   refresh: { enabled: true, label: 'Refresh widget' },
   elements: [
     {
-      id: 'headline',
+      id: 'today-badge',
       type: 'text',
       grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'top left' },
       sensitive: false,
       text: 'TODAY · 09:42',
       style: {
-        color: '#d4dbea',
-        font: { size: 10, bold: true, italic: false, underline: false, strikethrough: false },
+        color: '#b9f3e3',
+        font: { size: 9, bold: true, italic: false, underline: false, strikethrough: false },
         align: 'left',
         wrap: true,
+        background: '#2c8c7890',
+        radius: 50,
+        padding: { vertical: 1, horizontal: 6 },
       },
     },
     {
@@ -55,13 +61,48 @@ const dailyBrief: Widget = {
         font: { size: 21, bold: true, italic: false, underline: false, strikethrough: false },
         align: 'left',
         wrap: true,
+        padding: { vertical: 5, horizontal: 0 },
       },
+    },
+    {
+      id: 'brief-items',
+      type: 'text',
+      grid: { row: 3, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'center left' },
+      sensitive: false,
+      text: '• Review the project roadmap\n• Reply to priority messages\n• Protect time for focused work',
+      style: {
+        color: '#e2e6ef',
+        font: { size: 12, bold: false, italic: false, underline: false, strikethrough: false },
+        align: 'left',
+        wrap: true,
+      },
+    },
+    {
+      id: 'priority-label',
+      type: 'text',
+      grid: { row: 2, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'bottom left' },
+      sensitive: false,
+      text: '3 PRIORITIES',
+      style: {
+        color: '#9be7d1',
+        font: { size: 9, bold: true, italic: false, underline: false, strikethrough: false },
+        align: 'left',
+        wrap: true,
+      },
+    },
+    {
+      id: 'brief-divider',
+      type: 'divider',
+      grid: { row: 4, column: 0, rowSpan: 1, columnSpan: 3, anchor: 'center' },
+      sensitive: false,
+      orientation: 'horizontal',
+      style: { color: '#ffffff38' },
     },
     {
       id: 'caption',
       type: 'text',
-      grid: { row: 2, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'top left' },
-      sensitive: true,
+      grid: { row: 5, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'bottom left' },
+      sensitive: false,
       text: 'A focused view of what needs your attention.',
       style: {
         color: '#e2e6ef',
@@ -73,7 +114,7 @@ const dailyBrief: Widget = {
     {
       id: 'details',
       type: 'button',
-      grid: { row: 2, column: 2, rowSpan: 1, columnSpan: 1, anchor: 'bottom right' },
+      grid: { row: 5, column: 2, rowSpan: 1, columnSpan: 1, anchor: 'bottom right' },
       sensitive: false,
       label: 'Open',
       method: 'get',
