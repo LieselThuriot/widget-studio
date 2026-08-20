@@ -83,6 +83,33 @@ describe('App', () => {
     }
   });
 
+  it('should recreate a chart after switching through a progress sample', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const loadSample = async (name: string) => {
+      (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+      fixture.detectChanges();
+      const sampleButton = Array.from(
+        fixture.nativeElement.querySelectorAll('.sample-menu-option'),
+      ).find((button) => (button as HTMLButtonElement).textContent?.includes(name)) as
+        HTMLButtonElement | undefined;
+      sampleButton?.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    };
+
+    await loadSample('Holiday balance');
+    expect(fixture.nativeElement.querySelector('.chart-host svg')).toBeTruthy();
+
+    await loadSample('Team pulse');
+    expect(fixture.nativeElement.querySelector('.progress-element')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.chart-host')).toBeNull();
+
+    await loadSample('Weekly operations');
+    expect(fixture.nativeElement.querySelector('.chart-host svg')).toBeTruthy();
+  });
+
   it('should load a valid widget model from the loader', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

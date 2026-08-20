@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnDestroy,
-  effect,
-  input,
-  viewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnDestroy, effect, input, viewChild } from '@angular/core';
 import { use } from 'echarts/core';
 import { BarChart, FunnelChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
 import {
@@ -38,34 +30,52 @@ use([
   templateUrl: './chart-element-renderer.html',
   styleUrl: './chart-element-renderer.css',
 })
-export class ChartElementRenderer implements AfterViewInit, OnDestroy {
+export class ChartElementRenderer implements OnDestroy {
   readonly element = input.required<ChartElement | ProgressElement>();
   protected readonly summaryId = `chart-summary-${crypto.randomUUID()}`;
-  private readonly chartHost = viewChild.required<ElementRef<HTMLDivElement>>('chartHost');
+  private readonly chartHost = viewChild<ElementRef<HTMLDivElement>>('chartHost');
+  private chartHostElement: HTMLDivElement | null = null;
   private chartInstance: ECharts | null = null;
   private resizeObserver: ResizeObserver | null = null;
 
   constructor() {
     effect(() => {
-      this.element();
-      if (this.chartInstance) this.renderChart();
+      const element = this.element();
+      const chartHost = this.chartHost()?.nativeElement ?? null;
+
+      if (element.type === 'progress' || !chartHost) {
+        this.destroyChart();
+        return;
+      }
+
+      if (chartHost !== this.chartHostElement) {
+        this.destroyChart();
+        this.chartHostElement = chartHost;
+        this.chartInstance = init(chartHost, undefined, { renderer: 'svg' });
+
+        if (typeof ResizeObserver !== 'undefined') {
+          const chartInstance = this.chartInstance;
+          this.resizeObserver = new ResizeObserver(() => {
+            if (this.chartInstance === chartInstance) chartInstance.resize();
+          });
+          this.resizeObserver.observe(chartHost);
+        }
+      }
+
+      this.renderChart();
     });
   }
 
-  ngAfterViewInit(): void {
-    if (this.element().type !== 'progress') {
-      this.chartInstance = init(this.chartHost().nativeElement, undefined, { renderer: 'svg' });
-      if (typeof ResizeObserver !== 'undefined') {
-        this.resizeObserver = new ResizeObserver(() => this.chartInstance?.resize());
-        this.resizeObserver.observe(this.chartHost().nativeElement);
-      }
-      this.renderChart();
-    }
+  ngOnDestroy(): void {
+    this.destroyChart();
   }
 
-  ngOnDestroy(): void {
+  private destroyChart(): void {
     this.resizeObserver?.disconnect();
     this.chartInstance?.dispose();
+    this.resizeObserver = null;
+    this.chartInstance = null;
+    this.chartHostElement = null;
   }
 
   protected isProgress(element: WidgetElement): element is ProgressElement {
