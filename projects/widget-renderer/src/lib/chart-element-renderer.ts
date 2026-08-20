@@ -310,7 +310,8 @@ export class ChartElementRenderer implements OnDestroy {
         right: 12,
         top: element.title ? 30 : 12,
         bottom: element.showLegend ? 28 : 24,
-        containLabel: true,
+        outerBoundsMode: 'same',
+        outerBoundsContain: 'axisLabel',
       },
       xAxis: {
         type: 'category',
