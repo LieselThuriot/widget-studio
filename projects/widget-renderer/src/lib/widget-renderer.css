@@ -1,5 +1,12 @@
 :host {
   display: block;
+  --widget-renderer-radius: 8px;
+  --widget-renderer-pill-radius: 999px;
+  --widget-renderer-control-size: 28px;
+  --widget-renderer-content-padding: 18px;
+  --widget-renderer-shadow: 0 18px 40px #10182c38;
+  --widget-renderer-transition-duration: 160ms;
+  --widget-renderer-transition-easing: ease;
 }
 .widget-skeleton {
   position: relative;
@@ -8,9 +15,9 @@
   height: 245px;
   box-sizing: border-box;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
   background: #dfe5ee;
-  box-shadow: 0 18px 40px #10182c38;
+  box-shadow: var(--widget-renderer-shadow);
 }
 .widget-skeleton.is-wide {
   width: 530px;
@@ -35,9 +42,9 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: var(--widget-renderer-control-size);
+  height: var(--widget-renderer-control-size);
+  border-radius: var(--widget-renderer-radius);
   background: #c4cedd;
 }
 .widget-skeleton.is-dark .skeleton-toolbar {
@@ -47,12 +54,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 44px 18px 16px;
+  padding: 44px var(--widget-renderer-content-padding) 16px;
 }
 .skeleton-line {
   display: block;
   height: 10px;
-  border-radius: 999px;
+  border-radius: var(--widget-renderer-pill-radius);
 }
 .skeleton-line-small {
   width: 28%;
@@ -68,13 +75,13 @@
   width: 100%;
   height: 64px;
   margin-top: 2px;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
 }
 .skeleton-button {
   align-self: flex-end;
   width: 58px;
   height: 30px;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
 }
 @keyframes skeleton-shimmer {
   from {
@@ -94,15 +101,15 @@
 .widget-shell {
   position: relative;
   overflow: visible;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
   color: #f6f7fb;
-  box-shadow: 0 18px 40px #10182c38;
+  box-shadow: var(--widget-renderer-shadow);
 }
 .widget-background {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
 }
 .widget-background-image {
   position: absolute;
@@ -110,7 +117,8 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  transition: filter 160ms ease;
+  transition: filter var(--widget-renderer-transition-duration)
+    var(--widget-renderer-transition-easing);
 }
 .widget-background-image.is-sensitive {
   inset: -18px;
@@ -120,7 +128,7 @@
 .widget-overlay {
   position: absolute;
   inset: 0;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
   pointer-events: none;
   z-index: 0;
 }
@@ -133,9 +141,9 @@
   gap: 8px;
   box-sizing: border-box;
   overflow: auto;
-  padding: 18px;
+  padding: var(--widget-renderer-content-padding);
   border: 1px solid #e06a6a;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
   background: #fff4f4ef;
   color: #7f1d1d;
   pointer-events: none;
@@ -201,7 +209,7 @@
   width: 100%;
   height: 2px;
   flex: 0 0 auto;
-  border-radius: 999px;
+  border-radius: var(--widget-renderer-pill-radius);
 }
 .divider-element.is-vertical {
   width: 2px;
@@ -256,8 +264,8 @@ img {
   opacity: 0;
   transform: translateY(-4px);
   transition:
-    opacity 160ms ease,
-    transform 160ms ease;
+    opacity var(--widget-renderer-transition-duration) var(--widget-renderer-transition-easing),
+    transform var(--widget-renderer-transition-duration) var(--widget-renderer-transition-easing);
 }
 
 .widget-toolbar,
@@ -274,10 +282,10 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: var(--widget-renderer-control-size);
+  height: var(--widget-renderer-control-size);
   border: 1px solid #ffffff38;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
   background: #10182ccc;
   color: #fff;
   cursor: pointer;
@@ -299,7 +307,7 @@ img {
 }
 .action-button {
   min-height: 30px;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius);
   padding: 6px 10px;
   font: 600 12px/1.1 inherit;
   cursor: var(--widget-renderer-action-cursor, pointer);
@@ -309,8 +317,8 @@ img {
   pointer-events: none;
   transform: translateY(2px);
   transition:
-    opacity 160ms ease,
-    transform 160ms ease;
+    opacity var(--widget-renderer-transition-duration) var(--widget-renderer-transition-easing),
+    transform var(--widget-renderer-transition-duration) var(--widget-renderer-transition-easing);
 }
 .widget-shell:hover .action-button.show-only-on-hover,
 .widget-shell:focus-within .action-button.show-only-on-hover {

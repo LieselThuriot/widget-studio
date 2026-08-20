@@ -4,6 +4,9 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
+  --widget-renderer-pill-radius: 999px;
+  --widget-renderer-progress-label-padding: 6px;
+  --widget-renderer-chart-min-height: 40px;
 }
 :host.is-progress {
   width: 100%;
@@ -14,12 +17,12 @@
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 40px;
+  min-height: var(--widget-renderer-chart-min-height);
 }
 .chart-host {
   width: 100%;
   height: 100%;
-  min-height: 40px;
+  min-height: var(--widget-renderer-chart-min-height);
 }
 .progress-element {
   display: flex;
@@ -34,11 +37,11 @@
   display: block;
   overflow: hidden;
   height: 10px;
-  border-radius: 999px;
+  border-radius: var(--widget-renderer-pill-radius, 999px);
   background: var(--progress-track);
 }
 .progress-title {
-  padding-inline: 6px;
+  padding-inline: var(--widget-renderer-progress-label-padding);
   overflow: hidden;
   color: var(--progress-title-color);
   font-size: var(--progress-font-size);
@@ -85,7 +88,7 @@
   }
 }
 .progress-label {
-  padding-inline: 6px;
+  padding-inline: var(--widget-renderer-progress-label-padding);
   color: var(--progress-legend-color);
   font-size: var(--progress-font-size);
   overflow: hidden;
