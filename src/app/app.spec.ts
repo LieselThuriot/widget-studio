@@ -108,7 +108,7 @@ describe('App', () => {
     ) as { elements: { type: string; grid?: { anchor?: string } }[] };
 
     const chartElements = contract.elements.filter((element) =>
-      ['pie', 'donut', 'gauge', 'bar', 'line'].includes(element.type),
+      ['pie', 'donut', 'funnel', 'gauge', 'bar', 'line'].includes(element.type),
     );
 
     expect(chartElements.every((element) => !('anchor' in (element.grid ?? {})))).toBe(true);

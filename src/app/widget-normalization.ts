@@ -8,7 +8,7 @@ import {
 import { chartColors } from './colors';
 import { Widget } from './editor-model';
 
-const defaultGraphStyle = {
+const defaultAxisChartStyle = {
   color: {
     legend: chartColors.legend,
     title: chartColors.title,
@@ -20,8 +20,8 @@ const defaultGraphStyle = {
   font: { size: 11 },
   axis: { label: chartColors.axisLabel, line: chartColors.axisLine, grid: chartColors.grid },
 };
-const chartTypes = ['pie', 'donut', 'gauge', 'bar', 'line'] as const;
-const seriesTypes = ['pie', 'donut', 'bar', 'line'] as const;
+const chartTypes = ['pie', 'donut', 'funnel', 'gauge', 'bar', 'line'] as const;
+const seriesTypes = ['pie', 'donut', 'funnel', 'bar', 'line'] as const;
 
 type LegacyLayout = WidgetElement & {
   row?: number;
@@ -210,15 +210,15 @@ export function normalizeChartElement(
       size:
         (font['size'] as number | undefined) ??
         (style['fontSize'] as number | undefined) ??
-        defaultGraphStyle.font.size,
+        defaultAxisChartStyle.font.size,
     },
     color: {
       ...color,
-      legend: color['legend'] ?? style['legendColor'] ?? defaultGraphStyle.color.legend,
-      title: color['title'] ?? style['titleColor'] ?? defaultGraphStyle.color.title,
+      legend: color['legend'] ?? style['legendColor'] ?? defaultAxisChartStyle.color.legend,
+      title: color['title'] ?? style['titleColor'] ?? defaultAxisChartStyle.color.title,
     },
   };
-  if (element.type === 'pie' || element.type === 'donut') {
+  if (element.type === 'pie' || element.type === 'donut' || element.type === 'funnel') {
     return { ...element, grid, style: sharedStyle } as ChartElement;
   }
   return {
@@ -228,10 +228,10 @@ export function normalizeChartElement(
       ...sharedStyle,
       color: {
         ...sharedStyle.color,
-        line: color['line'] ?? style['lineColor'] ?? defaultGraphStyle.color.line,
+        line: color['line'] ?? style['lineColor'] ?? defaultAxisChartStyle.color.line,
       },
       axis: {
-        ...defaultGraphStyle.axis,
+        ...defaultAxisChartStyle.axis,
         ...axis,
         label: style['axisLabelColor'] ?? axis['label'],
         line: style['axisLineColor'] ?? axis['line'],

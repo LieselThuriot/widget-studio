@@ -1,7 +1,7 @@
 import {
   createWidgetElement,
-  defaultGaugeStyle,
-  defaultGraphStyle,
+  defaultAxisChartStyle,
+  defaultValueChartStyle,
 } from './widget-element-factory';
 
 describe('widget element factory', () => {
@@ -24,6 +24,7 @@ describe('widget element factory', () => {
     const progress = createWidgetElement('progress', 'progress-id');
     const pie = createWidgetElement('pie', 'pie-id');
     const donut = createWidgetElement('donut', 'donut-id');
+    const funnel = createWidgetElement('funnel', 'funnel-id');
     const bar = createWidgetElement('bar', 'bar-id');
 
     expect(gauge).toMatchObject({
@@ -42,8 +43,10 @@ describe('widget element factory', () => {
     });
     expect(pie).toMatchObject({ id: 'pie-id', type: 'pie', title: 'Distribution' });
     expect(donut).toMatchObject({ id: 'donut-id', type: 'donut', title: 'Composition' });
+    expect(funnel).toMatchObject({ id: 'funnel-id', type: 'funnel', title: 'Conversion' });
     expect((pie as { style: object }).style).not.toHaveProperty('axis');
     expect((donut as { style: object }).style).not.toHaveProperty('axis');
+    expect((funnel as { style: object }).style).not.toHaveProperty('axis');
     expect(bar).toMatchObject({ id: 'bar-id', type: 'bar', title: 'Comparison' });
   });
 
@@ -68,9 +71,9 @@ describe('widget element factory', () => {
   });
 
   it('returns fresh default style objects', () => {
-    expect(defaultGraphStyle()).toEqual(defaultGraphStyle());
-    expect(defaultGaugeStyle()).toEqual(defaultGaugeStyle());
-    expect(defaultGraphStyle()).not.toBe(defaultGraphStyle());
-    expect(defaultGaugeStyle()).not.toBe(defaultGaugeStyle());
+    expect(defaultAxisChartStyle()).toEqual(defaultAxisChartStyle());
+    expect(defaultValueChartStyle()).toEqual(defaultValueChartStyle());
+    expect(defaultAxisChartStyle()).not.toBe(defaultAxisChartStyle());
+    expect(defaultValueChartStyle()).not.toBe(defaultValueChartStyle());
   });
 });

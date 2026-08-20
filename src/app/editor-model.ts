@@ -2,6 +2,7 @@ import {
   ButtonElement as RendererButtonElement,
   ChartElement as RendererChartElement,
   DividerElement as RendererDividerElement,
+  FunnelElement as RendererFunnelElement,
   GaugeElement as RendererGaugeElement,
   ImageElement as RendererImageElement,
   PieElement as RendererPieElement,
@@ -9,9 +10,11 @@ import {
   SeriesElement as RendererSeriesElement,
   TextElement as RendererTextElement,
   Widget as RendererWidget,
-  GaugeStyle,
-  GraphStyle,
-  PieStyle,
+  AxisChartStyle,
+  ChartStyle,
+  FillTrackStyle,
+  ProgressStyle,
+  ValueChartStyle,
   WidgetElementBase,
 } from 'widget-renderer';
 
@@ -30,9 +33,17 @@ export type ButtonElement = RendererButtonElement & EditorElementBase;
 export type ChartElement = RendererChartElement & EditorElementBase;
 export type DividerElement = RendererDividerElement & EditorElementBase;
 export type GaugeElement = RendererGaugeElement & EditorElementBase;
+export type FunnelElement = RendererFunnelElement & EditorElementBase;
 export type ImageElement = RendererImageElement & EditorElementBase;
 export type PieElement = RendererPieElement & EditorElementBase;
 export type ProgressElement = RendererProgressElement & EditorElementBase;
 export type SeriesElement = RendererSeriesElement & EditorElementBase;
 export type TextElement = RendererTextElement & EditorElementBase;
-export type { GaugeStyle, GraphStyle, PieStyle, WidgetElementBase };
+export type {
+  AxisChartStyle,
+  ChartStyle,
+  FillTrackStyle,
+  ProgressStyle,
+  ValueChartStyle,
+  WidgetElementBase,
+};

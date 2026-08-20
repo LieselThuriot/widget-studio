@@ -94,7 +94,7 @@ export class WidgetRenderer {
     return element.type === 'button';
   }
   protected isChart(element: WidgetElement): element is ChartElement | ProgressElement {
-    return ['pie', 'donut', 'gauge', 'bar', 'line', 'progress'].includes(element.type);
+    return ['pie', 'donut', 'funnel', 'gauge', 'bar', 'line', 'progress'].includes(element.type);
   }
   protected isElementSensitive(element: WidgetElement): boolean {
     return ('sensitive' in element ? element.sensitive : false) && !this.sensitiveVisible();

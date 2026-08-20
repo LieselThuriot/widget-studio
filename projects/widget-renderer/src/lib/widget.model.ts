@@ -1,6 +1,16 @@
 export type GridUnit = 'pixel' | 'auto' | 'star';
 export type WidgetElementType =
-  'text' | 'image' | 'button' | 'divider' | 'pie' | 'donut' | 'gauge' | 'bar' | 'line' | 'progress';
+  | 'text'
+  | 'image'
+  | 'button'
+  | 'divider'
+  | 'pie'
+  | 'donut'
+  | 'funnel'
+  | 'gauge'
+  | 'bar'
+  | 'line'
+  | 'progress';
 export type ButtonMethod = 'get' | 'post';
 export type WidgetSize = 'square' | 'wide';
 export type ElementAnchor =
@@ -96,7 +106,7 @@ export interface ChartDataPoint {
   color?: string | null;
 }
 export interface ChartElementBase extends WidgetElementBase {
-  type: 'pie' | 'donut' | 'gauge' | 'bar' | 'line';
+  type: 'pie' | 'donut' | 'funnel' | 'gauge' | 'bar' | 'line';
   title: string;
   showLegend: boolean;
 }
@@ -106,23 +116,24 @@ export interface DataVisualStyle {
   };
   font: ChartFontStyle;
 }
-export interface PieStyle extends DataVisualStyle {
+export interface ChartStyle extends DataVisualStyle {
   color: DataVisualStyle['color'] & { title: string };
 }
-export interface GraphStyle extends PieStyle {
-  color: PieStyle['color'] & { line?: string };
+export interface AxisChartStyle extends ChartStyle {
+  color: ChartStyle['color'] & { line?: string };
   axis: {
     label: string;
     line: string;
     grid: string;
   };
 }
-export interface ProgressStyle extends DataVisualStyle {
+export interface FillTrackStyle extends DataVisualStyle {
   color: DataVisualStyle['color'] & {
     fill: string;
     track: string;
   };
 }
+export type ProgressStyle = FillTrackStyle;
 export interface ProgressData {
   label: string;
   value: number;
@@ -136,27 +147,28 @@ export interface GaugeData {
   min: number;
   max: number;
 }
-export interface GaugeStyle extends DataVisualStyle {
-  color: DataVisualStyle['color'] & {
-    title: string;
-    fill: string;
-    track: string;
-  };
+export interface ValueChartStyle extends FillTrackStyle {
+  color: FillTrackStyle['color'] & { title: string };
 }
 export interface PieElement extends ChartElementBase {
   type: 'pie' | 'donut';
   data: ChartDataPoint[];
-  style: PieStyle;
+  style: ChartStyle;
+}
+export interface FunnelElement extends ChartElementBase {
+  type: 'funnel';
+  data: ChartDataPoint[];
+  style: ChartStyle;
 }
 export interface GaugeElement extends ChartElementBase {
   type: 'gauge';
   data: GaugeData;
-  style: GaugeStyle;
+  style: ValueChartStyle;
 }
 export interface SeriesElement extends ChartElementBase {
   type: 'bar' | 'line';
   data: ChartDataPoint[];
-  style: GraphStyle;
+  style: AxisChartStyle;
 }
 export interface ProgressElement extends WidgetElementBase {
   type: 'progress';
@@ -165,7 +177,7 @@ export interface ProgressElement extends WidgetElementBase {
   showLegend: boolean;
   active: boolean;
 }
-export type ChartElement = PieElement | GaugeElement | SeriesElement;
+export type ChartElement = PieElement | FunnelElement | GaugeElement | SeriesElement;
 export type WidgetElement =
   TextElement | ImageElement | ButtonElement | DividerElement | ChartElement | ProgressElement;
 export type ButtonElementContract = Omit<ButtonElement, 'requestRefresh' | 'showOnlyOnHover'> & {

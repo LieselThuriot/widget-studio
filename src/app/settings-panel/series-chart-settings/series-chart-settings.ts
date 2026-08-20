@@ -1,6 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
-import { ChartDataPoint, GraphStyle } from 'widget-renderer';
-import { ChartElement, SeriesElement } from '../../editor-model';
+import { AxisChartStyle, ChartDataPoint } from 'widget-renderer';
+import { ChartElement } from '../../editor-model';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { DataPointsDialog } from '../data-points-dialog/data-points-dialog';
 import { ColorPicker } from '../../color-picker/color-picker';
@@ -13,7 +13,7 @@ import { ColorPicker } from '../../color-picker/color-picker';
 })
 export class SeriesChartSettings {
   readonly element = input.required<Exclude<ChartElement, { type: 'gauge' }>>();
-  readonly changed = output<Partial<SeriesElement>>();
+  readonly changed = output<Partial<Exclude<ChartElement, { type: 'gauge' }>>>();
   protected readonly isDataDialogOpen = signal(false);
 
   protected value(event: Event): string {
@@ -28,8 +28,8 @@ export class SeriesChartSettings {
     return eventChecked(event);
   }
 
-  protected style(): GraphStyle {
-    return this.element().style as GraphStyle;
+  protected style(): AxisChartStyle {
+    return this.element().style as AxisChartStyle;
   }
 
   protected saveData(points: ChartDataPoint[]): void {

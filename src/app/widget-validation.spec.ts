@@ -343,6 +343,52 @@ describe('widget contract validation', () => {
       expect(result.issues.map((issue) => issue.path)).toContain('elements[0].style.axis');
   });
 
+  it('rejects axis styling on funnel charts', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'funnel',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          title: 'Conversion',
+          showLegend: true,
+          data: [{ label: 'Qualified', value: 12, color: '#0ff' }],
+          style: {
+            color: { legend: '#fff', title: '#fff' },
+            font: { size: 11 },
+            axis: { label: '#fff', line: '#fff', grid: '#fff' },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success)
+      expect(result.issues.map((issue) => issue.path)).toContain('elements[0].style.axis');
+  });
+
+  it('requires colors for funnel data points', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'funnel',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          title: 'Conversion',
+          showLegend: true,
+          data: [{ label: 'Qualified', value: 12 }],
+          style: { color: { legend: '#fff', title: '#fff' }, font: { size: 11 } },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success)
+      expect(result.issues.map((issue) => issue.path)).toContain('elements[0].data[0].color');
+  });
+
   it('requires colors for pie, donut, and bar data points', () => {
     const result = safeParseWidgetInput({
       ...validContract,

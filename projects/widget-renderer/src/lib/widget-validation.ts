@@ -49,6 +49,7 @@ const elementTypes: WidgetElementType[] = [
   'divider',
   'pie',
   'donut',
+  'funnel',
   'gauge',
   'bar',
   'line',
@@ -288,6 +289,7 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
       break;
     case 'pie':
     case 'donut':
+    case 'funnel':
     case 'bar':
     case 'line':
       requiredString(value['title'], `${issuePath}.title`, issues, true);
@@ -297,7 +299,9 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
         value['style'],
         `${issuePath}.style`,
         issues,
-        value['type'] === 'pie' || value['type'] === 'donut' ? 'forbidden' : 'required',
+        value['type'] === 'pie' || value['type'] === 'donut' || value['type'] === 'funnel'
+          ? 'forbidden'
+          : 'required',
       );
       break;
   }

@@ -21,6 +21,18 @@ describe('chart accessibility summaries', () => {
     expect(chartAccessibilitySummary(element)).toContain('Mon: 4');
   });
 
+  it('summarizes funnel data', () => {
+    const element: ChartElement = {
+      ...base,
+      type: 'funnel',
+      data: [{ label: 'Qualified', value: 12 }],
+      style: { color: { legend: '#fff', title: '#fff' }, font: { size: 11 } },
+    };
+
+    expect(chartAriaLabel(element)).toContain('1 data points');
+    expect(chartAccessibilitySummary(element)).toContain('Qualified: 12');
+  });
+
   it('summarizes gauge ranges', () => {
     const element: ChartElement = {
       type: 'gauge',

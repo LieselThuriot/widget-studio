@@ -2,11 +2,11 @@ import {
   ButtonElement,
   ChartElement,
   GaugeElement,
-  GaugeStyle,
-  GraphStyle,
+  AxisChartStyle,
+  ChartStyle,
+  ValueChartStyle,
   ImageElement,
   DividerElement,
-  PieStyle,
   ProgressElement,
   SeriesElement,
   TextElement,
@@ -115,7 +115,7 @@ function createChartElement(
       title: 'Performance',
       data: { value: 72, min: 0, max: 100 },
       showLegend: true,
-      style: defaultGaugeStyle(backgroundColor),
+      style: defaultValueChartStyle(backgroundColor),
     } as GaugeElement;
   }
 
@@ -125,20 +125,22 @@ function createChartElement(
     type,
     title: createTitle(type),
     data,
-    showLegend: type === 'pie' || type === 'donut',
+    showLegend: type === 'pie' || type === 'donut' || type === 'funnel',
     style:
-      type === 'pie' || type === 'donut'
-        ? defaultPieStyle(backgroundColor)
-        : defaultGraphStyle(backgroundColor),
+      type === 'pie' || type === 'donut' || type === 'funnel'
+        ? defaultChartStyle(backgroundColor)
+        : defaultAxisChartStyle(backgroundColor),
   } as SeriesElement;
 }
 
-function createTitle(type: 'pie' | 'donut' | 'bar' | 'line'): string {
+function createTitle(type: 'pie' | 'donut' | 'funnel' | 'bar' | 'line'): string {
   switch (type) {
     case 'pie':
       return 'Distribution';
     case 'donut':
       return 'Composition';
+    case 'funnel':
+      return 'Conversion';
     case 'bar':
       return 'Comparison';
     case 'line':
@@ -155,7 +157,7 @@ function chartGrid(
   return grid;
 }
 
-export function defaultGraphStyle(backgroundColor?: string): GraphStyle {
+export function defaultAxisChartStyle(backgroundColor?: string): AxisChartStyle {
   const textColor = readableTextColor(backgroundColor);
   return {
     color: {
@@ -168,7 +170,7 @@ export function defaultGraphStyle(backgroundColor?: string): GraphStyle {
   };
 }
 
-export function defaultPieStyle(backgroundColor?: string): PieStyle {
+export function defaultChartStyle(backgroundColor?: string): ChartStyle {
   const textColor = readableTextColor(backgroundColor);
   return {
     color: { legend: textColor, title: textColor },
@@ -176,7 +178,7 @@ export function defaultPieStyle(backgroundColor?: string): PieStyle {
   };
 }
 
-export function defaultGaugeStyle(backgroundColor?: string): GaugeStyle {
+export function defaultValueChartStyle(backgroundColor?: string): ValueChartStyle {
   const textColor = readableTextColor(backgroundColor);
   return {
     color: {

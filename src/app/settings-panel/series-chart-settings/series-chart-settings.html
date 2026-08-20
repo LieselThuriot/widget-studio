@@ -19,7 +19,7 @@
 <button type="button" class="editor-button data-points-button" (click)="isDataDialogOpen.set(true)">
   Edit data points
 </button>
-@if (element().type === 'pie' || element().type === 'donut') {
+@if (element().type === 'pie' || element().type === 'donut' || element().type === 'funnel') {
   <label class="toggle-row"
     ><span><strong>Show legend</strong><small>Display labels for chart data</small></span
     ><input

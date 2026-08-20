@@ -276,7 +276,9 @@ describe('editor state transformations', () => {
     });
     expect(
       normalized.elements
-        .filter((element) => ['pie', 'donut', 'gauge', 'bar', 'line'].includes(element.type))
+        .filter((element) =>
+          ['pie', 'donut', 'funnel', 'gauge', 'bar', 'line'].includes(element.type),
+        )
         .every((element) => !('anchor' in element.grid)),
     ).toBe(true);
   });

@@ -15,6 +15,7 @@ export const widgetElementPalette: PaletteItem[] = [
   { type: 'divider', label: 'Divider', icon: '—', description: 'Visual separator' },
   { type: 'pie', label: 'Pie', icon: '◔', description: 'Part-to-whole' },
   { type: 'donut', label: 'Donut', icon: '◉', description: 'Part-to-whole' },
+  { type: 'funnel', label: 'Funnel', icon: '▽', description: 'Conversion stages' },
   { type: 'gauge', label: 'Gauge', icon: '◌', description: 'Single value' },
   { type: 'bar', label: 'Bar', icon: '▥', description: 'Compare values' },
   { type: 'line', label: 'Line', icon: '⌁', description: 'Show a trend' },

@@ -8,7 +8,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { use } from 'echarts/core';
-import { BarChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
+import { BarChart, FunnelChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
 import {
   GridComponent,
   LegendComponent,
@@ -25,6 +25,7 @@ use([
   GaugeChart,
   LineChart,
   PieChart,
+  FunnelChart,
   GridComponent,
   LegendComponent,
   TitleComponent,
@@ -141,13 +142,19 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
           }
         : undefined,
       legend:
-        (element.type === 'pie' || element.type === 'donut') && element.showLegend
+        (element.type === 'pie' || element.type === 'donut' || element.type === 'funnel') &&
+        element.showLegend
           ? {
               bottom: 10,
               textStyle: { fontSize: element.style.font.size, color: element.style.color.legend },
             }
           : undefined,
-      tooltip: { trigger: element.type === 'pie' || element.type === 'donut' ? 'item' : 'axis' },
+      tooltip: {
+        trigger:
+          element.type === 'pie' || element.type === 'donut' || element.type === 'funnel'
+            ? 'item'
+            : 'axis',
+      },
     } satisfies EChartsCoreOption;
 
     if (element.type === 'pie' || element.type === 'donut') {
@@ -165,6 +172,37 @@ export class ChartElementRenderer implements AfterViewInit, OnDestroy {
                   : '68%',
             label: { show: false },
             labelLine: { show: false },
+            data: element.data.map(({ label, value, color }) => ({
+              name: label,
+              value,
+              ...(color ? { itemStyle: { color } } : {}),
+            })),
+          },
+        ],
+      };
+    }
+    if (element.type === 'funnel') {
+      return {
+        ...base,
+        series: [
+          {
+            type: 'funnel',
+            left: '8%',
+            right: '8%',
+            top: element.title ? 38 : 12,
+            bottom: element.showLegend ? 38 : 12,
+            min: 0,
+            max: Math.max(...element.data.map(({ value }) => value), 1),
+            minSize: '10%',
+            maxSize: '88%',
+            sort: 'descending',
+            gap: 3,
+            label: { show: false },
+            labelLine: { show: false },
+            emphasis: {
+              label: { show: false },
+              labelLine: { show: false },
+            },
             data: element.data.map(({ label, value, color }) => ({
               name: label,
               value,
