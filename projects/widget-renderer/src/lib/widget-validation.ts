@@ -154,6 +154,7 @@ function validateStyle(
   issues: WidgetValidationIssue[],
   axisMode: 'required' | 'forbidden' | 'optional' = 'optional',
   fontMode: 'text' | 'chart' = 'chart',
+  requiredColors: readonly string[] = [],
 ): void {
   if (!isRecord(value)) {
     addIssue(issues, path, 'must be an object');
@@ -167,7 +168,7 @@ function validateStyle(
   const color = value['color'];
   if (isRecord(color)) {
     for (const key of ['legend', 'title', 'line', 'fill', 'track']) {
-      if (color[key] !== undefined)
+      if (requiredColors.includes(key) || color[key] !== undefined)
         requiredString(color[key], `${path}.color.${key}`, issues, true);
     }
   } else {
@@ -207,6 +208,58 @@ function validateDataPoints(
       if (!allowNullColor) addIssue(issues, `${pointPath}.color`, 'must be a string');
     } else requiredString(point['color'], `${pointPath}.color`, issues, true);
   });
+}
+
+function validateProgressData(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
+  if (!isRecord(value)) {
+    addIssue(issues, path, 'must be an object');
+    return;
+  }
+  requiredNumber(value['min'], `${path}.min`, issues);
+  requiredNumber(value['max'], `${path}.max`, issues);
+  if (
+    typeof value['min'] === 'number' &&
+    typeof value['max'] === 'number' &&
+    value['min'] >= value['max']
+  ) {
+    addIssue(issues, `${path}.max`, 'must be greater than min');
+  }
+  const items = value['items'];
+  if (!Array.isArray(items)) {
+    addIssue(issues, `${path}.items`, 'must be an array');
+    return;
+  }
+  let total = 0;
+  items.forEach((item, index) => {
+    const itemPath = `${path}.items[${index}]`;
+    if (!isRecord(item)) {
+      addIssue(issues, itemPath, 'must be an object');
+      return;
+    }
+    if (!isOneOf(item['kind'], ['segment', 'gap'] as const)) {
+      addIssue(issues, `${itemPath}.kind`, 'has an unsupported value');
+      return;
+    }
+    requiredNumber(item['value'], `${itemPath}.value`, issues);
+    if (typeof item['value'] === 'number' && Number.isFinite(item['value'])) {
+      if (item['value'] < 0) addIssue(issues, `${itemPath}.value`, 'must not be negative');
+      else total += item['value'];
+    }
+    if (item['kind'] === 'segment') {
+      requiredString(item['label'], `${itemPath}.label`, issues);
+      requiredString(item['color'], `${itemPath}.color`, issues);
+      requiredBoolean(item['active'], `${itemPath}.active`, issues);
+    }
+  });
+  if (
+    typeof value['min'] === 'number' &&
+    typeof value['max'] === 'number' &&
+    Number.isFinite(value['min']) &&
+    Number.isFinite(value['max']) &&
+    total > value['max'] - value['min']
+  ) {
+    addIssue(issues, `${path}.items`, 'total value must not exceed the progress range');
+  }
 }
 
 function validateElement(value: unknown, path: string, issues: WidgetValidationIssue[]): void {
@@ -280,15 +333,23 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
         requiredString(value['title'], `${issuePath}.title`, issues, true);
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
       validateRange(value['data'], `${issuePath}.data`, issues, false);
-      validateStyle(value['style'], `${issuePath}.style`, issues);
+      validateStyle(value['style'], `${issuePath}.style`, issues, 'optional', 'chart', [
+        'legend',
+        'title',
+        'fill',
+        'track',
+      ]);
       break;
     case 'progress':
       if (value['title'] !== undefined)
         requiredString(value['title'], `${issuePath}.title`, issues, true);
-      validateRange(value['data'], `${issuePath}.data`, issues, true);
-      validateStyle(value['style'], `${issuePath}.style`, issues);
+      validateProgressData(value['data'], `${issuePath}.data`, issues);
+      validateStyle(value['style'], `${issuePath}.style`, issues, 'optional', 'chart', [
+        'legend',
+        'title',
+        'track',
+      ]);
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
-      requiredBoolean(value['active'], `${issuePath}.active`, issues);
       break;
     case 'pie':
     case 'donut':
@@ -306,6 +367,10 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
         value['type'] === 'pie' || value['type'] === 'donut' || value['type'] === 'funnel'
           ? 'forbidden'
           : 'required',
+        'chart',
+        value['type'] === 'bar' || value['type'] === 'line'
+          ? ['legend', 'title', 'line']
+          : ['legend', 'title'],
       );
       break;
   }

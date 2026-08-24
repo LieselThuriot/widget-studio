@@ -177,7 +177,7 @@ describe('editor state transformations', () => {
     }
   });
 
-  it('normalizes legacy progress fields and styles', () => {
+  it('preserves current progress styles', () => {
     const widget = structuredClone(sampleWidget);
     widget.elements.push({
       id: 'legacy-progress',
@@ -185,13 +185,15 @@ describe('editor state transformations', () => {
       grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
       sensitive: false,
       title: 'Done',
-      label: 'Done',
-      value: 75,
-      min: 10,
-      max: 90,
-      color: '#22c55e',
-      trackColor: '#172033',
-      style: { fontSize: 14 },
+      data: {
+        min: 10,
+        max: 90,
+        items: [{ kind: 'segment', label: 'Done', value: 40, color: '#22c55e', active: false }],
+      },
+      style: {
+        color: { legend: '#fff', title: '#eee', track: '#172033' },
+        font: { size: 14 },
+      },
     } as never);
 
     const progress = normalizeWidget(widget).elements.find(
@@ -201,24 +203,19 @@ describe('editor state transformations', () => {
     expect(progress?.type).toBe('progress');
     if (progress?.type === 'progress') {
       expect(progress.data).toEqual({
-        label: 'Done',
-        value: 75,
         min: 10,
         max: 90,
-        separator: ' of ',
-        suffix: '',
+        items: [{ kind: 'segment', label: 'Done', value: 40, color: '#22c55e', active: false }],
       });
-      expect(progress.style.color.fill).toBe('#22c55e');
       expect(progress.style.color.track).toBe('#172033');
-      expect(progress.style.color.title).toBe('#f6f7fb');
+      expect(progress.style.color.title).toBe('#eee');
       expect(progress.title).toBe('Done');
       expect(progress.style.font.size).toBe(14);
-      expect(progress.showLegend).toBe(true);
-      expect(progress.active).toBe(false);
+      expect(progress.showLegend).toBeUndefined();
     }
   });
 
-  it('normalizes legacy gauge and series chart styles', () => {
+  it('preserves gauge and series chart styles', () => {
     const gauge = normalizeGaugeElement(
       {
         type: 'gauge',

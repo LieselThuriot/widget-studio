@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, effect, input, viewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, effect, input, signal, viewChild } from '@angular/core';
 import { use } from 'echarts/core';
 import { BarChart, FunnelChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
 import {
@@ -9,7 +9,13 @@ import {
 } from 'echarts/components';
 import { SVGRenderer } from 'echarts/renderers';
 import { init, type ECharts, type EChartsCoreOption } from 'echarts/core';
-import { ChartElement, ProgressElement, WidgetElement } from './widget.model';
+import {
+  ChartElement,
+  ProgressElement,
+  ProgressItem,
+  ProgressSegment,
+  WidgetElement,
+} from './widget.model';
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
 
 use([
@@ -29,6 +35,9 @@ use([
   selector: 'widget-chart-element',
   templateUrl: './chart-element-renderer.html',
   styleUrl: './chart-element-renderer.css',
+  host: {
+    '(document:pointerdown)': 'onDocumentPointerDown($event)',
+  },
 })
 export class ChartElementRenderer implements OnDestroy {
   readonly element = input.required<ChartElement | ProgressElement>();
@@ -37,6 +46,9 @@ export class ChartElementRenderer implements OnDestroy {
   private chartHostElement: HTMLDivElement | null = null;
   private chartInstance: ECharts | null = null;
   private resizeObserver: ResizeObserver | null = null;
+  private tooltipHideTimer: ReturnType<typeof setTimeout> | null = null;
+  protected readonly tooltipIndex = signal<number | null>(null);
+  protected readonly tooltipPosition = signal<{ x: string; y: string }>({ x: '50%', y: '0px' });
 
   constructor() {
     effect(() => {
@@ -67,6 +79,7 @@ export class ChartElementRenderer implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.tooltipHideTimer) clearTimeout(this.tooltipHideTimer);
     this.destroyChart();
   }
 
@@ -89,14 +102,7 @@ export class ChartElementRenderer implements OnDestroy {
   }
 
   protected progressStyle(element: ProgressElement): Record<string, string> {
-    const range = Math.max(1, element.data.max - element.data.min);
-    const percent = Math.max(
-      0,
-      Math.min(100, ((element.data.value - element.data.min) / range) * 100),
-    );
     return {
-      '--progress-value': `${percent}%`,
-      '--progress-color': element.style.color.fill,
       '--progress-track': element.style.color.track,
       '--progress-title-color': element.style.color.title,
       '--progress-legend-color': element.style.color.legend,
@@ -104,12 +110,111 @@ export class ChartElementRenderer implements OnDestroy {
     };
   }
 
-  protected progressShowLegend(element: ProgressElement): boolean {
-    return element.showLegend ?? true;
+  protected progressItems(element: ProgressElement): {
+    item: ProgressItem;
+    index: number;
+    start: number;
+    end: number;
+    width: number;
+    center: number;
+  }[] {
+    const range = Math.max(1, element.data.max - element.data.min);
+    let position = element.data.min;
+    return element.data.items.map((item, index) => {
+      const start = position;
+      position += item.value;
+      return {
+        item,
+        index,
+        start,
+        end: position,
+        width: (item.value / range) * 100,
+        center: ((start - element.data.min + item.value / 2) / range) * 100,
+      };
+    });
   }
 
-  protected progressActive(element: ProgressElement): boolean {
-    return element.active ?? false;
+  protected progressSegments(
+    element: ProgressElement,
+  ): ReturnType<ChartElementRenderer['progressItems']> {
+    return this.progressItems(element).filter(({ item }) => item.kind === 'segment');
+  }
+
+  protected segment(item: ProgressItem): ProgressSegment {
+    return item as ProgressSegment;
+  }
+
+  protected segmentStyle(width: number, color?: string): Record<string, string> {
+    return { width: `${width}%`, ...(color ? { background: color } : {}) };
+  }
+
+  protected progressValue(element: ProgressElement): number {
+    return element.data.items.reduce(
+      (total, item) => total + (item.kind === 'segment' ? item.value : 0),
+      0,
+    );
+  }
+
+  protected showTooltip(index: number, center: number): void {
+    this.cancelTooltipHide();
+    this.tooltipPosition.set({ x: `${center}%`, y: '0px' });
+    this.tooltipIndex.set(index);
+  }
+
+  protected hideTooltip(index: number): void {
+    this.cancelTooltipHide();
+    this.tooltipHideTimer = setTimeout(() => {
+      if (this.tooltipIndex() === index) this.tooltipIndex.set(null);
+      this.tooltipHideTimer = null;
+    }, 100);
+  }
+
+  protected moveTooltip(index: number, event: PointerEvent): void {
+    if (event.pointerType === 'touch') return;
+    this.positionTooltip(event);
+    this.tooltipIndex.set(index);
+  }
+
+  protected toggleTouchTooltip(index: number, event: PointerEvent): void {
+    if (event.pointerType === 'mouse') return;
+    event.stopPropagation();
+    this.cancelTooltipHide();
+    if (this.tooltipIndex() === index) {
+      this.tooltipIndex.set(null);
+      return;
+    }
+    this.positionTooltip(event);
+    this.tooltipIndex.set(index);
+  }
+
+  protected segmentKeyDown(index: number, event: KeyboardEvent): void {
+    if (event.key !== 'Escape') return;
+    event.preventDefault();
+    this.hideTooltip(index);
+  }
+
+  protected onDocumentPointerDown(event: PointerEvent): void {
+    if (!(event.target instanceof Element) || !event.target.closest('.progress-segment')) {
+      this.tooltipIndex.set(null);
+    }
+  }
+
+  private positionTooltip(event: PointerEvent): void {
+    const target = event.currentTarget;
+    if (!(target instanceof Element)) return;
+    const wrapper = target.closest('.progress-track-wrap');
+    if (!wrapper) return;
+    const bounds = wrapper.getBoundingClientRect();
+    this.tooltipPosition.set({
+      x: `${event.clientX - bounds.left}px`,
+      y: `${event.clientY - bounds.top}px`,
+    });
+  }
+
+  private cancelTooltipHide(): void {
+    if (!this.tooltipHideTimer) return;
+    clearTimeout(this.tooltipHideTimer);
+    this.tooltipHideTimer = null;
   }
 
   protected progressTextAlign(element: ProgressElement): 'left' | 'center' | 'right' {
@@ -118,14 +223,6 @@ export class ChartElementRenderer implements OnDestroy {
       : (element.grid.anchor ?? 'center').endsWith('right')
         ? 'right'
         : 'center';
-  }
-
-  protected progressSeparator(element: ProgressElement): string {
-    return element.data.separator ?? ' - ';
-  }
-
-  protected progressSuffix(element: ProgressElement): string {
-    return element.data.suffix ?? '';
   }
 
   protected ariaLabel(element: ChartElement | ProgressElement): string {

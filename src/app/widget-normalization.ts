@@ -5,21 +5,8 @@ import {
   WidgetElement,
   WidgetInput,
 } from 'widget-renderer';
-import { chartColors } from './colors';
 import { Widget } from './editor-model';
 
-const defaultAxisChartStyle = {
-  color: {
-    legend: chartColors.legend,
-    title: chartColors.title,
-    line: chartColors.line,
-    axisLabel: chartColors.axisLabel,
-    axisLine: chartColors.axisLine,
-    grid: chartColors.grid,
-  },
-  font: { size: 11 },
-  axis: { label: chartColors.axisLabel, line: chartColors.axisLine, grid: chartColors.grid },
-};
 const chartTypes = ['pie', 'donut', 'funnel', 'gauge', 'bar', 'line'] as const;
 const seriesTypes = ['pie', 'donut', 'funnel', 'bar', 'line'] as const;
 
@@ -110,143 +97,21 @@ export function normalizeProgressElement(
   element: ProgressElement,
   grid: WidgetElement['grid'],
 ): ProgressElement {
-  const legacy = element as ProgressElement & {
-    title?: string;
-    titleColor?: string;
-    color?: string;
-    trackColor?: string;
-    label?: string;
-    value?: number;
-    min?: number;
-    max?: number;
-    style?: Record<string, unknown>;
-  };
-  const style = legacy.style ?? {};
-  const color = recordValue(style['color']);
-  return {
-    ...element,
-    grid,
-    data: {
-      label: element.data?.label ?? legacy.label ?? 'Complete',
-      value: element.data?.value ?? legacy.value ?? 0,
-      min: element.data?.min ?? legacy.min ?? 0,
-      max: element.data?.max ?? legacy.max ?? 100,
-      separator: element.data?.separator ?? ' of ',
-      suffix: element.data?.suffix ?? '',
-    },
-    style: {
-      color: {
-        legend:
-          (color['legend'] as string | undefined) ??
-          (style['legendColor'] as string | undefined) ??
-          chartColors.legend,
-        title:
-          (color['title'] as string | undefined) ??
-          (style['titleColor'] as string | undefined) ??
-          legacy.titleColor ??
-          chartColors.title,
-        fill:
-          (color['fill'] as string | undefined) ??
-          (style['fillColor'] as string | undefined) ??
-          legacy.color ??
-          chartColors.fill,
-        track:
-          (color['track'] as string | undefined) ??
-          (style['trackColor'] as string | undefined) ??
-          legacy.trackColor ??
-          chartColors.track,
-      },
-      font: { size: (style['fontSize'] as number | undefined) ?? 11 },
-    },
-    title: element.title ?? legacy.title ?? element.data?.label ?? 'Completion',
-    showLegend: element.showLegend ?? true,
-    active: element.active ?? false,
-  };
+  return { ...element, grid };
 }
 
 export function normalizeGaugeElement(
   element: GaugeElement,
   grid: WidgetElement['grid'],
 ): GaugeElement {
-  const legacy = element as GaugeElement & { min?: number; max?: number };
-  const style = element.style as unknown as Record<string, unknown>;
-  const color = recordValue(style['color']);
-  return {
-    ...element,
-    grid,
-    data: {
-      value: element.data?.value ?? 0,
-      min: element.data?.min ?? legacy.min ?? 0,
-      max: element.data?.max ?? legacy.max ?? 100,
-    },
-    style: {
-      color: {
-        legend:
-          (color['legend'] as string | undefined) ??
-          (style['legendColor'] as string | undefined) ??
-          chartColors.legend,
-        title:
-          (color['title'] as string | undefined) ??
-          (style['titleColor'] as string | undefined) ??
-          chartColors.title,
-        fill:
-          (color['fill'] as string | undefined) ??
-          (style['fillColor'] as string | undefined) ??
-          chartColors.fill,
-        track:
-          (color['track'] as string | undefined) ??
-          (style['trackColor'] as string | undefined) ??
-          chartColors.track,
-      },
-      font: { size: (style['fontSize'] as number | undefined) ?? 11 },
-    },
-    showLegend: element.showLegend ?? true,
-  };
+  return { ...element, grid };
 }
 
 export function normalizeChartElement(
   element: ChartElement,
   grid: WidgetElement['grid'],
 ): ChartElement {
-  const style = element.style as unknown as Record<string, unknown>;
-  const color = recordValue(style['color']);
-  const font = recordValue(style['font']);
-  const axis = recordValue(style['axis']);
-  const sharedStyle = {
-    font: {
-      ...font,
-      size:
-        (font['size'] as number | undefined) ??
-        (style['fontSize'] as number | undefined) ??
-        defaultAxisChartStyle.font.size,
-    },
-    color: {
-      ...color,
-      legend: color['legend'] ?? style['legendColor'] ?? defaultAxisChartStyle.color.legend,
-      title: color['title'] ?? style['titleColor'] ?? defaultAxisChartStyle.color.title,
-    },
-  };
-  if (element.type === 'pie' || element.type === 'donut' || element.type === 'funnel') {
-    return { ...element, grid, style: sharedStyle } as ChartElement;
-  }
-  return {
-    ...element,
-    grid,
-    style: {
-      ...sharedStyle,
-      color: {
-        ...sharedStyle.color,
-        line: color['line'] ?? style['lineColor'] ?? defaultAxisChartStyle.color.line,
-      },
-      axis: {
-        ...defaultAxisChartStyle.axis,
-        ...axis,
-        label: style['axisLabelColor'] ?? axis['label'],
-        line: style['axisLineColor'] ?? axis['line'],
-        grid: style['gridColor'] ?? axis['grid'],
-      },
-    },
-  } as ChartElement;
+  return { ...element, grid };
 }
 
 function normalizeGrid(element: WidgetElement, legacyLayout: LegacyLayout) {

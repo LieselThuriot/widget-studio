@@ -93,14 +93,27 @@ function createChartElement(
   ];
 
   if (type === 'progress') {
+    const textColor = readableTextColor(backgroundColor);
     return {
       ...base,
       type,
       title: 'Completion',
-      data: { label: 'Complete', value: 72, min: 0, max: 100, separator: ' of ', suffix: '%' },
-      style: defaultValueChartStyle(backgroundColor),
+      data: {
+        min: 0,
+        max: 100,
+        items: [
+          { kind: 'segment', label: 'Complete', value: 72, color: firstColor, active: false },
+        ],
+      },
+      style: {
+        color: {
+          legend: textColor,
+          title: textColor,
+          track: chartColors.track,
+        },
+        font: { size: 11 },
+      },
       showLegend: true,
-      active: false,
     } as ProgressElement;
   }
 

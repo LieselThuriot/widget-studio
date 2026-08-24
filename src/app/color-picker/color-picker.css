@@ -36,19 +36,22 @@
   grid-column: 2;
   grid-row: 2;
   margin-top: 6px;
-  height: 29px;
+  height: 34px;
 }
 .color-picker.is-inline .alpha-control input[type='range'] {
-  height: 29px;
+  height: 34px;
 }
 .color-picker.is-inline .alpha-control input[type='range']::-webkit-slider-runnable-track {
-  height: 29px;
+  height: 34px;
 }
 .color-picker.is-inline .alpha-control input[type='range']::-moz-range-track {
-  height: 29px;
+  height: 34px;
 }
 .color-picker.is-inline .alpha-control input[type='range']::-webkit-slider-thumb {
-  margin-top: 8px;
+  margin-top: 10.5px;
+}
+.color-picker.is-inline .color-input {
+  height: 34px;
 }
 @media (max-width: 360px) {
   .color-picker.is-inline {

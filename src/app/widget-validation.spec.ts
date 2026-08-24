@@ -143,12 +143,18 @@ describe('widget contract validation', () => {
       {
         ...base,
         type: 'progress' as const,
-        data: { label: 'Complete', value: 72, min: 0, max: 100 },
+        data: {
+          min: 0,
+          max: 100,
+          items: [
+            { kind: 'segment', label: 'Complete', value: 72, color: '#0f0', active: false },
+            { kind: 'gap', value: 10 },
+          ],
+        },
         style: {
-          color: { legend: '#fff', title: '#fff', fill: '#0f0', track: '#333' },
+          color: { legend: '#fff', title: '#fff', track: '#333' },
           font: base.font,
         },
-        active: false,
       },
     ];
 
@@ -181,6 +187,91 @@ describe('widget contract validation', () => {
     if (!result.success) {
       expect(result.issues.map((issue) => issue.path)).toContain(
         'elements[0].style.padding.vertical',
+      );
+    }
+  });
+
+  it('rejects progress items that exceed the range', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'progress',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          showLegend: true,
+          data: {
+            min: 0,
+            max: 8,
+            items: [
+              { kind: 'segment', label: 'Morning', value: 4, color: '#0f0', active: false },
+              { kind: 'gap', value: 1 },
+              { kind: 'segment', label: 'Afternoon', value: 4, color: '#0ff', active: true },
+            ],
+          },
+          style: {
+            color: { legend: '#fff', title: '#fff', track: '#333' },
+            font: { size: 11 },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.issues).toContainEqual({
+        path: 'elements[0].data.items',
+        message: 'total value must not exceed the progress range',
+      });
+    }
+  });
+
+  it('allows progress with no items', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'progress',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          showLegend: true,
+          data: { min: 0, max: 8, items: [] },
+          style: {
+            color: { legend: '#fff', title: '#fff', track: '#333' },
+            font: { size: 11 },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects incomplete chart and progress colors', () => {
+    const elements = [
+      {
+        type: 'pie' as const,
+        grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+        sensitive: false,
+        showLegend: true,
+        data: [],
+        style: { color: { legend: '#fff' }, font: { size: 11 } },
+      },
+      {
+        type: 'progress' as const,
+        grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+        sensitive: false,
+        showLegend: true,
+        data: { min: 0, max: 100, items: [] },
+        style: { color: { legend: '#fff', title: '#fff' }, font: { size: 11 } },
+      },
+    ];
+    const result = safeParseWidgetInput({ ...validContract, elements });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.issues.map((issue) => issue.path)).toEqual(
+        expect.arrayContaining(['elements[0].style.color.title', 'elements[1].style.color.track']),
       );
     }
   });

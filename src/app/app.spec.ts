@@ -384,7 +384,11 @@ describe('App', () => {
     const progressElement = contract.elements.find((element) => element['type'] === 'progress');
 
     expect(progressElement?.['showLegend']).toBe(true);
-    expect(progressElement?.['active']).toBe(false);
+    expect(progressElement?.['data']).toMatchObject({
+      min: 0,
+      max: 100,
+      items: [{ kind: 'segment', label: 'Complete', value: 72, active: false }],
+    });
     expect(progressElement?.['title']).toBe('Completion');
     expect((progressElement?.['style'] as { color: { title: string } }).color.title).toBe(
       '#f6f7fb',
@@ -413,7 +417,7 @@ describe('App', () => {
     expect(dividerElement).not.toHaveProperty('sensitive');
   });
 
-  it('should update progress legend and active settings', async () => {
+  it('should update the progress legend setting', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
 
@@ -428,9 +432,8 @@ describe('App', () => {
         'app-chart-element-settings .toggle-row input',
       ) as NodeListOf<HTMLInputElement>,
     );
-    expect(toggles).toHaveLength(2);
+    expect(toggles).toHaveLength(1);
     toggles[0].click();
-    toggles[1].click();
     fixture.detectChanges();
 
     const contract = JSON.parse(
@@ -439,7 +442,6 @@ describe('App', () => {
     const progressElement = contract.elements.find((element) => element['type'] === 'progress');
 
     expect(progressElement?.['showLegend']).toBe(false);
-    expect(progressElement?.['active']).toBe(true);
   });
 
   it('should preserve progress style fields when changing one style setting', async () => {
@@ -474,7 +476,7 @@ describe('App', () => {
     };
     const progressElement = contract.elements.find((element) => element.type === 'progress');
 
-    expect(progressElement?.style?.color?.['fill']).toBe('#7dd3fc');
+    expect(progressElement?.style?.color).not.toHaveProperty('fill');
     expect(progressElement?.style?.color?.['legend']).toBe('#ff0000');
     expect(progressElement?.style?.color?.['track']).toBe('#334155');
   });

@@ -1,4 +1,4 @@
-import { ChartElement, ProgressElement } from './widget.model';
+import { ChartElement, ProgressElement, ProgressSegment } from './widget.model';
 
 const MAX_POINTS = 20;
 
@@ -16,17 +16,27 @@ function points(data: { label: string; value: number }[]): string {
   return remaining > 0 ? `${visible.join('; ')}; ${remaining} more points.` : visible.join('; ');
 }
 
-function progressSeparator(element: ProgressElement): string {
-  return element.data.separator ?? ' - ';
+function progressSegments(
+  element: ProgressElement,
+): { segment: ProgressSegment; start: number; end: number }[] {
+  let position = element.data.min;
+  return element.data.items.flatMap((item) => {
+    const start = position;
+    position += item.value;
+    return item.kind === 'segment' ? [{ segment: item, start, end: position }] : [];
+  });
 }
 
-function progressSuffix(element: ProgressElement): string {
-  return element.data.suffix ?? '';
+function progressValue(element: ProgressElement): number {
+  return element.data.items.reduce(
+    (total, item) => total + (item.kind === 'segment' ? item.value : 0),
+    0,
+  );
 }
 
 export function chartAriaLabel(element: ChartElement | ProgressElement): string {
   if (element.type === 'progress') {
-    return `${element.title || element.data.label || 'Progress'}, ${number(element.data.value)}${progressSeparator(element)}${number(element.data.max)}${progressSuffix(element)}.`;
+    return `${element.title || 'Progress'}, ${number(progressValue(element))} of ${number(element.data.max - element.data.min)}.`;
   }
   if (element.type === 'gauge') {
     return `${element.title || 'Gauge'}, ${number(element.data.value)} of ${number(element.data.max)}.`;
@@ -36,7 +46,11 @@ export function chartAriaLabel(element: ChartElement | ProgressElement): string 
 
 export function chartAccessibilitySummary(element: ChartElement | ProgressElement): string {
   if (element.type === 'progress') {
-    return `${element.title || element.data.label || 'Progress'}: value ${number(element.data.value)}, minimum ${number(element.data.min)}, maximum ${number(element.data.max)}.`;
+    const segments = progressSegments(element);
+    const breakdown = segments.length
+      ? ` ${segments.map(({ segment, start, end }) => `${segment.label}: ${number(start)} to ${number(end)}`).join('; ')}.`
+      : ' No segments.';
+    return `${element.title || 'Progress'}: ${number(progressValue(element))} of ${number(element.data.max - element.data.min)}; range ${number(element.data.min)} to ${number(element.data.max)}.${breakdown}`;
   }
   if (element.type === 'gauge') {
     const range = Math.max(1, element.data.max - element.data.min);

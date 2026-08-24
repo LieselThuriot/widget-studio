@@ -12,28 +12,10 @@
 />
 <div class="field-row">
   <label
-    >Label<input
-      [value]="element().data.label"
-      (input)="changed.emit({ data: { ...element().data, label: value($event) } })"
-  /></label>
-  <label
-    >Separator<input
-      [value]="element().data.separator ?? ' of '"
-      (input)="changed.emit({ data: { ...element().data, separator: value($event) } })"
-  /></label>
-</div>
-<div class="field-row">
-  <label
     >Minimum<input
       type="number"
       [value]="element().data.min"
       (input)="changed.emit({ data: { ...element().data, min: number($event) } })"
-  /></label>
-  <label
-    >Value<input
-      type="number"
-      [value]="element().data.value"
-      (input)="changed.emit({ data: { ...element().data, value: number($event) } })"
   /></label>
   <label
     >Maximum<input
@@ -41,22 +23,20 @@
       [value]="element().data.max"
       (input)="changed.emit({ data: { ...element().data, max: number($event) } })"
   /></label>
-  <label
-    >Suffix<input
-      [value]="element().data.suffix ?? ''"
-      (input)="changed.emit({ data: { ...element().data, suffix: value($event) } })"
-  /></label>
 </div>
-<div class="field-row color-fields stacked-fields">
-  <app-color-picker
-    label="Fill"
-    [value]="element().style.color.fill"
-    (changed)="
-      changed.emit({
-        style: { ...element().style, color: { ...element().style.color, fill: $event } },
-      })
-    "
+<button type="button" class="editor-button data-points-button" (click)="isDataDialogOpen.set(true)">
+  Edit progress items
+</button>
+@if (isDataDialogOpen()) {
+  <app-data-points-dialog
+    mode="progress"
+    [points]="element().data.items"
+    [maxTotal]="element().data.max - element().data.min"
+    (saved)="saveData($event)"
+    (closed)="isDataDialogOpen.set(false)"
   />
+}
+<div class="field-row color-fields stacked-fields">
   <app-color-picker
     label="Track"
     [value]="element().style.color.track"
@@ -95,10 +75,3 @@
       })
     "
 /></label>
-<label class="toggle-row"
-  ><span><strong>Active</strong><small>Animate the progress fill</small></span
-  ><input
-    type="checkbox"
-    [checked]="element().active"
-    (change)="changed.emit({ active: checked($event) })" /><span class="toggle"></span
-></label>

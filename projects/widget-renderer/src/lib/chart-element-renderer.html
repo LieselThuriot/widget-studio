@@ -2,30 +2,76 @@
   <div
     class="progress-element"
     [style]="progressStyle(progress(element()))"
-    [attr.aria-label]="ariaLabel(progress(element()))"
-    [attr.aria-describedby]="progress(element()).sensitive ? null : summaryId"
     [attr.aria-hidden]="progress(element()).sensitive ? 'true' : null"
-    role="progressbar"
-    [attr.aria-valuemin]="progress(element()).data.min"
-    [attr.aria-valuemax]="progress(element()).data.max"
-    [attr.aria-valuenow]="progress(element()).data.value"
   >
+    @if (!progress(element()).sensitive) {
+      <span
+        class="visually-hidden"
+        role="progressbar"
+        [attr.aria-label]="ariaLabel(progress(element()))"
+        [attr.aria-describedby]="summaryId"
+        aria-valuemin="0"
+        [attr.aria-valuemax]="progress(element()).data.max - progress(element()).data.min"
+        [attr.aria-valuenow]="progressValue(progress(element()))"
+      ></span>
+    }
     @if (progress(element()).title) {
       <span class="progress-title" [style.text-align]="progressTextAlign(progress(element()))">{{
         progress(element()).title
       }}</span>
     }
-    <span class="progress-track" [class.is-active]="progressActive(progress(element()))"
-      ><span class="progress-fill"></span
-    ></span>
-    @if (progressShowLegend(progress(element()))) {
-      <span class="progress-label" [style.text-align]="progressTextAlign(progress(element()))">
-        @if (progress(element()).data.label) {
-          {{ progress(element()).data.label }}:
+    <span class="progress-track-wrap">
+      <span class="progress-track">
+        @for (entry of progressItems(progress(element())); track entry.index) {
+          @if (entry.item.kind === 'segment') {
+            <button
+              type="button"
+              class="progress-item progress-segment"
+              [class.is-active]="segment(entry.item).active"
+              [style]="segmentStyle(entry.width, segment(entry.item).color)"
+              [attr.tabindex]="progress(element()).sensitive ? -1 : 0"
+              [attr.aria-label]="segment(entry.item).label + ': ' + segment(entry.item).value"
+              (pointerenter)="moveTooltip(entry.index, $event)"
+              (pointermove)="moveTooltip(entry.index, $event)"
+              (pointerleave)="hideTooltip(entry.index)"
+              (pointerdown)="toggleTouchTooltip(entry.index, $event)"
+              (focus)="showTooltip(entry.index, entry.center)"
+              (blur)="hideTooltip(entry.index)"
+              (keydown)="segmentKeyDown(entry.index, $event)"
+            ></button>
+          } @else {
+            <span class="progress-item progress-gap" [style]="segmentStyle(entry.width)"></span>
+          }
         }
-        {{ progress(element()).data.value }}{{ progressSeparator(progress(element()))
-        }}{{ progress(element()).data.max }}{{ progressSuffix(progress(element())) }}</span
+      </span>
+      @for (entry of progressSegments(progress(element())); track entry.index) {
+        @if (tooltipIndex() === entry.index) {
+          <span
+            class="progress-tooltip"
+            role="tooltip"
+            [style.--tooltip-x]="tooltipPosition().x"
+            [style.--tooltip-y]="tooltipPosition().y"
+            [style.--tooltip-border]="segment(entry.item).color"
+          >
+            <span class="tooltip-marker" [style.background]="segment(entry.item).color"></span>
+            <span>{{ segment(entry.item).label }}</span>
+            <strong>{{ segment(entry.item).value }}</strong>
+          </span>
+        }
+      }
+    </span>
+    @if (progress(element()).showLegend) {
+      <span
+        class="progress-legend"
+        [style.justify-content]="progressTextAlign(progress(element()))"
       >
+        @for (entry of progressSegments(progress(element())); track entry.index) {
+          <span class="progress-label">
+            <span class="legend-marker" [style.background]="segment(entry.item).color"></span>
+            {{ segment(entry.item).label }}: {{ entry.start }}–{{ entry.end }}
+          </span>
+        }
+      </span>
     }
     @if (!progress(element()).sensitive) {
       <span class="visually-hidden" [id]="summaryId">{{

@@ -133,13 +133,22 @@ export interface FillTrackStyle extends DataVisualStyle {
     track: string;
   };
 }
-export interface ProgressData {
+export interface ProgressSegment {
+  kind: 'segment';
   label: string;
   value: number;
+  color: string;
+  active: boolean;
+}
+export interface ProgressGap {
+  kind: 'gap';
+  value: number;
+}
+export type ProgressItem = ProgressSegment | ProgressGap;
+export interface ProgressData {
   min: number;
   max: number;
-  separator?: string | null;
-  suffix?: string | null;
+  items: ProgressItem[];
 }
 export interface GaugeData {
   value: number;
@@ -148,6 +157,9 @@ export interface GaugeData {
 }
 export interface ValueChartStyle extends FillTrackStyle {
   color: FillTrackStyle['color'] & { title: string };
+}
+export interface ProgressStyle extends DataVisualStyle {
+  color: DataVisualStyle['color'] & { title: string; track: string };
 }
 export interface PieElement extends ChartElementBase {
   type: 'pie' | 'donut';
@@ -172,8 +184,7 @@ export interface SeriesElement extends ChartElementBase {
 export interface ProgressElement extends ChartElementBase {
   type: 'progress';
   data: ProgressData;
-  style: ValueChartStyle;
-  active: boolean;
+  style: ProgressStyle;
 }
 export type ChartElement = PieElement | FunnelElement | GaugeElement | SeriesElement;
 export type WidgetElement =

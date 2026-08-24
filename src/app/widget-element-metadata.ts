@@ -19,7 +19,7 @@ export const widgetElementPalette: PaletteItem[] = [
   { type: 'gauge', label: 'Gauge', icon: '◌', description: 'Single value' },
   { type: 'bar', label: 'Bar', icon: '▥', description: 'Compare values' },
   { type: 'line', label: 'Line', icon: '⌁', description: 'Show a trend' },
-  { type: 'progress', label: 'Progress', icon: '▰', description: 'Completion value' },
+  { type: 'progress', label: 'Progress', icon: '▰', description: 'Segmented ranges' },
 ];
 
 export function elementIcon(type: WidgetElementType): string {
@@ -36,6 +36,6 @@ export function elementLabel(element: WidgetElement): string {
         : element.type === 'divider'
           ? 'Divider'
           : element.type === 'progress'
-            ? element.data.label
+            ? (element.title ?? 'Progress')
             : (element.title ?? element.type);
 }

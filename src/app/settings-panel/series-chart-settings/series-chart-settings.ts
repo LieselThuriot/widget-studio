@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { AxisChartStyle, ChartDataPoint } from 'widget-renderer';
+import { AxisChartStyle, ChartDataPoint, ProgressItem } from 'widget-renderer';
 import { ChartElement } from '../../editor-model';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { DataPointsDialog } from '../data-points-dialog/data-points-dialog';
@@ -32,7 +32,7 @@ export class SeriesChartSettings {
     return this.element().style as AxisChartStyle;
   }
 
-  protected saveData(points: ChartDataPoint[]): void {
-    this.changed.emit({ data: points });
+  protected saveData(points: (ChartDataPoint | ProgressItem)[]): void {
+    this.changed.emit({ data: points as ChartDataPoint[] });
   }
 }

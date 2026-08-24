@@ -38,9 +38,12 @@ describe('widget element factory', () => {
       id: 'progress-id',
       type: 'progress',
       title: 'Completion',
-      data: { label: 'Complete', separator: ' of ', suffix: '%' },
+      data: {
+        min: 0,
+        max: 100,
+        items: [{ kind: 'segment', label: 'Complete', value: 72, active: false }],
+      },
       showLegend: true,
-      active: false,
     });
     expect(pie).toMatchObject({ id: 'pie-id', type: 'pie', title: 'Distribution' });
     expect(donut).toMatchObject({ id: 'donut-id', type: 'donut', title: 'Composition' });

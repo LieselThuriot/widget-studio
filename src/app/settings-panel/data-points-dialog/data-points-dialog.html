@@ -4,24 +4,25 @@
   aria-modal="true"
   aria-labelledby="data-points-title"
   tabindex="0"
-  (click)="close()"
+  (click)="onBackdropClick($event)"
   (keydown)="onKeyDown($event)"
 >
-  <section
-    class="editor-overlay__panel data-points-dialog"
-    tabindex="-1"
-    (click)="$event.stopPropagation()"
-    (keydown)="onKeyDown($event)"
-  >
+  <section class="editor-overlay__panel data-points-dialog" tabindex="-1">
     <header class="editor-overlay__header">
       <div>
-        <p class="editor-eyebrow eyebrow">Chart data</p>
-        <h2 id="data-points-title">Edit data points</h2>
+        <p class="editor-eyebrow eyebrow">
+          {{ mode() === 'progress' ? 'Progress data' : 'Chart data' }}
+        </p>
+        <h2 id="data-points-title">
+          Edit {{ mode() === 'progress' ? 'progress items' : 'data points' }}
+        </h2>
       </div>
       <button
         type="button"
         class="editor-button editor-button--icon close-button"
-        aria-label="Close data point editor"
+        [attr.aria-label]="
+          'Close ' + (mode() === 'progress' ? 'progress item' : 'data point') + ' editor'
+        "
         (click)="close()"
       >
         ×
@@ -29,44 +30,83 @@
     </header>
     <div class="points-list">
       @for (point of draft(); track $index; let index = $index) {
-        <div class="point-row">
-          <label
-            >Label<input
-              required
-              [class.invalid]="invalidLabel(point)"
-              [value]="point.label"
-              (input)="update(index, { label: value($event) })"
-          /></label>
-          <label
+        <div class="point-row" [class.progress-row]="mode() === 'progress'">
+          @if (mode() === 'progress') {
+            <label class="kind-field"
+              >Kind<select
+                [value]="isGap(point) ? 'gap' : 'segment'"
+                (change)="changeKind(index, value($event))"
+              >
+                <option value="segment">Segment</option>
+                <option value="gap">Gap</option>
+              </select></label
+            >
+          }
+          @if (!isGap(point)) {
+            <label class="label-field"
+              >Label<input
+                required
+                [class.invalid]="invalidLabel(point)"
+                [attr.aria-invalid]="invalidLabel(point)"
+                [value]="point.label"
+                (input)="update(index, { label: value($event) })"
+            /></label>
+          }
+          <label class="value-field" [class.gap-value-field]="isGap(point)"
             >Value<input
               required
               type="number"
+              min="0"
               [class.invalid]="invalidValue(point)"
+              [attr.aria-invalid]="invalidValue(point)"
               [value]="point.value"
               (input)="update(index, { value: number($event) })"
           /></label>
-          <app-color-picker
-            class="color-field"
-            label="Color"
-            [value]="point.color ?? '#7dd3fc'"
-            [inline]="true"
-            (changed)="update(index, { color: $event })"
-          />
+          @if (!isGap(point)) {
+            <app-color-picker
+              class="color-field"
+              label="Color"
+              [value]="point.color ?? '#7dd3fc'"
+              [inline]="true"
+              (changed)="update(index, { color: $event })"
+            />
+          }
+          @if (isSegment(point)) {
+            <label class="active-field"
+              >Active<span class="active-switch"
+                ><input
+                  type="checkbox"
+                  [checked]="point.active"
+                  [attr.aria-label]="'Animate ' + (point.label || 'segment')"
+                  (change)="update(index, { active: checked($event) })" /><span
+                  class="active-switch-track"
+                ></span></span
+            ></label>
+          }
           <button
             type="button"
             class="editor-button editor-button--danger remove-button"
-            [attr.aria-label]="'Remove ' + (point.label || 'data point')"
+            [attr.aria-label]="'Remove ' + itemName(point)"
             (click)="remove(index)"
           >
             Remove
           </button>
         </div>
       } @empty {
-        <p class="empty-state">No data points yet.</p>
+        <p class="empty-state">
+          No {{ mode() === 'progress' ? 'progress items' : 'data points' }} yet.
+        </p>
       }
     </div>
+    @if (exceedsRange()) {
+      <p class="range-error" role="alert">
+        Item total {{ total() }} exceeds the available range {{ maxTotal() }}.
+      </p>
+    }
     <footer class="editor-overlay__footer">
-      <button type="button" class="editor-button add-button" (click)="add()">Add data point</button>
+      <button type="button" class="editor-button add-button" (click)="add()">
+        Add {{ mode() === 'progress' ? 'item' : 'data point' }}
+      </button>
       <div class="dialog-actions">
         <button
           type="button"

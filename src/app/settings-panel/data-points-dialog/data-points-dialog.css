@@ -7,7 +7,7 @@
 .data-points-dialog {
   display: flex;
   flex-direction: column;
-  width: min(760px, 100%);
+  width: min(900px, 100%);
   max-height: min(720px, calc(100dvh - 40px));
   overflow: hidden;
 }
@@ -51,7 +51,7 @@ h2 {
 }
 .point-row {
   display: grid;
-  grid-template-columns: minmax(100px, 1fr) 100px 180px auto;
+  grid-template-columns: repeat(2, minmax(130px, 1fr)) minmax(200px, auto) 130px;
   align-items: end;
   gap: 9px;
   padding: 12px;
@@ -59,12 +59,20 @@ h2 {
   border-radius: 8px;
   background: var(--editor-surface-panel);
 }
+.progress-row {
+  grid-template-columns:
+    130px minmax(130px, 1fr) minmax(100px, 1fr) minmax(200px, auto) 60px
+    130px;
+}
+.gap-value-field {
+  grid-column: 2 / 6;
+}
 label {
   color: var(--editor-text-secondary);
   font-size: 11px;
   font-weight: 600;
 }
-input {
+:is(input, select) {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -79,13 +87,75 @@ input {
     12px 'DM Sans',
     sans-serif;
 }
+.active-field {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+.active-switch {
+  position: relative;
+  display: block;
+  width: 42px;
+  height: 34px;
+  margin: 6px auto 0;
+}
+.active-switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.active-switch-track {
+  position: absolute;
+  inset: 8px 0;
+  border-radius: var(--editor-radius-pill);
+  background: var(--editor-toggle-off);
+  cursor: pointer;
+  transition: background var(--editor-duration-toggle) var(--editor-ease-standard);
+}
+.active-switch-track::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--editor-control-thumb);
+  content: '';
+  transition: transform var(--editor-duration-toggle) var(--editor-ease-standard);
+}
+.active-switch input:checked + .active-switch-track {
+  background: var(--editor-toggle-on);
+}
+.active-switch input:checked + .active-switch-track::after {
+  transform: translateX(24px);
+}
+.active-switch input:focus-visible + .active-switch-track {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 2px;
+}
+.range-error {
+  margin: 0;
+  padding: 0 22px 14px;
+  color: var(--editor-danger-input);
+  font-size: 12px;
+}
 input.invalid {
   --editor-border-control: var(--editor-danger-input);
   box-shadow: 0 0 0 1px var(--editor-danger-input-ring);
 }
 .remove-button {
+  width: 130px;
   min-height: 32px;
   align-self: end;
+  justify-self: end;
   margin-block-end: 13px;
 }
 .dialog-actions {
@@ -115,7 +185,7 @@ input.invalid {
 :host-context(html[data-theme='dark']) label {
   color: var(--editor-text-primary);
 }
-:host-context(html[data-theme='dark']) input {
+:host-context(html[data-theme='dark']) :is(input, select) {
   border-color: var(--editor-border-control);
   background: var(--editor-surface-input);
   color: var(--editor-text-primary);
@@ -123,6 +193,12 @@ input.invalid {
 @media (max-width: 560px) {
   .point-row {
     grid-template-columns: 1fr 1fr;
+  }
+  .progress-row {
+    grid-template-columns: 130px minmax(0, 1fr);
+  }
+  .gap-value-field {
+    grid-column: 2;
   }
   .color-field {
     grid-column: 1;

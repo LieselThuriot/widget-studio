@@ -67,36 +67,48 @@ describe('chart accessibility summaries', () => {
       grid: base.grid,
       sensitive: false,
       title: 'Progress',
-      data: { label: 'Complete', value: 4, min: 0, max: 10, separator: ' of ', suffix: '' },
+      data: {
+        min: 0,
+        max: 10,
+        items: [
+          { kind: 'segment', label: 'Morning', value: 4, color: '#0ff', active: false },
+          { kind: 'gap', value: 1 },
+        ],
+      },
       style: {
-        color: { legend: '#fff', title: '#fff', fill: '#0ff', track: '#000' },
+        color: { legend: '#fff', title: '#fff', track: '#000' },
         font: { size: 11 },
       },
       showLegend: true,
-      active: false,
     };
 
     expect(chartAriaLabel(element)).toContain('Progress');
-    expect(chartAccessibilitySummary(element)).toContain('maximum 10');
+    expect(chartAccessibilitySummary(element)).toContain('Morning: 0 to 4');
   });
 
-  it('uses renderer defaults for missing progress separator and suffix', () => {
+  it('counts only visible segments as progress', () => {
     const element = {
       ...({
         type: 'progress',
         grid: base.grid,
         sensitive: false,
         title: 'Progress',
-        data: { label: 'Complete', value: 4, min: 0, max: 10 },
+        data: {
+          min: 0,
+          max: 10,
+          items: [
+            { kind: 'segment', label: 'Morning', value: 4, color: '#0ff', active: false },
+            { kind: 'gap', value: 2 },
+          ],
+        },
         style: {
-          color: { legend: '#fff', title: '#fff', fill: '#0ff', track: '#000' },
+          color: { legend: '#fff', title: '#fff', track: '#000' },
           font: { size: 11 },
         },
         showLegend: true,
-        active: false,
       } satisfies ProgressElement),
     } as ProgressElement;
 
-    expect(chartAriaLabel(element)).toContain('4 - 10.');
+    expect(chartAriaLabel(element)).toContain('4 of 10.');
   });
 });
