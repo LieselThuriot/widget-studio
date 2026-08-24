@@ -148,6 +148,8 @@
 .widget-shell {
   position: relative;
   overflow: visible;
+  box-sizing: border-box;
+  border: 1px solid #10182c26;
   border-radius: var(--widget-renderer-radius);
   color: #f6f7fb;
   box-shadow: var(--widget-renderer-shadow);
