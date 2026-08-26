@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { GridTrack, WidgetElementType } from 'widget-renderer';
+import { WidgetElementType } from 'widget-renderer';
 import { Widget as RendererWidget } from 'widget-renderer';
 import { Widget, WidgetElement } from '../editor-model';
+import { GridTrackPatch } from '../editor-state';
 import { AnchorControl } from './anchor-control/anchor-control';
 import { TextElementSettings } from './text-element-settings/text-element-settings';
 import { ImageElementSettings } from './image-element-settings/image-element-settings';
@@ -16,7 +17,7 @@ import { DividerElementSettings } from './divider-element-settings/divider-eleme
 export interface TrackChange {
   kind: 'rows' | 'columns';
   index: number;
-  patch: Partial<GridTrack>;
+  patch: GridTrackPatch;
 }
 
 export interface PlacementChange {

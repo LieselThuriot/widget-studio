@@ -426,9 +426,14 @@ function validateWidget(value: unknown): WidgetValidationIssue[] {
         addIssue(issues, path, 'must be an object');
         return;
       }
-      requiredNumber(track['size'], `${path}.size`, issues, 0);
-      if (!isOneOf(track['unit'], gridUnits))
-        addIssue(issues, `${path}.unit`, 'has an unsupported value');
+      const unit = track['unit'];
+      if (!isOneOf(unit, gridUnits)) addIssue(issues, `${path}.unit`, 'has an unsupported value');
+      if (unit === 'auto') {
+        if (track['size'] !== undefined)
+          addIssue(issues, `${path}.size`, 'must not be set for auto tracks');
+      } else {
+        requiredNumber(track['size'], `${path}.size`, issues, 0);
+      }
     });
   }
   const background = value['background'];

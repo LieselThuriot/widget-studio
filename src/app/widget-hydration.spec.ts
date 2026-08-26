@@ -37,4 +37,10 @@ describe('normalizeWidgetInput', () => {
     expect(normalized.elements[0]).not.toHaveProperty('id');
     expect(normalized.elements[0].type).toBe('text');
   });
+
+  it('keeps auto tracks without adding a size', () => {
+    const normalized = normalizeWidgetInput({ ...contract, rows: [{ unit: 'auto' }] });
+
+    expect(normalized.rows).toEqual([{ unit: 'auto' }]);
+  });
 });

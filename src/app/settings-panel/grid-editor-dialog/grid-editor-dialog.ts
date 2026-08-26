@@ -1,6 +1,7 @@
 import { Component, ElementRef, effect, inject, input, output, signal } from '@angular/core';
 import { GridTrack, Widget, gridTemplate } from 'widget-renderer';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../../dialog-focus';
+import { GridTrackPatch, mergeTrack } from '../../editor-state';
 import { eventNumber, eventValue } from '../form-events';
 
 @Component({
@@ -54,7 +55,7 @@ export class GridEditorDialog {
     return this.columns()[this.selectedCell().column];
   }
 
-  protected updateSelected(kind: 'rows' | 'columns', patch: Partial<GridTrack>): void {
+  protected updateSelected(kind: 'rows' | 'columns', patch: GridTrackPatch): void {
     this.update(
       kind,
       kind === 'rows' ? this.selectedCell().row : this.selectedCell().column,
@@ -74,10 +75,10 @@ export class GridEditorDialog {
     return track.unit === 'auto' ? 'auto' : `${track.size}${track.unit === 'star' ? '*' : 'px'}`;
   }
 
-  protected update(kind: 'rows' | 'columns', index: number, patch: Partial<GridTrack>): void {
+  protected update(kind: 'rows' | 'columns', index: number, patch: GridTrackPatch): void {
     const tracks = kind === 'rows' ? this.rows : this.columns;
     tracks.update((items) =>
-      items.map((track, trackIndex) => (trackIndex === index ? { ...track, ...patch } : track)),
+      items.map((track, trackIndex) => (trackIndex === index ? mergeTrack(track, patch) : track)),
     );
   }
 

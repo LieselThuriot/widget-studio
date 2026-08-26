@@ -4,6 +4,7 @@ import { createWidgetElement } from './widget-element-factory';
 import {
   addTrack,
   changeElementStack,
+  GridTrackPatch,
   moveElement,
   patchElement,
   patchWidget,
@@ -137,11 +138,7 @@ export class EditorStateStore {
     this.widget.update((widget) => patchWidget(widget, patch) as Widget);
   }
 
-  updateTrack(
-    kind: 'rows' | 'columns',
-    index: number,
-    patch: Partial<Widget['rows'][number]>,
-  ): void {
+  updateTrack(kind: 'rows' | 'columns', index: number, patch: GridTrackPatch): void {
     this.widget.update((widget) => updateTrack(widget, kind, index, patch));
   }
 

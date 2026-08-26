@@ -11,12 +11,12 @@ const dailyBrief: Widget = {
   version: 2,
   size: 'square',
   rows: [
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'auto' },
+    { unit: 'auto' },
+    { unit: 'auto' },
+    { unit: 'auto' },
     { size: 1, unit: 'star' },
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'auto' },
+    { unit: 'auto' },
+    { unit: 'auto' },
   ],
   columns: [
     { size: 1, unit: 'star' },
@@ -130,11 +130,11 @@ const payslip: Widget = {
   version: 2,
   size: 'square',
   rows: [
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'auto' },
+    { unit: 'auto' },
+    { unit: 'auto' },
+    { unit: 'auto' },
     { size: 1, unit: 'star' },
-    { size: 1, unit: 'auto' },
+    { unit: 'auto' },
   ],
   columns: [
     { size: 1, unit: 'star' },
@@ -221,11 +221,7 @@ const payslip: Widget = {
 const clockedIn: Widget = {
   version: 2,
   size: 'wide',
-  rows: [
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'star' },
-    { size: 1, unit: 'auto' },
-  ],
+  rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
     { size: 1, unit: 'star' },
     { size: 1, unit: 'star' },
@@ -297,11 +293,7 @@ const clockedIn: Widget = {
 const holidayBalance: Widget = {
   version: 2,
   size: 'wide',
-  rows: [
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'star' },
-    { size: 1, unit: 'auto' },
-  ],
+  rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
     { size: 1, unit: 'star' },
     { size: 1, unit: 'star' },
@@ -420,12 +412,7 @@ const miniPulse: Widget = {
 const megaOverview: Widget = {
   version: 2,
   size: 'mega',
-  rows: [
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'star' },
-    { size: 1, unit: 'auto' },
-  ],
+  rows: [{ unit: 'auto' }, { unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
     { size: 1, unit: 'star' },
     { size: 1, unit: 'star' },
@@ -515,11 +502,7 @@ const megaOverview: Widget = {
 const heroLaunch: Widget = {
   version: 2,
   size: 'hero',
-  rows: [
-    { size: 1, unit: 'auto' },
-    { size: 1, unit: 'star' },
-    { size: 1, unit: 'auto' },
-  ],
+  rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
     { size: 1, unit: 'star' },
     { size: 1, unit: 'star' },

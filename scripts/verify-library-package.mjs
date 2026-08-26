@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { platform } from 'node:process';
@@ -8,6 +9,8 @@ const root = process.cwd();
 const temporaryRoot = mkdtempSync(join(tmpdir(), 'widget-renderer-consumer-'));
 const consumer = join(temporaryRoot, 'consumer');
 const npm = platform === 'win32' ? 'npm.cmd' : 'npm';
+const require = createRequire(join(root, 'package.json'));
+const angularVersion = require('@angular/core/package.json').version;
 
 try {
   const commandOptions = { cwd: root, stdio: 'inherit', shell: platform === 'win32' };
@@ -16,12 +19,20 @@ try {
     ...commandOptions,
   });
   execFileSync(npm, ['init', '--yes'], { ...commandOptions, cwd: temporaryRoot, stdio: 'ignore' });
-  execFileSync(npm, ['install', '--yes', '--prefix', consumer, join(temporaryRoot, 'widget-renderer-0.1.0.tgz')], {
-    ...commandOptions,
-  });
-  execFileSync(npm, ['install', '--yes', '--prefix', consumer, '@angular/compiler@22.1.2'], {
-    ...commandOptions,
-  });
+  execFileSync(
+    npm,
+    [
+      'install',
+      '--yes',
+      '--prefix',
+      consumer,
+      join(temporaryRoot, 'widget-renderer-0.1.0.tgz'),
+      `@angular/compiler@${angularVersion}`,
+      `@angular/core@${angularVersion}`,
+      `@angular/common@${angularVersion}`,
+    ],
+    { ...commandOptions },
+  );
   writeFileSync(
     join(consumer, 'verify.mjs'),
     `import '@angular/compiler';
@@ -36,6 +47,8 @@ const payload = {
   elements: [],
 };
  if (!safeParseWidgetInput(payload).success || normalizeWidgetInput(payload).elements.length !== 0) process.exit(1);
+ if (!safeParseWidgetInput({ ...payload, rows: [{ unit: 'auto' }] }).success) process.exit(1);
+ if (safeParseWidgetInput({ ...payload, rows: [{ size: 1, unit: 'auto' }] }).success) process.exit(1);
 `,
   );
   execFileSync('node', ['verify.mjs'], { cwd: consumer, stdio: 'inherit' });

@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { widgetHeight, Widget as RendererWidget, widgetWidth } from 'widget-renderer';
 import { Widget } from '../../editor-model';
+import { GridTrackPatch } from '../../editor-state';
 import { WidgetBackgroundSettings } from '../widget-background-settings/widget-background-settings';
 import { WidgetGridSettings } from '../widget-grid-settings/widget-grid-settings';
 import { WidgetRefreshSettings } from '../widget-refresh-settings/widget-refresh-settings';
@@ -8,7 +9,7 @@ import { WidgetRefreshSettings } from '../widget-refresh-settings/widget-refresh
 export interface WidgetTrackChange {
   kind: 'rows' | 'columns';
   index: number;
-  patch: { size?: number; unit?: 'star' | 'pixel' | 'auto' };
+  patch: GridTrackPatch;
 }
 
 @Component({

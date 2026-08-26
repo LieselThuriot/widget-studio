@@ -10,12 +10,8 @@ export function trackAt(
   span: number,
   resolvedSizes?: number[],
 ): number {
-  const fixed = tracks
-    .filter((track) => track.unit === 'pixel')
-    .reduce((sum, track) => sum + track.size, 0);
-  const stars = tracks
-    .filter((track) => track.unit === 'star')
-    .reduce((sum, track) => sum + track.size, 0);
+  const fixed = tracks.reduce((sum, track) => (track.unit === 'pixel' ? sum + track.size : sum), 0);
+  const stars = tracks.reduce((sum, track) => (track.unit === 'star' ? sum + track.size : sum), 0);
   const flexible = Math.max(0, available - Math.max(0, tracks.length - 1) * CANVAS_GAP - fixed);
   let cursor = 0;
   let index = 0;

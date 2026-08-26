@@ -24,10 +24,7 @@ export type ElementAnchor =
   | 'bottom center'
   | 'bottom right';
 
-export interface GridTrack {
-  size: number;
-  unit: GridUnit;
-}
+export type GridTrack = { size: number; unit: 'pixel' | 'star' } | { size?: never; unit: 'auto' };
 export interface BackgroundConfig {
   image?: string;
   sensitive: boolean;

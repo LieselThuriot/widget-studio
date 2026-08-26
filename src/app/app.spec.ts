@@ -1100,6 +1100,18 @@ describe('App', () => {
       (fixture.nativeElement.querySelector('.grid-editor-dialog .grid-preview') as HTMLElement)
         .style.gridTemplateColumns,
     ).toContain('auto');
+
+    (
+      fixture.nativeElement.querySelector(
+        '.grid-editor-dialog .primary-button',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { columns: Record<string, unknown>[] };
+    expect(contract.columns[0]).toEqual({ unit: 'auto' });
   });
 
   it('should mark the widget background as sensitive', async () => {

@@ -19,7 +19,10 @@ type LegacyLayout = WidgetElement & {
 };
 
 export function normalizeWidget(widget: Widget): Widget {
-  return { ...widget, elements: widget.elements.map(normalizeElement) as Widget['elements'] };
+  return {
+    ...widget,
+    elements: widget.elements.map(normalizeElement) as Widget['elements'],
+  };
 }
 
 export function assignEditorIds(widget: WidgetInput): Widget {

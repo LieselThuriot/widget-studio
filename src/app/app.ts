@@ -10,7 +10,8 @@ import { EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
 import { SettingsPanel } from './settings-panel/settings-panel';
 import { ButtonElement } from 'widget-renderer';
 import { Widget as RendererWidget, WidgetInput } from 'widget-renderer';
-import { Widget, WidgetElement } from './editor-model';
+import { WidgetElement } from './editor-model';
+import { GridTrackPatch } from './editor-state';
 import { widgetElementPalette } from './widget-element-metadata';
 import { EditorStateStore } from './editor-state-store';
 import { sampleWidgets } from './sample-widget';
@@ -182,11 +183,7 @@ export class App {
     this.editorState.updateWidget(patch);
   }
 
-  protected updateTrack(
-    kind: 'rows' | 'columns',
-    index: number,
-    patch: Partial<Widget['rows'][number]>,
-  ): void {
+  protected updateTrack(kind: 'rows' | 'columns', index: number, patch: GridTrackPatch): void {
     this.editorState.updateTrack(kind, index, patch);
   }
 

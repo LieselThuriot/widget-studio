@@ -187,16 +187,26 @@ export function updateElementRadius(widget: Widget, id: string, value: number): 
   return patchElement(widget, id, { radius: Math.max(0, Math.round(value) || 0) });
 }
 
+export interface GridTrackPatch {
+  size?: number;
+  unit?: GridTrack['unit'];
+}
+
+export function mergeTrack(track: GridTrack, patch: GridTrackPatch): GridTrack {
+  const unit = patch.unit ?? track.unit;
+  return unit === 'auto' ? { unit } : { unit, size: patch.size ?? track.size ?? 1 };
+}
+
 export function updateTrack(
   widget: Widget,
   kind: 'rows' | 'columns',
   index: number,
-  patch: Partial<GridTrack>,
+  patch: GridTrackPatch,
 ): Widget {
   return {
     ...widget,
     [kind]: widget[kind].map((track, trackIndex) =>
-      trackIndex === index ? { ...track, ...patch } : track,
+      trackIndex === index ? mergeTrack(track, patch) : track,
     ),
   };
 }

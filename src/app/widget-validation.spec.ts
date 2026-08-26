@@ -389,6 +389,26 @@ describe('widget contract validation', () => {
     if (result.success) expect(result.data.background.image).toBeUndefined();
   });
 
+  it('allows auto tracks without a size', () => {
+    const result = safeParseWidgetInput({ ...validContract, rows: [{ unit: 'auto' }] });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects auto tracks with a size', () => {
+    const result = safeParseWidgetInput({ ...validContract, rows: [{ size: 1, unit: 'auto' }] });
+
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.issues.map((issue) => issue.path)).toContain('rows[0].size');
+  });
+
+  it('requires a size for pixel and star tracks', () => {
+    const result = safeParseWidgetInput({ ...validContract, rows: [{ unit: 'star' }] });
+
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.issues.map((issue) => issue.path)).toContain('rows[0].size');
+  });
+
   it('reports actionable paths for malformed contracts', () => {
     const result = safeParseWidgetInput({
       ...validContract,

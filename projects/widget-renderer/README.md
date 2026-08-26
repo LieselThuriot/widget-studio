@@ -54,7 +54,7 @@ export class DashboardCard {
   readonly widget: WidgetContract = {
     version: 2,
     size: 'square',
-    rows: [{ size: 1, unit: 'star' }],
+    rows: [{ unit: 'auto' }],
     columns: [{ size: 1, unit: 'star' }],
     background: {
       color: '#172033',
@@ -128,8 +128,8 @@ Every input must use `version: 2` and include:
 | Field | Description |
 | --- | --- |
 | `size` | `square` or `wide`; the built-in widths are 265px and 530px |
-| `rows` | Non-empty grid tracks using `pixel`, `auto`, or `star` units |
-| `columns` | Non-empty grid tracks using `pixel`, `auto`, or `star` units |
+| `rows` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
+| `columns` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
 | `background` | Color, optional image, sizing, position, repeat, overlay, and sensitivity settings |
 | `refresh` | Whether to show a refresh action and its accessible label |
 | `elements` | An array of supported widget elements |
