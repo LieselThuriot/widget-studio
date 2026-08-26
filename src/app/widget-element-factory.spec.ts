@@ -34,6 +34,9 @@ describe('widget element factory', () => {
       grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
     });
     expect(gauge.grid).not.toHaveProperty('anchor');
+    expect(gauge).toMatchObject({
+      style: { color: { fill: expect.stringMatching(/^#[\da-f]{6}$/i) } },
+    });
     expect(progress).toMatchObject({
       id: 'progress-id',
       type: 'progress',

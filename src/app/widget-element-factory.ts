@@ -118,6 +118,7 @@ function createChartElement(
   }
 
   if (type === 'gauge') {
+    const valueStyle = defaultValueChartStyle(backgroundColor);
     return {
       ...base,
       grid: chartGrid(base),
@@ -125,7 +126,10 @@ function createChartElement(
       title: 'Performance',
       data: { value: 72, min: 0, max: 100 },
       showLegend: true,
-      style: defaultValueChartStyle(backgroundColor),
+      style: {
+        ...valueStyle,
+        color: { ...valueStyle.color, fill: firstColor },
+      },
     } as GaugeElement;
   }
 
