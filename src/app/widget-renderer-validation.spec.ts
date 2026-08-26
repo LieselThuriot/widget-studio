@@ -33,6 +33,43 @@ describe('widget renderer validation state', () => {
     expect(issues.length).toBeGreaterThan(1);
   });
 
+  it.each([
+    ['mini', 133, 123],
+    ['square', 265, 245],
+    ['wide', 530, 245],
+    ['mega', 530, 490],
+    ['hero', 1060, 490],
+  ] as const)(
+    'uses the selected %s dimensions when validation fails',
+    async (size, width, height) => {
+      const fixture = TestBed.createComponent(WidgetRenderer);
+      fixture.componentRef.setInput('widget', {
+        version: 3,
+        size,
+      } as unknown as WidgetInput);
+      await fixture.whenStable();
+
+      const shell = fixture.nativeElement.querySelector('.widget-shell') as HTMLElement;
+      expect(shell.style.width).toBe(`${width}px`);
+      expect(shell.style.height).toBe(`${height}px`);
+    },
+  );
+
+  it('defaults to square dimensions when the size is missing or invalid', async () => {
+    for (const size of [undefined, 'invalid']) {
+      const fixture = TestBed.createComponent(WidgetRenderer);
+      fixture.componentRef.setInput('widget', {
+        version: 3,
+        size,
+      } as unknown as WidgetInput);
+      await fixture.whenStable();
+
+      const shell = fixture.nativeElement.querySelector('.widget-shell') as HTMLElement;
+      expect(shell.style.width).toBe('265px');
+      expect(shell.style.height).toBe('245px');
+    }
+  });
+
   it('does not show validation issues while loading', async () => {
     const fixture = TestBed.createComponent(WidgetRenderer);
     fixture.componentRef.setInput('widget', { version: 3 } as unknown as WidgetInput);

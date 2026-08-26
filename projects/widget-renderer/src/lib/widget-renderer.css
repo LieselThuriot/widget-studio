@@ -195,7 +195,7 @@
   border-radius: var(--widget-renderer-radius);
   background: #fff4f4ef;
   color: #7f1d1d;
-  pointer-events: none;
+  pointer-events: auto;
 }
 .widget-validation-title {
   font-size: 13px;

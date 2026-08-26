@@ -51,7 +51,7 @@ export class WidgetRenderer {
   protected readonly renderWidget = computed<Widget>(() => {
     const result = this.parsedWidget();
     if (!result.success) {
-      return emptyWidget;
+      return { ...emptyWidget, size: widgetSizeOrSquare(this.widget()?.size) };
     }
     return normalizeWidgetInput(result.data) as Widget;
   });
@@ -162,3 +162,9 @@ const emptyWidget: Widget = {
   refresh: { enabled: false, label: 'Refresh widget' },
   elements: [],
 };
+
+function widgetSizeOrSquare(value: unknown): Widget['size'] {
+  return ['mini', 'square', 'wide', 'mega', 'hero'].includes(value as Widget['size'])
+    ? (value as Widget['size'])
+    : 'square';
+}
