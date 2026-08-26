@@ -44,6 +44,29 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('.widget-settings')).toBeTruthy();
   });
 
+  it('should select the focused canvas element and update the inspector', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const firstElement = fixture.nativeElement.querySelector(
+      '.editor-element[data-widget-element-id="today-badge"]',
+    ) as HTMLElement;
+    const secondElement = fixture.nativeElement.querySelector(
+      '.editor-element[data-widget-element-id="message"]',
+    ) as HTMLElement;
+
+    firstElement.focus();
+    fixture.detectChanges();
+    expect(firstElement.classList.contains('selected')).toBe(true);
+
+    secondElement.focus();
+    fixture.detectChanges();
+
+    expect(firstElement.classList.contains('selected')).toBe(false);
+    expect(secondElement.classList.contains('selected')).toBe(true);
+    expect(fixture.nativeElement.querySelector('.selected-chip')?.textContent).toContain('Text');
+  });
+
   it('should clear element selection when loading a sample', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

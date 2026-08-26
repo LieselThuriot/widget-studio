@@ -13,6 +13,10 @@
   user-select: none;
 }
 
+.editor-element:focus {
+  outline: none;
+}
+
 .editor-element:hover {
   border-color: var(--editor-overlay-light);
   background: var(--editor-overlay-subtle);

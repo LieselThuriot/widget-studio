@@ -13,6 +13,7 @@ export class CanvasElementOverlay {
   readonly selected = input(false);
   readonly dragging = input(false);
   readonly showGuides = input(false);
+  readonly focused = output<string>();
   readonly deleteRequested = output<Event>();
   readonly resizeStarted = output<{ axis: 'row' | 'column'; event: PointerEvent }>();
 

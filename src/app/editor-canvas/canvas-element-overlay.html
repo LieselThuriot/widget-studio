@@ -8,6 +8,7 @@
   [class.is-dragging]="dragging()"
   [class.show-guides]="showGuides()"
   [style]="style(element())"
+  (focusin)="focused.emit(element().id)"
 >
   @if (showGuides()) {
     <button

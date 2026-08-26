@@ -32,6 +32,7 @@
         [selected]="element.id === selectedId()"
         [dragging]="element.id === draggingId()"
         [showGuides]="ctrlPressed()"
+        (focused)="elementSelected.emit($event)"
         (deleteRequested)="deleteElement(element.id, $event)"
         (resizeStarted)="startResize(element, $event.axis, $event.event)"
       />
