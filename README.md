@@ -122,6 +122,14 @@ npm run verify:library-package
 
 See [`projects/widget-renderer/README.md`](projects/widget-renderer/README.md) for installation, contract details, public exports, and renderer usage.
 
+### C# contracts
+
+The [`WidgetStudio.Contracts`](projects/widget-contracts/widget-contracts/README.md) NuGet package provides the C# API contracts for the JSON consumed by `widget-renderer`. It targets `netstandard2.0` and uses a source-generated `System.Text.Json` context to preserve the shared renderer wire format. Pack it from the workspace root with:
+
+```bash
+dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj
+```
+
 ## Project structure
 
 ```text
@@ -143,6 +151,11 @@ projects/widget-renderer/
 ├── src/lib/                 Reusable renderer implementation
 ├── src/public-api.ts        Package entry point
 └── README.md                Renderer package documentation
+
+projects/widget-contracts/
+├── widget-contracts/        C# NuGet contract library
+├── widget-contracts.Tests/  Contract and JSON compatibility tests
+└── WidgetStudio.slnx        .NET solution
 ```
 
 The editor uses internal element IDs for selection and layer operations. The renderer accepts the public `WidgetContract` without those editor-only IDs; see the renderer documentation for the distinction.
@@ -154,9 +167,13 @@ The editor uses internal element IDs for selection and layer operations. The ren
 - [Apache ECharts](https://echarts.apache.org/) for chart rendering
 - [Vitest](https://vitest.dev/) for unit tests
 - [ng-packagr](https://github.com/ng-packagr/ng-packagr) for the renderer library build
+- [C#](https://learn.microsoft.com/en-us/dotnet/csharp/) contracts targeting `netstandard2.0`
+- [NuGet](https://www.nuget.org/) for distributing `WidgetStudio.Contracts`
+- [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json) source generation for contract serialization
 
 ## Further reading
 
 - [Widget Renderer README](projects/widget-renderer/README.md)
+- [Widget Contracts README](projects/widget-contracts/widget-contracts/README.md)
 - [Angular documentation](https://angular.dev/)
 - [ECharts documentation](https://echarts.apache.org/en/option.html)

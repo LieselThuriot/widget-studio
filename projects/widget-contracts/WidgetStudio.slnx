@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="widget-contracts.Tests/WidgetStudio.Contracts.Tests.csproj" />
+  <Project Path="widget-contracts/WidgetStudio.Contracts.csproj" />
+</Solution>

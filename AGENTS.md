@@ -2,25 +2,26 @@
 
 ## Structure
 
-- This is an Angular 22 workspace with two projects: `widget` is the editor application under `src/`; `widget-renderer` is the reusable library under `projects/widget-renderer/`.
+- This is an Angular 22 workspace with two Angular projects: `widget` is the editor application under `src/`; `widget-renderer` is the reusable library under `projects/widget-renderer/`. The C# `WidgetStudio.Contracts` package and its tests live under `projects/widget-contracts/`.
 - The library entrypoint is `projects/widget-renderer/src/public-api.ts`. Keep public exports there in sync with any new consumer-facing API.
+- The widget-renderer contract is mirrored by the C# NuGet package under `projects/widget-contracts/`; changes to renderer contracts must also be made in the C# package and its tests.
 - The editor imports the library through the `widget-renderer` TypeScript path alias; application changes do not by themselves prove the packaged library works.
 
 ## Commands
 
 - Use npm with the committed `package-lock.json` (`npm@12.0.2` is declared in `package.json`); use `npm ci` for a clean install.
 - Start the editor with `npm start` and open `http://localhost:4200/`.
-- Run formatting after edits with `npm run format`; check it with `npm run format:check`.
-- Run lint with `npm run lint` and non-watch unit tests with `npm test -- --watch=false`.
+- For TypeScript-side changes, including Angular templates, CSS, or other npm-side application/library code, run `npm run format`, `npm run lint`, and `npm test -- --watch=false`. Check formatting with `npm run format:check` when you do not want to rewrite files. These checks are not required for documentation-only or C#-only changes.
 - `npm run build` builds both the application and library. Use `npm run build:app` or `npm run build:library` for one project.
-- For library-facing changes, run `npm run verify:library-package` after the library build. It packs `dist/widget-renderer`, installs it into a temporary consumer, and verifies the public API.
+- For library-facing changes, run `npm run verify:library-package`. It builds the library, packs `dist/widget-renderer`, installs it into a temporary consumer, and runs a packaged-consumer smoke test for selected public APIs.
+- When changing C# contracts or C# contract tests, run `dotnet test projects/widget-contracts/WidgetStudio.slnx` and `dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj`. These commands are not required for TypeScript-only changes.
 
 ## Conventions
 
-- Keep strict TypeScript settings intact; prefer inferred types and avoid `any` when `unknown` or a specific type is possible.
+- Keep the TypeScript compiler and Angular strictness options configured in `tsconfig.json` intact; prefer inferred types and avoid `any` when `unknown` or a specific type is possible.
 - Reuse existing components, classes, design tokens, and interaction patterns before creating new UI styles or controls. New UI must be fully styled, including form controls, buttons, focus states, responsive behavior, and light/dark themes.
 - Use the existing Angular patterns: standalone components, signals for local state, `inject()`, signal/input/output APIs, external colocated HTML/CSS, and native `@if`/`@for`/`@switch` control flow.
-- Do not add `standalone: true` or explicit `OnPush`; both are defaults in this Angular 22 workspace.
+- Do not add `standalone: true`; standalone components are the workspace default. Add an explicit `OnPush` change-detection strategy only when it is an intentional choice supported by the component's behavior and existing patterns.
 - Put host event bindings in a component or directive decorator's `host` object instead of using `@HostBinding` or `@HostListener`.
 - Use `NgOptimizedImage` for static images; it does not support inline base64 images.
 - Use `computed()` for derived signal state and update signals with `set()` or `update()` rather than mutation.
