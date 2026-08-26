@@ -244,6 +244,25 @@ describe('App', () => {
     expect(overlay?.textContent).toContain('size');
   });
 
+  it('should load the new sample as a blank 1 × 1 widget', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (
+      Array.from(fixture.nativeElement.querySelectorAll('.sample-menu-option')).find((button) =>
+        (button as HTMLButtonElement).textContent?.includes('New widget'),
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelectorAll('.layer')).toHaveLength(0);
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('265 × 245');
+    expect(fixture.nativeElement.querySelector('.widget-validation-overlay')).toBeNull();
+  });
+
   it('should keep the loader open for invalid widget model JSON', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

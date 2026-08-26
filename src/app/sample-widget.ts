@@ -653,6 +653,21 @@ const brokenWidget = {
   elements: [],
 } as unknown as Widget;
 
+const newWidget: Widget = {
+  version: 2,
+  size: 'square',
+  rows: [{ size: 1, unit: 'star' }],
+  columns: [{ size: 1, unit: 'star' }],
+  background: {
+    sensitive: false,
+    repeat: false,
+    size: 'auto',
+    anchor: 'center',
+  },
+  refresh: { enabled: false, label: 'Refresh widget' },
+  elements: [],
+};
+
 export const sampleWidgets: readonly WidgetSample[] = [
   {
     id: 'daily-brief',
@@ -690,6 +705,12 @@ export const sampleWidgets: readonly WidgetSample[] = [
     name: 'Northstar launch',
     description: 'A full-width launch readiness story',
     widget: heroLaunch,
+  },
+  {
+    id: 'new-widget',
+    name: 'New widget',
+    description: 'Start with a blank 1 × 1 grid',
+    widget: newWidget,
   },
   {
     id: 'broken-widget',
