@@ -36,6 +36,39 @@ describe('App', () => {
     expect(compiled.querySelector('.topbar-meta')).toBeNull();
   });
 
+  it('should open widget settings without selecting an element', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('.editor-element.selected')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.widget-settings')).toBeTruthy();
+  });
+
+  it('should clear element selection when loading a sample', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const firstElement = fixture.nativeElement.querySelector(
+      '[data-widget-element-id]',
+    ) as HTMLElement;
+    firstElement.click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.selected-chip')).toBeTruthy();
+
+    (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    const sampleButton = Array.from(
+      fixture.nativeElement.querySelectorAll('.sample-menu-option'),
+    ).find((button) => (button as HTMLButtonElement).textContent?.includes('Team pulse')) as
+      HTMLButtonElement | undefined;
+    sampleButton?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('.editor-element.selected')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.widget-settings')).toBeTruthy();
+  });
+
   it('should open the widget model loader from the sample menu', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
@@ -808,6 +841,8 @@ describe('App', () => {
   it('should update text formatting from the inspector', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
+    (fixture.nativeElement.querySelector('.layer .layer-select') as HTMLButtonElement).click();
+    fixture.detectChanges();
 
     const boldButton = fixture.nativeElement.querySelector(
       '.formatting-tools button[aria-label="Toggle bold"]',
@@ -826,6 +861,8 @@ describe('App', () => {
   it('should preserve the remaining text decoration when toggling another', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
+    (fixture.nativeElement.querySelector('.layer .layer-select') as HTMLButtonElement).click();
+    fixture.detectChanges();
 
     const underline = fixture.nativeElement.querySelector(
       '.formatting-tools button[aria-label="Toggle underline"]',
@@ -1011,6 +1048,8 @@ describe('App', () => {
   it('should clamp selected element placement and span values', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
+    (fixture.nativeElement.querySelector('.layer .layer-select') as HTMLButtonElement).click();
+    fixture.detectChanges();
 
     const numberInputs = fixture.nativeElement.querySelectorAll(
       '.settings-panel .placement input',

@@ -22,7 +22,7 @@ import { ButtonElement, WidgetInput, safeParseWidgetInput } from 'widget-rendere
 
 export class EditorStateStore {
   readonly widget = signal<Widget>(structuredClone(sampleWidgets[0].widget));
-  readonly selectedId = signal<string | null>(sampleWidgets[0].widget.elements[0]?.id ?? null);
+  readonly selectedId = signal<string | null>(null);
   readonly isPreviewOpen = signal(false);
   readonly actionAlert = signal<ActionAlert | null>(null);
   readonly selectedElement = computed(
@@ -55,7 +55,7 @@ export class EditorStateStore {
         : normalizeWidget(structuredClone(sample.widget));
     const importedWidget = assignEditorIds(widget);
     this.widget.set(importedWidget);
-    this.selectedId.set(importedWidget.elements[0]?.id ?? null);
+    this.selectedId.set(null);
     this.isPreviewOpen.set(false);
     this.actionAlert.set(null);
   }
@@ -70,7 +70,7 @@ export class EditorStateStore {
     const widget = normalizeWidget(structuredClone(value) as Widget);
     const importedWidget = assignEditorIds(widget);
     this.widget.set(importedWidget);
-    this.selectedId.set(importedWidget.elements[0]?.id ?? null);
+    this.selectedId.set(null);
     this.isPreviewOpen.set(false);
     this.actionAlert.set(null);
     return true;
