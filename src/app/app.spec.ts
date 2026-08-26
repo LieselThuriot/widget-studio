@@ -1008,6 +1008,57 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('.grid-editor-dialog')).toBeNull();
   });
 
+  it('should clear the grid to one 1-star row and column', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (fixture.nativeElement.querySelector('.canvas') as HTMLElement).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.edit-grid-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const clearButton = fixture.nativeElement.querySelector(
+      '.grid-editor-dialog .clear-grid-button',
+    ) as HTMLButtonElement;
+    expect(
+      (fixture.nativeElement.querySelector('.grid-editor-dialog .column-add') as HTMLButtonElement)
+        .title,
+    ).toBe('Add column');
+    expect(
+      (fixture.nativeElement.querySelector('.grid-editor-dialog .row-add') as HTMLButtonElement)
+        .title,
+    ).toBe('Add row');
+    expect(clearButton.title).toBe('Clear grid');
+    clearButton.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('.grid-editor-dialog .row-label')).toHaveLength(
+      1,
+    );
+    expect(
+      fixture.nativeElement.querySelectorAll('.grid-editor-dialog .column-label'),
+    ).toHaveLength(1);
+    expect(
+      fixture.nativeElement.querySelector('.grid-editor-dialog .row-label')?.textContent,
+    ).toContain('1*');
+    expect(
+      fixture.nativeElement.querySelector('.grid-editor-dialog .column-label')?.textContent,
+    ).toContain('1*');
+
+    (
+      fixture.nativeElement.querySelector(
+        '.grid-editor-dialog .primary-button',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    const contract = JSON.parse(
+      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+    ) as { rows: unknown[]; columns: unknown[] };
+    expect(contract.rows).toHaveLength(1);
+    expect(contract.columns).toHaveLength(1);
+  });
+
   it('should display auto grid tracks without their stored size', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

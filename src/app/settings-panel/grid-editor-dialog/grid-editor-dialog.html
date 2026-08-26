@@ -34,7 +34,17 @@
         [style.grid-template-columns]="previewColumns()"
         [style.grid-template-rows]="previewRows()"
       >
-        <div class="grid-corner"></div>
+        <div class="grid-corner">
+          <button
+            type="button"
+            class="add-track clear-grid-button"
+            title="Clear grid"
+            aria-label="Clear grid"
+            (click)="clear()"
+          >
+            ↺
+          </button>
+        </div>
         @for (track of columns(); track $index; let index = $index) {
           <div class="track-label column-label">
             {{ trackLabel(track) }}
@@ -49,7 +59,15 @@
             </button>
           </div>
         }
-        <button type="button" class="add-track column-add" (click)="add('columns')">+</button>
+        <button
+          type="button"
+          class="add-track column-add"
+          title="Add column"
+          aria-label="Add column"
+          (click)="add('columns')"
+        >
+          +
+        </button>
         @for (row of rows(); track $index; let rowIndex = $index) {
           <div class="track-label row-label">
             {{ trackLabel(row) }}
@@ -78,7 +96,15 @@
           }
           <div class="row-end"></div>
         }
-        <button type="button" class="add-track row-add" (click)="add('rows')">+</button>
+        <button
+          type="button"
+          class="add-track row-add"
+          title="Add row"
+          aria-label="Add row"
+          (click)="add('rows')"
+        >
+          +
+        </button>
         @for (column of columns(); track $index) {
           <div class="column-bottom-spacer"></div>
         }

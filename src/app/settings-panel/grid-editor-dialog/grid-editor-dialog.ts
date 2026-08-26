@@ -111,6 +111,23 @@ export class GridEditorDialog {
     }));
   }
 
+  protected clear(): void {
+    this.removed.update((items) => [
+      ...items,
+      ...Array.from({ length: this.rows().length - 1 }, (_, index) => ({
+        kind: 'rows' as const,
+        index: index + 1,
+      })).reverse(),
+      ...Array.from({ length: this.columns().length - 1 }, (_, index) => ({
+        kind: 'columns' as const,
+        index: index + 1,
+      })).reverse(),
+    ]);
+    this.rows.set([{ size: 1, unit: 'star' }]);
+    this.columns.set([{ size: 1, unit: 'star' }]);
+    this.selectedCell.set({ row: 0, column: 0 });
+  }
+
   protected save(): void {
     this.saved.emit({ rows: this.rows(), columns: this.columns(), removed: this.removed() });
     this.close();
