@@ -67,6 +67,24 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('.selected-chip')?.textContent).toContain('Text');
   });
 
+  it('should clear Ctrl guides when the window loses focus', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const editorCanvas = fixture.nativeElement.querySelector('.editor-canvas') as HTMLElement;
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(editorCanvas.classList.contains('show-guides')).toBe(true);
+    expect(fixture.nativeElement.querySelector('.editor-element.show-guides')).toBeTruthy();
+
+    window.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+
+    expect(editorCanvas.classList.contains('show-guides')).toBe(false);
+    expect(fixture.nativeElement.querySelector('.editor-element.show-guides')).toBeNull();
+  });
+
   it('should clear element selection when loading a sample', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

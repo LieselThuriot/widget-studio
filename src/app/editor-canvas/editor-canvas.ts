@@ -34,6 +34,8 @@ import { elementForEvent, resolvedTrackSizes, trackAt } from './editor-canvas-in
   host: {
     '(document:keydown)': 'onKeyDown($event)',
     '(document:keyup)': 'onKeyUp($event)',
+    '(document:visibilitychange)': 'resetTransientState()',
+    '(window:blur)': 'resetTransientState()',
     '(document:pointerdown)': 'closeContextMenu()',
     '(document:pointermove)': 'moveDragDocument($event)',
     '(document:pointerup)': 'endDrag($event)',
@@ -360,5 +362,10 @@ export class EditorCanvas implements AfterViewInit, OnDestroy {
   }
   protected onKeyUp(event: KeyboardEvent): void {
     if (event.key === 'Control') this.ctrlPressed.set(false);
+  }
+
+  protected resetTransientState(): void {
+    this.ctrlPressed.set(false);
+    this.endDrag();
   }
 }
