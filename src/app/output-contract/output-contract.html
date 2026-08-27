@@ -4,7 +4,42 @@
       <p class="editor-eyebrow eyebrow">Output contract</p>
       <h2>Widget model</h2>
     </div>
-    <span class="json-badge">JSON</span>
+    <div class="format-tabs" role="tablist" aria-label="Output format">
+      <button
+        type="button"
+        role="tab"
+        id="json-tab"
+        aria-controls="json-panel"
+        [attr.aria-selected]="activeTab() === 'json'"
+        [attr.tabindex]="activeTab() === 'json' ? 0 : -1"
+        [class.is-active]="activeTab() === 'json'"
+        (click)="selectTab('json', true)"
+        (keydown)="onTabKeydown($event)"
+      >
+        JSON
+      </button>
+      <button
+        type="button"
+        role="tab"
+        id="csharp-tab"
+        aria-controls="csharp-panel"
+        [attr.aria-selected]="activeTab() === 'csharp'"
+        [attr.tabindex]="activeTab() === 'csharp' ? 0 : -1"
+        [class.is-active]="activeTab() === 'csharp'"
+        (click)="selectTab('csharp', true)"
+        (keydown)="onTabKeydown($event)"
+      >
+        C#
+      </button>
+    </div>
   </div>
-  <pre>{{ modelJson() }}</pre>
+  @if (activeTab() === 'json') {
+    <div id="json-panel" role="tabpanel" aria-labelledby="json-tab" data-output-format="json">
+      <app-json-output [modelContract]="modelContract()" />
+    </div>
+  } @else {
+    <div id="csharp-panel" role="tabpanel" aria-labelledby="csharp-tab" data-output-format="csharp">
+      <app-csharp-output [modelContract]="modelContract()" />
+    </div>
+  }
 </section>

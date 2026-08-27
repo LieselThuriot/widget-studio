@@ -331,7 +331,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const contract = JSON.parse(
-      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+      fixture.nativeElement.querySelector('[data-output-format="json"] pre')?.textContent ?? '{}',
     ) as {
       elements: Record<string, unknown>[];
     };
@@ -354,7 +354,7 @@ describe('App', () => {
     fixture.detectChanges();
 
     const contract = JSON.parse(
-      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+      fixture.nativeElement.querySelector('[data-output-format="json"] pre')?.textContent ?? '{}',
     ) as { background: Record<string, unknown> };
     expect(contract.background).not.toHaveProperty('image');
   });
@@ -363,7 +363,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const contract = JSON.parse(
-      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+      fixture.nativeElement.querySelector('[data-output-format="json"] pre')?.textContent ?? '{}',
     ) as { elements: { type: string; grid?: { anchor?: string } }[] };
 
     const chartElements = contract.elements.filter((element) =>
@@ -377,7 +377,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const contract = JSON.parse(
-      fixture.nativeElement.querySelector('pre')?.textContent ?? '{}',
+      fixture.nativeElement.querySelector('[data-output-format="json"] pre')?.textContent ?? '{}',
     ) as {
       elements: Record<string, unknown>[];
     };

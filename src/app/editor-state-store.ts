@@ -19,7 +19,7 @@ import {
 import { assignEditorIds, normalizeWidget } from './widget-normalization';
 import { sampleWidgets } from './sample-widget';
 import { Widget, WidgetElement } from './editor-model';
-import { ButtonElement, WidgetInput, safeParseWidgetInput } from 'widget-renderer';
+import { ButtonElement, WidgetContract, WidgetInput, safeParseWidgetInput } from 'widget-renderer';
 
 export class EditorStateStore {
   readonly widget = signal<Widget>(structuredClone(sampleWidgets[0].widget));
@@ -29,22 +29,18 @@ export class EditorStateStore {
   readonly selectedElement = computed(
     () => this.widget().elements.find((element) => element.id === this.selectedId()) ?? null,
   );
-  readonly modelJson = computed(() => {
+  readonly modelContract = computed<WidgetContract>(() => {
     const { elements, ...publicWidget } = this.widget();
-    return JSON.stringify(
-      {
-        ...publicWidget,
-        elements: elements.map(({ id: _id, ...element }) => {
-          if (element.type === 'divider') {
-            const { sensitive: _sensitive, ...publicDivider } = element;
-            return publicDivider;
-          }
-          return element;
-        }),
-      },
-      null,
-      2,
-    );
+    return {
+      ...publicWidget,
+      elements: elements.map(({ id: _id, ...element }) => {
+        if (element.type === 'divider') {
+          const { sensitive: _sensitive, ...publicDivider } = element;
+          return publicDivider;
+        }
+        return element;
+      }),
+    };
   });
 
   loadSample(sampleId: string): void {

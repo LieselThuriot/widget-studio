@@ -53,13 +53,13 @@ internal static class ContractFixtures
     Size = WidgetSize.Wide,
     Rows =
     [
-      new GridTrack { Size = null, Unit = GridUnit.Auto },
-      new GridTrack { Size = 2.5, Unit = GridUnit.Star }
+      GridTrack.Auto,
+      GridTrack.Star(2.5)
     ],
     Columns =
     [
-      new GridTrack { Size = 120, Unit = GridUnit.Pixel },
-      new GridTrack { Size = 1, Unit = GridUnit.Star }
+      GridTrack.Pixel(120),
+      GridTrack.Star()
     ],
     Background = new BackgroundConfig
     {

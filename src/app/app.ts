@@ -1,4 +1,4 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudioHeader } from './studio-header/studio-header';
 import { ElementPalette } from './element-palette/element-palette';
@@ -51,7 +51,8 @@ export class App {
   protected readonly isShareOpen = signal(false);
   protected readonly actionAlert = this.editorState.actionAlert;
   protected readonly selectedElement = this.editorState.selectedElement;
-  protected readonly modelJson = this.editorState.modelJson;
+  protected readonly modelContract = this.editorState.modelContract;
+  protected readonly modelJson = computed(() => JSON.stringify(this.modelContract(), null, 2));
   protected readonly palette = widgetElementPalette;
   protected readonly samples = sampleWidgets;
   protected readonly widgetSampleId = signal(sampleWidgets[0].id);

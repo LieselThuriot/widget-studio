@@ -1,0 +1,23 @@
+pre {
+  max-height: 380px;
+  overflow: auto;
+  margin: 18px 0 0;
+  padding: 18px;
+  border: 1px solid var(--editor-border-code);
+  border-radius: 9px;
+  background: var(--editor-surface-code);
+  color: var(--editor-text-code);
+  font:
+    11px/1.65 'DM Mono',
+    monospace;
+}
+:host-context(html[data-theme='dark']) pre {
+  border-color: var(--editor-border-code);
+  background: var(--editor-surface-code);
+  color: var(--editor-text-code);
+}
+@media (max-width: 700px) {
+  pre {
+    font-size: 9px;
+  }
+}

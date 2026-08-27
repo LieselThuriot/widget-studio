@@ -17,30 +17,49 @@ h2 {
     700 10px 'DM Sans',
     sans-serif;
 }
-pre {
-  max-height: 380px;
-  overflow: auto;
-  margin: 18px 0 0;
-  padding: 18px;
-  border: 1px solid var(--editor-border-code);
-  border-radius: 9px;
-  background: var(--editor-surface-code);
-  color: var(--editor-text-code);
+.format-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--editor-border-raised);
+  border-radius: 7px;
+}
+.format-tabs button {
+  border: 0;
+  border-radius: 4px;
+  padding: 5px 9px;
+  background: transparent;
+  color: var(--editor-text-menu);
+  cursor: pointer;
   font:
-    11px/1.65 'DM Mono',
-    monospace;
+    700 10px 'DM Sans',
+    sans-serif;
 }
-:host-context(html[data-theme='dark']) .json-badge {
+.format-tabs button:hover,
+.format-tabs button:hover {
+  background: var(--editor-surface-hover);
+  color: var(--editor-text-primary);
+}
+.format-tabs button:focus-visible {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 1px;
+}
+.format-tabs button.is-active {
+  border: 1px solid var(--editor-accent-strong);
+  background: var(--editor-surface-accent);
+  color: var(--editor-accent-strong);
+}
+:host-context(html[data-theme='dark']) .format-tabs {
   border-color: var(--editor-border-control);
-  color: var(--editor-text-secondary);
 }
-:host-context(html[data-theme='dark']) pre {
-  border-color: var(--editor-border-code);
-  background: var(--editor-surface-code);
-  color: var(--editor-text-code);
+:host-context(html[data-theme='dark']) .format-tabs button.is-active {
+  border-color: var(--editor-focus-ring);
+  background: var(--editor-surface-hover);
+  color: var(--editor-text-primary);
+  box-shadow: inset 0 0 0 1px var(--editor-accent);
 }
 @media (max-width: 700px) {
-  pre {
-    font-size: 9px;
+  .model-panel {
+    padding-inline: 16px;
   }
 }
