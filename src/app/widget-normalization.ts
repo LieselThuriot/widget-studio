@@ -21,6 +21,7 @@ type LegacyLayout = WidgetElement & {
 export function normalizeWidget(widget: Widget): Widget {
   return {
     ...widget,
+    refresh: widget.refresh ?? { enabled: false, label: 'Refresh widget' },
     elements: widget.elements.map(normalizeElement) as Widget['elements'],
   };
 }

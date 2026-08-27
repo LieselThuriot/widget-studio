@@ -460,8 +460,9 @@ function validateWidget(value: unknown): WidgetValidationIssue[] {
       requiredString(background['image'], 'background.image', issues, true);
   }
   const refresh = value['refresh'];
-  if (!isRecord(refresh)) addIssue(issues, 'refresh', 'must be an object');
-  else {
+  if (refresh !== undefined && refresh !== null && !isRecord(refresh))
+    addIssue(issues, 'refresh', 'must be an object or null');
+  else if (isRecord(refresh)) {
     requiredBoolean(refresh['enabled'], 'refresh.enabled', issues);
     requiredString(refresh['label'], 'refresh.label', issues, true);
   }

@@ -37,8 +37,8 @@ internal static class ContractAssertions
     Assert.Equal(expected.Background.Size, actual.Background.Size);
     Assert.Equal(expected.Background.Anchor, actual.Background.Anchor);
     Assert.Equal(expected.Background.OverlayColor, actual.Background.OverlayColor);
-    Assert.Equal(expected.Refresh.Enabled, actual.Refresh.Enabled);
-    Assert.Equal(expected.Refresh.Label, actual.Refresh.Label);
+    Assert.Equal(expected.Refresh?.Enabled, actual.Refresh?.Enabled);
+    Assert.Equal(expected.Refresh?.Label, actual.Refresh?.Label);
     var expectedJson = JsonSerializer.Serialize(expected, WidgetJsonContext.Default.WidgetContract);
     var actualJson = JsonSerializer.Serialize(actual, WidgetJsonContext.Default.WidgetContract);
     Assert.True(JsonNode.DeepEquals(JsonNode.Parse(expectedJson), JsonNode.Parse(actualJson)));

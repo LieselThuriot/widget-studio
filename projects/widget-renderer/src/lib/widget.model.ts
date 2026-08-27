@@ -34,6 +34,10 @@ export interface BackgroundConfig {
   anchor: ElementAnchor;
   overlayColor?: string;
 }
+export interface RefreshConfig {
+  enabled: boolean;
+  label: string;
+}
 export interface TextStyle {
   color: string;
   font: TextFontStyle;
@@ -208,10 +212,11 @@ export interface Widget {
   rows: GridTrack[];
   columns: GridTrack[];
   background: BackgroundConfig;
-  refresh: { enabled: boolean; label: string };
+  refresh: RefreshConfig;
   elements: WidgetElement[];
 }
-export type WidgetContract = Omit<Widget, 'elements'> & {
+export type WidgetContract = Omit<Widget, 'refresh' | 'elements'> & {
+  refresh?: RefreshConfig | null;
   elements: WidgetElementContract[];
 };
 export type WidgetInput = WidgetContract;

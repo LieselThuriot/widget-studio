@@ -23,6 +23,10 @@ describe('widget contract validation', () => {
     expect(result).toEqual({ success: true, data: validContract });
   });
 
+  it.each([undefined, null])('accepts a missing or null refresh configuration', (refresh) => {
+    expect(safeParseWidgetInput({ ...validContract, refresh }).success).toBe(true);
+  });
+
   it.each(['mini', 'square', 'wide', 'mega', 'hero'] as const)('accepts %s size', (size) => {
     expect(safeParseWidgetInput({ ...validContract, size }).success).toBe(true);
   });

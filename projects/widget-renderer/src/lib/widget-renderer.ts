@@ -53,7 +53,10 @@ export class WidgetRenderer {
     if (!result.success) {
       return { ...emptyWidget, size: widgetSizeOrSquare(this.widget()?.size) };
     }
-    return normalizeWidgetInput(result.data) as Widget;
+    return {
+      ...normalizeWidgetInput(result.data),
+      refresh: result.data.refresh ?? emptyWidget.refresh,
+    } as Widget;
   });
   readonly hasSensitiveElements = computed(() => {
     const widget = this.renderWidget();

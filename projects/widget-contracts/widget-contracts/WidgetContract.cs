@@ -10,6 +10,6 @@ public sealed class WidgetContract
   public List<GridTrack> Rows { get; set; } = [];
   public List<GridTrack> Columns { get; set; } = [];
   public BackgroundConfig Background { get; set; } = new();
-  public RefreshConfig Refresh { get; set; } = new();
+  public RefreshConfig? Refresh { get; set; }
   public List<WidgetElement> Elements { get; set; } = [];
 }

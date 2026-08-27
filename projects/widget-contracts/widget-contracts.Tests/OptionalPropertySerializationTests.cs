@@ -64,4 +64,15 @@ public sealed class OptionalPropertySerializationTests
     Assert.DoesNotContain("type", elementJson, StringComparison.Ordinal);
     Assert.False(JsonSerializer.Deserialize(elementJson, WidgetJsonContext.Default.DividerElement)!.Sensitive);
   }
+
+  [Fact]
+  public void OmitsNullRefresh()
+  {
+    var widget = ContractFixtures.CreateCompleteWidget();
+    widget.Refresh = null;
+
+    var serialized = JsonSerializer.Serialize(widget, WidgetJsonContext.Default.WidgetContract);
+
+    Assert.DoesNotContain("\"refresh\"", serialized, StringComparison.Ordinal);
+  }
 }
