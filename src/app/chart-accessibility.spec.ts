@@ -78,6 +78,7 @@ describe('chart accessibility summaries', () => {
       style: {
         color: { legend: '#fff', title: '#fff', track: '#000' },
         font: { size: 11 },
+        radius: null,
       },
       showLegend: true,
     };
@@ -104,6 +105,7 @@ describe('chart accessibility summaries', () => {
         style: {
           color: { legend: '#fff', title: '#fff', track: '#000' },
           font: { size: 11 },
+          radius: null,
         },
         showLegend: true,
       } satisfies ProgressElement),

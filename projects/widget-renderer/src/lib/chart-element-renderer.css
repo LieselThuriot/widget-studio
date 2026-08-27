@@ -37,7 +37,8 @@
   display: flex;
   overflow: hidden;
   height: 10px;
-  border-radius: var(--widget-renderer-pill-radius, 999px);
+  border: 1px solid transparent;
+  border-radius: var(--progress-track-radius);
   background: var(--progress-track);
 }
 .progress-track-wrap {
@@ -59,6 +60,7 @@
   height: 100%;
   padding: 0;
   border: 0;
+  border-radius: var(--progress-segment-radius);
 }
 .progress-segment {
   cursor: pointer;

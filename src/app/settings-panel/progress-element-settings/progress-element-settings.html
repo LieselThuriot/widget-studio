@@ -24,6 +24,42 @@
       (input)="changed.emit({ data: { ...element().data, max: number($event) } })"
   /></label>
 </div>
+<div class="field-row">
+  <label
+    >Segment radius<input
+      type="number"
+      min="0"
+      [value]="element().style.radius?.segment ?? 0"
+      (input)="
+        changed.emit({
+          style: {
+            ...element().style,
+            radius: {
+              segment: number($event),
+              track: element().style.radius?.track ?? 999,
+            },
+          },
+        })
+      "
+  /></label>
+  <label
+    >Track radius<input
+      type="number"
+      min="0"
+      [value]="element().style.radius?.track ?? 999"
+      (input)="
+        changed.emit({
+          style: {
+            ...element().style,
+            radius: {
+              segment: element().style.radius?.segment ?? 0,
+              track: number($event),
+            },
+          },
+        })
+      "
+  /></label>
+</div>
 <button type="button" class="editor-button data-points-button" (click)="isDataDialogOpen.set(true)">
   Edit progress items
 </button>

@@ -273,6 +273,7 @@ const clockedIn: Widget = {
       style: {
         color: { legend: '#e7fff7', title: '#e7fff7', track: '#ffffff38' },
         font: { size: 11 },
+        radius: { segment: 999, track: 999 },
       },
     },
     {
@@ -404,6 +405,7 @@ const miniPulse: Widget = {
       style: {
         color: { legend: '#dce9f7', title: '#dce9f7', track: '#ffffff32' },
         font: { size: 8 },
+        radius: { segment: 0, track: 999 },
       },
     },
   ],

@@ -102,11 +102,14 @@ export class ChartElementRenderer implements OnDestroy {
   }
 
   protected progressStyle(element: ProgressElement): Record<string, string> {
+    const radius = element.style.radius ?? { segment: 0, track: 999 };
     return {
       '--progress-track': element.style.color.track,
       '--progress-title-color': element.style.color.title,
       '--progress-legend-color': element.style.color.legend,
       '--progress-font-size': `${element.style?.font.size ?? 11}px`,
+      '--progress-segment-radius': `${radius.segment}px`,
+      '--progress-track-radius': `${radius.track}px`,
     };
   }
 

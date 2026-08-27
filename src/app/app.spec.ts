@@ -486,6 +486,7 @@ describe('App', () => {
     expect((progressElement?.['style'] as { color: { title: string } }).color.title).toBe(
       '#f6f7fb',
     );
+    expect(progressElement?.['style']).toMatchObject({ radius: { segment: 0, track: 999 } });
   });
 
   it('should add a divider with its public defaults', async () => {

@@ -213,7 +213,8 @@ internal static class ContractFixtures
         Style = new ProgressStyle
         {
           Color = new ProgressColor { Legend = "#bbb", Title = "#ccc", Track = "#ddd" },
-          Font = new ChartFontStyle { Size = 15 }
+          Font = new ChartFontStyle { Size = 15 },
+          Radius = new ProgressRadius { Segment = 4, Track = 12 }
         }
       }
     ]

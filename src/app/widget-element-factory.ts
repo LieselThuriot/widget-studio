@@ -112,6 +112,7 @@ function createChartElement(
           track: chartColors.track,
         },
         font: { size: 11 },
+        radius: { segment: 0, track: 999 },
       },
       showLegend: true,
     } as ProgressElement;

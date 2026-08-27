@@ -154,6 +154,7 @@ describe('widget contract validation', () => {
         style: {
           color: { legend: '#fff', title: '#fff', track: '#333' },
           font: base.font,
+          radius: { segment: 0, track: 999 },
         },
       },
     ];
@@ -212,6 +213,7 @@ describe('widget contract validation', () => {
           style: {
             color: { legend: '#fff', title: '#fff', track: '#333' },
             font: { size: 11 },
+            radius: { segment: 0, track: 999 },
           },
         },
       ],
@@ -223,6 +225,36 @@ describe('widget contract validation', () => {
         path: 'elements[0].data.items',
         message: 'total value must not exceed the progress range',
       });
+    }
+  });
+
+  it('rejects negative progress radii', () => {
+    const result = safeParseWidgetInput({
+      ...validContract,
+      elements: [
+        {
+          type: 'progress',
+          grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+          sensitive: false,
+          showLegend: true,
+          data: { min: 0, max: 8, items: [] },
+          style: {
+            color: { legend: '#fff', title: '#fff', track: '#333' },
+            font: { size: 11 },
+            radius: { segment: -1, track: -1 },
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.issues.map((issue) => issue.path)).toEqual(
+        expect.arrayContaining([
+          'elements[0].style.radius.segment',
+          'elements[0].style.radius.track',
+        ]),
+      );
     }
   });
 
@@ -239,6 +271,7 @@ describe('widget contract validation', () => {
           style: {
             color: { legend: '#fff', title: '#fff', track: '#333' },
             font: { size: 11 },
+            radius: { segment: 0, track: 999 },
           },
         },
       ],
@@ -263,7 +296,11 @@ describe('widget contract validation', () => {
         sensitive: false,
         showLegend: true,
         data: { min: 0, max: 100, items: [] },
-        style: { color: { legend: '#fff', title: '#fff' }, font: { size: 11 } },
+        style: {
+          color: { legend: '#fff', title: '#fff' },
+          font: { size: 11 },
+          radius: null,
+        },
       },
     ];
     const result = safeParseWidgetInput({ ...validContract, elements });

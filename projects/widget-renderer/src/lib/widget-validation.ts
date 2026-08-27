@@ -349,6 +349,17 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
         'title',
         'track',
       ]);
+      if (isRecord(value['style'])) {
+        const radius = value['style']['radius'];
+        if (radius !== null) {
+          if (!isRecord(radius))
+            addIssue(issues, `${issuePath}.style.radius`, 'must be an object or null');
+          else {
+            requiredNumber(radius['segment'], `${issuePath}.style.radius.segment`, issues);
+            requiredNumber(radius['track'], `${issuePath}.style.radius.track`, issues);
+          }
+        }
+      }
       requiredBoolean(value['showLegend'], `${issuePath}.showLegend`, issues);
       break;
     case 'pie':

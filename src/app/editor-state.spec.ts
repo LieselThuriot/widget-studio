@@ -193,6 +193,7 @@ describe('editor state transformations', () => {
       style: {
         color: { legend: '#fff', title: '#eee', track: '#172033' },
         font: { size: 14 },
+        radius: null,
       },
     } as never);
 
