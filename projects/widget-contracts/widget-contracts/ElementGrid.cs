@@ -4,9 +4,9 @@ namespace WidgetStudio.Contracts;
 
 public sealed class ElementGrid
 {
-  public int Row { get; set; }
-  public int Column { get; set; }
-  public int RowSpan { get; set; }
-  public int ColumnSpan { get; set; }
-  public ElementAnchor? Anchor { get; set; }
+    public required int Row { get; set; }
+    public required int Column { get; set; }
+    public required int RowSpan { get; set; }
+    public required int ColumnSpan { get; set; }
+    public ElementAnchor? Anchor { get; set; }
 }

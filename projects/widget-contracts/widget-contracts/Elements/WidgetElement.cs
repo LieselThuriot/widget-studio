@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+
 using WidgetStudio.Contracts.Elements.Charts;
 using WidgetStudio.Contracts.Enums;
 
@@ -18,8 +19,8 @@ namespace WidgetStudio.Contracts.Elements;
 [JsonDerivedType(typeof(ProgressElement), "progress")]
 public abstract class WidgetElement
 {
-  [JsonIgnore]
-  public abstract WidgetElementType Type { get; }
-  public ElementGrid Grid { get; set; } = new();
-  public virtual bool Sensitive { get; set; }
+    [JsonIgnore]
+    public abstract WidgetElementType Type { get; }
+    public required ElementGrid Grid { get; set; }
+    public virtual bool Sensitive { get; set; }
 }

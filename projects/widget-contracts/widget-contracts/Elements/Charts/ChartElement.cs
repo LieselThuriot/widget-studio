@@ -2,6 +2,7 @@ namespace WidgetStudio.Contracts.Elements.Charts;
 
 public abstract class ChartElement : WidgetElement
 {
-  public string? Title { get; set; }
-  public bool ShowLegend { get; set; }
+    public override required bool Sensitive { get; set; }
+    public string? Title { get; set; }
+    public required bool ShowLegend { get; set; }
 }

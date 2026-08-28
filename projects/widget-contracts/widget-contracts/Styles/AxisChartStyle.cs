@@ -2,7 +2,7 @@ namespace WidgetStudio.Contracts.Styles;
 
 public sealed class AxisChartStyle
 {
-  public AxisChartColor Color { get; set; } = new();
-  public ChartFontStyle Font { get; set; } = new();
-  public AxisStyle Axis { get; set; } = new();
+    public required AxisChartColor Color { get; set; }
+    public required ChartFontStyle Font { get; set; }
+    public required AxisStyle Axis { get; set; }
 }

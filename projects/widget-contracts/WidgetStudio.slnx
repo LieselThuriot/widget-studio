@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/SolutionFiles/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+  </Folder>
   <Project Path="widget-contracts.Tests/WidgetStudio.Contracts.Tests.csproj" />
   <Project Path="widget-contracts/WidgetStudio.Contracts.csproj" />
 </Solution>

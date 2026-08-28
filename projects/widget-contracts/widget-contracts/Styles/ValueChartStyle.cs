@@ -2,6 +2,6 @@ namespace WidgetStudio.Contracts.Styles;
 
 public sealed class ValueChartStyle
 {
-  public ValueChartColor Color { get; set; } = new();
-  public ChartFontStyle Font { get; set; } = new();
+    public required ValueChartColor Color { get; set; }
+    public required ChartFontStyle Font { get; set; }
 }

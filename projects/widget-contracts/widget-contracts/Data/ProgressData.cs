@@ -2,7 +2,7 @@ namespace WidgetStudio.Contracts.Data;
 
 public sealed class ProgressData
 {
-  public double Min { get; set; }
-  public double Max { get; set; }
-  public List<ProgressItem> Items { get; set; } = [];
+    public required double Min { get; set; }
+    public required double Max { get; set; }
+    public required List<ProgressItem> Items { get; set; }
 }

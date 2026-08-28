@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+
 using WidgetStudio.Contracts.Enums;
 
 namespace WidgetStudio.Contracts.Data;
@@ -8,22 +9,22 @@ namespace WidgetStudio.Contracts.Data;
 [JsonDerivedType(typeof(ProgressGap), "gap")]
 public abstract class ProgressItem
 {
-  [JsonIgnore]
-  public abstract ProgressItemKind Kind { get; }
-  public double Value { get; set; }
+    [JsonIgnore]
+    public abstract ProgressItemKind Kind { get; }
+    public required double Value { get; set; }
 }
 
 public sealed class ProgressSegment : ProgressItem
 {
-  [JsonIgnore]
-  public override ProgressItemKind Kind => ProgressItemKind.Segment;
-  public string Label { get; set; } = string.Empty;
-  public string Color { get; set; } = string.Empty;
-  public bool Active { get; set; }
+    [JsonIgnore]
+    public override ProgressItemKind Kind => ProgressItemKind.Segment;
+    public required string Label { get; set; }
+    public required string Color { get; set; }
+    public required bool Active { get; set; }
 }
 
 public sealed class ProgressGap : ProgressItem
 {
-  [JsonIgnore]
-  public override ProgressItemKind Kind => ProgressItemKind.Gap;
+    [JsonIgnore]
+    public override ProgressItemKind Kind => ProgressItemKind.Gap;
 }

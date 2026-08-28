@@ -4,6 +4,6 @@ namespace WidgetStudio.Contracts.Enums;
 
 public enum ProgressItemKind
 {
-  [JsonStringEnumMemberName("segment")] Segment,
-  [JsonStringEnumMemberName("gap")] Gap
+    [JsonStringEnumMemberName("segment")] Segment,
+    [JsonStringEnumMemberName("gap")] Gap
 }

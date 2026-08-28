@@ -4,6 +4,6 @@ namespace WidgetStudio.Contracts.Enums;
 
 public enum ButtonStyle
 {
-  [JsonStringEnumMemberName("solid")] Solid,
-  [JsonStringEnumMemberName("outline")] Outline
+    [JsonStringEnumMemberName("solid")] Solid,
+    [JsonStringEnumMemberName("outline")] Outline
 }

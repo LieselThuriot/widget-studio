@@ -4,6 +4,6 @@ namespace WidgetStudio.Contracts.Enums;
 
 public enum DividerOrientation
 {
-  [JsonStringEnumMemberName("horizontal")] Horizontal,
-  [JsonStringEnumMemberName("vertical")] Vertical
+    [JsonStringEnumMemberName("horizontal")] Horizontal,
+    [JsonStringEnumMemberName("vertical")] Vertical
 }

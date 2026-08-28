@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+
 using WidgetStudio.Contracts.Data;
 using WidgetStudio.Contracts.Elements.Charts;
 using WidgetStudio.Contracts.Enums;
@@ -8,8 +9,8 @@ namespace WidgetStudio.Contracts.Elements;
 
 public sealed class LineElement : ChartElement
 {
-  [JsonIgnore]
-  public override WidgetElementType Type => WidgetElementType.Line;
-  public List<ChartDataPoint> Data { get; set; } = [];
-  public AxisChartStyle Style { get; set; } = new();
+    [JsonIgnore]
+    public override WidgetElementType Type => WidgetElementType.Line;
+    public required List<ChartDataPoint> Data { get; set; }
+    public required AxisChartStyle Style { get; set; }
 }

@@ -2,13 +2,7 @@ namespace WidgetStudio.Contracts.Styles;
 
 public sealed class ProgressStyle
 {
-  public ProgressColor Color { get; set; } = new();
-  public ChartFontStyle Font { get; set; } = new();
-  public ProgressRadius? Radius { get; set; }
-}
-
-public sealed class ProgressRadius
-{
-  public double Segment { get; set; }
-  public double Track { get; set; }
+    public required ProgressColor Color { get; set; }
+    public required ChartFontStyle Font { get; set; }
+    public required ProgressRadius? Radius { get; set; }
 }

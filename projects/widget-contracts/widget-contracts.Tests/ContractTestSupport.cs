@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+
 using WidgetStudio.Contracts.Data;
 using WidgetStudio.Contracts.Elements;
 using WidgetStudio.Contracts.Elements.Charts;
@@ -10,75 +11,75 @@ namespace WidgetStudio.Contracts.Tests;
 
 internal static class ContractAssertions
 {
-  public static void AssertWireFormat(string json)
-  {
-    var root = JsonDocument.Parse(json).RootElement;
-    Assert.Equal(2, root.GetProperty("version").GetInt32());
-    Assert.Equal("wide", root.GetProperty("size").GetString());
-    Assert.Equal(11, root.GetProperty("elements").GetArrayLength());
-    Assert.DoesNotContain("Type", json, StringComparison.Ordinal);
-    Assert.DoesNotContain("Kind", json, StringComparison.Ordinal);
-  }
+    public static void AssertWireFormat(string json)
+    {
+        var root = JsonDocument.Parse(json).RootElement;
+        Assert.Equal(2, root.GetProperty("version").GetInt32());
+        Assert.Equal("wide", root.GetProperty("size").GetString());
+        Assert.Equal(11, root.GetProperty("elements").GetArrayLength());
+        Assert.DoesNotContain("Type", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("Kind", json, StringComparison.Ordinal);
+    }
 
-  public static void Equal(WidgetContract expected, WidgetContract actual)
-  {
-    Assert.Equal(expected.Version, actual.Version);
-    Assert.Equal(expected.Size, actual.Size);
-    Assert.Equal(
-      expected.Rows.Select(track => (track.Size, track.Unit)),
-      actual.Rows.Select(track => (track.Size, track.Unit)));
-    Assert.Equal(
-      expected.Columns.Select(track => (track.Size, track.Unit)),
-      actual.Columns.Select(track => (track.Size, track.Unit)));
-    Assert.Equal(expected.Background.Image, actual.Background.Image);
-    Assert.Equal(expected.Background.Sensitive, actual.Background.Sensitive);
-    Assert.Equal(expected.Background.Repeat, actual.Background.Repeat);
-    Assert.Equal(expected.Background.Color, actual.Background.Color);
-    Assert.Equal(expected.Background.Size, actual.Background.Size);
-    Assert.Equal(expected.Background.Anchor, actual.Background.Anchor);
-    Assert.Equal(expected.Background.OverlayColor, actual.Background.OverlayColor);
-    Assert.Equal(expected.Refresh?.Enabled, actual.Refresh?.Enabled);
-    Assert.Equal(expected.Refresh?.Label, actual.Refresh?.Label);
-    var expectedJson = JsonSerializer.Serialize(expected, WidgetJsonContext.Default.WidgetContract);
-    var actualJson = JsonSerializer.Serialize(actual, WidgetJsonContext.Default.WidgetContract);
-    Assert.True(JsonNode.DeepEquals(JsonNode.Parse(expectedJson), JsonNode.Parse(actualJson)));
-  }
+    public static void Equal(WidgetContract expected, WidgetContract actual)
+    {
+        Assert.Equal(expected.Version, actual.Version);
+        Assert.Equal(expected.Size, actual.Size);
+        Assert.Equal(
+          expected.Rows.Select(track => (track.Size, track.Unit)),
+          actual.Rows.Select(track => (track.Size, track.Unit)));
+        Assert.Equal(
+          expected.Columns.Select(track => (track.Size, track.Unit)),
+          actual.Columns.Select(track => (track.Size, track.Unit)));
+        Assert.Equal(expected.Background.Image, actual.Background.Image);
+        Assert.Equal(expected.Background.Sensitive, actual.Background.Sensitive);
+        Assert.Equal(expected.Background.Repeat, actual.Background.Repeat);
+        Assert.Equal(expected.Background.Color, actual.Background.Color);
+        Assert.Equal(expected.Background.Size, actual.Background.Size);
+        Assert.Equal(expected.Background.Anchor, actual.Background.Anchor);
+        Assert.Equal(expected.Background.OverlayColor, actual.Background.OverlayColor);
+        Assert.Equal(expected.Refresh?.Enabled, actual.Refresh?.Enabled);
+        Assert.Equal(expected.Refresh?.Label, actual.Refresh?.Label);
+        var expectedJson = JsonSerializer.Serialize(expected, WidgetJsonContext.Default.WidgetContract);
+        var actualJson = JsonSerializer.Serialize(actual, WidgetJsonContext.Default.WidgetContract);
+        Assert.True(JsonNode.DeepEquals(JsonNode.Parse(expectedJson), JsonNode.Parse(actualJson)));
+    }
 }
 
 internal static class ContractFixtures
 {
-  public static WidgetContract CreateCompleteWidget() => new()
-  {
-    Version = 2,
-    Size = WidgetSize.Wide,
-    Rows =
-    [
-      GridTrack.Auto,
+    public static WidgetContract CreateCompleteWidget() => new()
+    {
+        Version = 2,
+        Size = WidgetSize.Wide,
+        Rows =
+      [
+        GridTrack.Auto,
       GridTrack.Star(2.5)
-    ],
-    Columns =
-    [
-      GridTrack.Pixel(120),
+      ],
+        Columns =
+      [
+        GridTrack.Pixel(120),
       GridTrack.Star()
-    ],
-    Background = new BackgroundConfig
-    {
-      Image = "https://example.test/background.png",
-      Sensitive = true,
-      Repeat = true,
-      Color = "#101820",
-      Size = BackgroundSize.Cover,
-      Anchor = ElementAnchor.BottomRight,
-      OverlayColor = "#80000000"
-    },
-    Refresh = new RefreshConfig
-    {
-      Enabled = true,
-      Label = "Reload data"
-    },
-    Elements =
-    [
-      new TextElement
+      ],
+        Background = new BackgroundConfig
+        {
+            Image = "https://example.test/background.png",
+            Sensitive = true,
+            Repeat = true,
+            Color = "#101820",
+            Size = BackgroundSize.Cover,
+            Anchor = ElementAnchor.BottomRight,
+            OverlayColor = "#80000000"
+        },
+        Refresh = new RefreshConfig
+        {
+            Enabled = true,
+            Label = "Reload data"
+        },
+        Elements =
+      [
+        new TextElement
       {
         Grid = Grid(0, 0),
         Sensitive = true,
@@ -104,6 +105,7 @@ internal static class ContractFixtures
       new ImageElement
       {
         Grid = Grid(0, 1),
+        Sensitive = false,
         Source = "image.png",
         Alt = "An image",
         Fit = ImageFit.Contain,
@@ -113,6 +115,7 @@ internal static class ContractFixtures
       new ButtonElement
       {
         Grid = Grid(1, 0),
+        Sensitive = false,
         Label = "Submit",
         Method = ButtonMethod.Post,
         Url = "/submit",
@@ -130,6 +133,7 @@ internal static class ContractFixtures
       new PieElement
       {
         Grid = Grid(2, 0),
+        Sensitive = false,
         Title = "Pie",
         ShowLegend = true,
         Data = [new ChartDataPoint { Label = "A", Value = 1.5, Color = "#f00" }],
@@ -142,6 +146,7 @@ internal static class ContractFixtures
       new DonutElement
       {
         Grid = Grid(2, 1),
+        Sensitive = false,
         Title = "Donut",
         ShowLegend = false,
         Data = [new ChartDataPoint { Label = "B", Value = 2, Color = "#123456" }],
@@ -154,6 +159,7 @@ internal static class ContractFixtures
       new FunnelElement
       {
         Grid = Grid(3, 0),
+        Sensitive = false,
         ShowLegend = true,
         Data = [new ChartDataPoint { Label = "C", Value = 3, Color = "#00f" }],
         Style = new ChartStyle
@@ -165,6 +171,7 @@ internal static class ContractFixtures
       new GaugeElement
       {
         Grid = Grid(3, 1),
+        Sensitive = false,
         Title = "Gauge",
         ShowLegend = true,
         Data = new GaugeData { Value = 6, Min = 0, Max = 10 },
@@ -183,6 +190,7 @@ internal static class ContractFixtures
       new BarElement
       {
         Grid = Grid(4, 0),
+        Sensitive = false,
         Title = "Bar",
         ShowLegend = true,
         Data = [new ChartDataPoint { Label = "D", Value = 4, Color = "#0f0" }],
@@ -191,13 +199,16 @@ internal static class ContractFixtures
       new LineElement
       {
         Grid = Grid(4, 1),
+        Sensitive = false,
         Title = "Line",
+        ShowLegend = false,
         Data = [new ChartDataPoint { Label = "E", Value = 5, Color = "#f0f" }],
         Style = AxisStyle()
       },
       new ProgressElement
       {
         Grid = Grid(5, 0),
+        Sensitive = false,
         Title = "Progress",
         ShowLegend = true,
         Data = new ProgressData
@@ -217,32 +228,32 @@ internal static class ContractFixtures
           Radius = new ProgressRadius { Segment = 4, Track = 12 }
         }
       }
-    ]
-  };
+      ]
+    };
 
-  private static ElementGrid Grid(int row, int column) => new()
-  {
-    Row = row,
-    Column = column,
-    RowSpan = 1,
-    ColumnSpan = 1,
-    Anchor = ElementAnchor.Center
-  };
+    private static ElementGrid Grid(int row, int column) => new()
+    {
+        Row = row,
+        Column = column,
+        RowSpan = 1,
+        ColumnSpan = 1,
+        Anchor = ElementAnchor.Center
+    };
 
-  private static AxisChartStyle AxisStyle() => new()
-  {
-    Color = new AxisChartColor
+    private static AxisChartStyle AxisStyle() => new()
     {
-      Legend = "#abc",
-      Title = "#bcd",
-      Line = "#cde"
-    },
-    Font = new ChartFontStyle { Size = 16 },
-    Axis = new AxisStyle
-    {
-      Label = "#def",
-      Line = "#efa",
-      Grid = "#fab"
-    }
-  };
+        Color = new AxisChartColor
+        {
+            Legend = "#abc",
+            Title = "#bcd",
+            Line = "#cde"
+        },
+        Font = new ChartFontStyle { Size = 16 },
+        Axis = new AxisStyle
+        {
+            Label = "#def",
+            Line = "#efa",
+            Grid = "#fab"
+        }
+    };
 }

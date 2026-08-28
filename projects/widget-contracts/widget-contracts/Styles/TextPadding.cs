@@ -2,6 +2,6 @@ namespace WidgetStudio.Contracts.Styles;
 
 public sealed class TextPadding
 {
-  public double Vertical { get; set; }
-  public double Horizontal { get; set; }
+    public required double Vertical { get; set; }
+    public required double Horizontal { get; set; }
 }

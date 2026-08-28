@@ -4,7 +4,7 @@ namespace WidgetStudio.Contracts.Enums;
 
 public enum BackgroundSize
 {
-  [JsonStringEnumMemberName("cover")] Cover,
-  [JsonStringEnumMemberName("contain")] Contain,
-  [JsonStringEnumMemberName("auto")] Auto
+    [JsonStringEnumMemberName("cover")] Cover,
+    [JsonStringEnumMemberName("contain")] Contain,
+    [JsonStringEnumMemberName("auto")] Auto
 }

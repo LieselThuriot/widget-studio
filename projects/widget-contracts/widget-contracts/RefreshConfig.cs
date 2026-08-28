@@ -2,6 +2,6 @@ namespace WidgetStudio.Contracts;
 
 public sealed class RefreshConfig
 {
-  public bool Enabled { get; set; }
-  public string Label { get; set; } = string.Empty;
+    public required bool Enabled { get; set; }
+    public required string Label { get; set; }
 }
