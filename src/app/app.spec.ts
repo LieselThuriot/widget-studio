@@ -1008,6 +1008,36 @@ describe('App', () => {
     expect(data.textContent).toContain('daily-brief');
   });
 
+  it('should show the configured refresh label for a landscape widget', async () => {
+    localStorage.setItem(
+      'widget-studio-landscape',
+      JSON.stringify({
+        version: 1,
+        columns: 8,
+        widgets: [{ id: 'holiday-balance', size: 'wide', row: 0, column: 0 }],
+      }),
+    );
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (
+      fixture.nativeElement.querySelector('.workspace-tabs button:last-child') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    (
+      fixture.nativeElement.querySelector(
+        '[aria-label="Refresh holiday balance"]',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    const data = fixture.nativeElement.querySelector('.event-data') as HTMLElement;
+    expect(data.textContent).toContain('holiday-balance');
+    expect(data.textContent).toContain('Refresh holiday balance');
+    expect(data.textContent).not.toContain('Refresh widget');
+  });
+
   it('should show the landscape state change event after confirming edits', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

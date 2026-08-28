@@ -24,6 +24,7 @@ import {
   LandscapeState,
   LandscapeStateChange,
   LandscapeWidget,
+  LandscapeRefreshEvent,
   normalizeLandscapeState,
 } from 'widget-landscape';
 
@@ -197,8 +198,8 @@ export class App {
     this.isLandscapeLoadingSimulation.set(false);
   }
 
-  protected landscapeRefresh(event: { id: string }): void {
-    this.actionAlert.set({ kind: 'refresh', widgetId: event.id, label: 'Refresh widget' });
+  protected landscapeRefresh(event: LandscapeRefreshEvent): void {
+    this.actionAlert.set({ kind: 'refresh', widgetId: event.id, label: event.label });
   }
 
   protected landscapeAction(event: { id: string; element: ButtonElement; event: Event }): void {

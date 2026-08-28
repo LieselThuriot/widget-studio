@@ -14,6 +14,7 @@ import {
   LandscapeStateChange,
   LandscapeState,
   LandscapeWidget,
+  LandscapeRefreshEvent,
 } from './landscape.model';
 
 @Component({
@@ -35,7 +36,7 @@ export class WidgetLandscape {
   readonly editModeChange = output<boolean>();
   readonly widgetSelected = output<{ id: string }>();
   readonly widgetDeleted = output<{ id: string }>();
-  readonly refreshRequested = output<{ id: string }>();
+  readonly refreshRequested = output<LandscapeRefreshEvent>();
   readonly actionRequested = output<LandscapeActionEvent>();
 
   protected readonly draft = signal<LandscapeState | null>(null);
@@ -289,7 +290,8 @@ export class WidgetLandscape {
   }
 
   protected refresh(id: string): void {
-    this.refreshRequested.emit({ id });
+    const widget = this.activeState().widgets.find((item) => item.id === id)?.widget;
+    this.refreshRequested.emit({ id, label: widget?.refresh?.label ?? 'Refresh widget' });
   }
 
   protected action(id: string, event: { element: ButtonElement; event: Event }): void {

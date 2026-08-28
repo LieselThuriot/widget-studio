@@ -40,6 +40,11 @@ export interface LandscapeActionEvent {
   event: Event;
 }
 
+export interface LandscapeRefreshEvent {
+  id: string;
+  label: string;
+}
+
 export interface LandscapeFootprint {
   columnSpan: number;
   rowSpan: number;
