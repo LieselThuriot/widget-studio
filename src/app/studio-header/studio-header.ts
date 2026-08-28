@@ -9,7 +9,11 @@ import { Component, input, output } from '@angular/core';
 })
 export class StudioHeader {
   readonly darkMode = input(false);
+  readonly activeTab = input<'compose' | 'landscape'>('compose');
+  readonly landscapeLoading = input(false);
+  readonly landscapeSimulationDisabled = input(false);
   readonly darkModeToggled = output<void>();
   readonly previewRequested = output<void>();
   readonly shareRequested = output<void>();
+  readonly simulateRequested = output<void>();
 }

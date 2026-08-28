@@ -49,7 +49,7 @@ describe('App', () => {
       fixture.detectChanges();
 
       const simulateButton = fixture.nativeElement.querySelector(
-        '.landscape-simulation-row .landscape-simulation-button',
+        '.header-actions .landscape-simulation-button',
       ) as HTMLButtonElement;
       simulateButton.click();
       fixture.detectChanges();
@@ -79,8 +79,11 @@ describe('App', () => {
       expect(fixture.componentInstance['isLandscapeLoadingSimulation']()).toBe(false);
       expect(fixture.nativeElement.querySelectorAll('.widget-skeleton')).toHaveLength(0);
       expect(
-        (fixture.nativeElement.querySelector('.landscape-simulation-button') as HTMLButtonElement)
-          .textContent,
+        (
+          fixture.nativeElement.querySelector(
+            '.header-actions .landscape-simulation-button',
+          ) as HTMLButtonElement
+        ).textContent,
       ).toContain('Simulate');
     } finally {
       randomSpy.mockRestore();
@@ -108,7 +111,7 @@ describe('App', () => {
       fixture.detectChanges();
       (
         fixture.nativeElement.querySelector(
-          '.landscape-simulation-row .landscape-simulation-button',
+          '.header-actions .landscape-simulation-button',
         ) as HTMLButtonElement
       ).click();
       fixture.detectChanges();
@@ -143,6 +146,24 @@ describe('App', () => {
       'Widget editor canvas',
     );
     expect(compiled.querySelector('.topbar-meta')).toBeNull();
+  });
+
+  it('should show compose actions only on the compose tab', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('.preview-button')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.share-button')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.landscape-simulation-button')).toBeNull();
+
+    (
+      fixture.nativeElement.querySelector('.workspace-tabs button:last-child') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.preview-button')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.share-button')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.landscape-simulation-button')).toBeTruthy();
   });
 
   it('should open widget settings without selecting an element', async () => {

@@ -1,9 +1,15 @@
 <main class="workspace" [class.is-hero]="widget().size === 'hero'">
   <app-studio-header
     [darkMode]="darkMode()"
+    [activeTab]="activeTab()"
+    [landscapeLoading]="isLandscapeLoadingSimulation()"
+    [landscapeSimulationDisabled]="
+      !landscapeState().widgets.length || isLandscapeLoadingSimulation()
+    "
     (darkModeToggled)="toggleDarkMode()"
     (previewRequested)="openPreview()"
     (shareRequested)="openShare()"
+    (simulateRequested)="toggleLandscapeLoadingSimulation()"
   />
   <nav class="workspace-tabs" aria-label="Studio sections">
     <button
@@ -83,26 +89,6 @@
       />
     </div>
   } @else {
-    <div class="landscape-simulation-row">
-      <button
-        type="button"
-        class="landscape-simulation-button"
-        [class.is-loading]="isLandscapeLoadingSimulation()"
-        [disabled]="!landscapeState().widgets.length || isLandscapeLoadingSimulation()"
-        (click)="toggleLandscapeLoadingSimulation()"
-      >
-        <svg
-          class="landscape-simulation-icon"
-          [class.is-animating]="isLandscapeLoadingSimulation()"
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-        >
-          <path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7L12 2Z" />
-          <path d="m19 16 .7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7L19 16Z" />
-        </svg>
-        <span>{{ isLandscapeLoadingSimulation() ? 'Simulating' : 'Simulate' }}</span>
-      </button>
-    </div>
     <widget-landscape
       [state]="landscapeState()"
       [palette]="landscapePalette"

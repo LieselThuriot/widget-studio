@@ -7,26 +7,47 @@
     <h1 class="studio-tagline">Build widgets that fit your workflow</h1>
   </div>
   <div class="header-actions">
-    <button
-      type="button"
-      class="editor-button editor-button--subtle preview-button"
-      (click)="previewRequested.emit()"
-    >
-      <span class="live-dot" aria-hidden="true"></span> Preview
-    </button>
-    <button
-      type="button"
-      class="editor-button editor-button--subtle share-button"
-      (click)="shareRequested.emit()"
-    >
-      <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-        <circle cx="18" cy="5" r="2.5"></circle>
-        <circle cx="6" cy="12" r="2.5"></circle>
-        <circle cx="18" cy="19" r="2.5"></circle>
-        <path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"></path>
-      </svg>
-      Share
-    </button>
+    @if (activeTab() === 'compose') {
+      <button
+        type="button"
+        class="editor-button editor-button--subtle preview-button"
+        (click)="previewRequested.emit()"
+      >
+        <span class="live-dot" aria-hidden="true"></span> Preview
+      </button>
+      <button
+        type="button"
+        class="editor-button editor-button--subtle share-button"
+        (click)="shareRequested.emit()"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+          <circle cx="18" cy="5" r="2.5"></circle>
+          <circle cx="6" cy="12" r="2.5"></circle>
+          <circle cx="18" cy="19" r="2.5"></circle>
+          <path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"></path>
+        </svg>
+        Share
+      </button>
+    } @else {
+      <button
+        type="button"
+        class="editor-button editor-button--subtle landscape-simulation-button"
+        [class.is-loading]="landscapeLoading()"
+        [disabled]="landscapeSimulationDisabled()"
+        (click)="simulateRequested.emit()"
+      >
+        <svg
+          class="landscape-simulation-icon"
+          [class.is-animating]="landscapeLoading()"
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+        >
+          <path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7L12 2Z" />
+          <path d="m19 16 .7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7L19 16Z" />
+        </svg>
+        <span>{{ landscapeLoading() ? 'Simulating' : 'Simulate' }}</span>
+      </button>
+    }
     <button
       type="button"
       class="editor-segmented theme-button"
