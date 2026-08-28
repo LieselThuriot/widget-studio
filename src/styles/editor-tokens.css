@@ -45,6 +45,8 @@
   --editor-surface-grid-cell-selected: #d4e2f6;
   --editor-text-primary: #25324b;
   --editor-text-secondary: #67738a;
+  --editor-text-studio-name: var(--editor-text-primary);
+  --editor-text-studio-tagline: var(--editor-text-muted);
   --editor-text-control: #34425c;
   --editor-text-on-accent: #fff;
   --editor-control-thumb: #fff;

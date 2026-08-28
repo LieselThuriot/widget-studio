@@ -135,7 +135,9 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Compose a widget');
+    expect(compiled.querySelector('h1')?.textContent).toContain(
+      'Build widgets that fit your workflow',
+    );
     expect(compiled.querySelector('app-editor-canvas')).toBeTruthy();
     expect(compiled.querySelector('.editor-canvas')?.getAttribute('aria-label')).toBe(
       'Widget editor canvas',
