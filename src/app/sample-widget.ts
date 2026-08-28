@@ -287,6 +287,7 @@ const clockedIn: Widget = {
       label: 'Clock out',
       method: 'post',
       url: '/clock-out',
+      body: '{"action":"clock-out"}',
       requestRefresh: true,
       showOnlyOnHover: false,
       style: 'outline',
