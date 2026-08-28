@@ -21,3 +21,40 @@
 *::-webkit-scrollbar-thumb:hover {
   background: var(--editor-scrollbar-thumb-hover);
 }
+
+/* Highlighted code is injected with innerHTML, so these selectors must remain global. */
+.syntax-string {
+  color: var(--editor-code-string);
+}
+
+.syntax-property {
+  color: var(--editor-code-property);
+}
+
+.syntax-number {
+  color: var(--editor-code-number);
+}
+
+.syntax-boolean,
+.syntax-null,
+.syntax-keyword {
+  color: var(--editor-code-keyword);
+}
+
+.syntax-boolean,
+.syntax-null {
+  color: var(--editor-code-boolean);
+}
+
+.syntax-type {
+  color: var(--editor-code-type);
+}
+
+.syntax-comment {
+  color: var(--editor-code-comment);
+  font-style: italic;
+}
+
+.syntax-punctuation {
+  color: var(--editor-code-punctuation);
+}

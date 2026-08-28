@@ -29,6 +29,7 @@ describe('OutputContract', () => {
     expect(element.querySelector('[data-output-format="json"] pre')?.textContent).toContain(
       '"version"',
     );
+    expect(element.querySelector('[data-output-format="json"] .syntax-property')).not.toBeNull();
     expect(element.querySelector('[data-output-format="csharp"]')).toBeNull();
 
     (element.querySelector('#csharp-tab') as HTMLButtonElement).click();
@@ -38,6 +39,7 @@ describe('OutputContract', () => {
     expect(element.querySelector('[data-output-format="csharp"] pre')?.textContent).toContain(
       'new()',
     );
+    expect(element.querySelector('[data-output-format="csharp"] .syntax-keyword')).not.toBeNull();
     expect(element.querySelector('#csharp-tab')?.getAttribute('aria-selected')).toBe('true');
   });
 

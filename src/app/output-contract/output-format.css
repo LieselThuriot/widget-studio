@@ -3,7 +3,7 @@ pre {
   overflow: auto;
   margin: 18px 0 0;
   padding: 18px;
-  border: 1px solid var(--editor-border-code);
+  border: 1px solid var(--editor-code-border);
   border-radius: 9px;
   background: var(--editor-surface-code);
   color: var(--editor-text-code);
@@ -12,7 +12,7 @@ pre {
     monospace;
 }
 :host-context(html[data-theme='dark']) pre {
-  border-color: var(--editor-border-code);
+  border-color: var(--editor-code-border);
   background: var(--editor-surface-code);
   color: var(--editor-text-code);
 }
