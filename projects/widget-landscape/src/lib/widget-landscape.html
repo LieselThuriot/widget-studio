@@ -58,8 +58,7 @@
           tabindex="0"
           (dragstart)="startDrag($event, item.id)"
           (dragend)="endDrag()"
-          (keydown.enter)="selectWidget(item.id)"
-          (keydown.space)="$event.preventDefault(); selectWidget(item.id)"
+          (keydown)="widgetKeyDown(item.id, $event)"
         >
           @if (isEditing()) {
             <div
@@ -68,8 +67,6 @@
               tabindex="0"
               aria-label="Select widget"
               (click)="selectWidget(item.id)"
-              (keydown.enter)="selectWidget(item.id)"
-              (keydown.space)="$event.preventDefault(); selectWidget(item.id)"
             ></div>
             <div class="item-controls">
               <button

@@ -5,6 +5,7 @@ import {
   canFitWidget,
   footprintFor,
   hasCollisionAt,
+  moveWidget,
   normalizeLandscapeState,
   previewPlacement,
 } from './landscape-layout';
@@ -270,6 +271,37 @@ export class WidgetLandscape {
   protected selectWidget(id: string): void {
     this.selectedId.set(id);
     this.widgetSelected.emit({ id });
+  }
+
+  protected widgetKeyDown(id: string, event: KeyboardEvent): void {
+    if (['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT'].includes((event.target as HTMLElement).tagName)) {
+      return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.selectWidget(id);
+      return;
+    }
+
+    if (!this.isEditing()) return;
+
+    if (event.key === 'Delete' || event.key === 'Backspace') {
+      event.preventDefault();
+      this.deleteWidget(id);
+      return;
+    }
+
+    const direction = {
+      ArrowUp: { row: -1, column: 0 },
+      ArrowDown: { row: 1, column: 0 },
+      ArrowLeft: { row: 0, column: -1 },
+      ArrowRight: { row: 0, column: 1 },
+    }[event.key];
+    if (!direction) return;
+
+    event.preventDefault();
+    this.commitPreview(moveWidget(this.activeState(), id, direction.row, direction.column));
   }
 
   protected deleteWidget(id: string): void {

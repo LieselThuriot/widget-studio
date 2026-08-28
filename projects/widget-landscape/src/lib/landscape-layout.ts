@@ -86,6 +86,25 @@ export function previewPlacement(
   return { ...state, columns, widgets: reserved };
 }
 
+export function moveWidget(
+  state: LandscapeState,
+  widgetId: string,
+  rowDelta: number,
+  columnDelta: number,
+): LandscapeState {
+  const widget = state.widgets.find((item) => item.id === widgetId);
+  if (!widget) return state;
+  const preview = previewPlacement(
+    state,
+    widget,
+    widget.row + rowDelta,
+    widget.column + columnDelta,
+  );
+  if (!preview) return state;
+  const positions = new Map(preview.widgets.map((item) => [item.id, item]));
+  return { ...preview, widgets: state.widgets.map((item) => positions.get(item.id) ?? item) };
+}
+
 export function hasCollisionAt(
   widgets: readonly LandscapeWidget[],
   widget: LandscapeWidget,

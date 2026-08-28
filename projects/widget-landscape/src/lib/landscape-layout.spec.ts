@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeLandscapeState, placeWithPushDown, previewPlacement } from './landscape-layout';
+import {
+  moveWidget,
+  normalizeLandscapeState,
+  placeWithPushDown,
+  previewPlacement,
+} from './landscape-layout';
 import { LandscapeState } from './landscape.model';
 
 const widget = (id: string, size: 'mini' | 'square' = 'mini') => ({
@@ -76,5 +81,32 @@ describe('landscape layout', () => {
     } as LandscapeState;
     const preview = previewPlacement(state, state.widgets[0], 0, 3);
     expect(preview?.widgets[0]).toMatchObject({ row: 0, column: 2 });
+  });
+
+  it('moves a widget by one cell and places overlapping widgets in the next available cell', () => {
+    const state = {
+      version: 1,
+      columns: 2,
+      widgets: [
+        { ...widget('moving'), row: 0, column: 1 },
+        { ...widget('other'), row: 1, column: 1 },
+      ],
+    } as LandscapeState;
+
+    const moved = moveWidget(state, 'moving', 1, 0);
+
+    expect(moved.widgets.find(({ id }) => id === 'moving')).toMatchObject({ row: 1, column: 1 });
+    expect(moved.widgets.find(({ id }) => id === 'other')).toMatchObject({ row: 0, column: 0 });
+    expect(moved.widgets.map(({ id }) => id)).toEqual(['moving', 'other']);
+  });
+
+  it('clamps keyboard movement to the landscape bounds', () => {
+    const state = {
+      version: 1,
+      columns: 2,
+      widgets: [{ ...widget('moving'), row: 0, column: 0 }],
+    } as LandscapeState;
+
+    expect(moveWidget(state, 'moving', -1, -1).widgets[0]).toMatchObject({ row: 0, column: 0 });
   });
 });
