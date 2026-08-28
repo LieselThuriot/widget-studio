@@ -1,0 +1,37 @@
+<div class="alert-content">
+  <p class="editor-eyebrow eyebrow">Action event</p>
+  <h2 id="event-alert-title">{{ alert().element.label }} was clicked</h2>
+  <p class="alert-description">The renderer passed this data to the action handler.</p>
+  <dl class="event-data">
+    <div>
+      <dt>Widget ID</dt>
+      <dd>{{ alert().widgetId }}</dd>
+    </div>
+    <div>
+      <dt>Method</dt>
+      <dd>{{ alert().element.method | uppercase }}</dd>
+    </div>
+    <div>
+      <dt>URL</dt>
+      <dd>{{ alert().element.url }}</dd>
+    </div>
+    <div>
+      <dt>Event</dt>
+      <dd>{{ alert().event.type }}</dd>
+    </div>
+    @if (alert().element.body) {
+      <div>
+        <dt>Body</dt>
+        <dd>{{ alert().element.body }}</dd>
+      </div>
+    }
+    <div>
+      <dt>Request refresh</dt>
+      <dd>{{ alert().element.requestRefresh ? 'Yes' : 'No' }}</dd>
+    </div>
+    <div>
+      <dt>Target</dt>
+      <dd>{{ alert().event.target }}</dd>
+    </div>
+  </dl>
+</div>

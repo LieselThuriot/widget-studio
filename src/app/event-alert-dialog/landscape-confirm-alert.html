@@ -1,0 +1,51 @@
+<div class="alert-content">
+  <p class="editor-eyebrow eyebrow">Landscape event</p>
+  <h2 id="event-alert-title">Landscape confirmed</h2>
+  <p class="alert-description">The editor emitted the confirmed landscape state.</p>
+  <dl class="event-data">
+    <div>
+      <dt>Event</dt>
+      <dd>stateChange</dd>
+    </div>
+    <div>
+      <dt>Version</dt>
+      <dd>{{ alert().state.version }}</dd>
+    </div>
+    <div>
+      <dt>Columns</dt>
+      <dd>{{ alert().state.columns }}</dd>
+    </div>
+    <div>
+      <dt>Widget layout</dt>
+      <dd>
+        @if (alert().state.widgets.length) {
+          <table class="landscape-widget-data">
+            <caption class="sr-only">
+              Confirmed widget positions
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Size</th>
+                <th scope="col">Column</th>
+                <th scope="col">Row</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (widget of alert().state.widgets; track widget.id) {
+                <tr>
+                  <td>{{ widget.id }}</td>
+                  <td>{{ widget.size }}</td>
+                  <td>{{ widget.column }}</td>
+                  <td>{{ widget.row }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          No widgets
+        }
+      </dd>
+    </div>
+  </dl>
+</div>

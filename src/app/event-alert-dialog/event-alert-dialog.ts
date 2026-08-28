@@ -1,22 +1,31 @@
 import { Component, ElementRef, effect, inject, input, output } from '@angular/core';
-import { UpperCasePipe } from '@angular/common';
 import { ButtonElement } from 'widget-renderer';
 import { LandscapeStateChange } from 'widget-landscape';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../dialog-focus';
+import { ActionAlertComponent } from './action-alert';
+import { RefreshAlertComponent } from './refresh-alert';
+import { LandscapeConfirmAlertComponent } from './landscape-confirm-alert';
 
-export type ActionAlert =
-  | {
-      kind: 'action';
-      widgetId: string;
-      element: ButtonElement;
-      event: { type: string; target: string };
-    }
-  | { kind: 'refresh'; widgetId: string; label: string }
-  | { kind: 'landscape-confirm'; state: LandscapeStateChange };
+export interface ActionEventAlert {
+  kind: 'action';
+  widgetId: string;
+  element: ButtonElement;
+  event: { type: string; target: string };
+}
+export interface RefreshEventAlert {
+  kind: 'refresh';
+  widgetId: string;
+  label: string;
+}
+export interface LandscapeConfirmAlert {
+  kind: 'landscape-confirm';
+  state: LandscapeStateChange;
+}
+export type ActionAlert = ActionEventAlert | RefreshEventAlert | LandscapeConfirmAlert;
 
 @Component({
   selector: 'app-event-alert-dialog',
-  imports: [UpperCasePipe],
+  imports: [ActionAlertComponent, RefreshAlertComponent, LandscapeConfirmAlertComponent],
   templateUrl: './event-alert-dialog.html',
   styleUrl: './event-alert-dialog.css',
 })
