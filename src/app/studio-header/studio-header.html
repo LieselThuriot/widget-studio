@@ -27,13 +27,14 @@
     </button>
     <button
       type="button"
-      class="editor-button editor-button--subtle theme-button"
+      class="editor-segmented theme-button"
       [attr.aria-label]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
       [attr.aria-pressed]="darkMode()"
+      [class.is-dark]="darkMode()"
       (click)="darkModeToggled.emit()"
     >
-      <span aria-hidden="true">{{ darkMode() ? '☀' : '☾' }}</span>
-      {{ darkMode() ? 'Light' : 'Dark' }}
+      <span class="editor-segmented__item" aria-hidden="true">☀ Light</span>
+      <span class="editor-segmented__item" aria-hidden="true">☾ Dark</span>
     </button>
   </div>
 </header>

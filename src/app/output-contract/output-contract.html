@@ -4,15 +4,20 @@
       <p class="editor-eyebrow eyebrow">Output contract</p>
       <h2>Widget model</h2>
     </div>
-    <div class="format-tabs" role="tablist" aria-label="Output format">
+    <div
+      class="editor-segmented format-tabs"
+      [class.is-dark]="activeTab() === 'csharp'"
+      role="tablist"
+      aria-label="Output format"
+    >
       <button
         type="button"
+        class="editor-segmented__item"
         role="tab"
         id="json-tab"
         aria-controls="json-panel"
         [attr.aria-selected]="activeTab() === 'json'"
         [attr.tabindex]="activeTab() === 'json' ? 0 : -1"
-        [class.is-active]="activeTab() === 'json'"
         (click)="selectTab('json', true)"
         (keydown)="onTabKeydown($event)"
       >
@@ -20,12 +25,12 @@
       </button>
       <button
         type="button"
+        class="editor-segmented__item"
         role="tab"
         id="csharp-tab"
         aria-controls="csharp-panel"
         [attr.aria-selected]="activeTab() === 'csharp'"
         [attr.tabindex]="activeTab() === 'csharp' ? 0 : -1"
-        [class.is-active]="activeTab() === 'csharp'"
         (click)="selectTab('csharp', true)"
         (keydown)="onTabKeydown($event)"
       >

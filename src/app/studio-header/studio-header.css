@@ -39,11 +39,6 @@ h1 {
   padding-block: 7px;
   font-size: 12px;
 }
-.theme-button {
-  padding-block: 7px;
-  font-size: 12px;
-  gap: 7px;
-}
 .share-button svg {
   width: 14px;
   height: 14px;

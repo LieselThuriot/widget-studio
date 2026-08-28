@@ -57,6 +57,94 @@
   background: transparent;
 }
 
+.editor-segmented {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  min-height: 32px;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--editor-border-raised);
+  border-radius: var(--editor-radius-button);
+  background: transparent;
+  color: var(--editor-text-menu);
+  font: 700 10px var(--editor-font-sans);
+}
+
+.editor-segmented::before {
+  position: absolute;
+  inset-block: 3px;
+  inset-inline-start: 3px;
+  width: calc((100% - 8px) / 2);
+  border: 1px solid var(--editor-accent-strong);
+  border-radius: 4px;
+  background: var(--editor-surface-accent);
+  content: '';
+  pointer-events: none;
+  transition: inset-inline-start var(--editor-duration-toggle) var(--editor-ease-standard);
+}
+
+.editor-segmented.is-dark::before {
+  inset-inline-start: 50%;
+}
+
+.editor-segmented__item {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  min-width: 42px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--editor-text-menu);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+}
+
+.editor-segmented__item:is(:hover, :focus-visible) {
+  color: var(--editor-text-primary);
+  outline: none;
+}
+
+.editor-segmented__item.is-active,
+.editor-segmented__item[aria-selected='true'],
+.editor-segmented:not(.is-dark) .editor-segmented__item:first-child,
+.editor-segmented.is-dark .editor-segmented__item:last-child {
+  color: var(--editor-accent-strong);
+}
+
+.editor-segmented__item:focus-visible {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 1px;
+}
+
+html[data-theme='dark'] .editor-segmented {
+  border-color: var(--editor-border-control);
+}
+
+html[data-theme='dark'] .editor-segmented::before {
+  border-color: var(--editor-focus-ring);
+  background: var(--editor-surface-hover);
+  box-shadow: inset 0 0 0 1px var(--editor-accent);
+}
+
+html[data-theme='dark'] .editor-segmented__item[aria-selected='true'],
+html[data-theme='dark'] .editor-segmented:not(.is-dark) .editor-segmented__item:first-child,
+html[data-theme='dark'] .editor-segmented.is-dark .editor-segmented__item:last-child {
+  color: var(--editor-text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editor-segmented::before {
+    transition: none;
+  }
+}
+
 .editor-button--icon {
   width: 32px;
   min-height: 32px;

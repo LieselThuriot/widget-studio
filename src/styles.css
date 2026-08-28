@@ -20,7 +20,6 @@ html[data-theme='dark'] .color-picker-popover {
   border-color: var(--editor-border);
   color: var(--editor-text-primary);
 }
-html[data-theme='dark'] .topbar .theme-button,
 html[data-theme='dark'] .topbar .preview-button,
 html[data-theme='dark'] .topbar .share-button,
 html[data-theme='dark'] .shortcut-help-trigger,
@@ -30,8 +29,6 @@ html[data-theme='dark'] .preview-close {
   border-color: var(--editor-border-raised);
   color: var(--editor-accent-strong);
 }
-html[data-theme='dark'] .topbar .theme-button:hover,
-html[data-theme='dark'] .topbar .theme-button:focus-visible,
 html[data-theme='dark'] .topbar .preview-button:hover,
 html[data-theme='dark'] .topbar .preview-button:focus-visible,
 html[data-theme='dark'] .topbar .share-button:hover,
