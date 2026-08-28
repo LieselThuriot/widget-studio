@@ -18,7 +18,13 @@ import { sampleWidgets } from './sample-widget';
 import { decodeWidgetShareHash } from './widget-sharing';
 import { ShareDialog } from './share-dialog/share-dialog';
 import { ModelLoaderDialog } from './model-loader-dialog/model-loader-dialog';
-import { WidgetLandscape, LandscapePaletteItem, LandscapeState } from 'widget-landscape';
+import {
+  WidgetLandscape,
+  LandscapePaletteItem,
+  LandscapeState,
+  LandscapeStateChange,
+  normalizeLandscapeState,
+} from 'widget-landscape';
 
 @Component({
   selector: 'app-root',
@@ -61,11 +67,7 @@ export class App {
   protected readonly shareLoadMessage = signal<string | null>(null);
   protected readonly isModelLoaderOpen = signal(false);
   protected readonly activeTab = signal<'compose' | 'landscape'>('compose');
-  protected readonly landscapeState = signal<LandscapeState>({
-    version: 1,
-    columns: 8,
-    widgets: [],
-  });
+  protected readonly landscapeState = signal<LandscapeState>(readLandscapeState());
   protected readonly landscapePalette: readonly LandscapePaletteItem[] = sampleWidgets.map(
     (sample) => ({
       id: sample.id,
@@ -118,9 +120,19 @@ export class App {
     this.activeTab.set(tab);
   }
 
-  protected saveLandscape(state: LandscapeState): void {
-    this.landscapeState.set(structuredClone(state));
-    this.actionAlert.set({ kind: 'landscape-confirm', state: structuredClone(state) });
+  protected saveLandscape(change: LandscapeStateChange): void {
+    const savedChange = structuredClone(change);
+    const savedState = landscapeStateFromPlacements(savedChange);
+    this.landscapeState.set(savedState);
+    try {
+      localStorage.setItem(landscapeStorageKey, JSON.stringify(savedChange));
+    } catch {
+      // Keep the confirmed state in memory when storage is unavailable.
+    }
+    this.actionAlert.set({
+      kind: 'landscape-confirm',
+      state: structuredClone(savedChange),
+    });
   }
 
   protected landscapeRefresh(event: { id: string }): void {
@@ -272,6 +284,73 @@ export class App {
 }
 
 const themeStorageKey = 'widget-studio-theme';
+const landscapeStorageKey = 'widget-studio-landscape';
+
+function defaultLandscapeState(): LandscapeState {
+  return {
+    version: 1,
+    columns: 8,
+    widgets: [],
+  };
+}
+
+function readLandscapeState(): LandscapeState {
+  try {
+    const storedState = localStorage.getItem(landscapeStorageKey);
+    if (!storedState) return defaultLandscapeState();
+    const parsed: unknown = JSON.parse(storedState);
+    if (!isLandscapeStateChange(parsed)) return defaultLandscapeState();
+    return landscapeStateFromPlacements(parsed);
+  } catch {
+    return defaultLandscapeState();
+  }
+}
+
+function isLandscapeStateChange(value: unknown): value is LandscapeStateChange {
+  if (!value || typeof value !== 'object') return false;
+  const state = value as Partial<LandscapeStateChange>;
+  if (state.version !== 1 || typeof state.columns !== 'number' || !Array.isArray(state.widgets)) {
+    return false;
+  }
+  return state.widgets.every((item) => {
+    if (!item || typeof item !== 'object') return false;
+    const placement = item as Partial<LandscapeStateChange['widgets'][number]>;
+    return (
+      typeof placement.id === 'string' &&
+      isLandscapeWidgetSize(placement.size) &&
+      typeof placement.row === 'number' &&
+      typeof placement.column === 'number'
+    );
+  });
+}
+
+function isLandscapeWidgetSize(
+  value: unknown,
+): value is LandscapeStateChange['widgets'][number]['size'] {
+  return (
+    value === 'mini' ||
+    value === 'square' ||
+    value === 'wide' ||
+    value === 'mega' ||
+    value === 'hero'
+  );
+}
+
+function landscapeStateFromPlacements(change: LandscapeStateChange): LandscapeState {
+  const widgets = change.widgets.flatMap((placement) => {
+    const sample = sampleWidgets.find(({ id }) => id === placement.id);
+    if (!sample) return [];
+    return [
+      {
+        id: sample.widget.id,
+        widget: { ...structuredClone(sample.widget), size: placement.size },
+        row: placement.row,
+        column: placement.column,
+      },
+    ];
+  });
+  return normalizeLandscapeState({ version: 1, columns: change.columns, widgets });
+}
 
 function readThemePreference(): boolean {
   try {

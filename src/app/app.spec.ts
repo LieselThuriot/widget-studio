@@ -903,7 +903,93 @@ describe('App', () => {
     expect(data.textContent).toContain('stateChange');
     expect(data.querySelector('table.landscape-widget-data')).toBeTruthy();
     expect(data.textContent).toContain('daily-brief');
+    expect(data.textContent).toContain('square');
     expect(data.querySelector('tbody tr')?.textContent).toContain('0');
+  });
+
+  it('should persist landscape state only after confirming edits', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(localStorage.getItem('widget-studio-landscape')).toBeNull();
+
+    (
+      fixture.nativeElement.querySelector('.workspace-tabs button:last-child') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.palette-item') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(localStorage.getItem('widget-studio-landscape')).toBeNull();
+
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    expect(JSON.parse(localStorage.getItem('widget-studio-landscape') ?? '{}')).toEqual({
+      version: 1,
+      columns: 8,
+      widgets: [{ id: 'daily-brief', size: 'square', row: 0, column: 0 }],
+    });
+  });
+
+  it('should load the persisted landscape state on startup', async () => {
+    localStorage.setItem(
+      'widget-studio-landscape',
+      JSON.stringify({
+        version: 1,
+        columns: 8,
+        widgets: [{ id: 'daily-brief', size: 'square', row: 3, column: 2 }],
+      }),
+    );
+
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance['landscapeState']()).toMatchObject({
+      version: 1,
+      columns: 8,
+      widgets: [
+        {
+          id: 'daily-brief',
+          row: 3,
+          column: 2,
+          widget: { id: 'daily-brief', size: 'square' },
+        },
+      ],
+    });
+  });
+
+  it('should restore the persisted size independently of the palette widget', async () => {
+    localStorage.setItem(
+      'widget-studio-landscape',
+      JSON.stringify({
+        version: 1,
+        columns: 8,
+        widgets: [{ id: 'daily-brief', size: 'wide', row: 0, column: 0 }],
+      }),
+    );
+
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance['landscapeState']().widgets[0].widget.size).toBe('wide');
+  });
+
+  it('should ignore malformed persisted landscape state', async () => {
+    localStorage.setItem('widget-studio-landscape', '{ invalid');
+
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance['landscapeState']()).toEqual({
+      version: 1,
+      columns: 8,
+      widgets: [],
+    });
   });
 
   it('should close dialogs from the backdrop and restore focus', async () => {

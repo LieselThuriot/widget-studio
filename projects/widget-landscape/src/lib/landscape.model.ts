@@ -7,6 +7,19 @@ export interface LandscapeWidget {
   column: number;
 }
 
+export interface LandscapeWidgetPlacement {
+  id: string;
+  size: WidgetSize;
+  row: number;
+  column: number;
+}
+
+export interface LandscapeStateChange {
+  version: 1;
+  columns: number;
+  widgets: LandscapeWidgetPlacement[];
+}
+
 export interface LandscapeState {
   version: 1;
   columns: number;

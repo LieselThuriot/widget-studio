@@ -57,6 +57,7 @@
                     <thead>
                       <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">Size</th>
                         <th scope="col">Column</th>
                         <th scope="col">Row</th>
                       </tr>
@@ -65,6 +66,7 @@
                       @for (widget of alert.state.widgets; track widget.id) {
                         <tr>
                           <td>{{ widget.id }}</td>
+                          <td>{{ widget.size }}</td>
                           <td>{{ widget.column }}</td>
                           <td>{{ widget.row }}</td>
                         </tr>

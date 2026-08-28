@@ -11,6 +11,7 @@ import {
 import {
   LandscapeActionEvent,
   LandscapePaletteItem,
+  LandscapeStateChange,
   LandscapeState,
   LandscapeWidget,
 } from './landscape.model';
@@ -30,7 +31,7 @@ export class WidgetLandscape {
   readonly palette = input<readonly LandscapePaletteItem[]>([]);
   readonly editMode = input(false);
   readonly darkMode = input(false);
-  readonly stateChange = output<LandscapeState>();
+  readonly stateChange = output<LandscapeStateChange>();
   readonly editModeChange = output<boolean>();
   readonly widgetSelected = output<{ id: string }>();
   readonly widgetDeleted = output<{ id: string }>();
@@ -83,7 +84,17 @@ export class WidgetLandscape {
   protected confirmEdit(): void {
     const state = this.draft();
     if (!state) return;
-    this.stateChange.emit(normalizeLandscapeState(state));
+    const normalizedState = normalizeLandscapeState(state);
+    this.stateChange.emit({
+      version: 1,
+      columns: normalizedState.columns,
+      widgets: normalizedState.widgets.map(({ id, widget, row, column }) => ({
+        id,
+        size: widget.size,
+        row,
+        column,
+      })),
+    });
     this.draft.set(null);
     this.selectedId.set(null);
     this.editModeChange.emit(false);

@@ -14,7 +14,7 @@
 
 ## Integration
 
-Import `WidgetLandscape` and bind a `LandscapeState`. Supply palette entries with `createWidget` factories so every inserted item is independent.
+Import `WidgetLandscape` and bind a `LandscapeState`. Supply palette entries with `createWidget` factories so every inserted item is independent. After confirmation, `stateChange` emits versioned landscape data containing the column count and widget placements with only the widget ID, size, row, and column.
 
 ```html
 <widget-landscape
