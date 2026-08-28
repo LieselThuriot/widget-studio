@@ -127,6 +127,16 @@
 .landscape-shell.is-editing .landscape-item {
   animation: landscape-widget-wiggle 420ms ease-in-out infinite alternate;
   box-shadow: var(--widget-landscape-floating-shadow);
+  user-select: none;
+}
+.landscape-shell.is-editing .landscape-item widget-renderer {
+  pointer-events: none;
+}
+.landscape-interaction-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  user-select: none;
 }
 .landscape-shell.is-editing .landscape-item:nth-child(2n) {
   animation-delay: -210ms;

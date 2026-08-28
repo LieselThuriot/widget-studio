@@ -58,11 +58,19 @@
           tabindex="0"
           (dragstart)="startDrag($event, item.id)"
           (dragend)="endDrag()"
-          (click)="isEditing() && selectWidget(item.id)"
-          (keydown.enter)="isEditing() && selectWidget(item.id)"
-          (keydown.space)="$event.preventDefault(); isEditing() && selectWidget(item.id)"
+          (keydown.enter)="selectWidget(item.id)"
+          (keydown.space)="$event.preventDefault(); selectWidget(item.id)"
         >
           @if (isEditing()) {
+            <div
+              class="landscape-interaction-shield"
+              role="button"
+              tabindex="0"
+              aria-label="Select widget"
+              (click)="selectWidget(item.id)"
+              (keydown.enter)="selectWidget(item.id)"
+              (keydown.space)="$event.preventDefault(); selectWidget(item.id)"
+            ></div>
             <div class="item-controls">
               <button
                 type="button"
