@@ -7,14 +7,16 @@
       </div>
     }
     @if (!isEditing()) {
-      <button
-        type="button"
-        class="landscape-icon-button"
-        aria-label="Edit landscape"
-        (click)="enterEdit()"
-      >
-        ⚙
-      </button>
+      <div class="landscape-toolbar-actions">
+        <button
+          type="button"
+          class="landscape-icon-button"
+          aria-label="Edit landscape"
+          (click)="enterEdit()"
+        >
+          ⚙
+        </button>
+      </div>
     } @else {
       <div class="landscape-toolbar-actions">
         <button type="button" class="landscape-button" (click)="cancelEdit()">Cancel</button>
@@ -74,6 +76,7 @@
           }
           <widget-renderer
             [widget]="item.widget"
+            [loading]="item.widget === null ? item.size : false"
             [darkMode]="darkMode()"
             (refreshRequested)="refresh(item.id)"
             (actionRequested)="action(item.id, $event)"

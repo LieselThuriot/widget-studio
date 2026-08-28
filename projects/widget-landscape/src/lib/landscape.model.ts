@@ -2,7 +2,8 @@ import { ButtonElement, WidgetInput, WidgetSize } from 'widget-renderer';
 
 export interface LandscapeWidget {
   id: string;
-  widget: WidgetInput;
+  size: WidgetSize;
+  widget: WidgetInput | null;
   row: number;
   column: number;
 }

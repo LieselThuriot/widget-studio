@@ -66,9 +66,15 @@ export class WidgetLandscape {
     this.palette()
       .filter(
         (item) =>
-          this.activeState().widgets.some(({ widget }) => widget.id === item.createWidget().id) ||
+          this.activeState().widgets.some(({ id }) => id === item.createWidget().id) ||
           !canFitWidget(
-            { id: item.id, widget: item.createWidget(), row: 0, column: 0 },
+            {
+              id: item.id,
+              size: item.createWidget().size,
+              widget: item.createWidget(),
+              row: 0,
+              column: 0,
+            },
             this.activeState().columns,
           ),
       )
@@ -88,9 +94,9 @@ export class WidgetLandscape {
     this.stateChange.emit({
       version: 1,
       columns: normalizedState.columns,
-      widgets: normalizedState.widgets.map(({ id, widget, row, column }) => ({
+      widgets: normalizedState.widgets.map(({ id, size, row, column }) => ({
         id,
-        size: widget.size,
+        size,
         row,
         column,
       })),
@@ -112,6 +118,7 @@ export class WidgetLandscape {
     const widgetInput = item.createWidget();
     const widget: LandscapeWidget = {
       id: widgetInput.id,
+      size: widgetInput.size,
       widget: structuredClone(widgetInput),
       row: 0,
       column: 0,
@@ -221,7 +228,7 @@ export class WidgetLandscape {
     const item = this.dragPaletteItem();
     if (!item) return null;
     const widget = item.createWidget();
-    return { id: widget.id, widget: structuredClone(widget), row: 0, column: 0 };
+    return { id: widget.id, size: widget.size, widget: structuredClone(widget), row: 0, column: 0 };
   }
 
   protected draggedWidgetForTemplate(): LandscapeWidget | null {

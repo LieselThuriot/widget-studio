@@ -4,6 +4,7 @@ import { LandscapeState } from './landscape.model';
 
 const widget = (id: string, size: 'mini' | 'square' = 'mini') => ({
   id,
+  size,
   row: 0,
   column: 0,
   widget: { id: `widget-${id}`, size } as never,

@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudioHeader } from './studio-header/studio-header';
 import { ElementPalette } from './element-palette/element-palette';
@@ -23,6 +23,7 @@ import {
   LandscapePaletteItem,
   LandscapeState,
   LandscapeStateChange,
+  LandscapeWidget,
   normalizeLandscapeState,
 } from 'widget-landscape';
 
@@ -51,6 +52,7 @@ import {
   },
 })
 export class App {
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly darkMode = signal(readThemePreference());
   private readonly editorState = new EditorStateStore();
   protected readonly widget = this.editorState.widget;
@@ -68,6 +70,7 @@ export class App {
   protected readonly isModelLoaderOpen = signal(false);
   protected readonly activeTab = signal<'compose' | 'landscape'>('compose');
   protected readonly landscapeState = signal<LandscapeState>(readLandscapeState());
+  protected readonly isLandscapeLoadingSimulation = signal(false);
   protected readonly landscapePalette: readonly LandscapePaletteItem[] = sampleWidgets.map(
     (sample) => ({
       id: sample.id,
@@ -76,8 +79,11 @@ export class App {
       createWidget: () => structuredClone(sample.widget),
     }),
   );
+  private landscapeLoadingTimer: ReturnType<typeof setTimeout> | null = null;
+  private landscapeLoadingQueue: LandscapeWidget[] = [];
 
   constructor() {
+    this.destroyRef.onDestroy(() => this.stopLandscapeLoadingSimulation());
     effect(() => {
       const darkMode = this.darkMode();
       document.documentElement.dataset['theme'] = darkMode ? 'dark' : 'light';
@@ -117,10 +123,12 @@ export class App {
   }
 
   protected selectTab(tab: 'compose' | 'landscape'): void {
+    if (tab !== 'landscape') this.stopLandscapeLoadingSimulation();
     this.activeTab.set(tab);
   }
 
   protected saveLandscape(change: LandscapeStateChange): void {
+    this.stopLandscapeLoadingSimulation();
     const savedChange = structuredClone(change);
     const savedState = landscapeStateFromPlacements(savedChange);
     this.landscapeState.set(savedState);
@@ -133,6 +141,60 @@ export class App {
       kind: 'landscape-confirm',
       state: structuredClone(savedChange),
     });
+  }
+
+  protected toggleLandscapeLoadingSimulation(): void {
+    if (this.isLandscapeLoadingSimulation()) return;
+
+    const widgetIds = this.landscapeState().widgets.map(({ id }) => id);
+    if (!widgetIds.length) return;
+    this.landscapeLoadingQueue = shuffle(this.landscapeState().widgets);
+    this.landscapeState.update((state) => ({
+      ...state,
+      widgets: state.widgets.map((item) => ({ ...item, widget: null })),
+    }));
+    this.isLandscapeLoadingSimulation.set(true);
+    this.scheduleNextLandscapeWidget();
+  }
+
+  private scheduleNextLandscapeWidget(): void {
+    const nextWidget = this.landscapeLoadingQueue.shift();
+    if (!nextWidget) {
+      this.isLandscapeLoadingSimulation.set(false);
+      return;
+    }
+
+    const delay = 300 + Math.floor(Math.random() * 901);
+    this.landscapeLoadingTimer = setTimeout(() => {
+      this.landscapeLoadingTimer = null;
+      this.landscapeState.update((state) => ({
+        ...state,
+        widgets: state.widgets.map((item) =>
+          item.id === nextWidget.id
+            ? { ...item, widget: structuredClone(nextWidget.widget) }
+            : item,
+        ),
+      }));
+      this.scheduleNextLandscapeWidget();
+    }, delay);
+  }
+
+  private stopLandscapeLoadingSimulation(): void {
+    if (this.landscapeLoadingTimer !== null) clearTimeout(this.landscapeLoadingTimer);
+    this.landscapeLoadingTimer = null;
+    if (this.isLandscapeLoadingSimulation()) {
+      this.landscapeState.update((state) => ({
+        ...state,
+        widgets: state.widgets.map((item) => {
+          const sample = sampleWidgets.find(({ id }) => id === item.id);
+          return sample && item.widget === null
+            ? { ...item, widget: { ...structuredClone(sample.widget), size: item.size } }
+            : item;
+        }),
+      }));
+    }
+    this.landscapeLoadingQueue = [];
+    this.isLandscapeLoadingSimulation.set(false);
   }
 
   protected landscapeRefresh(event: { id: string }): void {
@@ -283,6 +345,15 @@ export class App {
   }
 }
 
+function shuffle<T>(items: readonly T[]): T[] {
+  const shuffled = [...items];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
 const themeStorageKey = 'widget-studio-theme';
 const landscapeStorageKey = 'widget-studio-landscape';
 
@@ -337,12 +408,13 @@ function isLandscapeWidgetSize(
 }
 
 function landscapeStateFromPlacements(change: LandscapeStateChange): LandscapeState {
-  const widgets = change.widgets.flatMap((placement) => {
+  const widgets: LandscapeWidget[] = change.widgets.flatMap((placement) => {
     const sample = sampleWidgets.find(({ id }) => id === placement.id);
     if (!sample) return [];
     return [
       {
         id: sample.widget.id,
+        size: placement.size,
         widget: { ...structuredClone(sample.widget), size: placement.size },
         row: placement.row,
         column: placement.column,

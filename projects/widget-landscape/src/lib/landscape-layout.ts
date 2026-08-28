@@ -6,7 +6,7 @@ import {
 } from './landscape.model';
 
 export function footprintFor(widget: LandscapeWidget): LandscapeFootprint {
-  return landscapeFootprintForSize(widget.widget.size);
+  return landscapeFootprintForSize(widget.size);
 }
 
 export function canFitWidget(widget: LandscapeWidget, columns: number): boolean {

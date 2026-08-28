@@ -51,9 +51,10 @@
 }
 .landscape-toolbar-actions {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
-.landscape-toolbar > .landscape-icon-button {
+.landscape-toolbar > .landscape-toolbar-actions {
   margin-inline-start: auto;
 }
 .landscape-button,
@@ -65,6 +66,8 @@
   cursor: pointer;
 }
 .landscape-button {
+  position: relative;
+  isolation: isolate;
   min-height: 32px;
   padding: 7px 12px;
   font-size: 12px;

@@ -24,6 +24,113 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
+  it('should simulate landscape widgets loading one at a time', async () => {
+    localStorage.setItem(
+      'widget-studio-landscape',
+      JSON.stringify({
+        version: 1,
+        columns: 8,
+        widgets: [
+          { id: 'daily-brief', size: 'square', row: 0, column: 0 },
+          { id: 'mini-pulse', size: 'mini', row: 0, column: 2 },
+        ],
+      }),
+    );
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    vi.useFakeTimers();
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0);
+    try {
+      (
+        fixture.nativeElement.querySelector(
+          '.workspace-tabs button:last-child',
+        ) as HTMLButtonElement
+      ).click();
+      fixture.detectChanges();
+
+      const simulateButton = fixture.nativeElement.querySelector(
+        '.landscape-simulation-row .landscape-simulation-button',
+      ) as HTMLButtonElement;
+      simulateButton.click();
+      fixture.detectChanges();
+
+      expect(simulateButton.textContent).toContain('Simulating');
+      expect(simulateButton.disabled).toBe(true);
+      expect(simulateButton.classList.contains('is-loading')).toBe(true);
+      expect(simulateButton.textContent).not.toMatch(/\d/);
+      expect(
+        fixture.componentInstance['landscapeState']().widgets.every(
+          (item: { widget: unknown }) => item.widget === null,
+        ),
+      ).toBe(true);
+      expect(fixture.nativeElement.querySelectorAll('.widget-skeleton')).toHaveLength(2);
+
+      await vi.advanceTimersByTimeAsync(300);
+      fixture.detectChanges();
+      expect(
+        fixture.componentInstance['landscapeState']().widgets.filter(
+          ({ widget }) => widget === null,
+        ),
+      ).toHaveLength(1);
+      expect(fixture.nativeElement.querySelectorAll('.widget-skeleton')).toHaveLength(1);
+
+      await vi.advanceTimersByTimeAsync(300);
+      fixture.detectChanges();
+      expect(fixture.componentInstance['isLandscapeLoadingSimulation']()).toBe(false);
+      expect(fixture.nativeElement.querySelectorAll('.widget-skeleton')).toHaveLength(0);
+      expect(
+        (fixture.nativeElement.querySelector('.landscape-simulation-button') as HTMLButtonElement)
+          .textContent,
+      ).toContain('Simulate');
+    } finally {
+      randomSpy.mockRestore();
+      vi.useRealTimers();
+    }
+  });
+
+  it('should stop the landscape loading simulation when leaving landscape', async () => {
+    localStorage.setItem(
+      'widget-studio-landscape',
+      JSON.stringify({
+        version: 1,
+        columns: 8,
+        widgets: [{ id: 'daily-brief', size: 'square', row: 0, column: 0 }],
+      }),
+    );
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    vi.useFakeTimers();
+    try {
+      const landscapeTab = fixture.nativeElement.querySelector(
+        '.workspace-tabs button:last-child',
+      ) as HTMLButtonElement;
+      landscapeTab.click();
+      fixture.detectChanges();
+      (
+        fixture.nativeElement.querySelector(
+          '.landscape-simulation-row .landscape-simulation-button',
+        ) as HTMLButtonElement
+      ).click();
+      fixture.detectChanges();
+
+      (
+        fixture.nativeElement.querySelector(
+          '.workspace-tabs button:first-child',
+        ) as HTMLButtonElement
+      ).click();
+      fixture.detectChanges();
+
+      expect(
+        fixture.componentInstance['landscapeState']().widgets.every(
+          (item: { widget: unknown }) => item.widget !== null,
+        ),
+      ).toBe(true);
+      expect(fixture.componentInstance['isLandscapeLoadingSimulation']()).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('should render the widget studio', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
@@ -963,6 +1070,27 @@ describe('App', () => {
     });
   });
 
+  it('should ignore unknown persisted landscape widgets', async () => {
+    localStorage.setItem(
+      'widget-studio-landscape',
+      JSON.stringify({
+        version: 1,
+        columns: 8,
+        widgets: [
+          { id: 'removed-widget', size: 'square', row: 0, column: 0 },
+          { id: 'daily-brief', size: 'square', row: 0, column: 2 },
+        ],
+      }),
+    );
+
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance['landscapeState']().widgets).toHaveLength(1);
+    expect(fixture.componentInstance['landscapeState']().widgets[0].id).toBe('daily-brief');
+    expect(fixture.nativeElement.querySelectorAll('.widget-skeleton')).toHaveLength(0);
+  });
+
   it('should restore the persisted size independently of the palette widget', async () => {
     localStorage.setItem(
       'widget-studio-landscape',
@@ -976,7 +1104,10 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
 
-    expect(fixture.componentInstance['landscapeState']().widgets[0].widget.size).toBe('wide');
+    expect(fixture.componentInstance['landscapeState']().widgets[0]).toMatchObject({
+      size: 'wide',
+      widget: { size: 'wide' },
+    });
   });
 
   it('should ignore malformed persisted landscape state', async () => {
