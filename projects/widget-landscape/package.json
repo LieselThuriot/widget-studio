@@ -1,0 +1,11 @@
+{
+  "name": "widget-landscape",
+  "version": "0.1.0",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^21.0.0 || ^22.0.0",
+    "@angular/core": "^21.0.0 || ^22.0.0",
+    "widget-renderer": "^0.1.0"
+  },
+  "sideEffects": false
+}

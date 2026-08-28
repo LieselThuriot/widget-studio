@@ -3,6 +3,7 @@ import { WidgetRenderer, WidgetContract } from 'widget-renderer';
 
 const widget: WidgetContract = {
   version: 2,
+  id: 'sensitive-content-test',
   size: 'square',
   rows: [{ size: 1, unit: 'star' }],
   columns: [{ size: 1, unit: 'star' }],

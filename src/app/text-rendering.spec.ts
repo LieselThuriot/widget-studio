@@ -4,6 +4,7 @@ import { WidgetContract, WidgetRenderer } from 'widget-renderer';
 function textWidget(wrap: boolean): WidgetContract {
   return {
     version: 2,
+    id: 'text-rendering-test',
     size: 'square',
     rows: [{ size: 1, unit: 'star' }],
     columns: [{ size: 1, unit: 'star' }],

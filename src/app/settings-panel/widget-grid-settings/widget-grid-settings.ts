@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { Widget } from '../../editor-model';
+import { widgetHeight, widgetWidth, WidgetSize } from 'widget-renderer';
 import { removeTrack } from '../../editor-state';
 import { GridEditorDialog } from '../grid-editor-dialog/grid-editor-dialog';
 import { eventValue } from '../form-events';
@@ -24,6 +25,10 @@ export class WidgetGridSettings {
     return ['mini', 'square', 'wide', 'mega', 'hero'].includes(value)
       ? (value as Widget['size'])
       : 'square';
+  }
+
+  protected dimensions(size: WidgetSize): string {
+    return `${widgetWidth(size)} × ${widgetHeight(size)}`;
   }
 
   protected saveGrid(

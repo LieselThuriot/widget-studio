@@ -15,6 +15,7 @@ internal static class ContractAssertions
     {
         var root = JsonDocument.Parse(json).RootElement;
         Assert.Equal(2, root.GetProperty("version").GetInt32());
+        Assert.Equal("complete-widget", root.GetProperty("id").GetString());
         Assert.Equal("wide", root.GetProperty("size").GetString());
         Assert.Equal(11, root.GetProperty("elements").GetArrayLength());
         Assert.DoesNotContain("Type", json, StringComparison.Ordinal);
@@ -24,6 +25,7 @@ internal static class ContractAssertions
     public static void Equal(WidgetContract expected, WidgetContract actual)
     {
         Assert.Equal(expected.Version, actual.Version);
+        Assert.Equal(expected.Id, actual.Id);
         Assert.Equal(expected.Size, actual.Size);
         Assert.Equal(
           expected.Rows.Select(track => (track.Size, track.Unit)),
@@ -51,6 +53,7 @@ internal static class ContractFixtures
     public static WidgetContract CreateCompleteWidget() => new()
     {
         Version = 2,
+        Id = "complete-widget",
         Size = WidgetSize.Wide,
         Rows =
       [

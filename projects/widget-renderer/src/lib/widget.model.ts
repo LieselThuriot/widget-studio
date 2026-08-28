@@ -208,6 +208,7 @@ export type WidgetElementContract =
   | ProgressElement;
 export interface Widget {
   version: 2;
+  id: string;
   size: WidgetSize;
   rows: GridTrack[];
   columns: GridTrack[];

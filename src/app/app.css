@@ -11,6 +11,33 @@
 .workspace.is-hero {
   max-width: 1760px;
 }
+.workspace-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 24px 0 20px;
+  border-bottom: 1px solid var(--editor-border);
+}
+.workspace-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 10px 12px;
+  background: transparent;
+  color: var(--editor-text-muted);
+  cursor: pointer;
+  font: 600 12px var(--editor-font-sans);
+}
+.workspace-tabs button:hover {
+  border-bottom-color: color-mix(in srgb, var(--editor-accent) 55%, var(--editor-surface-page));
+  color: var(--editor-accent-strong);
+}
+.workspace-tabs button:focus-visible {
+  border-bottom-color: var(--editor-accent);
+  color: var(--editor-accent-strong);
+}
+.workspace-tabs button.is-active {
+  border-bottom-color: var(--editor-accent);
+  color: var(--editor-accent-strong);
+}
 .share-load-message {
   position: fixed;
   right: 24px;

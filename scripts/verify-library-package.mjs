@@ -37,9 +37,10 @@ try {
     join(consumer, 'verify.mjs'),
     `import '@angular/compiler';
  import { normalizeWidgetInput, safeParseWidgetInput } from 'widget-renderer';
-const payload = {
-  version: 2,
-  size: 'square',
+ const payload = {
+   version: 2,
+   id: 'package-test-widget',
+   size: 'square',
   rows: [{ size: 1, unit: 'star' }],
   columns: [{ size: 1, unit: 'star' }],
   background: { sensitive: false, repeat: false, size: 'auto', anchor: 'center' },

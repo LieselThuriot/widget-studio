@@ -22,7 +22,7 @@ describe('OutputContract', () => {
 
   it('shows JSON by default and switches to the C# contract', () => {
     const fixture = TestBed.createComponent(OutputContract);
-    fixture.componentRef.setInput('modelContract', { version: 2 });
+    fixture.componentRef.setInput('modelContract', { version: 2, id: 'output-test' });
     fixture.detectChanges();
 
     const element = fixture.nativeElement as HTMLElement;
@@ -45,7 +45,7 @@ describe('OutputContract', () => {
 
   it('moves between tabs with arrow keys', () => {
     const fixture = TestBed.createComponent(OutputContract);
-    fixture.componentRef.setInput('modelContract', {});
+    fixture.componentRef.setInput('modelContract', { id: 'output-test' });
     fixture.detectChanges();
 
     const jsonTab = fixture.nativeElement.querySelector('#json-tab') as HTMLButtonElement;
@@ -62,7 +62,7 @@ describe('OutputContract', () => {
   it('restores and saves the selected output format', () => {
     localStorage.setItem('widget-studio-output-format', 'csharp');
     const fixture = TestBed.createComponent(OutputContract);
-    fixture.componentRef.setInput('modelContract', {});
+    fixture.componentRef.setInput('modelContract', { id: 'output-test' });
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('#csharp-tab')?.getAttribute('aria-selected')).toBe(

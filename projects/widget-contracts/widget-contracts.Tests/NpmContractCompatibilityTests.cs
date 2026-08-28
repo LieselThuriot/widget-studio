@@ -24,6 +24,7 @@ public sealed class NpmContractCompatibilityTests(RendererLibraryFixture fixture
     {
         var widget = new WidgetContract
         {
+            Id = "empty-widget",
             Size = WidgetSize.Square,
             Rows = [],
             Columns = [],

@@ -12,7 +12,6 @@ The package is designed to receive a plain `WidgetContract` from an API or appli
 - Render charts with ECharts using SVG output
 - Validate incoming data with structured paths and messages
 - Normalize optional contract fields such as button defaults and text padding
-- Display responsive loading skeletons in square or wide layouts
 - Blur sensitive backgrounds and elements until explicitly revealed
 - Emit refresh and button-action events without making network requests
 - Provide accessible names and text summaries for charts and progress bars
@@ -127,7 +126,7 @@ Every input must use `version: 2` and include:
 
 | Field | Description |
 | --- | --- |
-| `size` | `square` or `wide`; the built-in widths are 265px and 530px |
+| `size` | `mini`, `square`, `wide`, `mega`, or `hero`; dimensions include the 8px layout gap |
 | `rows` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
 | `columns` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
 | `background` | Color, optional image, sizing, position, repeat, overlay, and sensitivity settings |

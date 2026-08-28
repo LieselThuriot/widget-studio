@@ -8,6 +8,7 @@ import { WidgetContract } from 'widget-renderer';
 
 const validContract: WidgetContract = {
   version: 2,
+  id: 'test-widget',
   size: 'square',
   rows: [{ size: 1, unit: 'star' }],
   columns: [{ size: 1, unit: 'star' }],
@@ -31,8 +32,8 @@ describe('widget contract validation', () => {
     expect(safeParseWidgetInput({ ...validContract, size }).success).toBe(true);
   });
 
-  it('accepts a valid ID-free widget', () => {
-    expect(isWidget(validContract)).toBe(true);
+  it('rejects an ID-free widget', () => {
+    expect(isWidget({ ...validContract, id: undefined })).toBe(false);
   });
 
   it('accepts optional badge styling on text elements', () => {

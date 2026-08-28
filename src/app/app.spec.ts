@@ -150,8 +150,12 @@ describe('App', () => {
         sample.widget.size === 'mini'
           ? '133 × 123'
           : sample.widget.size === 'mega'
-            ? '530 × 490'
-            : '1060 × 490';
+            ? '556 × 516'
+            : sample.widget.size === 'hero'
+              ? '1120 × 516'
+              : sample.widget.size === 'wide'
+                ? '556 × 254'
+                : '274 × 254';
       expect(dimensions).toContain(expectedDimensions);
       expect(fixture.nativeElement.querySelector('.widget-validation-overlay')).toBeNull();
     }
@@ -199,6 +203,7 @@ describe('App', () => {
 
     const model = {
       version: 2,
+      id: 'loaded-widget',
       size: 'square',
       rows: [{ size: 1, unit: 'star' }],
       columns: [{ size: 1, unit: 'star' }],
@@ -221,7 +226,7 @@ describe('App', () => {
 
     expect(fixture.nativeElement.querySelector('.model-loader-overlay')).toBeNull();
     expect(fixture.nativeElement.querySelectorAll('.layer')).toHaveLength(0);
-    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('265');
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('274');
   });
 
   it('should show renderer validation errors for the broken sample', async () => {
@@ -259,7 +264,7 @@ describe('App', () => {
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelectorAll('.layer')).toHaveLength(0);
-    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('265 × 245');
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('274 × 254');
     expect(fixture.nativeElement.querySelector('.widget-validation-overlay')).toBeNull();
   });
 
@@ -852,12 +857,53 @@ describe('App', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
+    expect(fixture.nativeElement.querySelector('.event-data dd')?.textContent).toBe('daily-brief');
+
     const alertDialog = fixture.nativeElement.querySelector('.event-alert') as HTMLElement;
     const closeButton = fixture.nativeElement.querySelector('.alert-close') as HTMLButtonElement;
     closeButton.focus();
     alertDialog.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
 
     expect(document.activeElement).toBe(closeButton);
+  });
+
+  it('should show the refresh label and widget ID separately', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    fixture.componentInstance['onRefresh']();
+    fixture.detectChanges();
+
+    const data = fixture.nativeElement.querySelector('.event-data') as HTMLElement;
+    expect(data.textContent).toContain('Refresh widget');
+    expect(data.textContent).toContain('daily-brief');
+  });
+
+  it('should show the landscape state change event after confirming edits', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (
+      fixture.nativeElement.querySelector('.workspace-tabs button:last-child') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.palette-item') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    const data = fixture.nativeElement.querySelector('.event-data') as HTMLElement;
+    expect(fixture.nativeElement.querySelector('.event-alert h2')?.textContent).toContain(
+      'Landscape confirmed',
+    );
+    expect(data.textContent).toContain('stateChange');
+    expect(data.querySelector('table.landscape-widget-data')).toBeTruthy();
+    expect(data.textContent).toContain('daily-brief');
+    expect(data.querySelector('tbody tr')?.textContent).toContain('0');
   });
 
   it('should close dialogs from the backdrop and restore focus', async () => {
@@ -986,7 +1032,7 @@ describe('App', () => {
     addRow.click();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('530');
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('556');
     expect(fixture.nativeElement.querySelectorAll('.grid-editor-dialog .row-label')).toHaveLength(
       7,
     );

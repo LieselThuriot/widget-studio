@@ -12,10 +12,10 @@ describe('gridTemplate', () => {
 describe('widget dimensions', () => {
   it.each([
     ['mini', 133, 123],
-    ['square', 265, 245],
-    ['wide', 530, 245],
-    ['mega', 530, 490],
-    ['hero', 1060, 490],
+    ['square', 274, 254],
+    ['wide', 556, 254],
+    ['mega', 556, 516],
+    ['hero', 1120, 516],
   ] as const)('maps %s to its dimensions', (size, width, height) => {
     expect(widgetWidth(size)).toBe(width);
     expect(widgetHeight(size)).toBe(height);

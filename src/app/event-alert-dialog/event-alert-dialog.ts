@@ -1,11 +1,18 @@
 import { Component, ElementRef, effect, inject, input, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { ButtonElement } from 'widget-renderer';
+import { LandscapeState } from 'widget-landscape';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../dialog-focus';
 
 export type ActionAlert =
-  | { kind: 'action'; element: ButtonElement; event: { type: string; target: string } }
-  | { kind: 'refresh'; label: string };
+  | {
+      kind: 'action';
+      widgetId: string;
+      element: ButtonElement;
+      event: { type: string; target: string };
+    }
+  | { kind: 'refresh'; widgetId: string; label: string }
+  | { kind: 'landscape-confirm'; state: LandscapeState };
 
 @Component({
   selector: 'app-event-alert-dialog',

@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/lib/widget-landscape",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSourceMap": true,
+    "types": [],
+    "paths": {
+      "widget-renderer": ["dist/widget-renderer/types/widget-renderer.d.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "compilationMode": "partial"
+  },
+  "include": ["src/**/*.ts"]
+}

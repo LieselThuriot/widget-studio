@@ -98,6 +98,29 @@
           "defaultConfiguration": "production"
         }
       }
+    },
+    "widget-landscape": {
+      "projectType": "library",
+      "root": "projects/widget-landscape",
+      "sourceRoot": "projects/widget-landscape/src",
+      "prefix": "widget",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/widget-landscape/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/widget-landscape/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/widget-landscape/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
     }
   }
 }

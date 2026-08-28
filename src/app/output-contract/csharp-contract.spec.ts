@@ -4,6 +4,7 @@ describe('generateCsharpContract', () => {
   it('uses GridTrack helpers including the default Star overload', () => {
     const output = generateCsharpContract({
       version: 2,
+      id: 'grid-track-test',
       size: 'wide',
       rows: [{ unit: 'auto' }, { unit: 'star', size: 1 }, { unit: 'star', size: 2.5 }],
       columns: [{ unit: 'pixel', size: 120 }],
@@ -26,6 +27,7 @@ describe('generateCsharpContract', () => {
   it('uses raw string literals for multiline values', () => {
     const output = generateCsharpContract({
       version: 2,
+      id: 'multiline-test',
       size: 'wide',
       rows: [],
       columns: [],
@@ -59,6 +61,7 @@ describe('generateCsharpContract', () => {
   it('generates progress data with the package contract type', () => {
     const output = generateCsharpContract({
       version: 2,
+      id: 'progress-test',
       size: 'wide',
       rows: [],
       columns: [],

@@ -13,11 +13,11 @@
       [value]="widget().size"
       (change)="widgetChanged.emit({ size: size($event) })"
     >
-      <option value="mini">Mini · 133 × 123</option>
-      <option value="square">Square · 265 × 245</option>
-      <option value="wide">Wide · 530 × 245</option>
-      <option value="mega">Mega · 530 × 490</option>
-      <option value="hero">Hero · 1060 × 490</option>
+      <option value="mini">Mini · {{ dimensions('mini') }}</option>
+      <option value="square">Square · {{ dimensions('square') }}</option>
+      <option value="wide">Wide · {{ dimensions('wide') }}</option>
+      <option value="mega">Mega · {{ dimensions('mega') }}</option>
+      <option value="hero">Hero · {{ dimensions('hero') }}</option>
     </select></label
   >
   @if (isGridDialogOpen()) {

@@ -35,10 +35,10 @@ describe('widget renderer validation state', () => {
 
   it.each([
     ['mini', 133, 123],
-    ['square', 265, 245],
-    ['wide', 530, 245],
-    ['mega', 530, 490],
-    ['hero', 1060, 490],
+    ['square', 274, 254],
+    ['wide', 556, 254],
+    ['mega', 556, 516],
+    ['hero', 1120, 516],
   ] as const)(
     'uses the selected %s dimensions when validation fails',
     async (size, width, height) => {
@@ -65,8 +65,8 @@ describe('widget renderer validation state', () => {
       await fixture.whenStable();
 
       const shell = fixture.nativeElement.querySelector('.widget-shell') as HTMLElement;
-      expect(shell.style.width).toBe('265px');
-      expect(shell.style.height).toBe('245px');
+      expect(shell.style.width).toBe('274px');
+      expect(shell.style.height).toBe('254px');
     }
   });
 

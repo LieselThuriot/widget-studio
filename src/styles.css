@@ -68,6 +68,23 @@ html[data-theme='dark'] .color-input {
 html[data-theme='dark'] button:not(.icon-button):not(.action-button) {
   border-color: var(--editor-border-raised);
 }
+html[data-theme='dark'] .workspace-tabs button:not(.icon-button):not(.action-button) {
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+}
+html[data-theme='dark'] .workspace-tabs button:hover:not(.icon-button):not(.action-button) {
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--editor-accent) 55%,
+    var(--editor-surface-page)
+  ) !important;
+}
+html[data-theme='dark'] .workspace-tabs button:focus-visible:not(.icon-button):not(.action-button) {
+  border-bottom-color: var(--editor-accent) !important;
+}
+html[data-theme='dark'] .workspace-tabs button.is-active:not(.icon-button):not(.action-button) {
+  border-bottom-color: var(--editor-accent) !important;
+}
 html[data-theme='dark'] .eyebrow,
 html[data-theme='dark'] .helper,
 html[data-theme='dark'] .count,

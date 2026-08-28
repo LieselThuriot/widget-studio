@@ -1,0 +1,280 @@
+import { Component, computed, effect, input, output, signal, untracked } from '@angular/core';
+import { ButtonElement, WidgetRenderer } from 'widget-renderer';
+import {
+  addWidget,
+  canFitWidget,
+  footprintFor,
+  hasCollisionAt,
+  normalizeLandscapeState,
+  previewPlacement,
+} from './landscape-layout';
+import {
+  LandscapeActionEvent,
+  LandscapePaletteItem,
+  LandscapeState,
+  LandscapeWidget,
+} from './landscape.model';
+
+@Component({
+  selector: 'widget-landscape',
+  imports: [WidgetRenderer],
+  templateUrl: './widget-landscape.html',
+  styleUrl: './widget-landscape.css',
+  host: {
+    '(document:keydown.escape)': 'cancelEdit()',
+    '[class.is-dark]': 'darkMode()',
+  },
+})
+export class WidgetLandscape {
+  readonly state = input.required<LandscapeState>();
+  readonly palette = input<readonly LandscapePaletteItem[]>([]);
+  readonly editMode = input(false);
+  readonly darkMode = input(false);
+  readonly stateChange = output<LandscapeState>();
+  readonly editModeChange = output<boolean>();
+  readonly widgetSelected = output<{ id: string }>();
+  readonly widgetDeleted = output<{ id: string }>();
+  readonly refreshRequested = output<{ id: string }>();
+  readonly actionRequested = output<LandscapeActionEvent>();
+
+  protected readonly draft = signal<LandscapeState | null>(null);
+  protected readonly selectedId = signal<string | null>(null);
+  protected readonly dragId = signal<string | null>(null);
+  protected readonly dragPaletteItem = signal<LandscapePaletteItem | null>(null);
+  protected readonly dragPreview = signal<LandscapeState | null>(null);
+  protected readonly dragTarget = signal<{ row: number; column: number } | null>(null);
+  private dragOrigin: LandscapeState | null = null;
+  private wasInControlledEditMode = false;
+  private hoverTimer: ReturnType<typeof setTimeout> | null = null;
+  private hoverKey: string | null = null;
+
+  constructor() {
+    effect(() => {
+      const editMode = this.editMode();
+      if (editMode && !this.wasInControlledEditMode && !untracked(() => this.draft())) {
+        this.draft.set(normalizeLandscapeState(structuredClone(this.state())));
+      }
+      this.wasInControlledEditMode = editMode;
+    });
+  }
+  protected readonly activeState = computed(
+    () => this.dragPreview() ?? this.draft() ?? this.state(),
+  );
+  protected readonly isEditing = computed(() => this.editMode() || this.draft() !== null);
+  protected readonly invalidPaletteIds = computed(() =>
+    this.palette()
+      .filter(
+        (item) =>
+          this.activeState().widgets.some(({ widget }) => widget.id === item.createWidget().id) ||
+          !canFitWidget(
+            { id: item.id, widget: item.createWidget(), row: 0, column: 0 },
+            this.activeState().columns,
+          ),
+      )
+      .map((item) => item.id),
+  );
+
+  protected enterEdit(): void {
+    if (this.isEditing()) return;
+    this.draft.set(normalizeLandscapeState(structuredClone(this.state())));
+    this.editModeChange.emit(true);
+  }
+
+  protected confirmEdit(): void {
+    const state = this.draft();
+    if (!state) return;
+    this.stateChange.emit(normalizeLandscapeState(state));
+    this.draft.set(null);
+    this.selectedId.set(null);
+    this.editModeChange.emit(false);
+  }
+
+  protected cancelEdit(): void {
+    if (!this.isEditing()) return;
+    this.draft.set(null);
+    this.selectedId.set(null);
+    this.editModeChange.emit(false);
+  }
+
+  protected addFromPalette(item: LandscapePaletteItem): void {
+    if (this.invalidPaletteIds().includes(item.id)) return;
+    const widgetInput = item.createWidget();
+    const widget: LandscapeWidget = {
+      id: widgetInput.id,
+      widget: structuredClone(widgetInput),
+      row: 0,
+      column: 0,
+    };
+    this.draft.update((state) => (state ? addWidget(state, widget) : state));
+  }
+
+  protected startPaletteDrag(event: DragEvent, item: LandscapePaletteItem): void {
+    if (this.invalidPaletteIds().includes(item.id)) return;
+    event.dataTransfer?.setData('widget-landscape-palette-id', item.id);
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'copy';
+    this.setTransparentDragImage(event);
+    this.beginDrag(null, item);
+  }
+
+  protected startDrag(event: DragEvent, id: string): void {
+    event.dataTransfer?.setData('widget-landscape-id', id);
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+    this.setTransparentDragImage(event);
+    this.beginDrag(id, null);
+  }
+
+  private beginDrag(id: string | null, item: LandscapePaletteItem | null): void {
+    this.clearDragTimer();
+    this.dragId.set(id);
+    this.dragPaletteItem.set(item);
+    this.dragOrigin = structuredClone(
+      this.draft() ?? normalizeLandscapeState(structuredClone(this.state())),
+    );
+    this.dragPreview.set(null);
+    this.dragTarget.set(null);
+  }
+
+  private setTransparentDragImage(event: DragEvent): void {
+    const image = document.createElement('canvas');
+    image.width = 1;
+    image.height = 1;
+    event.dataTransfer?.setDragImage(image, 0, 0);
+  }
+
+  protected dragOverWidget(event: DragEvent): void {
+    event.preventDefault();
+    const host = event.currentTarget as HTMLElement;
+    const moving = this.draggedWidget();
+    const target = this.targetForEvent(event, host, moving);
+    if (!target || !moving || !this.dragOrigin) return;
+    const key = `${target.row}:${target.column}`;
+    this.dragTarget.set(target);
+    if (this.hoverKey === key) return;
+    this.clearDragTimer();
+    this.hoverKey = key;
+    const hasCollision = hasCollisionAt(this.dragOrigin.widgets, moving, target.row, target.column);
+    if (!hasCollision) {
+      this.dragPreview.set({
+        ...this.dragOrigin,
+        widgets: [
+          ...this.dragOrigin.widgets.filter((item) => item.id !== moving.id),
+          { ...moving, ...target },
+        ],
+      });
+      return;
+    }
+    this.hoverTimer = setTimeout(() => {
+      const preview =
+        this.dragOrigin && previewPlacement(this.dragOrigin, moving, target.row, target.column);
+      this.dragPreview.set(preview);
+      this.hoverTimer = null;
+    }, 350);
+  }
+
+  protected dragLeaveWidget(event: DragEvent): void {
+    const host = event.currentTarget as HTMLElement;
+    if (event.relatedTarget instanceof Node && host.contains(event.relatedTarget)) return;
+    this.clearDragTimer();
+    this.dragTarget.set(null);
+    this.dragPreview.set(null);
+  }
+
+  protected dropWidget(event: DragEvent): void {
+    event.preventDefault();
+    const preview = this.dragPreview();
+    const target = this.dragTarget();
+    const moving = this.draggedWidget();
+    if (preview && target && moving) {
+      this.commitPreview(preview);
+    } else if (target && moving && this.dragOrigin) {
+      const placed = previewPlacement(this.dragOrigin, moving, target.row, target.column);
+      if (placed) this.commitPreview(placed);
+    }
+    this.endDrag();
+  }
+
+  protected endDrag(): void {
+    this.clearDragTimer();
+    this.dragId.set(null);
+    this.dragPaletteItem.set(null);
+    this.dragPreview.set(null);
+    this.dragTarget.set(null);
+    this.dragOrigin = null;
+    this.hoverKey = null;
+  }
+
+  private draggedWidget(): LandscapeWidget | null {
+    const id = this.dragId();
+    if (id && this.dragOrigin)
+      return this.dragOrigin.widgets.find((item) => item.id === id) ?? null;
+    const item = this.dragPaletteItem();
+    if (!item) return null;
+    const widget = item.createWidget();
+    return { id: widget.id, widget: structuredClone(widget), row: 0, column: 0 };
+  }
+
+  protected draggedWidgetForTemplate(): LandscapeWidget | null {
+    return this.draggedWidget();
+  }
+
+  protected canFitDraggedWidget(): boolean {
+    const widget = this.draggedWidget();
+    return widget !== null && canFitWidget(widget, this.activeState().columns);
+  }
+
+  private commitPreview(preview: LandscapeState): void {
+    this.draft.set(preview);
+  }
+
+  private targetForEvent(
+    event: DragEvent,
+    host: HTMLElement,
+    moving: LandscapeWidget | null,
+  ): { row: number; column: number } | null {
+    const bounds = host.getBoundingClientRect();
+    const columns = this.activeState().columns;
+    if (!bounds.width || !columns || !moving) return null;
+    const padding = 18;
+    const column = Math.floor((event.clientX - bounds.left - padding) / 141);
+    const maxColumn = columns - footprintFor(moving).columnSpan;
+    return {
+      row: Math.max(0, Math.floor((event.clientY - bounds.top - padding) / 131)),
+      column: Math.max(0, Math.min(maxColumn, column)),
+    };
+  }
+
+  private clearDragTimer(): void {
+    if (this.hoverTimer !== null) clearTimeout(this.hoverTimer);
+    this.hoverTimer = null;
+  }
+
+  protected selectWidget(id: string): void {
+    this.selectedId.set(id);
+    this.widgetSelected.emit({ id });
+  }
+
+  protected deleteWidget(id: string): void {
+    this.draft.update((state) =>
+      state ? { ...state, widgets: state.widgets.filter((item) => item.id !== id) } : state,
+    );
+    this.widgetDeleted.emit({ id });
+    if (this.selectedId() === id) this.selectedId.set(null);
+  }
+
+  protected footprint(widget: LandscapeWidget): string {
+    const size = footprintFor(widget) ?? { columnSpan: 1, rowSpan: 1 };
+    return `span ${size.rowSpan} / span ${size.columnSpan}`;
+  }
+
+  protected footprintFor(widget: LandscapeWidget) {
+    return footprintFor(widget);
+  }
+
+  protected refresh(id: string): void {
+    this.refreshRequested.emit({ id });
+  }
+
+  protected action(id: string, event: { element: ButtonElement; event: Event }): void {
+    this.actionRequested.emit({ id, ...event });
+  }
+}

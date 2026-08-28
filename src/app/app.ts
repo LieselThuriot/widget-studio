@@ -18,6 +18,7 @@ import { sampleWidgets } from './sample-widget';
 import { decodeWidgetShareHash } from './widget-sharing';
 import { ShareDialog } from './share-dialog/share-dialog';
 import { ModelLoaderDialog } from './model-loader-dialog/model-loader-dialog';
+import { WidgetLandscape, LandscapePaletteItem, LandscapeState } from 'widget-landscape';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,7 @@ import { ModelLoaderDialog } from './model-loader-dialog/model-loader-dialog';
     SettingsPanel,
     ShareDialog,
     ModelLoaderDialog,
+    WidgetLandscape,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -58,6 +60,20 @@ export class App {
   protected readonly widgetSampleId = signal(sampleWidgets[0].id);
   protected readonly shareLoadMessage = signal<string | null>(null);
   protected readonly isModelLoaderOpen = signal(false);
+  protected readonly activeTab = signal<'compose' | 'landscape'>('compose');
+  protected readonly landscapeState = signal<LandscapeState>({
+    version: 1,
+    columns: 8,
+    widgets: [],
+  });
+  protected readonly landscapePalette: readonly LandscapePaletteItem[] = sampleWidgets.map(
+    (sample) => ({
+      id: sample.id,
+      label: sample.name,
+      description: sample.description,
+      createWidget: () => structuredClone(sample.widget),
+    }),
+  );
 
   constructor() {
     effect(() => {
@@ -96,6 +112,23 @@ export class App {
   protected loadSample(sampleId: string): void {
     this.editorState.loadSample(sampleId);
     this.widgetSampleId.set(sampleId);
+  }
+
+  protected selectTab(tab: 'compose' | 'landscape'): void {
+    this.activeTab.set(tab);
+  }
+
+  protected saveLandscape(state: LandscapeState): void {
+    this.landscapeState.set(structuredClone(state));
+    this.actionAlert.set({ kind: 'landscape-confirm', state: structuredClone(state) });
+  }
+
+  protected landscapeRefresh(event: { id: string }): void {
+    this.actionAlert.set({ kind: 'refresh', widgetId: event.id, label: 'Refresh widget' });
+  }
+
+  protected landscapeAction(event: { id: string; element: ButtonElement; event: Event }): void {
+    this.onAction({ widgetId: event.id, element: event.element, event: event.event });
   }
 
   protected openModelLoader(): void {
@@ -233,8 +266,8 @@ export class App {
     }
   }
 
-  protected onAction(event: { element: ButtonElement; event: Event }): void {
-    this.editorState.onAction(event);
+  protected onAction(event: { widgetId?: string; element: ButtonElement; event: Event }): void {
+    this.editorState.onAction({ ...event, widgetId: event.widgetId ?? this.widget().id });
   }
 }
 

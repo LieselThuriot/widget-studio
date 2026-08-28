@@ -1,0 +1,200 @@
+:host {
+  --widget-landscape-text: #25324b;
+  --widget-landscape-text-muted: #78869d;
+  --widget-landscape-border: #d9e0eb;
+  --widget-landscape-panel: #ffffff;
+  --widget-landscape-control: #ffffff;
+  --widget-landscape-accent: #5874ab;
+  --widget-landscape-pattern-dot: #d8dce4;
+  --widget-landscape-shadow: 0 12px 30px #25365718;
+  display: block;
+  color: var(--widget-landscape-text);
+}
+.landscape-shell {
+  min-width: 0;
+  background: transparent;
+}
+:host(.is-dark) {
+  --widget-landscape-text: #e7ecf5;
+  --widget-landscape-text-muted: #aebbd1;
+  --widget-landscape-border: #3a4b6e;
+  --widget-landscape-panel: #17233c;
+  --widget-landscape-control: #1d2b49;
+  --widget-landscape-accent: #9db7e4;
+  --widget-landscape-pattern-dot: #2d3d5d;
+  --widget-landscape-shadow: 0 12px 30px #080e1f55;
+}
+.landscape-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.landscape-toolbar strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--widget-landscape-text);
+}
+.landscape-kicker {
+  display: block;
+  color: var(--widget-landscape-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.landscape-toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+.landscape-toolbar > .landscape-icon-button {
+  margin-inline-start: auto;
+}
+.landscape-button,
+.landscape-icon-button {
+  border: 1px solid var(--widget-landscape-border);
+  border-radius: 7px;
+  background: var(--widget-landscape-control);
+  color: var(--widget-landscape-text);
+  cursor: pointer;
+}
+.landscape-button {
+  min-height: 32px;
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.landscape-button--primary {
+  border-color: var(--widget-landscape-accent);
+  background: var(--widget-landscape-accent);
+  color: #fff;
+}
+.landscape-icon-button {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  font-size: 16px;
+}
+.landscape-button:disabled,
+.palette-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.landscape-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+.landscape-grid {
+  min-height: 560px;
+  display: grid;
+  grid-auto-rows: 123px;
+  grid-template-columns: repeat(var(--landscape-columns), 133px);
+  gap: 8px;
+  align-content: start;
+  padding: 18px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+}
+.landscape-grid.is-dragging {
+  cursor: grabbing;
+}
+.landscape-shell.is-editing .landscape-grid {
+  background-image: radial-gradient(var(--widget-landscape-pattern-dot) 1px, transparent 1px);
+  background-size: 14px 14px;
+  border-color: var(--widget-landscape-border);
+}
+.landscape-item {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 9px;
+  align-self: start;
+  justify-self: start;
+  transition: transform 160ms ease;
+}
+.landscape-item.is-drag-source {
+  opacity: 0.3;
+}
+.landscape-drop-placeholder {
+  z-index: 4;
+  border: 2px dashed var(--widget-landscape-accent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--widget-landscape-accent) 16%, transparent);
+  pointer-events: none;
+}
+.landscape-drop-placeholder.is-invalid {
+  border-color: #c85d6a;
+  background: #c85d6a20;
+}
+.landscape-item.is-selected {
+  outline: 2px solid var(--widget-landscape-accent);
+  outline-offset: 4px;
+}
+.landscape-item widget-renderer {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.item-controls {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  z-index: 5;
+  display: flex;
+  gap: 4px;
+}
+.item-controls .landscape-icon-button {
+  width: 26px;
+  height: 26px;
+  background: var(--widget-landscape-control);
+  box-shadow: var(--widget-landscape-shadow);
+}
+.landscape-palette {
+  display: grid;
+  width: 190px;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--widget-landscape-border);
+  border-radius: 10px;
+  background: var(--widget-landscape-panel);
+  box-shadow: var(--widget-landscape-shadow);
+}
+.palette-item {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid var(--widget-landscape-border);
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: grab;
+}
+.palette-item small {
+  color: var(--widget-landscape-text-muted);
+  font-size: 10px;
+  line-height: 1.35;
+}
+.landscape-empty {
+  grid-column: 1 / -1;
+  align-self: center;
+  justify-self: center;
+  color: var(--widget-landscape-text-muted);
+  font-size: 13px;
+}
+@media (max-width: 900px) {
+  .landscape-body {
+    grid-template-columns: 1fr;
+  }
+  .landscape-palette {
+    width: auto;
+  }
+  .landscape-palette {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}

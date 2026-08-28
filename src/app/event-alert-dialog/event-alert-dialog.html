@@ -16,10 +16,68 @@
       (keydown)="onKeyDown($event)"
     >
       <div class="alert-icon" aria-hidden="true">
-        {{ alert.kind === 'refresh' ? '↻' : '↗' }}
+        @switch (alert.kind) {
+          @case ('refresh') {
+            ↻
+          }
+          @case ('landscape-confirm') {
+            ✓
+          }
+          @default {
+            ↗
+          }
+        }
       </div>
       <div class="alert-content">
-        @if (alert.kind === 'refresh') {
+        @if (alert.kind === 'landscape-confirm') {
+          <p class="editor-eyebrow eyebrow">Landscape event</p>
+          <h2 id="event-alert-title">Landscape confirmed</h2>
+          <p class="alert-description">The editor emitted the confirmed landscape state.</p>
+          <dl class="event-data">
+            <div>
+              <dt>Event</dt>
+              <dd>stateChange</dd>
+            </div>
+            <div>
+              <dt>Version</dt>
+              <dd>{{ alert.state.version }}</dd>
+            </div>
+            <div>
+              <dt>Columns</dt>
+              <dd>{{ alert.state.columns }}</dd>
+            </div>
+            <div>
+              <dt>Widget layout</dt>
+              <dd>
+                @if (alert.state.widgets.length) {
+                  <table class="landscape-widget-data">
+                    <caption class="sr-only">
+                      Confirmed widget positions
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Column</th>
+                        <th scope="col">Row</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (widget of alert.state.widgets; track widget.id) {
+                        <tr>
+                          <td>{{ widget.id }}</td>
+                          <td>{{ widget.column }}</td>
+                          <td>{{ widget.row }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                } @else {
+                  No widgets
+                }
+              </dd>
+            </div>
+          </dl>
+        } @else if (alert.kind === 'refresh') {
           <p class="editor-eyebrow eyebrow">Refresh event</p>
           <h2 id="event-alert-title">Refresh requested</h2>
           <p class="alert-description">The renderer emitted the configured refresh event.</p>
@@ -27,6 +85,10 @@
             <div>
               <dt>Event</dt>
               <dd>refreshRequested</dd>
+            </div>
+            <div>
+              <dt>Widget ID</dt>
+              <dd>{{ alert.widgetId }}</dd>
             </div>
             <div>
               <dt>Label</dt>
@@ -38,6 +100,10 @@
           <h2 id="event-alert-title">{{ alert.element.label }} was clicked</h2>
           <p class="alert-description">The renderer passed this data to the action handler.</p>
           <dl class="event-data">
+            <div>
+              <dt>Widget ID</dt>
+              <dd>{{ alert.widgetId }}</dd>
+            </div>
             <div>
               <dt>Method</dt>
               <dd>{{ alert.element.method | uppercase }}</dd>

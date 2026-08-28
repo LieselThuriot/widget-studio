@@ -1,0 +1,126 @@
+<section class="landscape-shell" [class.is-editing]="isEditing()" [class.is-dark]="darkMode()">
+  <header class="landscape-toolbar">
+    @if (isEditing()) {
+      <div>
+        <span class="landscape-kicker">Widget landscape</span>
+        <strong>{{ activeState().columns }} columns</strong>
+      </div>
+    }
+    @if (!isEditing()) {
+      <button
+        type="button"
+        class="landscape-icon-button"
+        aria-label="Edit landscape"
+        (click)="enterEdit()"
+      >
+        ⚙
+      </button>
+    } @else {
+      <div class="landscape-toolbar-actions">
+        <button type="button" class="landscape-button" (click)="cancelEdit()">Cancel</button>
+        <button
+          type="button"
+          class="landscape-button landscape-button--primary"
+          (click)="confirmEdit()"
+        >
+          Confirm
+        </button>
+      </div>
+    }
+  </header>
+  <div class="landscape-body">
+    <div
+      class="landscape-grid"
+      [style.--landscape-columns]="activeState().columns"
+      [class.is-dragging]="dragId() !== null || dragPaletteItem() !== null"
+      (dragover)="dragOverWidget($event)"
+      (dragleave)="dragLeaveWidget($event)"
+      (drop)="dropWidget($event)"
+    >
+      @for (item of activeState().widgets; track item.id) {
+        <article
+          class="landscape-item"
+          [class.is-selected]="item.id === selectedId()"
+          [class.is-drag-source]="item.id === dragId()"
+          [style.grid-area]="
+            item.row +
+            1 +
+            ' / ' +
+            (item.column + 1) +
+            ' / ' +
+            (item.row + footprintFor(item).rowSpan + 1) +
+            ' / ' +
+            (item.column + footprintFor(item).columnSpan + 1)
+          "
+          [draggable]="isEditing()"
+          tabindex="0"
+          (dragstart)="startDrag($event, item.id)"
+          (dragend)="endDrag()"
+          (click)="isEditing() && selectWidget(item.id)"
+          (keydown.enter)="isEditing() && selectWidget(item.id)"
+          (keydown.space)="$event.preventDefault(); isEditing() && selectWidget(item.id)"
+        >
+          @if (isEditing()) {
+            <div class="item-controls">
+              <button
+                type="button"
+                class="landscape-icon-button"
+                aria-label="Delete widget"
+                (click)="deleteWidget(item.id); $event.stopPropagation()"
+              >
+                ×
+              </button>
+            </div>
+          }
+          <widget-renderer
+            [widget]="item.widget"
+            [darkMode]="darkMode()"
+            (refreshRequested)="refresh(item.id)"
+            (actionRequested)="action(item.id, $event)"
+          />
+        </article>
+      }
+      @if (dragTarget(); as target) {
+        <div
+          class="landscape-drop-placeholder"
+          [class.is-invalid]="!canFitDraggedWidget()"
+          [style.grid-area]="
+            target.row +
+            1 +
+            ' / ' +
+            (target.column + 1) +
+            ' / ' +
+            (target.row + footprintFor(draggedWidgetForTemplate()!).rowSpan + 1) +
+            ' / ' +
+            (target.column + footprintFor(draggedWidgetForTemplate()!).columnSpan + 1)
+          "
+          aria-hidden="true"
+        ></div>
+      }
+      @if (!activeState().widgets.length) {
+        <p class="landscape-empty">Open edit mode to add a widget.</p>
+      }
+    </div>
+    @if (isEditing()) {
+      <aside class="landscape-palette" aria-label="Widgets">
+        <span class="landscape-kicker">Add widget</span>
+        @for (item of palette(); track item.id) {
+          <button
+            type="button"
+            class="palette-item"
+            [disabled]="invalidPaletteIds().includes(item.id)"
+            (click)="addFromPalette(item)"
+            (dragstart)="startPaletteDrag($event, item)"
+            (dragend)="endDrag()"
+            draggable="true"
+          >
+            <strong>{{ item.label }}</strong>
+            @if (item.description) {
+              <small>{{ item.description }}</small>
+            }
+          </button>
+        }
+      </aside>
+    }
+  </div>
+</section>

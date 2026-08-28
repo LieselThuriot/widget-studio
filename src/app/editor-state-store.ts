@@ -153,7 +153,11 @@ export class EditorStateStore {
   }
 
   onRefresh(): void {
-    this.actionAlert.set({ kind: 'refresh', label: this.widget().refresh.label });
+    this.actionAlert.set({
+      kind: 'refresh',
+      widgetId: this.widget().id,
+      label: this.widget().refresh.label,
+    });
   }
 
   openPreview(): void {
@@ -168,11 +172,12 @@ export class EditorStateStore {
     this.actionAlert.set(null);
   }
 
-  onAction(event: { element: ButtonElement; event: Event }): void {
+  onAction(event: { widgetId: string; element: ButtonElement; event: Event }): void {
     event.event.preventDefault();
     const target = event.event.target;
     this.actionAlert.set({
       kind: 'action',
+      widgetId: event.widgetId,
       element: event.element,
       event: {
         type: event.event.type,

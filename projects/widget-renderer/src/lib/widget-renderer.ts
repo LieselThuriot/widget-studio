@@ -153,6 +153,7 @@ export class WidgetRenderer {
 
 const emptyWidget: Widget = {
   version: 2,
+  id: 'empty-widget',
   size: 'square',
   rows: [{ size: 1, unit: 'star' }],
   columns: [{ size: 1, unit: 'star' }],

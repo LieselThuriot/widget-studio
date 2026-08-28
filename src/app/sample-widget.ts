@@ -9,6 +9,7 @@ export interface WidgetSample {
 
 const dailyBrief: Widget = {
   version: 2,
+  id: 'daily-brief',
   size: 'square',
   rows: [
     { unit: 'auto' },
@@ -128,6 +129,7 @@ const dailyBrief: Widget = {
 
 const payslip: Widget = {
   version: 2,
+  id: 'payslip',
   size: 'square',
   rows: [
     { unit: 'auto' },
@@ -220,6 +222,7 @@ const payslip: Widget = {
 
 const clockedIn: Widget = {
   version: 2,
+  id: 'clocked-in',
   size: 'wide',
   rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
@@ -293,6 +296,7 @@ const clockedIn: Widget = {
 
 const holidayBalance: Widget = {
   version: 2,
+  id: 'holiday-balance',
   size: 'wide',
   rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
@@ -353,6 +357,7 @@ const holidayBalance: Widget = {
 
 const miniPulse: Widget = {
   version: 2,
+  id: 'mini-pulse',
   size: 'mini',
   rows: [
     { size: 18, unit: 'pixel' },
@@ -413,6 +418,7 @@ const miniPulse: Widget = {
 
 const megaOverview: Widget = {
   version: 2,
+  id: 'mega-overview',
   size: 'mega',
   rows: [{ unit: 'auto' }, { unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
@@ -503,6 +509,7 @@ const megaOverview: Widget = {
 
 const heroLaunch: Widget = {
   version: 2,
+  id: 'hero-launch',
   size: 'hero',
   rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
   columns: [
@@ -625,6 +632,7 @@ const heroLaunch: Widget = {
 
 const brokenWidget = {
   version: 3,
+  id: 'broken-widget',
   size: 'invalid',
   rows: [],
   columns: [],
@@ -640,6 +648,7 @@ const brokenWidget = {
 
 const newWidget: Widget = {
   version: 2,
+  id: 'new-widget',
   size: 'square',
   rows: [{ size: 1, unit: 'star' }],
   columns: [{ size: 1, unit: 'star' }],

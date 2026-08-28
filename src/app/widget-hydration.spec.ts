@@ -2,6 +2,7 @@ import { normalizeWidgetInput, WidgetContract } from 'widget-renderer';
 
 const contract: WidgetContract = {
   version: 2,
+  id: 'hydration-test',
   size: 'square',
   rows: [{ size: 1, unit: 'star' }],
   columns: [{ size: 1, unit: 'star' }],
