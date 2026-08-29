@@ -53,6 +53,8 @@ export interface LandscapeFootprint {
 
 export const landscapeFootprints: Record<WidgetSize, LandscapeFootprint> = {
   mini: { columnSpan: 1, rowSpan: 1 },
+  compact: { columnSpan: 2, rowSpan: 1 },
+  tall: { columnSpan: 1, rowSpan: 2 },
   square: { columnSpan: 2, rowSpan: 2 },
   wide: { columnSpan: 4, rowSpan: 2 },
   mega: { columnSpan: 4, rowSpan: 4 },

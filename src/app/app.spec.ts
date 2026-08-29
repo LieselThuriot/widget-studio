@@ -257,11 +257,18 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('.model-loader-overlay')).toBeTruthy();
   });
 
-  it('should load the mini, banner, mega, and hero samples at their intended sizes', async () => {
+  it('should load the samples at their intended sizes', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const expectedSamples = sampleWidgets.filter(({ id }) =>
-      ['mini-pulse', 'weather-snapshot', 'mega-overview', 'hero-launch'].includes(id),
+      [
+        'mini-pulse',
+        'weather-snapshot',
+        'compact-hiring',
+        'tall-hydration',
+        'mega-overview',
+        'hero-launch',
+      ].includes(id),
     );
 
     for (const sample of expectedSamples) {
@@ -276,19 +283,17 @@ describe('App', () => {
       await fixture.whenStable();
 
       const dimensions = fixture.nativeElement.querySelector('.dimensions')?.textContent;
-      const expectedDimensions =
-        sample.widget.size === 'mini'
-          ? '133 × 123'
-          : sample.widget.size === 'mega'
-            ? '556 × 516'
-            : sample.widget.size === 'banner'
-              ? '274 × 516'
-              : sample.widget.size === 'hero'
-                ? '1120 × 516'
-                : sample.widget.size === 'wide'
-                  ? '556 × 254'
-                  : '274 × 254';
-      expect(dimensions).toContain(expectedDimensions);
+      const expectedDimensions: Record<string, string> = {
+        mini: '133 × 123',
+        compact: '274 × 123',
+        tall: '133 × 254',
+        square: '274 × 254',
+        wide: '556 × 254',
+        mega: '556 × 516',
+        banner: '274 × 516',
+        hero: '1120 × 516',
+      };
+      expect(dimensions).toContain(expectedDimensions[sample.widget.size]);
       expect(fixture.nativeElement.querySelector('.widget-validation-overlay')).toBeNull();
     }
   });
@@ -1091,6 +1096,8 @@ describe('App', () => {
       '4 × 2',
       '1 × 1',
       '2 × 4',
+      '2 × 1',
+      '1 × 2',
       '4 × 4',
       '8 × 4',
       '2 × 2',

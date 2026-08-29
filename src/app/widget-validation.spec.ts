@@ -28,7 +28,7 @@ describe('widget contract validation', () => {
     expect(safeParseWidgetInput({ ...validContract, refresh }).success).toBe(true);
   });
 
-  it.each(['mini', 'square', 'wide', 'mega', 'banner', 'hero'] as const)(
+  it.each(['mini', 'compact', 'tall', 'square', 'wide', 'mega', 'banner', 'hero'] as const)(
     'accepts %s size',
     (size) => {
       expect(safeParseWidgetInput({ ...validContract, size }).success).toBe(true);

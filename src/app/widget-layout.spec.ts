@@ -12,6 +12,8 @@ describe('gridTemplate', () => {
 describe('widget dimensions', () => {
   it.each([
     ['mini', 133, 123],
+    ['compact', 274, 123],
+    ['tall', 133, 254],
     ['square', 274, 254],
     ['wide', 556, 254],
     ['mega', 556, 516],

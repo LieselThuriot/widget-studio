@@ -5,6 +5,8 @@ namespace WidgetStudio.Contracts.Enums;
 public enum WidgetSize
 {
     [JsonStringEnumMemberName("mini")] Mini,
+    [JsonStringEnumMemberName("compact")] Compact,
+    [JsonStringEnumMemberName("tall")] Tall,
     [JsonStringEnumMemberName("square")] Square,
     [JsonStringEnumMemberName("wide")] Wide,
     [JsonStringEnumMemberName("mega")] Mega,

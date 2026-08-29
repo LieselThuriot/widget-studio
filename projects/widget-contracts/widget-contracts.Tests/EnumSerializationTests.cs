@@ -17,6 +17,8 @@ public sealed class EnumSerializationTests
 
     [Theory]
     [InlineData(WidgetSize.Mini, "mini")]
+    [InlineData(WidgetSize.Compact, "compact")]
+    [InlineData(WidgetSize.Tall, "tall")]
     [InlineData(WidgetSize.Square, "square")]
     [InlineData(WidgetSize.Wide, "wide")]
     [InlineData(WidgetSize.Mega, "mega")]

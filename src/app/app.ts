@@ -402,6 +402,8 @@ function isLandscapeWidgetSize(
 ): value is LandscapeStateChange['widgets'][number]['size'] {
   return (
     value === 'mini' ||
+    value === 'compact' ||
+    value === 'tall' ||
     value === 'square' ||
     value === 'wide' ||
     value === 'mega' ||

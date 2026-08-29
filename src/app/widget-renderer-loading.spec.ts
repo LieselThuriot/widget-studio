@@ -24,7 +24,7 @@ describe('widget renderer loading state', () => {
     expect(fixture.nativeElement.querySelector('.widget-skeleton.is-wide')).toBeTruthy();
   });
 
-  it.each(['mini', 'mega'] as const)(
+  it.each(['mini', 'compact', 'tall', 'mega'] as const)(
     'renders the %s skeleton variant when requested',
     async (size) => {
       const fixture = TestBed.createComponent(WidgetRenderer);

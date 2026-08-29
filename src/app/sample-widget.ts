@@ -572,6 +572,109 @@ const weatherSnapshot: Widget = {
   ],
 };
 
+const compactHiring: Widget = {
+  version: 2,
+  id: 'hiring',
+  size: 'compact',
+  rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
+  columns: [
+    { size: 1, unit: 'star' },
+    { size: 1, unit: 'star' },
+  ],
+  background: {
+    color: '#30283f',
+    anchor: 'center',
+    sensitive: false,
+    repeat: false,
+    size: 'cover',
+    overlayColor: '#30283fe6',
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=274&h=123&auto=format&fit=crop'
+  },
+  refresh: { enabled: true, label: 'Refresh hiring pipeline' },
+  elements: [
+    {
+      id: 'hiring-label',
+      type: 'text',
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 2, anchor: 'top left' },
+      sensitive: false,
+      text: 'HIRING · PRODUCT DESIGN',
+      style: { color: '#e6b8d5', font: { size: 8, bold: true }, align: 'left', wrap: true },
+    },
+    {
+      id: 'hiring-title',
+      type: 'text',
+      grid: { row: 1, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'center left' },
+      sensitive: false,
+      text: 'Senior product\ndesigner',
+      style: { color: '#faf5ff', font: { size: 15, bold: true }, align: 'left', wrap: true },
+    },
+    {
+      id: 'hiring-summary',
+      type: 'text',
+      grid: { row: 2, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'bottom left' },
+      sensitive: false,
+      text: 'Next interview · Thursday',
+      style: { color: '#d5c9e0', font: { size: 8, bold: true }, align: 'left', wrap: true },
+    },
+    {
+      id: 'hiring-funnel',
+      type: 'funnel',
+      grid: { row: 0, column: 1, rowSpan: 3, columnSpan: 1, anchor: 'center' },
+      sensitive: false,
+      data: [
+        { label: 'Applied', value: 42, color: '#d9a6cf' },
+        { label: 'Screened', value: 18, color: '#a977b1' },
+        { label: 'Interview', value: 8, color: '#754e87' },
+        { label: 'Offer', value: 2, color: '#4d3564' },
+      ],
+      showLegend: false,
+      style: { color: { legend: '#eadcf0', title: '#fff7ff' }, font: { size: 8 } },
+    },
+  ],
+};
+
+const tallHydration: Widget = {
+  version: 2,
+  id: 'hydration',
+  size: 'tall',
+  rows: [{ unit: 'auto' }, { size: 1, unit: 'star' }, { unit: 'auto' }],
+  columns: [{ size: 1, unit: 'star' }],
+  background: {
+    color: '#dcecf4',
+    anchor: 'center',
+    sensitive: false,
+    repeat: false,
+    size: 'cover',
+    overlayColor: '#dcecf4b3',
+    image:
+      'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=133&h=254&auto=format&fit=crop',
+  },
+  refresh: { enabled: true, label: 'Refresh hydration' },
+  elements: [
+    {
+      id: 'hydration-label',
+      type: 'text',
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'top left' },
+      sensitive: false,
+      text: 'HYDRATION',
+      style: { color: '#39718a', font: { size: 8, bold: true }, align: 'left', wrap: true },
+    },
+    {
+      id: 'hydration-gauge',
+      type: 'gauge',
+      grid: { row: 1, column: 0, rowSpan: 2, columnSpan: 1, anchor: 'center' },
+      sensitive: false,
+      title: 'glasses today',
+      data: { min: 0, max: 8, value: 6 },
+      showLegend: true,
+      style: {
+        color: { legend: '#39718a', title: '#19445b', fill: '#4babc1', track: '#39718a35' },
+        font: { size: 8 },
+      },
+    },
+  ],
+};
+
 const megaOverview: Widget = {
   version: 2,
   id: 'mega-overview',
@@ -849,6 +952,18 @@ export const sampleWidgets: readonly WidgetSample[] = [
     name: 'Weather snapshot',
     description: 'A calm Antwerp forecast at a glance',
     widget: weatherSnapshot,
+  },
+  {
+    id: 'hiring',
+    name: 'Hiring pipeline',
+    description: 'A compact candidate pipeline',
+    widget: compactHiring,
+  },
+  {
+    id: 'hydration',
+    name: 'Hydration',
+    description: 'A slim daily progress card',
+    widget: tallHydration,
   },
   {
     id: 'mega-overview',

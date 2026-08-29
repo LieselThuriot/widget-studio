@@ -14,6 +14,8 @@
       (change)="widgetChanged.emit({ size: size($event) })"
     >
       <option value="mini">Mini · {{ dimensions('mini') }}</option>
+      <option value="compact">Compact · {{ dimensions('compact') }}</option>
+      <option value="tall">Tall · {{ dimensions('tall') }}</option>
       <option value="square">Square · {{ dimensions('square') }}</option>
       <option value="wide">Wide · {{ dimensions('wide') }}</option>
       <option value="banner">Banner · {{ dimensions('banner') }}</option>

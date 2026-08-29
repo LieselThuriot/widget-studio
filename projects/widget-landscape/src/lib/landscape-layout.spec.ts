@@ -20,6 +20,11 @@ describe('landscape layout', () => {
     expect(landscapeFootprintForSize('banner')).toEqual({ columnSpan: 2, rowSpan: 4 });
   });
 
+  it('uses compact footprints for the compact and tall sizes', () => {
+    expect(landscapeFootprintForSize('compact')).toEqual({ columnSpan: 2, rowSpan: 1 });
+    expect(landscapeFootprintForSize('tall')).toEqual({ columnSpan: 1, rowSpan: 2 });
+  });
+
   it('pushes overlapping widgets down', () => {
     const state = { version: 1, columns: 2, widgets: [widget('a'), widget('b')] } as LandscapeState;
     const moved = placeWithPushDown(state, 'b', 0, 0);

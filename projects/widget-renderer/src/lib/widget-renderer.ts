@@ -168,7 +168,9 @@ const emptyWidget: Widget = {
 };
 
 function widgetSizeOrSquare(value: unknown): Widget['size'] {
-  return ['mini', 'square', 'wide', 'mega', 'banner', 'hero'].includes(value as Widget['size'])
+  return ['mini', 'compact', 'tall', 'square', 'wide', 'mega', 'banner', 'hero'].includes(
+    value as Widget['size'],
+  )
     ? (value as Widget['size'])
     : 'square';
 }

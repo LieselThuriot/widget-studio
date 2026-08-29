@@ -22,7 +22,7 @@ export class WidgetGridSettings {
 
   protected size(event: Event): Widget['size'] {
     const value = eventValue(event);
-    return ['mini', 'square', 'wide', 'mega', 'banner', 'hero'].includes(value)
+    return ['mini', 'compact', 'tall', 'square', 'wide', 'mega', 'banner', 'hero'].includes(value)
       ? (value as Widget['size'])
       : 'square';
   }

@@ -8,6 +8,8 @@ export const WIDGET_CELL_HEIGHT = 123;
 
 const footprintBySize: Record<WidgetSize, { columns: number; rows: number }> = {
   mini: { columns: 1, rows: 1 },
+  compact: { columns: 2, rows: 1 },
+  tall: { columns: 1, rows: 2 },
   square: { columns: 2, rows: 2 },
   wide: { columns: 4, rows: 2 },
   mega: { columns: 4, rows: 4 },

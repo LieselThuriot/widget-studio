@@ -12,7 +12,8 @@ export type WidgetElementType =
   | 'line'
   | 'progress';
 export type ButtonMethod = 'get' | 'post';
-export type WidgetSize = 'mini' | 'square' | 'wide' | 'mega' | 'banner' | 'hero';
+export type WidgetSize =
+  'mini' | 'compact' | 'tall' | 'square' | 'wide' | 'mega' | 'banner' | 'hero';
 export type ElementAnchor =
   | 'top left'
   | 'top center'

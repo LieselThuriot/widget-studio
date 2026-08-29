@@ -95,7 +95,7 @@ export class DashboardCard {
 
 ### Loading state
 
-Set `loading` to `true` for the default square skeleton, or to `'wide'` for a wide skeleton:
+Set `loading` to `true` for the default square skeleton, or to a widget size such as `'wide'` for a matching skeleton:
 
 ```html
 <widget-renderer [loading]="'wide'" [darkMode]="true" />
@@ -126,7 +126,7 @@ Every input must use `version: 2` and include:
 
 | Field | Description |
 | --- | --- |
-| `size` | `mini`, `square`, `wide`, `mega`, or `hero`; dimensions include the 8px layout gap |
+| `size` | `mini`, `compact`, `square`, `wide`, `mega`, `banner`, `hero`, or `tall`; dimensions include the 8px layout gap |
 | `rows` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
 | `columns` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
 | `background` | Color, optional image, sizing, position, repeat, overlay, and sensitivity settings |
