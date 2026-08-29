@@ -45,6 +45,7 @@ export class WidgetLandscape {
   readonly state = input.required<LandscapeState>();
   readonly palette = input<readonly LandscapePaletteItem[]>([]);
   readonly editMode = input(false);
+  readonly columnsLocked = input(false);
   readonly darkMode = input(false);
   readonly stateChange = output<LandscapeStateChange>();
   readonly editModeChange = output<boolean>();
@@ -94,9 +95,20 @@ export class WidgetLandscape {
       })
       .map((item) => item.id),
   );
+  protected readonly minimumColumns = computed(() =>
+    this.activeState().widgets.reduce(
+      (minimum, widget) => Math.max(minimum, footprintFor(widget).columnSpan),
+      1,
+    ),
+  );
 
   protected paletteFootprint(item: LandscapePaletteItem) {
     return item.size ? landscapeFootprintForSize(item.size) : null;
+  }
+
+  protected columnBoundaryOffset(): number {
+    const columns = this.activeState().columns;
+    return 18 + columns * 133 + Math.max(0, columns - 1) * 8;
   }
 
   protected enterEdit(): void {
@@ -123,6 +135,19 @@ export class WidgetLandscape {
     this.selectedId.set(null);
     this.paletteSide.set('right');
     this.editModeChange.emit(false);
+  }
+
+  protected updateColumns(event: Event): void {
+    const columns = Number((event.target as HTMLInputElement).value);
+    if (!Number.isFinite(columns)) return;
+    this.draft.update((state) =>
+      state
+        ? normalizeLandscapeState({
+            ...state,
+            columns: Math.max(this.minimumColumns(), Math.floor(columns)),
+          })
+        : state,
+    );
   }
 
   protected cancelEdit(): void {

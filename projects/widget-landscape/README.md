@@ -21,9 +21,12 @@ Import `WidgetLandscape` and bind a `LandscapeState`. Supply palette entries wit
   [state]="state"
   [palette]="palette"
   [darkMode]="darkMode"
+  [columnsLocked]="false"
   (stateChange)="save($event)"
 />
 ```
+
+While editing, users can change the column count unless `columnsLocked` is `true`. Column changes are draft-only until confirmation; cancelling edit mode restores the original count and layout. The confirmed count is emitted as `stateChange.columns`.
 
 The surface is transparent. The package does not inspect `html[data-theme]` and does not require application-level design tokens. Consumers can override package variables such as `--widget-landscape-accent` from their host stylesheet.
 

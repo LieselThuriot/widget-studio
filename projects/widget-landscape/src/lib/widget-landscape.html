@@ -7,9 +7,22 @@
 >
   <header class="landscape-toolbar">
     @if (isEditing()) {
-      <div>
+      <div class="landscape-toolbar-heading">
         <span class="landscape-kicker">Widget landscape</span>
-        <strong>{{ activeState().columns }} columns</strong>
+        @if (!columnsLocked()) {
+          <label class="landscape-column-control">
+            <span>Columns</span>
+            <input
+              type="number"
+              [min]="minimumColumns()"
+              [value]="activeState().columns"
+              aria-label="Landscape columns"
+              (input)="updateColumns($event)"
+            />
+          </label>
+        } @else {
+          <strong>{{ activeState().columns }} columns</strong>
+        }
       </div>
     }
     @if (!isEditing()) {
@@ -46,6 +59,13 @@
       (dragleave)="dragLeaveWidget($event)"
       (drop)="dropWidget($event)"
     >
+      @if (isEditing()) {
+        <div
+          class="landscape-column-boundary"
+          [style.left.px]="columnBoundaryOffset()"
+          aria-hidden="true"
+        ></div>
+      }
       @for (item of activeState().widgets; track item.id) {
         <article
           class="landscape-item"
