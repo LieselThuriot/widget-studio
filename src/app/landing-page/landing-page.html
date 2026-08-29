@@ -1,0 +1,73 @@
+<main class="studio-shell landing-page">
+  <app-studio-header
+    [darkMode]="darkMode()"
+    [showActions]="false"
+    (darkModeToggled)="darkModeToggled.emit()"
+  />
+  <nav class="workspace-tabs" aria-label="Studio sections">
+    <a class="is-active" routerLink="/">Home</a>
+    <a routerLink="/compose">Compose a widget</a>
+    <a routerLink="/landscape">Landscape</a>
+  </nav>
+  <section class="landing-hero" aria-labelledby="landing-title">
+    <div class="landing-hero__copy">
+      <p class="landing-eyebrow">A visual widget workbench</p>
+      <h1 id="landing-title">Compose useful interfaces in minutes.</h1>
+      <p class="landing-hero__intro">
+        Build compact, data-driven widgets, preview every state, and arrange them into a complete
+        landscape before sharing the model with your team.
+      </p>
+      <div class="landing-actions">
+        <a class="landing-button landing-button--primary" routerLink="/compose">Compose a widget</a>
+        <a class="landing-button landing-button--secondary" routerLink="/landscape"
+          >View landscape</a
+        >
+      </div>
+    </div>
+    <div class="landing-hero__mark" aria-hidden="true">
+      <div class="landing-hero__glow"></div>
+      <img src="android-chrome-512x512.png" alt="" width="280" height="280" />
+    </div>
+  </section>
+
+  <section class="landing-features" aria-labelledby="features-title">
+    <div class="landing-section-heading">
+      <p class="landing-eyebrow">A small toolkit for useful interfaces</p>
+      <h2 id="features-title">From first idea to shareable contract.</h2>
+    </div>
+    <div class="landing-feature-grid">
+      <article class="landing-feature-card">
+        <span class="landing-feature-card__number">01</span>
+        <h3>Compose visually</h3>
+        <p>
+          Add text, imagery, actions, dividers, charts, and progress displays to a flexible grid
+          canvas. Tune the details in the inspector without hand-editing JSON.
+        </p>
+      </article>
+      <article class="landing-feature-card">
+        <span class="landing-feature-card__number">02</span>
+        <h3>Preview with confidence</h3>
+        <p>
+          Check loading, refresh, button, chart, and sensitive-content states before your widget
+          leaves the studio. The live output contract stays visible as you work.
+        </p>
+      </article>
+      <article class="landing-feature-card">
+        <span class="landing-feature-card__number">03</span>
+        <h3>Arrange a landscape</h3>
+        <p>
+          Bring several widgets together in a configurable dashboard grid. Reposition them,
+          experiment with responsive reflow, and confirm the layout when it feels right.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="landing-footer-cta" aria-labelledby="cta-title">
+    <div>
+      <p class="landing-eyebrow">Ready when you are</p>
+      <h2 id="cta-title">Make the next useful widget.</h2>
+    </div>
+    <a class="landing-button landing-button--primary" routerLink="/compose">Open the studio</a>
+  </section>
+</main>

@@ -12,6 +12,7 @@ export class StudioHeader {
   readonly activeTab = input<'compose' | 'landscape'>('compose');
   readonly landscapeLoading = input(false);
   readonly landscapeSimulationDisabled = input(false);
+  readonly showActions = input(true);
   readonly darkModeToggled = output<void>();
   readonly previewRequested = output<void>();
   readonly shareRequested = output<void>();

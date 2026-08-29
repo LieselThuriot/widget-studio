@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./public/favicon.ico" alt="Widget Studio icon" width="72" />
+<img src="./public/android-chrome-512x512.png" alt="Widget Studio logo" width="160" />
 
 # Widget Studio
 

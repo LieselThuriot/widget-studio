@@ -1,5 +1,8 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NavigationEnd, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 import { StudioHeader } from './studio-header/studio-header';
 import { ElementPalette } from './element-palette/element-palette';
 import { LayerPanel } from './layer-panel/layer-panel';
@@ -18,6 +21,7 @@ import { sampleWidgets } from './sample-widget';
 import { decodeWidgetShareHash } from './widget-sharing';
 import { ShareDialog } from './share-dialog/share-dialog';
 import { ModelLoaderDialog } from './model-loader-dialog/model-loader-dialog';
+import { LandingPage } from './landing-page/landing-page';
 import {
   WidgetLandscape,
   LandscapePaletteItem,
@@ -32,6 +36,7 @@ import {
   selector: 'app-root',
   imports: [
     CommonModule,
+    RouterLink,
     StudioHeader,
     ElementPalette,
     LayerPanel,
@@ -43,6 +48,7 @@ import {
     ShareDialog,
     ModelLoaderDialog,
     WidgetLandscape,
+    LandingPage,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -54,6 +60,7 @@ import {
 })
 export class App {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router, { optional: true });
   protected readonly darkMode = signal(readThemePreference());
   private readonly editorState = new EditorStateStore();
   protected readonly widget = this.editorState.widget;
@@ -70,6 +77,7 @@ export class App {
   protected readonly shareLoadMessage = signal<string | null>(null);
   protected readonly isModelLoaderOpen = signal(false);
   protected readonly activeTab = signal<'compose' | 'landscape'>('compose');
+  protected readonly isLandingPage = signal(false);
   protected readonly landscapeState = signal<LandscapeState>(readLandscapeState());
   protected readonly isLandscapeLoadingSimulation = signal(false);
   protected readonly landscapePalette: readonly LandscapePaletteItem[] = sampleWidgets.map(
@@ -86,6 +94,12 @@ export class App {
 
   constructor() {
     this.destroyRef.onDestroy(() => this.stopLandscapeLoadingSimulation());
+    if (this.router) {
+      this.updateRouteView(this.router.url);
+      this.router.events
+        .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+        .subscribe((event) => this.updateRouteView(event.urlAfterRedirects));
+    }
     effect(() => {
       const darkMode = this.darkMode();
       document.documentElement.dataset['theme'] = darkMode ? 'dark' : 'light';
@@ -126,7 +140,24 @@ export class App {
 
   protected selectTab(tab: 'compose' | 'landscape'): void {
     if (tab !== 'landscape') this.stopLandscapeLoadingSimulation();
+    this.isLandingPage.set(false);
     this.activeTab.set(tab);
+    if (this.router) {
+      void this.router.navigate([tab]);
+      return;
+    }
+  }
+
+  private updateRouteView(url: string): void {
+    const path = url.split(/[?#]/, 1)[0].replace(/^\/+|\/+$/g, '');
+    if (path === '') {
+      this.stopLandscapeLoadingSimulation();
+      this.isLandingPage.set(true);
+      return;
+    }
+    this.isLandingPage.set(false);
+    this.activeTab.set(path === 'landscape' ? 'landscape' : 'compose');
+    if (path !== 'landscape') this.stopLandscapeLoadingSimulation();
   }
 
   protected saveLandscape(change: LandscapeStateChange): void {

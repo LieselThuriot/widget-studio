@@ -7,7 +7,7 @@ export async function encodeWidgetShareUrl(modelJson: string): Promise<string> {
 
   const compressed = await compress(new TextEncoder().encode(modelJson));
   const payload = bytesToBase64Url(compressed);
-  return `${window.location.origin}${window.location.pathname}${window.location.search}#${shareHashKey}=${payload}`;
+  return `${window.location.origin}/compose${window.location.search}#${shareHashKey}=${payload}`;
 }
 
 export async function decodeWidgetShareHash(hash: string): Promise<unknown | null> {

@@ -1,104 +1,109 @@
-<main class="workspace" [class.is-hero]="widget().size === 'hero'">
-  <app-studio-header
-    [darkMode]="darkMode()"
-    [activeTab]="activeTab()"
-    [landscapeLoading]="isLandscapeLoadingSimulation()"
-    [landscapeSimulationDisabled]="
-      !landscapeState().widgets.length || isLandscapeLoadingSimulation()
-    "
-    (darkModeToggled)="toggleDarkMode()"
-    (previewRequested)="openPreview()"
-    (shareRequested)="openShare()"
-    (simulateRequested)="toggleLandscapeLoadingSimulation()"
-  />
-  <nav class="workspace-tabs" aria-label="Studio sections">
-    <button
-      type="button"
-      [class.is-active]="activeTab() === 'compose'"
-      (click)="selectTab('compose')"
-    >
-      Compose a widget
-    </button>
-    <button
-      type="button"
-      [class.is-active]="activeTab() === 'landscape'"
-      (click)="selectTab('landscape')"
-    >
-      Landscape
-    </button>
-  </nav>
-  @if (activeTab() === 'compose') {
-    <div class="studio-grid" [class.is-hero]="widget().size === 'hero'">
-      <aside class="editor-panel panel palette-panel" aria-label="Widget elements">
-        <div class="editor-section-heading panel-heading">
-          <div>
-            <p class="editor-eyebrow eyebrow">Building blocks</p>
-            <h2>Elements</h2>
-          </div>
-          <span class="count">{{ widget().elements.length }}</span>
-        </div>
-        <app-element-palette
-          [items]="palette"
-          (elementAdded)="addElement($event)"
-          (dragStarted)="dragStart($event.event, $event.type)"
-        />
-        <div class="panel-divider"></div>
-        <app-layer-panel
-          [elements]="widget().elements"
-          [selectedId]="selectedId()"
-          (elementSelected)="selectElement($event)"
-          (elementDeleted)="deleteElement($event)"
-          (layersCleared)="clearLayers()"
-          (dragStarted)="layerDragStart($event.event, $event.id)"
-          (layerDropped)="reorderLayer($event.event, $event.id)"
-          (stackChanged)="changeStack($event)"
-        />
-      </aside>
-      <div class="canvas-column">
-        <app-canvas-workspace
-          [widget]="widget()"
-          [darkMode]="darkMode()"
-          [selectedId]="selectedId()"
-          [samples]="samples"
-          [selectedSampleId]="widgetSampleId()"
-          (sampleSelected)="loadSample($event)"
-          (modelLoadRequested)="openModelLoader()"
-          (elementDropped)="dropElement($event)"
-          (widgetSelected)="selectWidget()"
-          (elementSelected)="selectElement($event)"
-          (elementDeleted)="deleteElement($event)"
-          (elementMoved)="moveElement($event)"
-          (elementResized)="resizeElement($event)"
-          (elementStackChanged)="changeStack($event)"
-          (refreshRequested)="onRefresh()"
-          (actionRequested)="onAction($event)"
-        />
-        <app-output-contract [modelContract]="modelContract()" />
-      </div>
-      <app-settings-panel
-        [widget]="widget()"
-        [selectedElement]="selectedElement()"
-        (elementChanged)="updateSelected($event)"
-        (widgetChanged)="updateWidget($event)"
-        (placementChanged)="updatePosition($event.kind, $event.value)"
-        (spanChanged)="updateSpan($event.kind, $event.value)"
-        (radiusChanged)="updateRadius($event)"
-        (trackChanged)="updateTrack($event.kind, $event.index, $event.patch)"
-        (trackAdded)="addTrack($event)"
-        (trackRemoved)="removeTrack($event.kind, $event.index)"
-      />
-    </div>
-  } @else {
-    <widget-landscape
-      [state]="landscapeState()"
-      [palette]="landscapePalette"
+@if (isLandingPage()) {
+  <app-landing-page [darkMode]="darkMode()" (darkModeToggled)="toggleDarkMode()" />
+} @else {
+  <main class="studio-shell workspace" [class.is-hero]="widget().size === 'hero'">
+    <app-studio-header
       [darkMode]="darkMode()"
-      (stateChange)="saveLandscape($event)"
-      (refreshRequested)="landscapeRefresh($event)"
-      (actionRequested)="landscapeAction($event)"
+      [activeTab]="activeTab()"
+      [landscapeLoading]="isLandscapeLoadingSimulation()"
+      [landscapeSimulationDisabled]="
+        !landscapeState().widgets.length || isLandscapeLoadingSimulation()
+      "
+      (darkModeToggled)="toggleDarkMode()"
+      (previewRequested)="openPreview()"
+      (shareRequested)="openShare()"
+      (simulateRequested)="toggleLandscapeLoadingSimulation()"
     />
-  }
-</main>
+    <nav class="workspace-tabs" aria-label="Studio sections">
+      <a class="workspace-tab-link" routerLink="/">Home</a>
+      <button
+        type="button"
+        [class.is-active]="activeTab() === 'compose'"
+        (click)="selectTab('compose')"
+      >
+        Compose a widget
+      </button>
+      <button
+        type="button"
+        [class.is-active]="activeTab() === 'landscape'"
+        (click)="selectTab('landscape')"
+      >
+        Landscape
+      </button>
+    </nav>
+    @if (activeTab() === 'compose') {
+      <div class="studio-grid" [class.is-hero]="widget().size === 'hero'">
+        <aside class="editor-panel panel palette-panel" aria-label="Widget elements">
+          <div class="editor-section-heading panel-heading">
+            <div>
+              <p class="editor-eyebrow eyebrow">Building blocks</p>
+              <h2>Elements</h2>
+            </div>
+            <span class="count">{{ widget().elements.length }}</span>
+          </div>
+          <app-element-palette
+            [items]="palette"
+            (elementAdded)="addElement($event)"
+            (dragStarted)="dragStart($event.event, $event.type)"
+          />
+          <div class="panel-divider"></div>
+          <app-layer-panel
+            [elements]="widget().elements"
+            [selectedId]="selectedId()"
+            (elementSelected)="selectElement($event)"
+            (elementDeleted)="deleteElement($event)"
+            (layersCleared)="clearLayers()"
+            (dragStarted)="layerDragStart($event.event, $event.id)"
+            (layerDropped)="reorderLayer($event.event, $event.id)"
+            (stackChanged)="changeStack($event)"
+          />
+        </aside>
+        <div class="canvas-column">
+          <app-canvas-workspace
+            [widget]="widget()"
+            [darkMode]="darkMode()"
+            [selectedId]="selectedId()"
+            [samples]="samples"
+            [selectedSampleId]="widgetSampleId()"
+            (sampleSelected)="loadSample($event)"
+            (modelLoadRequested)="openModelLoader()"
+            (elementDropped)="dropElement($event)"
+            (widgetSelected)="selectWidget()"
+            (elementSelected)="selectElement($event)"
+            (elementDeleted)="deleteElement($event)"
+            (elementMoved)="moveElement($event)"
+            (elementResized)="resizeElement($event)"
+            (elementStackChanged)="changeStack($event)"
+            (refreshRequested)="onRefresh()"
+            (actionRequested)="onAction($event)"
+          />
+          <app-output-contract [modelContract]="modelContract()" />
+        </div>
+        <app-settings-panel
+          [widget]="widget()"
+          [selectedElement]="selectedElement()"
+          (elementChanged)="updateSelected($event)"
+          (widgetChanged)="updateWidget($event)"
+          (placementChanged)="updatePosition($event.kind, $event.value)"
+          (spanChanged)="updateSpan($event.kind, $event.value)"
+          (radiusChanged)="updateRadius($event)"
+          (trackChanged)="updateTrack($event.kind, $event.index, $event.patch)"
+          (trackAdded)="addTrack($event)"
+          (trackRemoved)="removeTrack($event.kind, $event.index)"
+        />
+      </div>
+    } @else {
+      <widget-landscape
+        [state]="landscapeState()"
+        [palette]="landscapePalette"
+        [darkMode]="darkMode()"
+        (stateChange)="saveLandscape($event)"
+        (refreshRequested)="landscapeRefresh($event)"
+        (actionRequested)="landscapeAction($event)"
+      />
+    }
+  </main>
+}
 @if (shareLoadMessage(); as message) {
   <div class="share-load-message" role="alert">
     <span>{{ message }}</span>

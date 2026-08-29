@@ -7,6 +7,13 @@
 @import './styles/editor-overlays.css';
 @import './styles/editor-inspector.css';
 
+.studio-shell {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: 34px 42px 50px;
+}
+
 html[data-theme='dark'] .panel,
 html[data-theme='dark'] .preview-window,
 html[data-theme='dark'] .preview-header,
@@ -68,21 +75,25 @@ html[data-theme='dark'] .color-input {
 html[data-theme='dark'] button:not(.icon-button):not(.action-button) {
   border-color: var(--editor-border-raised);
 }
-html[data-theme='dark'] .workspace-tabs button:not(.icon-button):not(.action-button) {
+html[data-theme='dark'] .workspace-tabs button:not(.icon-button):not(.action-button),
+html[data-theme='dark'] .workspace-tabs .workspace-tab-link {
   border: 0 !important;
   border-bottom: 2px solid transparent !important;
 }
-html[data-theme='dark'] .workspace-tabs button:hover:not(.icon-button):not(.action-button) {
+html[data-theme='dark'] .workspace-tabs button:hover:not(.icon-button):not(.action-button),
+html[data-theme='dark'] .workspace-tabs .workspace-tab-link:hover {
   border-bottom-color: color-mix(
     in srgb,
     var(--editor-accent) 55%,
     var(--editor-surface-page)
   ) !important;
 }
-html[data-theme='dark'] .workspace-tabs button:focus-visible:not(.icon-button):not(.action-button) {
+html[data-theme='dark'] .workspace-tabs button:focus-visible:not(.icon-button):not(.action-button),
+html[data-theme='dark'] .workspace-tabs .workspace-tab-link:focus-visible {
   border-bottom-color: var(--editor-accent) !important;
 }
-html[data-theme='dark'] .workspace-tabs button.is-active:not(.icon-button):not(.action-button) {
+html[data-theme='dark'] .workspace-tabs button.is-active:not(.icon-button):not(.action-button),
+html[data-theme='dark'] .workspace-tabs .workspace-tab-link.is-active {
   border-bottom-color: var(--editor-accent) !important;
 }
 html[data-theme='dark'] .eyebrow,

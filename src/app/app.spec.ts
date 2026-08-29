@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { sampleWidgets } from './sample-widget';
+import { provideRouter, Router } from '@angular/router';
+import { routes } from './app.routes';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -15,13 +17,112 @@ describe('App', () => {
     });
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [provideRouter(routes)],
     }).compileComponents();
+    await TestBed.inject(Router).navigateByUrl('/compose');
   });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  it('should show the landing page at the root route', async () => {
+    const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('app-landing-page')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.landing-page .brand-mark')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.landing-hero img')?.getAttribute('src')).toContain(
+      'android-chrome-512x512.png',
+    );
+    expect(
+      fixture.nativeElement.querySelector('.landing-button--primary')?.getAttribute('href'),
+    ).toBe('/compose');
+  });
+
+  it('should toggle dark mode from the landing page', async () => {
+    const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const themeButton = fixture.nativeElement.querySelector(
+      '.landing-page .theme-button',
+    ) as HTMLButtonElement;
+    expect(themeButton.getAttribute('aria-pressed')).toBe('false');
+
+    themeButton.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(themeButton.getAttribute('aria-pressed')).toBe('true');
+    expect(fixture.nativeElement.classList.contains('is-dark')).toBe(true);
+    expect(localStorage.getItem('widget-studio-theme')).toBe('dark');
+  });
+
+  it('should navigate between the compose and landscape routes', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/compose');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('app-editor-canvas')).toBeTruthy();
+    expect(fixture.componentInstance['activeTab']()).toBe('compose');
+
+    await router.navigateByUrl('/landscape');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('widget-landscape')).toBeTruthy();
+    expect(fixture.componentInstance['activeTab']()).toBe('landscape');
+  });
+
+  it('should navigate home from the landscape view', async () => {
+    localStorage.setItem(
+      'widget-studio-landscape',
+      JSON.stringify({
+        version: 1,
+        columns: 8,
+        widgets: [{ id: 'daily-brief', size: 'square', row: 0, column: 0 }],
+      }),
+    );
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/landscape');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    vi.useFakeTimers();
+    try {
+      (
+        fixture.nativeElement.querySelector(
+          '.header-actions .landscape-simulation-button',
+        ) as HTMLButtonElement
+      ).click();
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance['isLandscapeLoadingSimulation']()).toBe(true);
+
+      vi.useRealTimers();
+      (fixture.nativeElement.querySelector('.workspace-tab-link') as HTMLAnchorElement).click();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance['isLandscapeLoadingSimulation']()).toBe(false);
+      expect(
+        fixture.componentInstance['landscapeState']().widgets.every(
+          (item: { widget: unknown }) => item.widget !== null,
+        ),
+      ).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+
+    expect(router.url).toBe('/');
+    expect(fixture.nativeElement.querySelector('app-landing-page')).toBeTruthy();
   });
 
   it('should simulate landscape widgets loading one at a time', async () => {
@@ -116,11 +217,7 @@ describe('App', () => {
       ).click();
       fixture.detectChanges();
 
-      (
-        fixture.nativeElement.querySelector(
-          '.workspace-tabs button:first-child',
-        ) as HTMLButtonElement
-      ).click();
+      (fixture.nativeElement.querySelector('.workspace-tabs button') as HTMLButtonElement).click();
       fixture.detectChanges();
 
       expect(

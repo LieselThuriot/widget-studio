@@ -3,9 +3,6 @@
   min-height: 100dvh;
 }
 .workspace {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 34px 42px 50px;
   transition: max-width 220ms ease;
 }
 .workspace.is-hero {
@@ -17,7 +14,8 @@
   margin: 24px 0 20px;
   border-bottom: 1px solid var(--editor-border);
 }
-.workspace-tabs button {
+.workspace-tabs button,
+.workspace-tabs .workspace-tab-link {
   border: 0;
   border-bottom: 2px solid transparent;
   padding: 10px 12px;
@@ -25,16 +23,20 @@
   color: var(--editor-text-muted);
   cursor: pointer;
   font: 600 12px var(--editor-font-sans);
+  text-decoration: none;
 }
-.workspace-tabs button:hover {
+.workspace-tabs button:hover,
+.workspace-tabs .workspace-tab-link:hover {
   border-bottom-color: color-mix(in srgb, var(--editor-accent) 55%, var(--editor-surface-page));
   color: var(--editor-accent-strong);
 }
-.workspace-tabs button:focus-visible {
+.workspace-tabs button:focus-visible,
+.workspace-tabs .workspace-tab-link:focus-visible {
   border-bottom-color: var(--editor-accent);
   color: var(--editor-accent-strong);
 }
-.workspace-tabs button.is-active {
+.workspace-tabs button.is-active,
+.workspace-tabs .workspace-tab-link.is-active {
   border-bottom-color: var(--editor-accent);
   color: var(--editor-accent-strong);
 }

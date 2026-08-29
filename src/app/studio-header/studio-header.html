@@ -7,7 +7,7 @@
     <h1 class="studio-tagline">Build widgets that fit your workflow</h1>
   </div>
   <div class="header-actions">
-    @if (activeTab() === 'compose') {
+    @if (showActions() && activeTab() === 'compose') {
       <button
         type="button"
         class="editor-button editor-button--subtle preview-button"
@@ -28,7 +28,7 @@
         </svg>
         Share
       </button>
-    } @else {
+    } @else if (showActions()) {
       <button
         type="button"
         class="editor-button editor-button--subtle landscape-simulation-button"
