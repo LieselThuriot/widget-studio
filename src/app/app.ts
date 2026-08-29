@@ -404,6 +404,7 @@ function isLandscapeWidgetSize(
     value === 'square' ||
     value === 'wide' ||
     value === 'mega' ||
+    value === 'banner' ||
     value === 'hero'
   );
 }

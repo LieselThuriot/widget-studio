@@ -5,7 +5,7 @@ import {
   placeWithPushDown,
   previewPlacement,
 } from './landscape-layout';
-import { LandscapeState } from './landscape.model';
+import { landscapeFootprintForSize, LandscapeState } from './landscape.model';
 
 const widget = (id: string, size: 'mini' | 'square' = 'mini') => ({
   id,
@@ -16,6 +16,10 @@ const widget = (id: string, size: 'mini' | 'square' = 'mini') => ({
 });
 
 describe('landscape layout', () => {
+  it('uses the stacked-square footprint for Banner widgets', () => {
+    expect(landscapeFootprintForSize('banner')).toEqual({ columnSpan: 2, rowSpan: 4 });
+  });
+
   it('pushes overlapping widgets down', () => {
     const state = { version: 1, columns: 2, widgets: [widget('a'), widget('b')] } as LandscapeState;
     const moved = placeWithPushDown(state, 'b', 0, 0);

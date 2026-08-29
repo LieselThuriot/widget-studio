@@ -20,6 +20,7 @@ public sealed class EnumSerializationTests
     [InlineData(WidgetSize.Square, "square")]
     [InlineData(WidgetSize.Wide, "wide")]
     [InlineData(WidgetSize.Mega, "mega")]
+    [InlineData(WidgetSize.Banner, "banner")]
     [InlineData(WidgetSize.Hero, "hero")]
     public void SerializesWidgetSizes(WidgetSize value, string expected)
     {

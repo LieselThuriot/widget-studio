@@ -15,6 +15,7 @@ describe('widget dimensions', () => {
     ['square', 274, 254],
     ['wide', 556, 254],
     ['mega', 556, 516],
+    ['banner', 274, 516],
     ['hero', 1120, 516],
   ] as const)('maps %s to its dimensions', (size, width, height) => {
     expect(widgetWidth(size)).toBe(width);

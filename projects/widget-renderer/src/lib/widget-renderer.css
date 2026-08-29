@@ -30,6 +30,10 @@
   width: 556px;
   height: 516px;
 }
+.widget-skeleton.is-banner {
+  width: 274px;
+  height: 516px;
+}
 .widget-skeleton.is-hero {
   width: 1120px;
   height: 516px;
@@ -61,11 +65,11 @@
   width: 42px;
   height: 18px;
 }
-.widget-skeleton:is(.is-mega, .is-hero) .skeleton-content {
+.widget-skeleton:is(.is-mega, .is-banner, .is-hero) .skeleton-content {
   box-sizing: border-box;
   height: 100%;
 }
-.widget-skeleton:is(.is-mega, .is-hero) .skeleton-chart {
+.widget-skeleton:is(.is-mega, .is-banner, .is-hero) .skeleton-chart {
   flex: 1 1 auto;
   min-height: 180px;
 }

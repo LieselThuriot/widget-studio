@@ -8,5 +8,6 @@ public enum WidgetSize
     [JsonStringEnumMemberName("square")] Square,
     [JsonStringEnumMemberName("wide")] Wide,
     [JsonStringEnumMemberName("mega")] Mega,
+    [JsonStringEnumMemberName("banner")] Banner,
     [JsonStringEnumMemberName("hero")] Hero
 }

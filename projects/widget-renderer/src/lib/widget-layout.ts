@@ -11,6 +11,7 @@ const footprintBySize: Record<WidgetSize, { columns: number; rows: number }> = {
   square: { columns: 2, rows: 2 },
   wide: { columns: 4, rows: 2 },
   mega: { columns: 4, rows: 4 },
+  banner: { columns: 2, rows: 4 },
   hero: { columns: 8, rows: 4 },
 };
 

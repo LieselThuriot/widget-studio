@@ -28,9 +28,12 @@ describe('widget contract validation', () => {
     expect(safeParseWidgetInput({ ...validContract, refresh }).success).toBe(true);
   });
 
-  it.each(['mini', 'square', 'wide', 'mega', 'hero'] as const)('accepts %s size', (size) => {
-    expect(safeParseWidgetInput({ ...validContract, size }).success).toBe(true);
-  });
+  it.each(['mini', 'square', 'wide', 'mega', 'banner', 'hero'] as const)(
+    'accepts %s size',
+    (size) => {
+      expect(safeParseWidgetInput({ ...validContract, size }).success).toBe(true);
+    },
+  );
 
   it('rejects an ID-free widget', () => {
     expect(isWidget({ ...validContract, id: undefined })).toBe(false);

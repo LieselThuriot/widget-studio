@@ -257,11 +257,11 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('.model-loader-overlay')).toBeTruthy();
   });
 
-  it('should load the mini, mega, and hero samples at their intended sizes', async () => {
+  it('should load the mini, banner, mega, and hero samples at their intended sizes', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const expectedSamples = sampleWidgets.filter(({ id }) =>
-      ['mini-pulse', 'mega-overview', 'hero-launch'].includes(id),
+      ['mini-pulse', 'weather-snapshot', 'mega-overview', 'hero-launch'].includes(id),
     );
 
     for (const sample of expectedSamples) {
@@ -281,11 +281,13 @@ describe('App', () => {
           ? '133 × 123'
           : sample.widget.size === 'mega'
             ? '556 × 516'
-            : sample.widget.size === 'hero'
-              ? '1120 × 516'
-              : sample.widget.size === 'wide'
-                ? '556 × 254'
-                : '274 × 254';
+            : sample.widget.size === 'banner'
+              ? '274 × 516'
+              : sample.widget.size === 'hero'
+                ? '1120 × 516'
+                : sample.widget.size === 'wide'
+                  ? '556 × 254'
+                  : '274 × 254';
       expect(dimensions).toContain(expectedDimensions);
       expect(fixture.nativeElement.querySelector('.widget-validation-overlay')).toBeNull();
     }
@@ -1289,9 +1291,12 @@ describe('App', () => {
     fixture.detectChanges();
 
     const size = fixture.nativeElement.querySelector('.settings-panel select') as HTMLSelectElement;
-    size.value = 'wide';
+    size.value = 'banner';
     size.dispatchEvent(new Event('change', { bubbles: true }));
     fixture.detectChanges();
+    expect(size.value).toBe('banner');
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('274');
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('516');
     const editGrid = fixture.nativeElement.querySelector('.edit-grid-button') as HTMLButtonElement;
     editGrid.click();
     fixture.detectChanges();
@@ -1302,7 +1307,7 @@ describe('App', () => {
     addRow.click();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('556');
+    expect(fixture.nativeElement.querySelector('.dimensions')?.textContent).toContain('274');
     expect(fixture.nativeElement.querySelectorAll('.grid-editor-dialog .row-label')).toHaveLength(
       7,
     );

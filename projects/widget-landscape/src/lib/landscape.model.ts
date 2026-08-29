@@ -55,6 +55,7 @@ export const landscapeFootprints: Record<WidgetSize, LandscapeFootprint> = {
   square: { columnSpan: 2, rowSpan: 2 },
   wide: { columnSpan: 4, rowSpan: 2 },
   mega: { columnSpan: 4, rowSpan: 4 },
+  banner: { columnSpan: 2, rowSpan: 4 },
   hero: { columnSpan: 8, rowSpan: 4 },
 };
 
