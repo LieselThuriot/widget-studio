@@ -18,12 +18,14 @@ export interface LandscapeWidgetPlacement {
 export interface LandscapeStateChange {
   version: 1;
   columns: number;
+  responsive: boolean;
   widgets: LandscapeWidgetPlacement[];
 }
 
 export interface LandscapeState {
   version: 1;
   columns: number;
+  responsive: boolean;
   widgets: LandscapeWidget[];
 }
 

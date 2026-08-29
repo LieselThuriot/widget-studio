@@ -4,6 +4,7 @@ import {
   effect,
   ElementRef,
   input,
+  OnDestroy,
   output,
   signal,
   untracked,
@@ -39,7 +40,11 @@ import {
     '[class.is-dark]': 'darkMode()',
   },
 })
-export class WidgetLandscape {
+export class WidgetLandscape implements OnDestroy {
+  private static readonly gridPadding = 18;
+  private static readonly gridGap = 8;
+  private static readonly columnWidth = 133;
+  private static readonly rowHeight = 123;
   private static readonly paletteSwitchDistance = 280;
 
   readonly state = input.required<LandscapeState>();
@@ -47,6 +52,7 @@ export class WidgetLandscape {
   readonly editMode = input(false);
   readonly columnsLocked = input(false);
   readonly darkMode = input(false);
+  readonly responsive = input<boolean | undefined>();
   readonly stateChange = output<LandscapeStateChange>();
   readonly editModeChange = output<boolean>();
   readonly widgetSelected = output<{ id: string }>();
@@ -61,12 +67,15 @@ export class WidgetLandscape {
   protected readonly dragPreview = signal<LandscapeState | null>(null);
   protected readonly dragTarget = signal<{ row: number; column: number } | null>(null);
   protected readonly paletteSide = signal<'left' | 'right'>('right');
+  private readonly responsiveColumns = signal<number | null>(null);
   private readonly gridElement = viewChild<ElementRef<HTMLElement>>('landscapeGrid');
   private readonly paletteElement = viewChild<ElementRef<HTMLElement>>('landscapePalette');
   private dragOrigin: LandscapeState | null = null;
   private wasInControlledEditMode = false;
   private hoverTimer: ReturnType<typeof setTimeout> | null = null;
   private hoverKey: string | null = null;
+  private resizeObserver: ResizeObserver | null = null;
+  private observedGrid: HTMLElement | null = null;
 
   constructor() {
     effect(() => {
@@ -76,10 +85,41 @@ export class WidgetLandscape {
       }
       this.wasInControlledEditMode = editMode;
     });
+    effect(() => {
+      const grid = this.gridElement()?.nativeElement ?? null;
+      this.isResponsive();
+      this.activeState();
+      if (
+        grid === this.observedGrid &&
+        ((this.isResponsive() && this.resizeObserver) ||
+          (!this.isResponsive() && !this.resizeObserver))
+      )
+        return;
+      this.resizeObserver?.disconnect();
+      this.resizeObserver = null;
+      this.observedGrid = grid;
+      this.responsiveColumns.set(null);
+      if (!grid || !this.isResponsive() || typeof ResizeObserver === 'undefined') return;
+      this.resizeObserver = new ResizeObserver(() => this.updateResponsiveColumns(grid));
+      this.resizeObserver.observe(grid);
+      this.updateResponsiveColumns(grid);
+    });
   }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+  }
+
   protected readonly activeState = computed(
     () => this.dragPreview() ?? this.draft() ?? this.state(),
   );
+  protected readonly renderedState = computed(() => {
+    const state = this.activeState();
+    const columns = this.displayedColumns();
+    return this.isResponsive() && columns !== state.columns
+      ? normalizeLandscapeState({ ...state, columns })
+      : state;
+  });
   protected readonly isEditing = computed(() => this.editMode() || this.draft() !== null);
   protected readonly paletteItems = computed(() => this.palette() ?? []);
   protected readonly invalidPaletteIds = computed(() =>
@@ -103,13 +143,41 @@ export class WidgetLandscape {
     ),
   );
 
+  protected readonly isResponsive = computed(
+    () => this.responsive() ?? this.activeState().responsive,
+  );
+
   protected paletteFootprint(item: LandscapePaletteItem) {
     return item.size ? landscapeFootprintForSize(item.size) : null;
   }
 
   protected columnBoundaryOffset(): number {
-    const columns = this.activeState().columns;
-    return 18 + columns * 133 + Math.max(0, columns - 1) * 8;
+    const columns = this.renderedState().columns;
+    return (
+      WidgetLandscape.gridPadding +
+      columns * WidgetLandscape.columnWidth +
+      Math.max(0, columns - 1) * WidgetLandscape.gridGap
+    );
+  }
+
+  private displayedColumns(): number {
+    return this.isResponsive() && this.responsiveColumns() !== null
+      ? this.responsiveColumns()!
+      : this.activeState().columns;
+  }
+
+  private updateResponsiveColumns(grid: HTMLElement): void {
+    if (!this.isResponsive()) return;
+    const availableWidth = grid.getBoundingClientRect().width - WidgetLandscape.gridPadding * 2;
+    const fittingColumns = Math.floor(
+      (availableWidth + WidgetLandscape.gridGap) /
+        (WidgetLandscape.columnWidth + WidgetLandscape.gridGap),
+    );
+    const largestWidget = this.activeState().widgets.reduce(
+      (maximum, widget) => Math.max(maximum, footprintFor(widget).columnSpan),
+      1,
+    );
+    this.responsiveColumns.set(Math.max(largestWidget, fittingColumns, 1));
   }
 
   protected enterEdit(): void {
@@ -125,6 +193,7 @@ export class WidgetLandscape {
     this.stateChange.emit({
       version: 1,
       columns: normalizedState.columns,
+      responsive: this.isResponsive(),
       widgets: normalizedState.widgets.map(({ id, size, row, column }) => ({
         id,
         size,
@@ -136,6 +205,11 @@ export class WidgetLandscape {
     this.selectedId.set(null);
     this.paletteSide.set('right');
     this.editModeChange.emit(false);
+  }
+
+  protected updateResponsive(event: Event): void {
+    const responsive = (event.target as HTMLInputElement).checked;
+    this.draft.update((state) => (state ? { ...state, responsive } : state));
   }
 
   protected updateColumns(event: Event): void {
@@ -308,13 +382,22 @@ export class WidgetLandscape {
     moving: LandscapeWidget | null,
   ): { row: number; column: number } | null {
     const bounds = host.getBoundingClientRect();
-    const columns = this.activeState().columns;
+    const columns = this.renderedState().columns;
     if (!bounds.width || !columns || !moving) return null;
-    const padding = 18;
-    const column = Math.floor((event.clientX - bounds.left - padding) / 141);
+    const padding = WidgetLandscape.gridPadding;
+    const column = Math.floor(
+      (event.clientX - bounds.left - padding) /
+        (WidgetLandscape.columnWidth + WidgetLandscape.gridGap),
+    );
     const maxColumn = columns - footprintFor(moving).columnSpan;
     return {
-      row: Math.max(0, Math.floor((event.clientY - bounds.top - padding) / 131)),
+      row: Math.max(
+        0,
+        Math.floor(
+          (event.clientY - bounds.top - padding) /
+            (WidgetLandscape.rowHeight + WidgetLandscape.gridGap),
+        ),
+      ),
       column: Math.max(0, Math.min(maxColumn, column)),
     };
   }
@@ -377,16 +460,26 @@ export class WidgetLandscape {
   private updatePaletteSideForKeyboardMove(state: LandscapeState, id: string): void {
     const grid = this.gridElement()?.nativeElement;
     const palette = this.paletteElement()?.nativeElement;
-    const widget = state.widgets.find((item) => item.id === id);
+    const widget = this.renderedState().widgets.find((item) => item.id === id);
     if (!grid || !palette || !widget || getComputedStyle(palette).position === 'static') return;
 
     const gridBounds = grid.getBoundingClientRect();
     const paletteBounds = palette.getBoundingClientRect();
     const size = footprintFor(widget);
-    const left = gridBounds.left + 18 + widget.column * 141;
-    const top = gridBounds.top + 18 + widget.row * 131;
-    const right = left + size.columnSpan * 133 + (size.columnSpan - 1) * 8;
-    const bottom = top + size.rowSpan * 123 + (size.rowSpan - 1) * 8;
+    const left =
+      gridBounds.left +
+      WidgetLandscape.gridPadding +
+      widget.column * (WidgetLandscape.columnWidth + WidgetLandscape.gridGap);
+    const top =
+      gridBounds.top +
+      WidgetLandscape.gridPadding +
+      widget.row * (WidgetLandscape.rowHeight + WidgetLandscape.gridGap);
+    const right =
+      left +
+      size.columnSpan * WidgetLandscape.columnWidth +
+      (size.columnSpan - 1) * WidgetLandscape.gridGap;
+    const bottom =
+      top + size.rowSpan * WidgetLandscape.rowHeight + (size.rowSpan - 1) * WidgetLandscape.gridGap;
     const overlapsPalette =
       left < paletteBounds.right &&
       right > paletteBounds.left &&

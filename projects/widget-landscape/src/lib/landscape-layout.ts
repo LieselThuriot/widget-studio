@@ -122,7 +122,13 @@ export function addWidget(state: LandscapeState, widget: LandscapeWidget): Lands
 
 export function normalizeLandscapeState(state: LandscapeState): LandscapeState {
   const columns = Math.max(1, Math.floor(state.columns || 1));
-  let result: LandscapeState = { version: 1, columns, widgets: [] };
+  let result: LandscapeState = {
+    ...state,
+    version: 1,
+    columns,
+    responsive: state.responsive ?? false,
+    widgets: [],
+  };
   for (const widget of state.widgets) {
     if (!canFitWidget(widget, columns)) continue;
     const footprint = footprintFor(widget);

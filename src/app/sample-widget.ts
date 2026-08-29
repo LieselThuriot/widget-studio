@@ -588,8 +588,7 @@ const compactHiring: Widget = {
     repeat: false,
     size: 'cover',
     overlayColor: '#30283fe6',
-    image:
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600',
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600',
   },
   refresh: { enabled: true, label: 'Refresh hiring pipeline' },
   elements: [
@@ -647,8 +646,7 @@ const tallHydration: Widget = {
     repeat: false,
     size: 'cover',
     overlayColor: '#dcecf4b3',
-    image:
-      'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=600',
+    image: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=600',
   },
   refresh: { enabled: true, label: 'Refresh hydration' },
   elements: [

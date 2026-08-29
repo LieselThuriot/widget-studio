@@ -1099,6 +1099,8 @@ describe('App', () => {
     expect(data.querySelector('table.landscape-widget-data')).toBeTruthy();
     expect(data.textContent).toContain('daily-brief');
     expect(data.textContent).toContain('square');
+    expect(data.textContent).toContain('Responsive');
+    expect(data.textContent).toContain('false');
     expect(data.querySelector('tbody tr')?.textContent).toContain('0');
   });
 
@@ -1237,6 +1239,7 @@ describe('App', () => {
     expect(JSON.parse(localStorage.getItem('widget-studio-landscape') ?? '{}')).toEqual({
       version: 1,
       columns: 8,
+      responsive: false,
       widgets: [{ id: 'daily-brief', size: 'square', row: 0, column: 0 }],
     });
   });
@@ -1337,6 +1340,7 @@ describe('App', () => {
     expect(fixture.componentInstance['landscapeState']()).toEqual({
       version: 1,
       columns: 8,
+      responsive: false,
       widgets: [],
     });
   });

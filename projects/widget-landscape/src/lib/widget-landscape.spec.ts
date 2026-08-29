@@ -9,6 +9,7 @@ describe('WidgetLandscape', () => {
   const state: LandscapeState = {
     version: 1,
     columns: 8,
+    responsive: false,
     widgets: [
       {
         id: 'mini',
@@ -128,6 +129,85 @@ describe('WidgetLandscape', () => {
 
   it('shows the edit button when the palette has an item', () => {
     expect(fixture.nativeElement.querySelector('[aria-label="Edit landscape"]')).not.toBeNull();
+  });
+
+  it('keeps responsive mode disabled by default', () => {
+    expect(fixture.componentInstance.responsive()).toBe(false);
+    expect(fixture.nativeElement.querySelector('.landscape-shell.is-responsive')).toBeNull();
+  });
+
+  it('enables responsive mode without changing the configured state', () => {
+    fixture.componentRef.setInput('responsive', true);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.responsive()).toBe(true);
+    expect(fixture.nativeElement.querySelector('.landscape-shell.is-responsive')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.landscape-grid')?.getAttribute('style')).toContain(
+      '--landscape-columns: 8',
+    );
+  });
+
+  it('shows the responsive toggle only when the input is omitted', () => {
+    enterEdit();
+    expect(
+      fixture.nativeElement.querySelector('[aria-label="Responsive landscape"]'),
+    ).not.toBeNull();
+
+    fixture.componentRef.setInput('responsive', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[aria-label="Responsive landscape"]')).toBeNull();
+  });
+
+  it('emits the toggled responsive value on confirmation', () => {
+    let change: LandscapeStateChange | undefined;
+    fixture.componentRef.setInput('state', { ...structuredClone(state), responsive: false });
+    fixture.componentInstance.stateChange.subscribe((value) => (change = value));
+    enterEdit();
+
+    const toggle = fixture.nativeElement.querySelector(
+      '[aria-label="Responsive landscape"]',
+    ) as HTMLInputElement;
+    toggle.click();
+    fixture.detectChanges();
+    expect(change).toBeUndefined();
+
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+    expect(change?.responsive).toBe(true);
+  });
+
+  it('reverts the responsive toggle when editing is cancelled', () => {
+    fixture.componentRef.setInput('state', { ...structuredClone(state), responsive: false });
+    fixture.detectChanges();
+    enterEdit();
+
+    (
+      fixture.nativeElement.querySelector('[aria-label="Responsive landscape"]') as HTMLInputElement
+    ).click();
+    fixture.detectChanges();
+    expect(
+      (
+        fixture.nativeElement.querySelector(
+          '[aria-label="Responsive landscape"]',
+        ) as HTMLInputElement
+      ).checked,
+    ).toBe(true);
+
+    (
+      fixture.nativeElement.querySelector(
+        '.landscape-button:not(.landscape-button--primary)',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    enterEdit();
+    expect(
+      (
+        fixture.nativeElement.querySelector(
+          '[aria-label="Responsive landscape"]',
+        ) as HTMLInputElement
+      ).checked,
+    ).toBe(false);
   });
 
   it('clears all widgets from the draft and emits an empty layout on confirmation', () => {

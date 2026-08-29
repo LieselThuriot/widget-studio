@@ -363,6 +363,7 @@ function defaultLandscapeState(): LandscapeState {
   return landscapeStateFromPlacements({
     version: 1,
     columns: 8,
+    responsive: false,
     widgets: [
       { id: 'hydration', size: 'tall', row: 1, column: 4 },
       { id: 'holiday-balance', size: 'wide', row: 0, column: 0 },
@@ -377,7 +378,7 @@ function defaultLandscapeState(): LandscapeState {
 }
 
 function emptyLandscapeState(): LandscapeState {
-  return { version: 1, columns: 8, widgets: [] };
+  return { version: 1, columns: 8, responsive: false, widgets: [] };
 }
 
 function readLandscapeState(): LandscapeState {
@@ -395,7 +396,12 @@ function readLandscapeState(): LandscapeState {
 function isLandscapeStateChange(value: unknown): value is LandscapeStateChange {
   if (!value || typeof value !== 'object') return false;
   const state = value as Partial<LandscapeStateChange>;
-  if (state.version !== 1 || typeof state.columns !== 'number' || !Array.isArray(state.widgets)) {
+  if (
+    state.version !== 1 ||
+    typeof state.columns !== 'number' ||
+    (state.responsive !== undefined && typeof state.responsive !== 'boolean') ||
+    !Array.isArray(state.widgets)
+  ) {
     return false;
   }
   return state.widgets.every((item) => {
@@ -439,7 +445,12 @@ function landscapeStateFromPlacements(change: LandscapeStateChange): LandscapeSt
       },
     ];
   });
-  return normalizeLandscapeState({ version: 1, columns: change.columns, widgets });
+  return normalizeLandscapeState({
+    version: 1,
+    columns: change.columns,
+    responsive: change.responsive ?? false,
+    widgets,
+  });
 }
 
 function readThemePreference(): boolean {

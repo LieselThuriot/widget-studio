@@ -11,6 +11,8 @@
 - Transparent host surface with a dotted edit-mode pattern
 - Package-owned styling with no dependency on application editor tokens
 - `darkMode` input forwarded to every `WidgetRenderer` and applied to package controls
+- Optional responsive reflow that preserves fixed widget dimensions
+- Persisted responsive preference with an edit-mode toggle for uncontrolled usage
 
 ## Integration
 
@@ -22,6 +24,7 @@ The edit controls are shown when the palette has entries. Passing an empty array
 <widget-landscape
   [state]="state"
   [palette]="palette"
+  [responsive]="true"
   [darkMode]="darkMode"
   [columnsLocked]="false"
   (stateChange)="save($event)"
@@ -31,6 +34,10 @@ The edit controls are shown when the palette has entries. Passing an empty array
 While editing, users can change the column count unless `columnsLocked` is `true`. Column changes are draft-only until confirmation; cancelling edit mode restores the original count and layout. The confirmed count is emitted as `stateChange.columns`.
 
 The surface is transparent. The package does not inspect `html[data-theme]` and does not require application-level design tokens. Consumers can override package variables such as `--widget-landscape-accent` from their host stylesheet.
+
+`responsive` defaults to `false`. When enabled, the landscape keeps its existing fixed column and row dimensions and measures the available host width. Widgets that do not fit in the available columns are visually reflowed into additional rows instead of being resized. Responsive reflow is presentation-only: the configured columns and widget placements are unchanged until an edit is explicitly confirmed.
+
+If `responsive` is omitted, the value is read from `LandscapeState` and a Responsive toggle is available in edit mode. Toggling it changes the draft only. Confirming emits and persists the selected value; cancelling restores the previous value. Binding `[responsive]` to `true` or `false` makes the component controlled and hides the toggle.
 
 ## Footprints
 

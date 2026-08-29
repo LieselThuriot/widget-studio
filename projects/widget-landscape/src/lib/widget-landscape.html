@@ -2,6 +2,7 @@
   class="landscape-shell"
   [class.is-editing]="isEditing()"
   [class.is-dark]="darkMode()"
+  [class.is-responsive]="responsive()"
   [class.palette-on-left]="paletteSide() === 'left'"
   [class.is-dragging]="dragId() !== null || dragPaletteItem() !== null"
 >
@@ -10,16 +11,31 @@
       <div class="landscape-toolbar-heading">
         <span class="landscape-kicker">Widget landscape</span>
         @if (!columnsLocked()) {
-          <label class="landscape-column-control">
-            <span>Columns</span>
-            <input
-              type="number"
-              [min]="minimumColumns()"
-              [value]="activeState().columns"
-              aria-label="Landscape columns"
-              (input)="updateColumns($event)"
-            />
-          </label>
+          <div class="landscape-column-control">
+            <label class="landscape-columns-field">
+              <span>Columns</span>
+              <input
+                type="number"
+                [min]="minimumColumns()"
+                [value]="activeState().columns"
+                aria-label="Landscape columns"
+                (input)="updateColumns($event)"
+              />
+            </label>
+            @if (responsive() === undefined) {
+              <label class="landscape-responsive-control">
+                <input
+                  type="checkbox"
+                  class="landscape-responsive-toggle"
+                  [checked]="activeState().responsive"
+                  aria-label="Responsive landscape"
+                  (change)="updateResponsive($event)"
+                />
+                <span class="landscape-responsive-slider" aria-hidden="true"></span>
+                <span class="landscape-responsive-label">Responsive</span>
+              </label>
+            }
+          </div>
         } @else {
           <strong>{{ activeState().columns }} columns</strong>
         }
@@ -65,7 +81,7 @@
     <div
       #landscapeGrid
       class="landscape-grid"
-      [style.--landscape-columns]="activeState().columns"
+      [style.--landscape-columns]="renderedState().columns"
       [class.is-dragging]="dragId() !== null || dragPaletteItem() !== null"
       (dragover)="dragOverWidget($event)"
       (dragleave)="dragLeaveWidget($event)"
@@ -78,7 +94,7 @@
           aria-hidden="true"
         ></div>
       }
-      @for (item of activeState().widgets; track item.id) {
+      @for (item of renderedState().widgets; track item.id) {
         <article
           class="landscape-item"
           [class.is-selected]="item.id === selectedId()"
@@ -144,7 +160,7 @@
           aria-hidden="true"
         ></div>
       }
-      @if (!activeState().widgets.length) {
+      @if (!renderedState().widgets.length) {
         <p class="landscape-empty">
           {{
             isEditing()
