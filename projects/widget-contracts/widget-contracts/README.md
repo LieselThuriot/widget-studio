@@ -11,6 +11,12 @@ using WidgetStudio.Contracts;
 var json = JsonSerializer.Serialize(widget, WidgetJsonContext.Default.WidgetContract);
 ```
 
+Install the package with:
+
+```bash
+dotnet add package WidgetStudio.Contracts
+```
+
 The generated context emits camel-case property names, lowercase enum values, space-separated anchor values such as `"top left"`, and the `type` discriminator required by the renderer's polymorphic element model. It also omits null properties. Do not use the default `JsonSerializerOptions` when producing widget payloads.
 
 ## Colors

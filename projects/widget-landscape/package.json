@@ -1,7 +1,35 @@
 {
   "name": "widget-landscape",
   "version": "0.1.0",
+  "description": "Reusable Angular component for arranging widgets in a configurable dashboard grid.",
+  "author": {
+    "name": "Liesel Thuriot"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LieselThuriot/widget-studio.git"
+  },
+  "homepage": "https://github.com/LieselThuriot/widget-studio#readme",
+  "bugs": {
+    "url": "https://github.com/LieselThuriot/widget-studio/issues"
+  },
+  "keywords": [
+    "angular",
+    "dashboard",
+    "grid",
+    "widget",
+    "widget-landscape"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "fesm2022",
+    "types",
+    "README.md",
+    "LICENSE"
+  ],
   "peerDependencies": {
     "@angular/common": "^21.0.0 || ^22.0.0",
     "@angular/core": "^21.0.0 || ^22.0.0",

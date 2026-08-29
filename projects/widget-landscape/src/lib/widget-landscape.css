@@ -162,9 +162,6 @@
 .landscape-responsive-control input {
   accent-color: var(--widget-landscape-accent);
 }
-.landscape-column-control strong {
-  margin-top: 0;
-}
 .landscape-kicker {
   display: block;
   color: var(--widget-landscape-text-muted);

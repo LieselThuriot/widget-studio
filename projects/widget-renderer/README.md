@@ -192,7 +192,7 @@ The package entry point exports:
 - `ChartElementRenderer`
 - `chartAriaLabel` and `chartAccessibilitySummary`
 
-Import from `widget-renderer` rather than reaching into internal source files. The complete export list is maintained in [`src/public-api.ts`](src/public-api.ts). The package metadata is in [`package.json`](package.json); Angular and ECharts are peer dependencies.
+Import from `widget-renderer` rather than reaching into internal source files. The complete export list is maintained in [`src/public-api.ts`](https://github.com/LieselThuriot/widget-studio/blob/main/projects/widget-renderer/src/public-api.ts). The package metadata is in [`package.json`](package.json); Angular and ECharts are peer dependencies.
 
 ## Development
 
@@ -202,11 +202,11 @@ This library is part of the parent Angular workspace. Run these commands from th
 # Install the locked dependency tree
 npm ci
 
-# Build the library
-npm run build:library
+# Build the renderer library
+npm run build:renderer
 
 # Build, pack, install into a temporary consumer, and verify the public API
-npm run verify:library-package
+npm run verify:renderer-package
 
 # Check formatting, lint, and tests
 npm run format:check

@@ -12,8 +12,8 @@
 - Use the committed npm lockfile with npm 12.0.2: `npm ci`.
 - Start the editor with `npm start` and open `http://localhost:4200/`.
 - For TypeScript, template, or CSS changes, run `npm run format`, `npm run lint`, and `npm test -- --watch=false`; use `npm run format:check` when formatting must not rewrite files.
-- Use `npm run build:app` for the editor, `npm run build:library` for `widget-renderer`, `npm run build:landscape` for both libraries, and `npm run build` for all three projects.
-- For `widget-renderer` package changes, run `npm run verify:library-package` after the library build. It packs `dist/widget-renderer`, installs it into a temporary consumer, and checks the public validation/normalization API.
+- Use `npm run build:app` for the editor, `npm run build:renderer` for `widget-renderer`, `npm run build:landscape` for an already-built renderer plus `widget-landscape`, `npm run build:libraries` for both libraries, and `npm run build` for all three projects.
+- For `widget-renderer` package changes, run `npm run verify:renderer-package` after the library build. It packs `dist/widget-renderer`, installs it into a temporary consumer, and checks the public validation/normalization API.
 - For C# contract or contract-test changes, run `dotnet test projects/widget-contracts/WidgetStudio.slnx` and `dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj`.
 
 ## Contracts

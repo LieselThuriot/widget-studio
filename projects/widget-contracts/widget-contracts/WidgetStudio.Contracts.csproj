@@ -13,8 +13,10 @@
     <PackageTags>widget;contracts;system-text-json</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/LieselThuriot/autovpn</RepositoryUrl>
+    <RepositoryUrl>https://github.com/LieselThuriot/widget-studio</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/LieselThuriot/widget-studio</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 

@@ -14,7 +14,8 @@ const angularVersion = require('@angular/core/package.json').version;
 
 try {
   const commandOptions = { cwd: root, stdio: 'inherit', shell: platform === 'win32' };
-  execFileSync(npm, ['run', 'build:library'], commandOptions);
+  execFileSync(npm, ['run', 'build:renderer'], commandOptions);
+  const rendererVersion = require(join(root, 'dist', 'widget-renderer', 'package.json')).version;
   execFileSync(npm, ['pack', './dist/widget-renderer', '--pack-destination', temporaryRoot], {
     ...commandOptions,
   });
@@ -26,7 +27,7 @@ try {
       '--yes',
       '--prefix',
       consumer,
-      join(temporaryRoot, 'widget-renderer-0.1.0.tgz'),
+      join(temporaryRoot, `widget-renderer-${rendererVersion}.tgz`),
       `@angular/compiler@${angularVersion}`,
       `@angular/core@${angularVersion}`,
       `@angular/common@${angularVersion}`,

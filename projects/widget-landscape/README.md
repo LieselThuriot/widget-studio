@@ -72,10 +72,10 @@ Run these commands from the workspace root:
 
 ```bash
 npm ci
-npm run build:landscape
+npm run build:libraries
 npm run format:check
 npm run lint
 npm test -- --watch=false
 ```
 
-`build:landscape` builds `widget-renderer` first and then `widget-landscape`. The package entry point is [`src/public-api.ts`](src/public-api.ts).
+`build:libraries` builds `widget-renderer` first and then `widget-landscape`. Use `build:landscape` when the renderer has already been built. The package entry point is [`src/public-api.ts`](https://github.com/LieselThuriot/widget-studio/blob/main/projects/widget-landscape/src/public-api.ts).

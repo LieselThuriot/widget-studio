@@ -116,8 +116,8 @@ The production build applies bundle and component-style budgets. The test suite 
 The editor imports the renderer through the workspace TypeScript path alias. To verify the separately packaged library rather than only the application integration, run:
 
 ```bash
-npm run build:library
-npm run verify:library-package
+npm run build:renderer
+npm run verify:renderer-package
 ```
 
 See [`projects/widget-renderer/README.md`](projects/widget-renderer/README.md) for installation, contract details, public exports, and renderer usage.
