@@ -43,7 +43,7 @@ export class WidgetLandscape {
   private static readonly paletteSwitchDistance = 280;
 
   readonly state = input.required<LandscapeState>();
-  readonly palette = input<readonly LandscapePaletteItem[]>([]);
+  readonly palette = input<readonly LandscapePaletteItem[] | null>([]);
   readonly editMode = input(false);
   readonly columnsLocked = input(false);
   readonly darkMode = input(false);
@@ -81,8 +81,9 @@ export class WidgetLandscape {
     () => this.dragPreview() ?? this.draft() ?? this.state(),
   );
   protected readonly isEditing = computed(() => this.editMode() || this.draft() !== null);
+  protected readonly paletteItems = computed(() => this.palette() ?? []);
   protected readonly invalidPaletteIds = computed(() =>
-    this.palette()
+    this.paletteItems()
       .filter((item) => {
         const widget = item.createWidget();
         return (

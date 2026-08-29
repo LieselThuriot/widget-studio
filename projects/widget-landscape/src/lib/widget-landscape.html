@@ -25,28 +25,30 @@
         }
       </div>
     }
-    @if (!isEditing()) {
-      <div class="landscape-toolbar-actions">
-        <button
-          type="button"
-          class="landscape-icon-button"
-          aria-label="Edit landscape"
-          (click)="enterEdit()"
-        >
-          ⚙
-        </button>
-      </div>
-    } @else {
-      <div class="landscape-toolbar-actions">
-        <button type="button" class="landscape-button" (click)="cancelEdit()">Cancel</button>
-        <button
-          type="button"
-          class="landscape-button landscape-button--primary"
-          (click)="confirmEdit()"
-        >
-          Confirm
-        </button>
-      </div>
+    @if (paletteItems().length > 0) {
+      @if (!isEditing()) {
+        <div class="landscape-toolbar-actions">
+          <button
+            type="button"
+            class="landscape-icon-button"
+            aria-label="Edit landscape"
+            (click)="enterEdit()"
+          >
+            ⚙
+          </button>
+        </div>
+      } @else {
+        <div class="landscape-toolbar-actions">
+          <button type="button" class="landscape-button" (click)="cancelEdit()">Cancel</button>
+          <button
+            type="button"
+            class="landscape-button landscape-button--primary"
+            (click)="confirmEdit()"
+          >
+            Confirm
+          </button>
+        </div>
+      }
     }
   </header>
   <div class="landscape-body">
@@ -139,7 +141,7 @@
     @if (isEditing()) {
       <aside #landscapePalette class="landscape-palette" aria-label="Widgets">
         <span class="landscape-kicker">Add widget</span>
-        @for (item of palette(); track item.id) {
+        @for (item of paletteItems(); track item.id) {
           <button
             type="button"
             class="palette-item"

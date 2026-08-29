@@ -16,6 +16,8 @@
 
 Import `WidgetLandscape` and bind a `LandscapeState`. Supply palette entries with `createWidget` factories so every inserted item is independent. After confirmation, `stateChange` emits versioned landscape data containing the column count and widget placements with only the widget ID, size, row, and column.
 
+The edit controls are shown when the palette has entries. Passing an empty array or `null` hides the edit controls, allowing consumers to provide a fixed layout without allowing widgets to be added, removed, or repositioned.
+
 ```html
 <widget-landscape
   [state]="state"

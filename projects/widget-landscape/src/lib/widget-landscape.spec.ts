@@ -19,11 +19,19 @@ describe('WidgetLandscape', () => {
       },
     ],
   };
+  const palette = [
+    {
+      id: 'new-widget',
+      label: 'New widget',
+      createWidget: () => ({ id: 'new-widget', size: 'mini' }) as never,
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({ imports: [WidgetLandscape] }).compileComponents();
     fixture = TestBed.createComponent(WidgetLandscape);
     fixture.componentRef.setInput('state', structuredClone(state));
+    fixture.componentRef.setInput('palette', palette);
     fixture.detectChanges();
   });
 
@@ -84,6 +92,42 @@ describe('WidgetLandscape', () => {
 
     expect(columnInput()).toBeNull();
     expect(fixture.nativeElement.textContent).toContain('8 columns');
+  });
+
+  it('hides the edit button when the palette is empty', () => {
+    fixture.componentRef.setInput('palette', []);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[aria-label="Edit landscape"]')).toBeNull();
+  });
+
+  it('hides the edit button when the palette is null', () => {
+    fixture.componentRef.setInput('palette', null);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[aria-label="Edit landscape"]')).toBeNull();
+  });
+
+  it('hides edit actions when editing with an empty palette', () => {
+    fixture.componentRef.setInput('palette', []);
+    fixture.componentRef.setInput('editMode', true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.landscape-button')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.landscape-button--primary')).toBeNull();
+  });
+
+  it('hides edit actions when editing with a null palette', () => {
+    fixture.componentRef.setInput('palette', null);
+    fixture.componentRef.setInput('editMode', true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.landscape-button')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.landscape-button--primary')).toBeNull();
+  });
+
+  it('shows the edit button when the palette has an item', () => {
+    expect(fixture.nativeElement.querySelector('[aria-label="Edit landscape"]')).not.toBeNull();
   });
 
   it('shows the column boundary at the end of the configured grid', () => {
