@@ -6,9 +6,9 @@ The package is designed to receive a plain `WidgetContract` from an API or appli
 
 ## Features
 
-- Render square or wide widgets from a version 2 contract
+- Render `mini`, `compact`, `tall`, `square`, `wide`, `mega`, `banner`, and `hero` widgets from a version 2 contract
 - Place elements with configurable rows, columns, spans, and anchors
-- Support text, images, buttons, dividers, pie, donut, gauge, bar, line, and progress elements
+- Support text, images, buttons, dividers, pie, donut, funnel, gauge, bar, line, and progress elements
 - Render charts with ECharts using SVG output
 - Validate incoming data with structured paths and messages
 - Normalize optional contract fields such as button defaults and text padding
@@ -141,7 +141,7 @@ Element positions are zero-based. For example, `row: 0` and `column: 0` place an
 - `image`: remote or local image with alternative text, fit mode, radius, and overlay color
 - `button`: `get` or `post` action metadata, optional body, solid or outline styling, and hover behavior
 - `divider`: horizontal or vertical separator
-- `pie` and `donut`: labeled data points with optional legends and per-point colors
+- `pie`, `donut`, and `funnel`: labeled data points with optional legends and per-point colors
 - `gauge`: a value within a minimum and maximum range
 - `bar` and `line`: labeled series data with axis and line styling
 - `progress`: a range-based progress bar with label, suffix, legend, and active animation options
@@ -192,7 +192,7 @@ The package entry point exports:
 - `ChartElementRenderer`
 - `chartAriaLabel` and `chartAccessibilitySummary`
 
-Import from `widget-renderer` rather than reaching into internal source files. The complete export list is maintained in [`src/public-api.ts`](src/public-api.ts).
+Import from `widget-renderer` rather than reaching into internal source files. The complete export list is maintained in [`src/public-api.ts`](src/public-api.ts). The package metadata is in [`package.json`](package.json); Angular and ECharts are peer dependencies.
 
 ## Development
 
