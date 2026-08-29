@@ -20,8 +20,46 @@ h2 {
 .format-tabs {
   flex-shrink: 0;
 }
+.output-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+.copy-button {
+  flex-shrink: 0;
+  font: 600 11px var(--editor-font-sans);
+}
+.copy-status {
+  flex: 1;
+  margin: 0;
+  color: var(--editor-text-muted);
+  font-size: 12px;
+  animation: copy-status-fade 3.2s ease-out forwards;
+}
+.copy-status.is-error {
+  color: var(--editor-danger);
+}
+@keyframes copy-status-fade {
+  0%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 @media (max-width: 700px) {
   .model-panel {
     padding-inline: 16px;
+  }
+  .copy-button {
+    min-height: 34px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .copy-status {
+    animation: none;
   }
 }

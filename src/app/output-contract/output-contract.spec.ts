@@ -3,8 +3,10 @@ import { OutputContract } from './output-contract';
 
 describe('OutputContract', () => {
   const values = new Map<string, string>();
+  let writeText: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
+    vi.useRealTimers();
     values.clear();
     Object.defineProperty(globalThis, 'localStorage', {
       configurable: true,
@@ -13,6 +15,11 @@ describe('OutputContract', () => {
         setItem: (key: string, value: string) => values.set(key, value),
         removeItem: (key: string) => values.delete(key),
       },
+    });
+    writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
     });
   });
 
@@ -71,5 +78,61 @@ describe('OutputContract', () => {
 
     (fixture.nativeElement.querySelector('#json-tab') as HTMLButtonElement).click();
     expect(localStorage.getItem('widget-studio-output-format')).toBe('json');
+  });
+
+  it('copies the active JSON output and reports success', async () => {
+    vi.useFakeTimers();
+    const fixture = TestBed.createComponent(OutputContract);
+    fixture.componentRef.setInput('modelContract', { version: 2, id: 'output-test' });
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('.copy-button') as HTMLButtonElement).click();
+    await Promise.resolve();
+    fixture.detectChanges();
+
+    expect(writeText).toHaveBeenCalledWith(`{
+  "version": 2,
+  "id": "output-test"
+}`);
+    expect(fixture.nativeElement.querySelector('.copy-status')?.textContent).toContain(
+      'Copied to clipboard.',
+    );
+    vi.advanceTimersByTime(3200);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.copy-status')).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it('copies the active C# output', async () => {
+    const fixture = TestBed.createComponent(OutputContract);
+    fixture.componentRef.setInput('modelContract', { version: 2, id: 'output-test' });
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('#csharp-tab') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('.copy-button') as HTMLButtonElement).click();
+    await fixture.whenStable();
+
+    expect(writeText).toHaveBeenCalledWith(
+      expect.stringContaining('WidgetContract widget = new()'),
+    );
+  });
+
+  it('reports clipboard failures', async () => {
+    vi.useFakeTimers();
+    writeText.mockRejectedValue(new Error('denied'));
+    const fixture = TestBed.createComponent(OutputContract);
+    fixture.componentRef.setInput('modelContract', { id: 'output-test' });
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('.copy-button') as HTMLButtonElement).click();
+    await Promise.resolve();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.copy-status')?.textContent).toContain(
+      'Copy failed.',
+    );
+    vi.advanceTimersByTime(3200);
+    vi.useRealTimers();
   });
 });

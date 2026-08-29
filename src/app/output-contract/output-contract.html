@@ -47,4 +47,19 @@
       <app-csharp-output [modelContract]="modelContract()" />
     </div>
   }
+  <div class="output-actions">
+    @if (copyStatus(); as status) {
+      <p class="copy-status" [class.is-error]="status.includes('failed')" role="status">
+        {{ status }}
+      </p>
+    }
+    <button
+      type="button"
+      class="editor-button editor-button--primary copy-button"
+      [disabled]="isCopying()"
+      (click)="copyOutput()"
+    >
+      Copy
+    </button>
+  </div>
 </section>
