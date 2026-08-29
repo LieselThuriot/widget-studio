@@ -298,6 +298,32 @@ describe('App', () => {
     }
   });
 
+  it('should not give tall widgets the banner-sized editor canvas', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const loadSample = (name: string) => {
+      (fixture.nativeElement.querySelector('.sample-menu-trigger') as HTMLButtonElement).click();
+      fixture.detectChanges();
+      const sampleButton = Array.from(
+        fixture.nativeElement.querySelectorAll('.sample-menu-option'),
+      ).find((button) => (button as HTMLButtonElement).textContent?.includes(name)) as
+        HTMLButtonElement | undefined;
+      sampleButton?.click();
+      fixture.detectChanges();
+    };
+
+    loadSample('Hydration');
+    expect(
+      (fixture.nativeElement.querySelector('.canvas') as HTMLElement).classList.contains('is-tall'),
+    ).toBe(false);
+
+    loadSample('Weather snapshot');
+    expect(
+      (fixture.nativeElement.querySelector('.canvas') as HTMLElement).classList.contains('is-tall'),
+    ).toBe(true);
+  });
+
   it('should recreate a chart after switching through a progress sample', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

@@ -101,10 +101,7 @@
     <div
       class="canvas"
       [class.is-tall]="
-        widget().size === 'tall' ||
-        widget().size === 'mega' ||
-        widget().size === 'banner' ||
-        widget().size === 'hero'
+        widget().size === 'mega' || widget().size === 'banner' || widget().size === 'hero'
       "
       (dragover)="$event.preventDefault()"
       (drop)="elementDropped.emit($event)"
