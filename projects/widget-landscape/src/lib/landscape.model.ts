@@ -31,6 +31,7 @@ export interface LandscapePaletteItem {
   id: string;
   label: string;
   description?: string;
+  size?: WidgetSize | null;
   createWidget: () => WidgetInput;
 }
 

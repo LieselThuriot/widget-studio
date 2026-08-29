@@ -1069,6 +1069,108 @@ describe('App', () => {
     expect(data.querySelector('tbody tr')?.textContent).toContain('0');
   });
 
+  it('should show each landscape palette widget footprint', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (
+      fixture.nativeElement.querySelector('.workspace-tabs button:last-child') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const footprints = Array.from(
+      fixture.nativeElement.querySelectorAll('.palette-size') as NodeListOf<HTMLElement>,
+    ).map((item) => item.textContent?.trim());
+
+    expect(footprints).toEqual([
+      '2 × 2',
+      '2 × 2',
+      '4 × 2',
+      '4 × 2',
+      '1 × 1',
+      '2 × 4',
+      '4 × 4',
+      '8 × 4',
+      '2 × 2',
+    ]);
+    expect(
+      fixture.nativeElement.querySelector('.palette-item:last-child .palette-size'),
+    ).toBeNull();
+  });
+
+  it('should move the landscape palette away from the drag pointer', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (
+      fixture.nativeElement.querySelector('.workspace-tabs button:last-child') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const landscape = fixture.nativeElement.querySelector('.landscape-shell') as HTMLElement;
+    const grid = fixture.nativeElement.querySelector('.landscape-grid') as HTMLElement;
+    const paletteItem = fixture.nativeElement.querySelector('.palette-item') as HTMLElement;
+    vi.spyOn(grid, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 0, 1000, 600));
+
+    const dragOver = (clientX: number) => {
+      const event = new Event('dragover', { bubbles: true, cancelable: true });
+      Object.defineProperty(event, 'clientX', { value: clientX });
+      grid.dispatchEvent(event);
+    };
+
+    paletteItem.dispatchEvent(new Event('dragstart', { bubbles: true, cancelable: true }));
+    dragOver(950);
+    fixture.detectChanges();
+    expect(landscape.classList.contains('palette-on-left')).toBe(true);
+
+    grid.dispatchEvent(new Event('dragend', { bubbles: true }));
+    fixture.detectChanges();
+    expect(landscape.classList.contains('palette-on-left')).toBe(true);
+
+    dragOver(50);
+    fixture.detectChanges();
+    expect(landscape.classList.contains('palette-on-left')).toBe(false);
+  });
+
+  it('should reset the landscape palette side after cancelling edit mode', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    (
+      fixture.nativeElement.querySelector('.workspace-tabs button:last-child') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const landscape = fixture.nativeElement.querySelector('.landscape-shell') as HTMLElement;
+    const grid = fixture.nativeElement.querySelector('.landscape-grid') as HTMLElement;
+    const paletteItem = fixture.nativeElement.querySelector('.palette-item') as HTMLElement;
+    vi.spyOn(grid, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 0, 1000, 600));
+    paletteItem.dispatchEvent(new Event('dragstart', { bubbles: true, cancelable: true }));
+    const dragOver = new Event('dragover', { bubbles: true, cancelable: true });
+    Object.defineProperty(dragOver, 'clientX', { value: 950 });
+    grid.dispatchEvent(dragOver);
+    fixture.detectChanges();
+    expect(landscape.classList.contains('palette-on-left')).toBe(true);
+
+    (
+      fixture.nativeElement.querySelector(
+        '.landscape-button:not(.landscape-button--primary)',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    expect(landscape.classList.contains('palette-on-left')).toBe(false);
+
+    (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(landscape.classList.contains('palette-on-left')).toBe(false);
+  });
+
   it('should persist landscape state only after confirming edits', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

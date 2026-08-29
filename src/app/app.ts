@@ -77,6 +77,7 @@ export class App {
       id: sample.id,
       label: sample.name,
       description: sample.description,
+      size: sample.id === 'broken-widget' ? null : sample.widget.size,
       createWidget: () => structuredClone(sample.widget),
     }),
   );

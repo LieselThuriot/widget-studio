@@ -1,4 +1,10 @@
-<section class="landscape-shell" [class.is-editing]="isEditing()" [class.is-dark]="darkMode()">
+<section
+  class="landscape-shell"
+  [class.is-editing]="isEditing()"
+  [class.is-dark]="darkMode()"
+  [class.palette-on-left]="paletteSide() === 'left'"
+  [class.is-dragging]="dragId() !== null || dragPaletteItem() !== null"
+>
   <header class="landscape-toolbar">
     @if (isEditing()) {
       <div>
@@ -32,6 +38,7 @@
   </header>
   <div class="landscape-body">
     <div
+      #landscapeGrid
       class="landscape-grid"
       [style.--landscape-columns]="activeState().columns"
       [class.is-dragging]="dragId() !== null || dragPaletteItem() !== null"
@@ -110,7 +117,7 @@
       }
     </div>
     @if (isEditing()) {
-      <aside class="landscape-palette" aria-label="Widgets">
+      <aside #landscapePalette class="landscape-palette" aria-label="Widgets">
         <span class="landscape-kicker">Add widget</span>
         @for (item of palette(); track item.id) {
           <button
@@ -122,10 +129,20 @@
             (dragend)="endDrag()"
             draggable="true"
           >
-            <strong>{{ item.label }}</strong>
-            @if (item.description) {
-              <small>{{ item.description }}</small>
-            }
+            <span class="palette-item-heading">
+              <strong>{{ item.label }}</strong>
+              @if (paletteFootprint(item); as footprint) {
+                <span
+                  class="palette-size"
+                  [attr.aria-label]="
+                    'Widget footprint: ' + footprint.columnSpan + ' × ' + footprint.rowSpan
+                  "
+                >
+                  {{ footprint.columnSpan }} × {{ footprint.rowSpan }}
+                </span>
+              }
+            </span>
+            <small>{{ item.description }}</small>
           </button>
         }
       </aside>

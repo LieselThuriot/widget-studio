@@ -1,4 +1,14 @@
-import { Component, computed, effect, input, output, signal, untracked } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  input,
+  output,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { ButtonElement, WidgetRenderer } from 'widget-renderer';
 import {
   addWidget,
@@ -16,6 +26,7 @@ import {
   LandscapeState,
   LandscapeWidget,
   LandscapeRefreshEvent,
+  landscapeFootprintForSize,
 } from './landscape.model';
 
 @Component({
@@ -29,6 +40,8 @@ import {
   },
 })
 export class WidgetLandscape {
+  private static readonly paletteSwitchDistance = 280;
+
   readonly state = input.required<LandscapeState>();
   readonly palette = input<readonly LandscapePaletteItem[]>([]);
   readonly editMode = input(false);
@@ -46,6 +59,9 @@ export class WidgetLandscape {
   protected readonly dragPaletteItem = signal<LandscapePaletteItem | null>(null);
   protected readonly dragPreview = signal<LandscapeState | null>(null);
   protected readonly dragTarget = signal<{ row: number; column: number } | null>(null);
+  protected readonly paletteSide = signal<'left' | 'right'>('right');
+  private readonly gridElement = viewChild<ElementRef<HTMLElement>>('landscapeGrid');
+  private readonly paletteElement = viewChild<ElementRef<HTMLElement>>('landscapePalette');
   private dragOrigin: LandscapeState | null = null;
   private wasInControlledEditMode = false;
   private hoverTimer: ReturnType<typeof setTimeout> | null = null;
@@ -66,22 +82,22 @@ export class WidgetLandscape {
   protected readonly isEditing = computed(() => this.editMode() || this.draft() !== null);
   protected readonly invalidPaletteIds = computed(() =>
     this.palette()
-      .filter(
-        (item) =>
-          this.activeState().widgets.some(({ id }) => id === item.createWidget().id) ||
+      .filter((item) => {
+        const widget = item.createWidget();
+        return (
+          this.activeState().widgets.some(({ id }) => id === widget.id) ||
           !canFitWidget(
-            {
-              id: item.id,
-              size: item.createWidget().size,
-              widget: item.createWidget(),
-              row: 0,
-              column: 0,
-            },
+            { id: item.id, size: widget.size, widget, row: 0, column: 0 },
             this.activeState().columns,
-          ),
-      )
+          )
+        );
+      })
       .map((item) => item.id),
   );
+
+  protected paletteFootprint(item: LandscapePaletteItem) {
+    return item.size ? landscapeFootprintForSize(item.size) : null;
+  }
 
   protected enterEdit(): void {
     if (this.isEditing()) return;
@@ -105,6 +121,7 @@ export class WidgetLandscape {
     });
     this.draft.set(null);
     this.selectedId.set(null);
+    this.paletteSide.set('right');
     this.editModeChange.emit(false);
   }
 
@@ -112,6 +129,7 @@ export class WidgetLandscape {
     if (!this.isEditing()) return;
     this.draft.set(null);
     this.selectedId.set(null);
+    this.paletteSide.set('right');
     this.editModeChange.emit(false);
   }
 
@@ -164,6 +182,7 @@ export class WidgetLandscape {
   protected dragOverWidget(event: DragEvent): void {
     event.preventDefault();
     const host = event.currentTarget as HTMLElement;
+    if (this.dragId() || this.dragPaletteItem()) this.updatePaletteSide(event, host);
     const moving = this.draggedWidget();
     const target = this.targetForEvent(event, host, moving);
     if (!target || !moving || !this.dragOrigin) return;
@@ -230,7 +249,13 @@ export class WidgetLandscape {
     const item = this.dragPaletteItem();
     if (!item) return null;
     const widget = item.createWidget();
-    return { id: widget.id, size: widget.size, widget: structuredClone(widget), row: 0, column: 0 };
+    return {
+      id: widget.id,
+      size: widget.size,
+      widget: structuredClone(widget),
+      row: 0,
+      column: 0,
+    };
   }
 
   protected draggedWidgetForTemplate(): LandscapeWidget | null {
@@ -261,6 +286,18 @@ export class WidgetLandscape {
       row: Math.max(0, Math.floor((event.clientY - bounds.top - padding) / 131)),
       column: Math.max(0, Math.min(maxColumn, column)),
     };
+  }
+
+  private updatePaletteSide(event: DragEvent, host: HTMLElement): void {
+    const bounds = host.getBoundingClientRect();
+    if (!bounds.width) return;
+    const distanceFromLeft = event.clientX - bounds.left;
+    const distanceFromRight = bounds.right - event.clientX;
+    if (distanceFromRight <= WidgetLandscape.paletteSwitchDistance) {
+      this.paletteSide.set('left');
+    } else if (distanceFromLeft <= WidgetLandscape.paletteSwitchDistance) {
+      this.paletteSide.set('right');
+    }
   }
 
   private clearDragTimer(): void {
@@ -301,7 +338,34 @@ export class WidgetLandscape {
     if (!direction) return;
 
     event.preventDefault();
-    this.commitPreview(moveWidget(this.activeState(), id, direction.row, direction.column));
+    const movedState = moveWidget(this.activeState(), id, direction.row, direction.column);
+    this.commitPreview(movedState);
+    this.updatePaletteSideForKeyboardMove(movedState, id);
+  }
+
+  private updatePaletteSideForKeyboardMove(state: LandscapeState, id: string): void {
+    const grid = this.gridElement()?.nativeElement;
+    const palette = this.paletteElement()?.nativeElement;
+    const widget = state.widgets.find((item) => item.id === id);
+    if (!grid || !palette || !widget || getComputedStyle(palette).position === 'static') return;
+
+    const gridBounds = grid.getBoundingClientRect();
+    const paletteBounds = palette.getBoundingClientRect();
+    const size = footprintFor(widget);
+    const left = gridBounds.left + 18 + widget.column * 141;
+    const top = gridBounds.top + 18 + widget.row * 131;
+    const right = left + size.columnSpan * 133 + (size.columnSpan - 1) * 8;
+    const bottom = top + size.rowSpan * 123 + (size.rowSpan - 1) * 8;
+    const overlapsPalette =
+      left < paletteBounds.right &&
+      right > paletteBounds.left &&
+      top < paletteBounds.bottom &&
+      bottom > paletteBounds.top;
+
+    if (!overlapsPalette) return;
+    this.paletteSide.set(
+      paletteBounds.left >= gridBounds.left + gridBounds.width / 2 ? 'left' : 'right',
+    );
   }
 
   protected deleteWidget(id: string): void {

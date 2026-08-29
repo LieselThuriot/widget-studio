@@ -269,7 +269,7 @@ const clockedIn: Widget = {
         items: [
           { kind: 'segment', label: 'Morning', value: 3, color: '#f2b56b', active: false },
           { kind: 'gap', value: 0.5 },
-          { kind: 'segment', label: 'Afternoon', value: 2, color: '#9be7d1', active: true },
+          { kind: 'segment', label: 'Afternoon', value: 2, color: '#55b99d', active: true },
         ],
       },
       showLegend: true,
