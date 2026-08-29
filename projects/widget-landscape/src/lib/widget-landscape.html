@@ -145,12 +145,28 @@
         ></div>
       }
       @if (!activeState().widgets.length) {
-        <p class="landscape-empty">Open edit mode to add a widget.</p>
+        <p class="landscape-empty">
+          {{
+            isEditing()
+              ? 'Choose a widget from the palette to add it.'
+              : 'Open edit mode to add a widget.'
+          }}
+        </p>
       }
     </div>
     @if (isEditing()) {
       <aside #landscapePalette class="landscape-palette" aria-label="Widgets">
-        <span class="landscape-kicker">Add widget</span>
+        <div class="landscape-palette-heading">
+          <span class="landscape-kicker">Add widget</span>
+          <button
+            type="button"
+            class="landscape-clear-button"
+            [disabled]="!activeState().widgets.length"
+            (click)="clearWidgets()"
+          >
+            Clear all
+          </button>
+        </div>
         @for (item of paletteItems(); track item.id) {
           <button
             type="button"

@@ -1056,6 +1056,8 @@ describe('App', () => {
 
     (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
     fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-clear-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
     (fixture.nativeElement.querySelector('.palette-item') as HTMLButtonElement).click();
     fixture.detectChanges();
     (
@@ -1117,6 +1119,8 @@ describe('App', () => {
     fixture.detectChanges();
     (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
     fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-clear-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
 
     const landscape = fixture.nativeElement.querySelector('.landscape-shell') as HTMLElement;
     const grid = fixture.nativeElement.querySelector('.landscape-grid') as HTMLElement;
@@ -1152,6 +1156,8 @@ describe('App', () => {
     ).click();
     fixture.detectChanges();
     (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-clear-button') as HTMLButtonElement).click();
     fixture.detectChanges();
 
     const landscape = fixture.nativeElement.querySelector('.landscape-shell') as HTMLElement;
@@ -1190,6 +1196,8 @@ describe('App', () => {
     fixture.detectChanges();
     (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
     fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.landscape-clear-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
     (fixture.nativeElement.querySelector('.palette-item') as HTMLButtonElement).click();
     fixture.detectChanges();
 
@@ -1204,6 +1212,26 @@ describe('App', () => {
       version: 1,
       columns: 8,
       widgets: [{ id: 'daily-brief', size: 'square', row: 0, column: 0 }],
+    });
+  });
+
+  it('should load the designed default landscape when no layout is stored', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance['landscapeState']()).toMatchObject({
+      version: 1,
+      columns: 8,
+      widgets: [
+        { id: 'hydration', size: 'tall', row: 1, column: 4 },
+        { id: 'holiday-balance', size: 'wide', row: 0, column: 0 },
+        { id: 'clocked-in', size: 'wide', row: 3, column: 4 },
+        { id: 'weather-snapshot', size: 'banner', row: 2, column: 2 },
+        { id: 'payslip', size: 'square', row: 1, column: 5 },
+        { id: 'hiring', size: 'compact', row: 2, column: 0 },
+        { id: 'daily-brief', size: 'square', row: 3, column: 0 },
+        { id: 'mini-pulse', size: 'mini', row: 0, column: 4 },
+      ],
     });
   });
 

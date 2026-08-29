@@ -13,6 +13,7 @@
   --widget-landscape-card-focus: #eaf0fb;
   --widget-landscape-badge: #edf2fb;
   --widget-landscape-badge-text: #456292;
+  --widget-landscape-danger: #b64d60;
   display: block;
   color: var(--widget-landscape-text);
 }
@@ -35,6 +36,7 @@
   --widget-landscape-card-focus: #263b60;
   --widget-landscape-badge: #2a4169;
   --widget-landscape-badge-text: #c8d8f4;
+  --widget-landscape-danger: #f19aa4;
 }
 .landscape-toolbar {
   display: flex;
@@ -288,9 +290,28 @@
 .landscape-shell.is-dragging .landscape-palette {
   pointer-events: none;
 }
-.landscape-palette > .landscape-kicker {
+.landscape-palette-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 2px 2px 4px;
+}
+.landscape-palette-heading .landscape-kicker {
   color: var(--widget-landscape-accent);
+}
+.landscape-clear-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--widget-landscape-danger);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.landscape-clear-button:disabled {
+  color: var(--widget-landscape-text-muted);
+  cursor: default;
 }
 .palette-item {
   display: grid;

@@ -588,7 +588,8 @@ const compactHiring: Widget = {
     repeat: false,
     size: 'cover',
     overlayColor: '#30283fe6',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=274&h=123&auto=format&fit=crop'
+    image:
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=274&h=123&auto=format&fit=crop',
   },
   refresh: { enabled: true, label: 'Refresh hiring pipeline' },
   elements: [

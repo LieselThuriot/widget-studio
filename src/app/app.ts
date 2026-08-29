@@ -360,11 +360,24 @@ const themeStorageKey = 'widget-studio-theme';
 const landscapeStorageKey = 'widget-studio-landscape';
 
 function defaultLandscapeState(): LandscapeState {
-  return {
+  return landscapeStateFromPlacements({
     version: 1,
     columns: 8,
-    widgets: [],
-  };
+    widgets: [
+      { id: 'hydration', size: 'tall', row: 1, column: 4 },
+      { id: 'holiday-balance', size: 'wide', row: 0, column: 0 },
+      { id: 'clocked-in', size: 'wide', row: 3, column: 4 },
+      { id: 'weather-snapshot', size: 'banner', row: 2, column: 2 },
+      { id: 'payslip', size: 'square', row: 1, column: 5 },
+      { id: 'hiring', size: 'compact', row: 2, column: 0 },
+      { id: 'daily-brief', size: 'square', row: 3, column: 0 },
+      { id: 'mini-pulse', size: 'mini', row: 0, column: 4 },
+    ],
+  });
+}
+
+function emptyLandscapeState(): LandscapeState {
+  return { version: 1, columns: 8, widgets: [] };
 }
 
 function readLandscapeState(): LandscapeState {
@@ -372,10 +385,10 @@ function readLandscapeState(): LandscapeState {
     const storedState = localStorage.getItem(landscapeStorageKey);
     if (!storedState) return defaultLandscapeState();
     const parsed: unknown = JSON.parse(storedState);
-    if (!isLandscapeStateChange(parsed)) return defaultLandscapeState();
+    if (!isLandscapeStateChange(parsed)) return emptyLandscapeState();
     return landscapeStateFromPlacements(parsed);
   } catch {
-    return defaultLandscapeState();
+    return emptyLandscapeState();
   }
 }
 

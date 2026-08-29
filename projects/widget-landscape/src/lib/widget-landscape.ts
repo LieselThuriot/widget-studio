@@ -172,6 +172,11 @@ export class WidgetLandscape {
     this.draft.update((state) => (state ? addWidget(state, widget) : state));
   }
 
+  protected clearWidgets(): void {
+    this.draft.update((state) => (state ? { ...state, widgets: [] } : state));
+    this.selectedId.set(null);
+  }
+
   protected startPaletteDrag(event: DragEvent, item: LandscapePaletteItem): void {
     if (this.invalidPaletteIds().includes(item.id)) return;
     event.dataTransfer?.setData('widget-landscape-palette-id', item.id);

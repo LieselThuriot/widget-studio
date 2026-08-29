@@ -130,6 +130,70 @@ describe('WidgetLandscape', () => {
     expect(fixture.nativeElement.querySelector('[aria-label="Edit landscape"]')).not.toBeNull();
   });
 
+  it('clears all widgets from the draft and emits an empty layout on confirmation', () => {
+    let change: LandscapeStateChange | undefined;
+    fixture.componentInstance.stateChange.subscribe((value) => (change = value));
+    enterEdit();
+
+    const clearButton = fixture.nativeElement.querySelector(
+      '.landscape-clear-button',
+    ) as HTMLButtonElement;
+    expect(clearButton.disabled).toBe(false);
+    clearButton.click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('.landscape-item')).toHaveLength(0);
+    expect(clearButton.disabled).toBe(true);
+
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+    expect(change?.widgets).toEqual([]);
+  });
+
+  it('restores cleared widgets when editing is cancelled', () => {
+    enterEdit();
+
+    (fixture.nativeElement.querySelector('.landscape-clear-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('.landscape-item')).toHaveLength(0);
+
+    (
+      fixture.nativeElement.querySelector(
+        '.landscape-button:not(.landscape-button--primary)',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+    enterEdit();
+
+    expect(fixture.nativeElement.querySelectorAll('.landscape-item')).toHaveLength(1);
+  });
+
+  it('disables clear all when the landscape has no widgets', () => {
+    fixture.componentRef.setInput('state', { ...structuredClone(state), widgets: [] });
+    fixture.detectChanges();
+    enterEdit();
+
+    expect(
+      (fixture.nativeElement.querySelector('.landscape-clear-button') as HTMLButtonElement)
+        .disabled,
+    ).toBe(true);
+  });
+
+  it('shows an add-widget prompt after clearing in edit mode', () => {
+    enterEdit();
+
+    (fixture.nativeElement.querySelector('.landscape-clear-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.landscape-empty')?.textContent).toContain(
+      'Choose a widget from the palette to add it.',
+    );
+    expect(fixture.nativeElement.querySelector('.landscape-empty')?.textContent).not.toContain(
+      'Open edit mode',
+    );
+  });
+
   it('shows the column boundary at the end of the configured grid', () => {
     enterEdit();
 
