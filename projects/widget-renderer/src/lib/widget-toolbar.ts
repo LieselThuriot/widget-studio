@@ -52,8 +52,10 @@ import { RefreshConfig } from './widget.model';
         opacity: 0;
         transform: translateY(-4px);
         transition:
-          opacity 160ms ease,
-          transform 160ms ease;
+          opacity var(--widget-renderer-transition-duration, 160ms)
+            var(--widget-renderer-transition-easing, ease),
+          transform var(--widget-renderer-transition-duration, 160ms)
+            var(--widget-renderer-transition-easing, ease);
       }
       :host-context(.widget-shell:hover) .widget-toolbar,
       :host-context(.widget-shell:focus-within) .widget-toolbar {
@@ -64,12 +66,12 @@ import { RefreshConfig } from './widget.model';
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
-        border: 1px solid #ffffff38;
-        border-radius: 8px;
-        background: #10182ccc;
-        color: #fff;
+        width: var(--widget-renderer-control-size, 28px);
+        height: var(--widget-renderer-control-size, 28px);
+        border: 1px solid var(--widget-renderer-control-border, #ffffff38);
+        border-radius: var(--widget-renderer-radius, 8px);
+        background: var(--widget-renderer-control-background, #10182ccc);
+        color: var(--widget-renderer-action-color, #fff);
         cursor: pointer;
       }
       .icon-button svg {
@@ -83,9 +85,9 @@ import { RefreshConfig } from './widget.model';
       }
       .icon-button:hover,
       .icon-button:focus-visible {
-        border-color: #17233c;
-        background: #fff;
-        color: #17233c;
+        border-color: var(--widget-renderer-control-hover-border, #17233c);
+        background: var(--widget-renderer-control-hover-background, #fff);
+        color: var(--widget-renderer-control-hover-color, #17233c);
       }
     `,
   ],

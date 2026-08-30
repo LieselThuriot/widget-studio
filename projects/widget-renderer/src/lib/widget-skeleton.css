@@ -1,10 +1,5 @@
 :host {
   display: block;
-  --widget-renderer-radius: 8px;
-  --widget-renderer-pill-radius: 999px;
-  --widget-renderer-control-size: 28px;
-  --widget-renderer-content-padding: 18px;
-  --widget-renderer-shadow: 0 18px 40px #10182c38;
 }
 .widget-skeleton {
   position: relative;

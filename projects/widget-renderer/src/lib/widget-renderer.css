@@ -7,6 +7,16 @@
   --widget-renderer-shadow: 0 18px 40px #10182c38;
   --widget-renderer-transition-duration: 160ms;
   --widget-renderer-transition-easing: ease;
+  --widget-renderer-control-background: #10182ccc;
+  --widget-renderer-control-border: #ffffff38;
+  --widget-renderer-control-hover-border: #17233c;
+  --widget-renderer-control-hover-background: #fff;
+  --widget-renderer-control-hover-color: #17233c;
+  --widget-renderer-action-background: #151515;
+  --widget-renderer-action-color: #fff;
+  --widget-renderer-action-outline-border: #737373;
+  --widget-renderer-action-outline-background: #fff;
+  --widget-renderer-action-outline-color: #151515;
 }
 .widget-skeleton {
   position: relative;

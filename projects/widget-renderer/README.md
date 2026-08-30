@@ -124,14 +124,14 @@ handleAction(event: { element: ButtonElement; event: Event }): void {
 
 Every input must use `version: 2` and include:
 
-| Field | Description |
-| --- | --- |
-| `size` | `mini`, `compact`, `square`, `wide`, `mega`, `banner`, `hero`, or `tall`; dimensions include the 8px layout gap |
-| `rows` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
-| `columns` | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
-| `background` | Color, optional image, sizing, position, repeat, overlay, and sensitivity settings |
-| `refresh` | Whether to show a refresh action and its accessible label |
-| `elements` | An array of supported widget elements |
+| Field        | Description                                                                                                                                          |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`       | `mini`, `compact`, `square`, `wide`, `mega`, `banner`, `hero`, or `tall`; dimensions include the 8px layout gap                                      |
+| `rows`       | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
+| `columns`    | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
+| `background` | Color, optional image, sizing, position, repeat, overlay, and sensitivity settings                                                                   |
+| `refresh`    | Whether to show a refresh action and its accessible label                                                                                            |
+| `elements`   | An array of supported widget elements                                                                                                                |
 
 Element positions are zero-based. For example, `row: 0` and `column: 0` place an element in the first grid cell.
 
@@ -160,11 +160,7 @@ Set `sensitive: true` on the background or an element to blur it and remove hidd
 Use the exported helpers when data enters your application:
 
 ```ts
-import {
-  normalizeWidgetInput,
-  parseWidgetInput,
-  safeParseWidgetInput,
-} from 'widget-renderer';
+import { normalizeWidgetInput, parseWidgetInput, safeParseWidgetInput } from 'widget-renderer';
 
 const result = safeParseWidgetInput(payload);
 
@@ -189,7 +185,7 @@ The package entry point exports:
 - `normalizeWidgetInput`
 - `safeParseWidgetInput`, `parseWidgetInput`, `isWidgetContract`, `isWidget`, and validation types
 - Grid layout helpers and widget dimensions
-- `ChartElementRenderer`
+- `WidgetRenderer` is the supported rendering entry point; element and chart implementation components are internal.
 - `chartAriaLabel` and `chartAccessibilitySummary`
 
 Import from `widget-renderer` rather than reaching into internal source files. The complete export list is maintained in [`src/public-api.ts`](https://github.com/LieselThuriot/widget-studio/blob/main/projects/widget-renderer/src/public-api.ts). The package metadata is in [`package.json`](package.json); Angular and ECharts are peer dependencies.

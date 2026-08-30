@@ -31,7 +31,7 @@ import { BackgroundConfig } from './widget.model';
         position: absolute;
         inset: 0;
         overflow: hidden;
-        border-radius: 8px;
+        border-radius: var(--widget-renderer-radius, 8px);
       }
       .widget-background-image {
         position: absolute;
@@ -39,7 +39,8 @@ import { BackgroundConfig } from './widget.model';
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        transition: filter 160ms ease;
+        transition: filter var(--widget-renderer-transition-duration, 160ms)
+          var(--widget-renderer-transition-easing, ease);
       }
       .widget-background-image.is-sensitive {
         inset: -18px;
@@ -49,7 +50,7 @@ import { BackgroundConfig } from './widget.model';
       .widget-overlay {
         position: absolute;
         inset: 0;
-        border-radius: 8px;
+        border-radius: var(--widget-renderer-radius, 8px);
         pointer-events: none;
         z-index: 0;
       }

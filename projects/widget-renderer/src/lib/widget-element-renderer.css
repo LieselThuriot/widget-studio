@@ -77,7 +77,7 @@ img {
   width: 100%;
   height: 2px;
   flex: 0 0 auto;
-  border-radius: 999px;
+  border-radius: var(--widget-renderer-pill-radius, 999px);
 }
 .divider-element.is-vertical {
   width: 2px;
@@ -89,7 +89,7 @@ img {
 }
 .action-button {
   min-height: 30px;
-  border-radius: 8px;
+  border-radius: var(--widget-renderer-radius, 8px);
   padding: 6px 10px;
   font: 600 12px/1.1 inherit;
   cursor: var(--widget-renderer-action-cursor, pointer);
@@ -99,8 +99,10 @@ img {
   pointer-events: none;
   transform: translateY(2px);
   transition:
-    opacity 160ms ease,
-    transform 160ms ease;
+    opacity var(--widget-renderer-transition-duration, 160ms)
+      var(--widget-renderer-transition-easing, ease),
+    transform var(--widget-renderer-transition-duration, 160ms)
+      var(--widget-renderer-transition-easing, ease);
 }
 :host-context(.widget-shell:hover) .action-button.show-only-on-hover,
 :host-context(.widget-shell:focus-within) .action-button.show-only-on-hover {
@@ -109,12 +111,12 @@ img {
   transform: translateY(0);
 }
 .action-button.solid {
-  border: 1px solid #151515;
-  background: #151515;
-  color: #fff;
+  border: 1px solid var(--widget-renderer-action-background, #151515);
+  background: var(--widget-renderer-action-background, #151515);
+  color: var(--widget-renderer-action-color, #fff);
 }
 .action-button.outline {
-  border: 1px solid #737373;
-  background: #fff;
-  color: #151515;
+  border: 1px solid var(--widget-renderer-action-outline-border, #737373);
+  background: var(--widget-renderer-action-outline-background, #fff);
+  color: var(--widget-renderer-action-outline-color, #151515);
 }
