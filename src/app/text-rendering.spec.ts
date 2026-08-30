@@ -75,4 +75,34 @@ describe('text renderer whitespace', () => {
     expect(text.style.borderRadius).toBe('999px');
     expect(text.style.padding).toBe('4px 8px');
   });
+
+  it('allows italic text to paint beyond its advance width', async () => {
+    const fixture = TestBed.createComponent(WidgetRenderer);
+    const baseText = textWidget(false).elements[0] as Extract<
+      WidgetContract['elements'][number],
+      { type: 'text' }
+    >;
+    fixture.componentRef.setInput('widget', {
+      ...textWidget(false),
+      elements: [
+        {
+          ...baseText,
+          text: '18°',
+          style: {
+            ...baseText.style,
+            align: 'right',
+            font: { size: 36, italic: true },
+          },
+        },
+      ],
+    });
+    await fixture.whenStable();
+
+    const text = fixture.nativeElement.querySelector('.text-element') as HTMLElement;
+    expect(text.style.fontStyle).toBe('italic');
+    expect(getComputedStyle(text).overflow).toBe('visible');
+    expect(getComputedStyle(fixture.nativeElement.querySelector('.widget-shell')).overflow).toBe(
+      'hidden',
+    );
+  });
 });
