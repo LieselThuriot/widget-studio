@@ -17,7 +17,7 @@ describe('chartOptions', () => {
       title: 'Share',
       data: [{ label: 'A', value: 4 }],
     } as ChartElement);
-    expect(options.series).toEqual([
+    expect(options['series']).toEqual([
       {
         type: 'pie',
         center: ['50%', '54%'],
@@ -38,7 +38,7 @@ describe('chartOptions', () => {
     } as ChartElement);
     expect(
       (
-        options.series as [
+        options['series'] as [
           { axisLine: { lineStyle: { color: [[number, string], [number, string]] } } },
         ]
       )[0].axisLine.lineStyle.color[0][0],
@@ -57,7 +57,8 @@ describe('chartOptions', () => {
       },
     } as ChartElement);
     expect(
-      (options.series as [{ data: [{ itemStyle: { color: string } }] }])[0].data[0].itemStyle.color,
+      (options['series'] as [{ data: [{ itemStyle: { color: string } }] }])[0].data[0].itemStyle
+        .color,
     ).toBe('#f00');
   });
 });
