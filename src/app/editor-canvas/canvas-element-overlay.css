@@ -74,9 +74,20 @@
   padding: 0;
   border: 2px solid var(--editor-surface-code);
   border-radius: 50%;
-  background: var(--editor-danger);
-  color: var(--editor-text-on-accent);
+  background: var(--editor-surface-raised);
+  color: var(--editor-danger-strong);
   cursor: pointer;
   pointer-events: auto;
   line-height: 15px;
+  opacity: 1;
+  box-shadow: var(--editor-shadow-panel);
+}
+
+.element-delete:hover {
+  background: var(--editor-surface-hover);
+}
+
+.element-delete:focus-visible {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 1px;
 }

@@ -275,6 +275,9 @@
 .landscape-shell.is-editing .landscape-item widget-renderer {
   pointer-events: none;
 }
+.landscape-shell.is-editing ::ng-deep .widget-toolbar {
+  display: none !important;
+}
 .landscape-interaction-shield {
   position: absolute;
   inset: 0;
@@ -324,16 +327,22 @@
 .item-controls {
   position: absolute;
   top: 7px;
-  left: 7px;
+  right: 7px;
   z-index: 5;
   display: flex;
   gap: 4px;
 }
 .item-controls .landscape-icon-button {
-  width: 26px;
-  height: 26px;
+  box-sizing: border-box;
+  width: 19px;
+  height: 19px;
+  padding: 0;
+  border-radius: 50%;
   background: var(--widget-landscape-control);
+  color: var(--widget-landscape-danger);
   box-shadow: var(--widget-landscape-shadow);
+  line-height: 15px;
+  opacity: 1;
 }
 .landscape-palette {
   position: absolute;
