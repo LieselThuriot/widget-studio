@@ -1,19 +1,9 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-import { ChartElementRenderer } from './chart-element-renderer';
-import {
-  ButtonElement,
-  ChartElement,
-  ImageElement,
-  ProgressElement,
-  TextElement,
-  Widget,
-  WidgetElement,
-  WidgetInput,
-} from './widget.model';
+import { WidgetElementRenderer } from './widget-element-renderer';
+import { ButtonElement, Widget, WidgetInput } from './widget.model';
 import { normalizeWidgetInput } from './widget-hydration';
 import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
 import {
-  elementGridStyle,
   gridTemplate,
   widgetHeight as getWidgetHeight,
   widgetWidth as getWidgetWidth,
@@ -25,7 +15,7 @@ export type WidgetLoading = boolean | Widget['size'];
   selector: 'widget-renderer',
   templateUrl: './widget-renderer.html',
   styleUrl: './widget-renderer.css',
-  imports: [ChartElementRenderer],
+  imports: [WidgetElementRenderer],
 })
 export class WidgetRenderer {
   readonly widget = input<WidgetInput | null>(null);
@@ -34,7 +24,6 @@ export class WidgetRenderer {
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
-  private readonly failedImages = signal<Record<string, string>>({});
   private readonly parsedWidget = computed(() => {
     const widget = this.widget();
     return widget === null ? { success: false as const, issues: [] } : safeParseWidgetInput(widget);
@@ -78,76 +67,8 @@ export class WidgetRenderer {
     return image ? `url("${image}")` : 'none';
   });
 
-  protected isText(element: WidgetElement): element is TextElement {
-    return element.type === 'text';
-  }
-  protected textFontWeight(element: TextElement): number {
-    return element.style.font.bold ? 700 : 400;
-  }
-  protected textFontStyle(element: TextElement): 'normal' | 'italic' {
-    return element.style.font.italic ? 'italic' : 'normal';
-  }
-  protected textFontDecoration(element: TextElement): string {
-    return (
-      [
-        element.style.font.underline && 'underline',
-        element.style.font.strikethrough && 'line-through',
-      ]
-        .filter(Boolean)
-        .join(' ') || 'none'
-    );
-  }
-  protected isImage(element: WidgetElement): element is ImageElement {
-    return element.type === 'image';
-  }
-  protected isButton(element: WidgetElement): element is ButtonElement {
-    return element.type === 'button';
-  }
-  protected isChart(element: WidgetElement): element is ChartElement | ProgressElement {
-    return ['pie', 'donut', 'funnel', 'gauge', 'bar', 'line', 'progress'].includes(element.type);
-  }
-  protected isElementSensitive(element: WidgetElement): boolean {
-    return ('sensitive' in element ? element.sensitive : false) && !this.sensitiveVisible();
-  }
-  protected sensitiveBlur(element: WidgetElement): string | null {
-    if (!element.sensitive) {
-      return null;
-    }
-    if (element.type !== 'text') {
-      return '2px';
-    }
-
-    const blur = Math.min(Math.max(element.style.font.size * 0.25, 2), 10);
-    return `${blur}px`;
-  }
-  protected elementAlt(element: ImageElement): string {
-    return this.isElementSensitive(element) ? '' : element.alt;
-  }
-  protected imageFailed(element: ImageElement, index: number): boolean {
-    return this.failedImages()[index] === element.source;
-  }
-  protected imageLoadFailed(element: ImageElement, index: number): void {
-    this.failedImages.update((failed) => ({ ...failed, [index]: element.source }));
-  }
-  protected horizontalAnchor(anchor: string): string {
-    return anchor.endsWith('left')
-      ? 'flex-start'
-      : anchor.endsWith('right')
-        ? 'flex-end'
-        : 'center';
-  }
-  protected verticalAnchor(anchor: string): string {
-    return anchor.startsWith('top')
-      ? 'flex-start'
-      : anchor.startsWith('bottom')
-        ? 'flex-end'
-        : 'center';
-  }
   protected toggleSensitive(): void {
     this.sensitiveVisible.update((visible) => !visible);
-  }
-  protected elementStyle(element: WidgetElement): Record<string, string> {
-    return elementGridStyle(element);
   }
 }
 

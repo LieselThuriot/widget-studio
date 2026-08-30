@@ -1,0 +1,114 @@
+:host {
+  display: contents;
+}
+.widget-element {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  z-index: 1;
+}
+.element-content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+.element-content:has(widget-chart-element) {
+  align-items: stretch;
+}
+.element-content > widget-chart-element {
+  flex: 0 1 auto;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+.element-content > widget-chart-element.is-progress {
+  height: auto;
+}
+.chart-placeholder {
+  width: 100%;
+  height: 100%;
+}
+.text-element {
+  display: inline-block;
+  overflow: visible;
+  line-height: 1.2;
+}
+img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.image-placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #dfe5ee;
+}
+.image-placeholder svg {
+  width: min(56px, 45%);
+  height: auto;
+  fill: none;
+  stroke: #8c9ab0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+.divider-element {
+  width: 100%;
+  height: 2px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+}
+.divider-element.is-vertical {
+  width: 2px;
+  height: 100%;
+}
+.element-content.is-sensitive {
+  filter: blur(var(--sensitive-blur, 2px));
+  user-select: none;
+}
+.action-button {
+  min-height: 30px;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font: 600 12px/1.1 inherit;
+  cursor: var(--widget-renderer-action-cursor, pointer);
+}
+.action-button.show-only-on-hover {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+:host-context(.widget-shell:hover) .action-button.show-only-on-hover,
+:host-context(.widget-shell:focus-within) .action-button.show-only-on-hover {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.action-button.solid {
+  border: 1px solid #151515;
+  background: #151515;
+  color: #fff;
+}
+.action-button.outline {
+  border: 1px solid #737373;
+  background: #fff;
+  color: #151515;
+}
