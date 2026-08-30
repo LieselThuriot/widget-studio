@@ -26,7 +26,6 @@ const element = {
 
 describe('ProgressElementRenderer', () => {
   let fixture: ComponentFixture<ProgressElementRenderer>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProgressElementRenderer],
@@ -35,7 +34,6 @@ describe('ProgressElementRenderer', () => {
     fixture.componentRef.setInput('element', element);
     await fixture.whenStable();
   });
-
   it('renders accessible progress and legend content', () => {
     expect(
       fixture.nativeElement.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow'),
@@ -44,14 +42,12 @@ describe('ProgressElementRenderer', () => {
       'Done: 0–4',
     );
   });
-
   it('shows and hides a segment tooltip with focus and blur', () => {
     vi.useFakeTimers();
     const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
     segment.dispatchEvent(new FocusEvent('focus'));
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('[role="tooltip"]')?.textContent).toContain('Done');
-
     segment.dispatchEvent(new FocusEvent('blur'));
     vi.advanceTimersByTime(100);
     fixture.detectChanges();
