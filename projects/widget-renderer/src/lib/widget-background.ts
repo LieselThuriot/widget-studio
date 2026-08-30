@@ -3,7 +3,11 @@ import { BackgroundConfig } from './widget.model';
 
 @Component({
   selector: 'widget-background',
-  template: `<div class="widget-background" [class.is-sensitive]="sensitive()">
+  template: `<div
+      class="widget-background"
+      [class.is-sensitive]="sensitive()"
+      style="background-image: none"
+    >
       <div
         class="widget-background-image"
         [class.is-sensitive]="sensitive()"
