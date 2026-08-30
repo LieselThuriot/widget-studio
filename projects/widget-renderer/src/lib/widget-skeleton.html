@@ -1,0 +1,22 @@
+<div
+  class="widget-skeleton"
+  [class.is-mini]="size() === 'mini'"
+  [class.is-compact]="size() === 'compact'"
+  [class.is-tall]="size() === 'tall'"
+  [class.is-wide]="size() === 'wide'"
+  [class.is-mega]="size() === 'mega'"
+  [class.is-banner]="size() === 'banner'"
+  [class.is-hero]="size() === 'hero'"
+  [class.is-dark]="darkMode()"
+  role="status"
+  aria-label="Widget loading"
+>
+  <div class="skeleton-toolbar"></div>
+  <div class="skeleton-content">
+    <span class="skeleton-line skeleton-line-small"></span>
+    <span class="skeleton-line skeleton-line-title"></span>
+    <span class="skeleton-line skeleton-line-copy"></span>
+    <span class="skeleton-chart"></span>
+    <span class="skeleton-button"></span>
+  </div>
+</div>

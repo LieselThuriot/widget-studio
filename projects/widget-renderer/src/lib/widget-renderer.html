@@ -1,26 +1,5 @@
 @if (isLoading()) {
-  <div
-    class="widget-skeleton"
-    [class.is-mini]="loadingSize() === 'mini'"
-    [class.is-compact]="loadingSize() === 'compact'"
-    [class.is-tall]="loadingSize() === 'tall'"
-    [class.is-wide]="loadingSize() === 'wide'"
-    [class.is-mega]="loadingSize() === 'mega'"
-    [class.is-banner]="loadingSize() === 'banner'"
-    [class.is-hero]="loadingSize() === 'hero'"
-    [class.is-dark]="darkMode()"
-    role="status"
-    aria-label="Widget loading"
-  >
-    <div class="skeleton-toolbar"></div>
-    <div class="skeleton-content">
-      <span class="skeleton-line skeleton-line-small"></span>
-      <span class="skeleton-line skeleton-line-title"></span>
-      <span class="skeleton-line skeleton-line-copy"></span>
-      <span class="skeleton-chart"></span>
-      <span class="skeleton-button"></span>
-    </div>
-  </div>
+  <widget-skeleton [size]="loadingSize()" [darkMode]="darkMode()" />
 } @else {
   @let widget = renderWidget();
   <section

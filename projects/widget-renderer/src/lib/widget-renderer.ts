@@ -1,5 +1,6 @@
 import { Component, computed, input, output, signal } from '@angular/core';
 import { WidgetElementRenderer } from './widget-element-renderer';
+import { WidgetSkeleton } from './widget-skeleton';
 import { ButtonElement, Widget, WidgetInput } from './widget.model';
 import { normalizeWidgetInput } from './widget-hydration';
 import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
@@ -15,7 +16,7 @@ export type WidgetLoading = boolean | Widget['size'];
   selector: 'widget-renderer',
   templateUrl: './widget-renderer.html',
   styleUrl: './widget-renderer.css',
-  imports: [WidgetElementRenderer],
+  imports: [WidgetElementRenderer, WidgetSkeleton],
 })
 export class WidgetRenderer {
   readonly widget = input<WidgetInput | null>(null);
