@@ -5,7 +5,7 @@ import { ProgressElement, ProgressItem, ProgressSegment } from './widget.model';
 @Component({
   selector: 'widget-progress-element',
   templateUrl: './progress-element-renderer.html',
-  styleUrl: './chart-element-renderer.css',
+  styleUrl: './progress-element-renderer.css',
   host: {
     class: 'is-progress',
     '(document:pointerdown)': 'onDocumentPointerDown($event)',

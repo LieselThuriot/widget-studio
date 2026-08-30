@@ -6,7 +6,6 @@ import { ProgressElementRenderer } from './progress-element-renderer';
 @Component({
   selector: 'widget-chart-element',
   templateUrl: './chart-element-renderer.html',
-  styleUrl: './chart-element-renderer.css',
   imports: [EchartsElementRenderer, ProgressElementRenderer],
 })
 export class ChartElementRenderer {

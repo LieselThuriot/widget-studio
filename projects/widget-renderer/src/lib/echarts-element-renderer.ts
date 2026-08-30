@@ -39,7 +39,7 @@ use([
       <span class="visually-hidden" [id]="summaryId">{{ accessibilitySummary(element()) }}</span>
     }
   </div>`,
-  styleUrl: './chart-element-renderer.css',
+  styleUrl: './echarts-element-renderer.css',
 })
 export class EchartsElementRenderer implements OnDestroy {
   readonly element = input.required<ChartElement>();
