@@ -8,14 +8,17 @@ import {
   TextElement,
   WidgetElement,
 } from './widget.model';
-import { elementGridStyle } from './widget-layout';
 
 @Component({
   selector: 'widget-element-renderer',
   templateUrl: './widget-element-renderer.html',
   styleUrl: './widget-element-renderer.css',
   imports: [ChartElementRenderer],
-  host: { class: 'widget-element' },
+  host: {
+    class: 'widget-element',
+    '[style.grid-row]': 'gridRow()',
+    '[style.grid-column]': 'gridColumn()',
+  },
 })
 export class WidgetElementRenderer {
   readonly element = input.required<WidgetElement>();
@@ -82,10 +85,13 @@ export class WidgetElementRenderer {
         .join(' ') || 'none'
     );
   }
-  protected elementStyle(element: WidgetElement): Record<string, string> {
-    return elementGridStyle(element);
-  }
   protected elementId(element: WidgetElement): string | null {
     return 'id' in element ? (element as WidgetElement & { id: string }).id : null;
+  }
+  protected gridRow(): string {
+    return `${this.element().grid.row + 1} / span ${this.element().grid.rowSpan}`;
+  }
+  protected gridColumn(): string {
+    return `${this.element().grid.column + 1} / span ${this.element().grid.columnSpan}`;
   }
 }

@@ -3,8 +3,6 @@
   class="widget-element"
   [attr.data-widget-element-id]="elementId(item)"
   [class.is-sensitive]="isSensitive(item)"
-  [attr.aria-hidden]="isSensitive(item) ? 'true' : null"
-  [style]="elementStyle(item)"
 >
   <div
     class="element-content"
