@@ -45,6 +45,22 @@ describe('chartOptions', () => {
     ).toBe(1);
   });
 
+  it('uses the exact range for a sub-unit gauge', () => {
+    const options = chartOptions({
+      ...base,
+      type: 'gauge',
+      data: { value: 0.35, min: 0.1, max: 0.6 },
+      style: { ...base.style, color: { ...base.style.color, fill: '#0a0', track: '#aaa' } },
+    } as ChartElement);
+    expect(
+      (
+        options['series'] as [
+          { axisLine: { lineStyle: { color: [[number, string], [number, string]] } } },
+        ]
+      )[0].axisLine.lineStyle.color[0][0],
+    ).toBeCloseTo(0.5);
+  });
+
   it('uses the line color fallback for uncolored line points', () => {
     const options = chartOptions({
       ...base,

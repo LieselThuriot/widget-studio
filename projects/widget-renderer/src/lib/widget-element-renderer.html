@@ -95,7 +95,11 @@
     } @else if (isChart(item)) {
       @let chart = item;
       @defer (on immediate) {
-        <widget-chart-element [class.is-progress]="chart.type === 'progress'" [element]="chart" />
+        <widget-chart-element
+          [class.is-progress]="chart.type === 'progress'"
+          [element]="chart"
+          [sensitiveHidden]="isSensitive(chart)"
+        />
       } @placeholder {
         <div class="chart-placeholder" aria-hidden="true"></div>
       }

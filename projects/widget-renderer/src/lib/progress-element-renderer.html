@@ -1,9 +1,9 @@
 <div
   class="progress-element"
   [style]="progressStyle(element())"
-  [attr.aria-hidden]="element().sensitive ? 'true' : null"
+  [attr.aria-hidden]="sensitiveHidden() ? 'true' : null"
 >
-  @if (!element().sensitive) {
+  @if (!sensitiveHidden()) {
     <span
       class="visually-hidden"
       role="progressbar"
@@ -28,7 +28,7 @@
             class="progress-item progress-segment"
             [class.is-active]="segment(entry.item).active"
             [style]="segmentStyle(entry.width, segment(entry.item).color)"
-            [attr.tabindex]="element().sensitive ? -1 : 0"
+            [attr.tabindex]="sensitiveHidden() ? -1 : 0"
             [attr.aria-label]="segment(entry.item).label + ': ' + segment(entry.item).value"
             (pointerenter)="moveTooltip(entry.index, $event)"
             (pointermove)="moveTooltip(entry.index, $event)"
@@ -68,7 +68,7 @@
       }
     </span>
   }
-  @if (!element().sensitive) {
+  @if (!sensitiveHidden()) {
     <span class="visually-hidden" [id]="summaryId">{{ accessibilitySummary(element()) }}</span>
   }
 </div>

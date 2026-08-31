@@ -27,15 +27,29 @@ export function normalizeWidget(widget: Widget): Widget {
 }
 
 export function assignEditorIds(widget: WidgetInput): Widget {
+  const reservedIds = new Set(
+    widget.elements.flatMap((element) => {
+      const id = 'id' in element && typeof element.id === 'string' ? element.id : '';
+      return id.length > 0 ? [id] : [];
+    }),
+  );
+  const assignedIds = new Set<string>();
+
   return {
     ...widget,
-    elements: widget.elements.map((element, index) => ({
-      ...element,
-      id:
-        'id' in element && typeof element.id === 'string'
-          ? element.id
-          : `${element.type}-${index}-${crypto.randomUUID()}`,
-    })),
+    elements: widget.elements.map((element, index) => {
+      const existingId = 'id' in element && typeof element.id === 'string' ? element.id : '';
+      let id = existingId;
+
+      if (id.length === 0 || assignedIds.has(id)) {
+        do {
+          id = `${element.type}-${index}-${crypto.randomUUID()}`;
+        } while (reservedIds.has(id) || assignedIds.has(id));
+      }
+
+      assignedIds.add(id);
+      return { ...element, id };
+    }),
   } as Widget;
 }
 

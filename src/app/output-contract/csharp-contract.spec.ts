@@ -1,6 +1,50 @@
 import { generateCsharpContract } from './csharp-contract';
 
 describe('generateCsharpContract', () => {
+  it('maps compact and tall widget sizes to WidgetSize', () => {
+    for (const [size, member] of [
+      ['compact', 'Compact'],
+      ['tall', 'Tall'],
+    ] as const) {
+      const output = generateCsharpContract({
+        version: 2,
+        id: `${size}-test`,
+        size,
+        rows: [],
+        columns: [],
+        background: { sensitive: false, repeat: false, size: 'auto', anchor: 'center' },
+        refresh: { enabled: false, label: '' },
+        elements: [],
+      });
+
+      expect(output).toContain(`Size = WidgetSize.${member}`);
+    }
+  });
+
+  it('maps background size to BackgroundSize with or without an image', () => {
+    for (const image of [undefined, 'https://example.com/background.png']) {
+      const output = generateCsharpContract({
+        version: 2,
+        id: 'background-size-test',
+        size: 'wide',
+        rows: [],
+        columns: [],
+        background: {
+          ...(image ? { image } : {}),
+          sensitive: false,
+          repeat: false,
+          size: 'contain',
+          anchor: 'center',
+        },
+        refresh: { enabled: false, label: '' },
+        elements: [],
+      });
+
+      expect(output).toContain('Size = BackgroundSize.Contain');
+      expect(output).not.toContain('Size = WidgetSize.Contain');
+    }
+  });
+
   it('uses GridTrack helpers including the default Star overload', () => {
     const output = generateCsharpContract({
       version: 2,
@@ -77,7 +121,6 @@ describe('generateCsharpContract', () => {
           style: {
             color: { legend: '#111', title: '#222', track: '#333' },
             font: { size: 12 },
-            radius: null,
           },
         },
       ],
@@ -86,5 +129,6 @@ describe('generateCsharpContract', () => {
     expect(output).toContain('Data = new ProgressData()');
     expect(output).toContain('new ProgressGap()');
     expect(output).not.toContain('Data = new object()');
+    expect(output).not.toContain('Radius =');
   });
 });

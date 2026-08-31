@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { WidgetRenderer } from 'widget-renderer';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { LandscapeItem } from './landscape-item';
 
@@ -38,5 +40,23 @@ describe('LandscapeItem', () => {
     button.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
 
     expect(movement).toBe(false);
+  });
+
+  it('preserves the placement size for a loading skeleton', () => {
+    fixture.componentRef.setInput('item', {
+      id: 'item',
+      size: 'wide',
+      widget: null,
+      row: 0,
+      column: 0,
+    });
+    fixture.detectChanges();
+
+    const renderer = fixture.debugElement.query(By.directive(WidgetRenderer))
+      .componentInstance as WidgetRenderer;
+    expect(renderer.loading()).toBe('wide');
+    expect(
+      (fixture.nativeElement.querySelector('.landscape-item') as HTMLElement).style.gridArea,
+    ).toBe('1 / 1 / 3 / 5');
   });
 });

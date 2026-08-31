@@ -166,7 +166,7 @@ export interface ValueChartStyle extends FillTrackStyle {
 }
 export interface ProgressStyle extends DataVisualStyle {
   color: DataVisualStyle['color'] & { title: string; track: string };
-  radius: ProgressRadius | null;
+  radius?: ProgressRadius | null;
 }
 export interface PieElement extends ChartElementBase {
   type: 'pie' | 'donut';

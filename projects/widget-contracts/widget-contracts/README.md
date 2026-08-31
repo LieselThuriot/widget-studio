@@ -19,6 +19,8 @@ dotnet add package WidgetStudio.Contracts
 
 The generated context emits camel-case property names, lowercase enum values, space-separated anchor values such as `"top left"`, and the `type` discriminator required by the renderer's polymorphic element model. It also omits null properties. Do not use the default `JsonSerializerOptions` when producing widget payloads.
 
+This package is primarily a serialization layer. When deserializing external JSON with `WidgetJsonContext`, put each polymorphic discriminator before the object's other properties: `type` first for widget elements and `kind` first for progress items. JSON produced by `WidgetJsonContext` already has this order.
+
 ## Colors
 
 Use `WidgetColor` to create renderer-compatible hexadecimal colors without formatting channel values by hand:

@@ -13,6 +13,7 @@ import { ProgressElement, ProgressItem, ProgressSegment } from './widget.model';
 })
 export class ProgressElementRenderer implements OnDestroy {
   readonly element = input.required<ProgressElement>();
+  readonly sensitiveHidden = input(false);
   protected readonly summaryId = `progress-summary-${crypto.randomUUID()}`;
   protected readonly tooltipIndex = signal<number | null>(null);
   protected readonly tooltipPosition = signal<{ x: string; y: string }>({ x: '50%', y: '0px' });
@@ -33,7 +34,7 @@ export class ProgressElementRenderer implements OnDestroy {
     };
   }
   protected progressItems(element: ProgressElement) {
-    const range = Math.max(1, element.data.max - element.data.min);
+    const range = element.data.max - element.data.min;
     let position = element.data.min;
     return element.data.items.map((item, index) => {
       const start = position;

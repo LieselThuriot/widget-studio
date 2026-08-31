@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { WidgetElementRenderer } from './widget-element-renderer';
 import { WidgetSkeleton } from './widget-skeleton';
 import { WidgetBackground } from './widget-background';
@@ -76,6 +76,16 @@ export class WidgetRenderer {
     const image = this.renderWidget().background.image;
     return image ? `url("${image}")` : 'none';
   });
+
+  constructor() {
+    effect(() => {
+      this.widget();
+      this.sensitiveVisible.set(false);
+    });
+    effect(() => {
+      if (this.loading() !== false) this.sensitiveVisible.set(false);
+    });
+  }
 
   protected toggleSensitive(): void {
     this.sensitiveVisible.update((visible) => !visible);

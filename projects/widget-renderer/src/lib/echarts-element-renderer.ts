@@ -30,12 +30,12 @@ use([
   template: `<div
     class="chart-chart"
     [attr.aria-label]="ariaLabel(element())"
-    [attr.aria-describedby]="element().sensitive ? null : summaryId"
-    [attr.aria-hidden]="element().sensitive ? 'true' : null"
+    [attr.aria-describedby]="sensitiveHidden() ? null : summaryId"
+    [attr.aria-hidden]="sensitiveHidden() ? 'true' : null"
     role="img"
   >
     <div #chartHost class="chart-host"></div>
-    @if (!element().sensitive) {
+    @if (!sensitiveHidden()) {
       <span class="visually-hidden" [id]="summaryId">{{ accessibilitySummary(element()) }}</span>
     }
   </div>`,
@@ -43,6 +43,7 @@ use([
 })
 export class EchartsElementRenderer implements OnDestroy {
   readonly element = input.required<ChartElement>();
+  readonly sensitiveHidden = input(false);
   protected readonly summaryId = `chart-summary-${crypto.randomUUID()}`;
   private readonly chartHost = viewChild<ElementRef<HTMLDivElement>>('chartHost');
   private chartHostElement: HTMLDivElement | null = null;

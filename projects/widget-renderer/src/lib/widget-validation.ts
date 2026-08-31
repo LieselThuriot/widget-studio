@@ -171,6 +171,8 @@ function validateStyle(
       if (requiredColors.includes(key) || color[key] !== undefined)
         requiredString(color[key], `${path}.color.${key}`, issues, true);
     }
+  } else if (requiredColors.length) {
+    addIssue(issues, `${path}.color`, 'must be an object');
   } else {
     requiredString(color, `${path}.color`, issues, true);
   }
@@ -351,9 +353,9 @@ function validateElement(value: unknown, path: string, issues: WidgetValidationI
       ]);
       if (isRecord(value['style'])) {
         const radius = value['style']['radius'];
-        if (radius !== null) {
+        if (radius !== undefined && radius !== null) {
           if (!isRecord(radius))
-            addIssue(issues, `${issuePath}.style.radius`, 'must be an object or null');
+            addIssue(issues, `${issuePath}.style.radius`, 'must be an object, null, or undefined');
           else {
             requiredNumber(radius['segment'], `${issuePath}.style.radius.segment`, issues);
             requiredNumber(radius['track'], `${issuePath}.style.radius.track`, issues);

@@ -149,14 +149,17 @@ export function updateElementPosition(
   kind: 'row' | 'column',
   value: number,
 ): Widget {
-  const maximum = kind === 'row' ? widget.rows.length - 1 : widget.columns.length - 1;
-  const position = Number.isFinite(value)
-    ? Math.max(0, Math.min(maximum, Math.round(value) - 1))
-    : 0;
   const element = widget.elements.find((candidate) => candidate.id === id);
-  return element
-    ? patchElement(widget, id, { grid: { ...element.grid, [kind]: position } })
-    : widget;
+  if (!element) return widget;
+
+  const maximum =
+    kind === 'row'
+      ? widget.rows.length - element.grid.rowSpan
+      : widget.columns.length - element.grid.columnSpan;
+  const position = Number.isFinite(value)
+    ? Math.max(0, Math.min(Math.max(0, maximum), Math.round(value) - 1))
+    : 0;
+  return patchElement(widget, id, { grid: { ...element.grid, [kind]: position } });
 }
 
 export function updateElementSpan(

@@ -53,7 +53,7 @@ export function chartAccessibilitySummary(element: ChartElement | ProgressElemen
     return `${element.title || 'Progress'}: ${number(progressValue(element))} of ${number(element.data.max - element.data.min)}; range ${number(element.data.min)} to ${number(element.data.max)}.${breakdown}`;
   }
   if (element.type === 'gauge') {
-    const range = Math.max(1, element.data.max - element.data.min);
+    const range = element.data.max - element.data.min;
     const percentage = Math.max(
       0,
       Math.min(100, ((element.data.value - element.data.min) / range) * 100),

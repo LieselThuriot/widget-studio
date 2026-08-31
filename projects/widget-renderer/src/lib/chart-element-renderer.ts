@@ -10,6 +10,7 @@ import { ProgressElementRenderer } from './progress-element-renderer';
 })
 export class ChartElementRenderer {
   readonly element = input.required<ChartElement | ProgressElement>();
+  readonly sensitiveHidden = input(false);
 
   protected isProgress(element: WidgetElement): element is ProgressElement {
     return element.type === 'progress';

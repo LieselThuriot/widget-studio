@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  footprintFor,
   moveWidget,
   normalizeLandscapeState,
   placeWithPushDown,
@@ -23,6 +24,33 @@ describe('landscape layout', () => {
   it('uses compact footprints for the compact and tall sizes', () => {
     expect(landscapeFootprintForSize('compact')).toEqual({ columnSpan: 2, rowSpan: 1 });
     expect(landscapeFootprintForSize('tall')).toEqual({ columnSpan: 1, rowSpan: 2 });
+  });
+
+  it('uses the loaded widget size and falls back to the placement size while loading', () => {
+    expect(
+      footprintFor({ ...widget('loaded'), size: 'mini', widget: { size: 'wide' } as never }),
+    ).toEqual({ columnSpan: 4, rowSpan: 2 });
+    expect(footprintFor({ ...widget('loading'), size: 'wide', widget: null })).toEqual({
+      columnSpan: 4,
+      rowSpan: 2,
+    });
+  });
+
+  it('uses loaded widget sizes when resolving collisions', () => {
+    const normalized = normalizeLandscapeState({
+      version: 1,
+      columns: 4,
+      responsive: false,
+      widgets: [
+        { ...widget('large'), size: 'mini', widget: { size: 'square' } as never },
+        widget('small'),
+      ],
+    } as LandscapeState);
+
+    expect(normalized.widgets.find(({ id }) => id === 'small')).toMatchObject({
+      row: 0,
+      column: 2,
+    });
   });
 
   it('pushes overlapping widgets down', () => {

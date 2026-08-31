@@ -3,7 +3,9 @@ using System.Text.Json.Nodes;
 
 using WidgetStudio.Contracts.Data;
 using WidgetStudio.Contracts.Elements;
+using WidgetStudio.Contracts.Elements.Charts;
 using WidgetStudio.Contracts.Enums;
+using WidgetStudio.Contracts.Styles;
 
 namespace WidgetStudio.Contracts.Tests;
 
@@ -82,5 +84,25 @@ public sealed class OptionalPropertySerializationTests
         var serialized = JsonSerializer.Serialize(widget, WidgetJsonContext.Default.WidgetContract);
 
         Assert.DoesNotContain("\"refresh\"", serialized, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void ProgressRadiusMayBeOmitted()
+    {
+        var widget = ContractFixtures.CreateCompleteWidget();
+        var progress = widget.Elements.OfType<ProgressElement>().Single();
+        progress.Style = new ProgressStyle
+        {
+            Color = progress.Style.Color,
+            Font = progress.Style.Font
+        };
+
+        var serialized = JsonSerializer.Serialize(widget, WidgetJsonContext.Default.WidgetContract);
+        var progressJson = JsonNode.Parse(serialized)!["elements"]!.AsArray()
+          .Single(element => element!["type"]!.GetValue<string>() == "progress")!;
+        var result = JsonSerializer.Deserialize(serialized, WidgetJsonContext.Default.WidgetContract)!;
+
+        Assert.DoesNotContain("radius", progressJson["style"]!.AsObject());
+        Assert.Null(result.Elements.OfType<ProgressElement>().Single().Style.Radius);
     }
 }

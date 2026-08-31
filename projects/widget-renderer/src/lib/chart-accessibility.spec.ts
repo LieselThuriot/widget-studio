@@ -44,4 +44,19 @@ describe('chart accessibility', () => {
     expect(summary).toContain('1 more points.');
     expect(summary).not.toContain('Point 20');
   });
+
+  it('uses the exact range for a sub-unit gauge percentage', () => {
+    const element = {
+      type: 'gauge',
+      grid,
+      sensitive: false,
+      showLegend: true,
+      style: {
+        font: { size: 11 },
+        color: { legend: '#111', title: '#222', fill: '#0a0', track: '#ddd' },
+      },
+      data: { value: 0.35, min: 0.1, max: 0.6 },
+    } as ChartElement;
+    expect(chartAccessibilitySummary(element)).toContain('50 percent.');
+  });
 });

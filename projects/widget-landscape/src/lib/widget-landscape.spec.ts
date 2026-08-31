@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { describe, expect, it, beforeEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LandscapeState, LandscapeStateChange } from './landscape.model';
 import { WidgetLandscape } from './widget-landscape';
 
@@ -35,6 +35,54 @@ describe('WidgetLandscape', () => {
     fixture.componentRef.setInput('palette', palette);
     fixture.detectChanges();
   });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  function recreateResponsiveFixture(
+    responsiveState: LandscapeState,
+    editMode = false,
+  ): { observerCount: () => number } {
+    fixture.destroy();
+    let observers = 0;
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(_callback: ResizeObserverCallback) {
+          observers++;
+        }
+        observe(): void {
+          return;
+        }
+        unobserve(): void {
+          return;
+        }
+        disconnect(): void {
+          return;
+        }
+      },
+    );
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      x: 0,
+      y: 0,
+      width: 310,
+      height: 560,
+      top: 0,
+      right: 310,
+      bottom: 560,
+      left: 0,
+      toJSON: () => ({}),
+    });
+    fixture = TestBed.createComponent(WidgetLandscape);
+    fixture.componentRef.setInput('state', structuredClone(responsiveState));
+    fixture.componentRef.setInput('palette', palette);
+    fixture.componentRef.setInput('responsive', true);
+    fixture.componentRef.setInput('editMode', editMode);
+    fixture.detectChanges();
+    return { observerCount: () => observers };
+  }
 
   function enterEdit(): void {
     (
@@ -127,6 +175,24 @@ describe('WidgetLandscape', () => {
     expect(fixture.nativeElement.querySelector('.landscape-button--primary')).toBeNull();
   });
 
+  it('clears controlled edit state when editMode is turned off', () => {
+    fixture.componentRef.setInput('editMode', true);
+    fixture.detectChanges();
+    const input = columnInput();
+    input.value = '3';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    fixture.componentRef.setInput('editMode', false);
+    fixture.detectChanges();
+    expect(columnInput()).toBeNull();
+
+    fixture.componentRef.setInput('state', { ...structuredClone(state), columns: 6 });
+    fixture.componentRef.setInput('editMode', true);
+    fixture.detectChanges();
+    expect(columnInput().value).toBe('6');
+  });
+
   it('shows the edit button when the palette has an item', () => {
     expect(fixture.nativeElement.querySelector('[aria-label="Edit landscape"]')).not.toBeNull();
   });
@@ -145,6 +211,121 @@ describe('WidgetLandscape', () => {
     expect(fixture.nativeElement.querySelector('.landscape-grid')?.getAttribute('style')).toContain(
       '--landscape-columns: 8',
     );
+  });
+
+  it('recalculates responsive columns when a loaded widget footprint changes', () => {
+    const responsiveState = {
+      ...structuredClone(state),
+      responsive: true,
+      widgets: [
+        {
+          ...structuredClone(state.widgets[0]),
+          column: 0,
+          widget: { id: 'mini', size: 'mini' } as never,
+        },
+      ],
+    };
+    const observer = recreateResponsiveFixture(responsiveState);
+    expect(
+      fixture.nativeElement
+        .querySelector('.landscape-grid')
+        .style.getPropertyValue('--landscape-columns'),
+    ).toBe('2');
+
+    fixture.componentRef.setInput('state', {
+      ...responsiveState,
+      widgets: [
+        {
+          ...responsiveState.widgets[0],
+          widget: { id: 'mini', size: 'wide' } as never,
+        },
+      ],
+    });
+    fixture.detectChanges();
+
+    expect(observer.observerCount()).toBe(1);
+    expect(
+      fixture.nativeElement
+        .querySelector('.landscape-grid')
+        .style.getPropertyValue('--landscape-columns'),
+    ).toBe('4');
+    expect(fixture.nativeElement.querySelectorAll('.landscape-item')).toHaveLength(1);
+    expect(
+      (fixture.nativeElement.querySelector('.landscape-item') as HTMLElement).style.gridArea,
+    ).toBe('1 / 1 / 3 / 5');
+  });
+
+  it('moves from visible responsive coordinates with the keyboard', () => {
+    let change: LandscapeStateChange | undefined;
+    recreateResponsiveFixture(
+      {
+        version: 1,
+        columns: 4,
+        responsive: true,
+        widgets: [
+          { ...structuredClone(state.widgets[0]), id: 'first', column: 2 },
+          { ...structuredClone(state.widgets[0]), id: 'moving', column: 3 },
+        ],
+      },
+      true,
+    );
+    fixture.componentInstance.stateChange.subscribe((value) => (change = value));
+
+    const moving = fixture.nativeElement.querySelectorAll('.landscape-item')[1] as HTMLElement;
+    moving.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }),
+    );
+    fixture.detectChanges();
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+
+    expect(change?.columns).toBe(4);
+    expect(change?.widgets.find(({ id }) => id === 'moving')).toMatchObject({
+      row: 0,
+      column: 1,
+    });
+    expect(change?.widgets.find(({ id }) => id === 'first')).toMatchObject({ row: 0, column: 0 });
+  });
+
+  it('commits drag movement from the visible responsive layout', () => {
+    let change: LandscapeStateChange | undefined;
+    recreateResponsiveFixture(
+      {
+        version: 1,
+        columns: 4,
+        responsive: true,
+        widgets: [
+          { ...structuredClone(state.widgets[0]), id: 'first', column: 2 },
+          { ...structuredClone(state.widgets[0]), id: 'moving', column: 3 },
+        ],
+      },
+      true,
+    );
+    fixture.componentInstance.stateChange.subscribe((value) => (change = value));
+    const grid = fixture.nativeElement.querySelector('.landscape-grid') as HTMLElement;
+    const moving = fixture.nativeElement.querySelectorAll('.landscape-item')[1] as HTMLElement;
+
+    moving.dispatchEvent(new Event('dragstart', { bubbles: true, cancelable: true }));
+    grid.dispatchEvent(
+      new MouseEvent('dragover', {
+        clientX: 20,
+        clientY: 20,
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+    grid.dispatchEvent(new Event('drop', { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+
+    expect(change?.widgets.find(({ id }) => id === 'moving')).toMatchObject({
+      row: 0,
+      column: 0,
+    });
+    expect(change?.widgets.find(({ id }) => id === 'first')).toMatchObject({ row: 0, column: 1 });
   });
 
   it('shows the responsive toggle only when the input is omitted', () => {
@@ -289,10 +470,16 @@ describe('WidgetLandscape', () => {
     expect(boundary.style.left).toBe('574px');
   });
 
-  it('does not remove widgets when the requested columns cannot fit them', () => {
+  it('uses the loaded widget size for the minimum column count', () => {
     fixture.componentRef.setInput('state', {
       ...structuredClone(state),
-      widgets: [{ ...structuredClone(state.widgets[0]), size: 'square' }],
+      widgets: [
+        {
+          ...structuredClone(state.widgets[0]),
+          size: 'mini',
+          widget: { id: 'mini', size: 'square' } as never,
+        },
+      ],
     });
     fixture.detectChanges();
     enterEdit();
@@ -305,5 +492,28 @@ describe('WidgetLandscape', () => {
 
     expect(input.value).toBe('2');
     expect(fixture.nativeElement.querySelectorAll('.landscape-item')).toHaveLength(1);
+  });
+
+  it('emits the authoritative loaded widget size on confirmation', () => {
+    let change: LandscapeStateChange | undefined;
+    fixture.componentRef.setInput('state', {
+      ...structuredClone(state),
+      widgets: [
+        {
+          ...structuredClone(state.widgets[0]),
+          size: 'mini',
+          widget: { id: 'mini', size: 'square' } as never,
+        },
+      ],
+    });
+    fixture.componentInstance.stateChange.subscribe((value) => (change = value));
+    fixture.detectChanges();
+    enterEdit();
+
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+
+    expect(change?.widgets[0].size).toBe('square');
   });
 });

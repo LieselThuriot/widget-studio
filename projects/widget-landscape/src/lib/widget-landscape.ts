@@ -17,6 +17,7 @@ import { LandscapePalette } from './landscape-palette';
 import {
   addWidget,
   canFitWidget,
+  effectiveSizeFor,
   footprintFor,
   hasCollisionAt,
   moveWidget,
@@ -84,6 +85,8 @@ export class WidgetLandscape implements OnDestroy {
       const editMode = this.editMode();
       if (editMode && !this.wasInControlledEditMode && !untracked(() => this.draft())) {
         this.draft.set(normalizeLandscapeState(structuredClone(this.state())));
+      } else if (!editMode && this.wasInControlledEditMode) {
+        this.clearEditState();
       }
       this.wasInControlledEditMode = editMode;
     });
@@ -95,8 +98,10 @@ export class WidgetLandscape implements OnDestroy {
         grid === this.observedGrid &&
         ((this.isResponsive() && this.resizeObserver) ||
           (!this.isResponsive() && !this.resizeObserver))
-      )
+      ) {
+        if (grid && this.isResponsive()) this.updateResponsiveColumns(grid);
         return;
+      }
       this.resizeObserver?.disconnect();
       this.resizeObserver = null;
       this.observedGrid = grid;
@@ -192,16 +197,14 @@ export class WidgetLandscape implements OnDestroy {
       version: 1,
       columns: normalizedState.columns,
       responsive: this.isResponsive(),
-      widgets: normalizedState.widgets.map(({ id, size, row, column }) => ({
-        id,
-        size,
-        row,
-        column,
+      widgets: normalizedState.widgets.map((widget) => ({
+        id: widget.id,
+        size: effectiveSizeFor(widget),
+        row: widget.row,
+        column: widget.column,
       })),
     });
-    this.draft.set(null);
-    this.selectedId.set(null);
-    this.paletteSide.set('right');
+    this.clearEditState();
     this.editModeChange.emit(false);
   }
 
@@ -225,10 +228,15 @@ export class WidgetLandscape implements OnDestroy {
 
   protected cancelEdit(): void {
     if (!this.isEditing()) return;
+    this.clearEditState();
+    this.editModeChange.emit(false);
+  }
+
+  private clearEditState(): void {
     this.draft.set(null);
     this.selectedId.set(null);
     this.paletteSide.set('right');
-    this.editModeChange.emit(false);
+    this.endDrag();
   }
 
   protected addFromPalette(item: LandscapePaletteItem): void {
@@ -268,9 +276,7 @@ export class WidgetLandscape implements OnDestroy {
     this.clearDragTimer();
     this.dragId.set(id);
     this.dragPaletteItem.set(item);
-    this.dragOrigin = structuredClone(
-      this.draft() ?? normalizeLandscapeState(structuredClone(this.state())),
-    );
+    this.dragOrigin = structuredClone(this.renderedState());
     this.dragPreview.set(null);
     this.dragTarget.set(null);
   }
@@ -367,7 +373,7 @@ export class WidgetLandscape implements OnDestroy {
 
   protected canFitDraggedWidget(): boolean {
     const widget = this.draggedWidget();
-    return widget !== null && canFitWidget(widget, this.activeState().columns);
+    return widget !== null && canFitWidget(widget, this.renderedState().columns);
   }
 
   protected footprintFor(widget: LandscapeWidget) {
@@ -375,7 +381,14 @@ export class WidgetLandscape implements OnDestroy {
   }
 
   private commitPreview(preview: LandscapeState): void {
-    this.draft.set(preview);
+    const configuredState = this.draft() ?? this.state();
+    this.draft.set(
+      normalizeLandscapeState({
+        ...preview,
+        columns: configuredState.columns,
+        responsive: configuredState.responsive,
+      }),
+    );
   }
 
   private targetForEvent(
@@ -427,7 +440,7 @@ export class WidgetLandscape implements OnDestroy {
   }
 
   protected moveFromKeyboard(event: { id: string; row: number; column: number }): void {
-    const movedState = moveWidget(this.activeState(), event.id, event.row, event.column);
+    const movedState = moveWidget(this.renderedState(), event.id, event.row, event.column);
     this.commitPreview(movedState);
     this.updatePaletteSideForKeyboardMove(movedState, event.id);
   }

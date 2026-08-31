@@ -10,11 +10,11 @@ internal static class NpmRendererTestHost
     {
         var result = await RunProcessAsync(
           GetNpmExecutable(),
-          "run build:library",
+          "run build:renderer",
           repositoryRoot,
           string.Empty);
 
-        Assert.True(result.ExitCode == 0, $"npm library build failed:\n{result.StandardError}");
+        Assert.True(result.ExitCode == 0, $"npm renderer build failed:\n{result.StandardError}");
     }
 
     public static async Task<ValidationResult> ValidateAsync(string repositoryRoot, string json)

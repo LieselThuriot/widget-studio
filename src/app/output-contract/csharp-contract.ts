@@ -35,6 +35,8 @@ const enumMembers: Record<string, Record<string, string>> = {
   orientation: { horizontal: 'Horizontal', vertical: 'Vertical' },
   size: {
     mini: 'Mini',
+    compact: 'Compact',
+    tall: 'Tall',
     square: 'Square',
     wide: 'Wide',
     mega: 'Mega',
@@ -94,18 +96,21 @@ function formatObject(value: JsonObject, type: string, level: number): string {
   const childIndent = '  '.repeat(level + 1);
   const properties = entries.map(
     ([key, child]) =>
-      `${childIndent}${propertyName(key)} = ${formatValue(child, key, value, level + 1)},`,
+      `${childIndent}${propertyName(key)} = ${formatValue(child, key, value, level + 1, type)},`,
   );
   return [`new ${type}()`, `${indent}{`, ...properties, `${indent}}`].join('\n');
 }
 
-function formatValue(value: JsonValue, key: string, parent: JsonObject, level: number): string {
+function formatValue(
+  value: JsonValue,
+  key: string,
+  parent: JsonObject,
+  level: number,
+  parentType?: string,
+): string {
   if (value === null || value === undefined) return 'null';
   if (typeof value === 'string') {
-    const enumKey =
-      key === 'size' && parent['image'] === undefined && parent['sensitive'] !== undefined
-        ? 'backgroundSize'
-        : key;
+    const enumKey = key === 'size' && parentType === 'BackgroundConfig' ? 'backgroundSize' : key;
     const enumType = enumTypes[enumKey];
     if (enumType) return `${enumType}.${enumMembers[enumKey][value] ?? value}`;
     return quote(value);

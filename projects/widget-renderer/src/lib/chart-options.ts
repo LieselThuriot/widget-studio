@@ -82,10 +82,7 @@ export function chartOptions(element: ChartElement): EChartsCoreOption {
   if (element.type === 'gauge') {
     const percentage = Math.max(
       0,
-      Math.min(
-        1,
-        (element.data.value - element.data.min) / Math.max(1, element.data.max - element.data.min),
-      ),
+      Math.min(1, (element.data.value - element.data.min) / (element.data.max - element.data.min)),
     );
     return {
       ...base,

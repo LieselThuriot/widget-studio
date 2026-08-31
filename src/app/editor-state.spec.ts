@@ -10,7 +10,11 @@ import {
   updateElementPosition,
   updateElementSpan,
 } from './editor-state';
-import { normalizeChartElement, normalizeGaugeElement } from './widget-normalization';
+import {
+  assignEditorIds,
+  normalizeChartElement,
+  normalizeGaugeElement,
+} from './widget-normalization';
 
 describe('editor state transformations', () => {
   it('clears an optional text background when patched as undefined', () => {
@@ -49,14 +53,25 @@ describe('editor state transformations', () => {
     }
   });
 
-  it('clamps element position and span to the widget grid', () => {
+  it('clamps element position based on its span and clamps subsequent span changes', () => {
     const widget = structuredClone(sampleWidget);
+    const message = widget.elements.find((candidate) => candidate.id === 'message');
+    if (!message) throw new Error('Expected message element');
+    message.grid = { ...message.grid, rowSpan: 2, columnSpan: 2 };
+
     const position = updateElementPosition(widget, 'message', 'row', 99);
     const element = position.elements.find((candidate) => candidate.id === 'message');
     const span = updateElementSpan(position, element!, 'rowSpan', 99);
 
-    expect(element?.grid.row).toBe(5);
-    expect(span.elements.find((candidate) => candidate.id === 'message')?.grid.rowSpan).toBe(1);
+    expect(element?.grid.row).toBe(4);
+    expect(span.elements.find((candidate) => candidate.id === 'message')?.grid.rowSpan).toBe(2);
+  });
+
+  it('clamps element column position based on its column span', () => {
+    const widget = structuredClone(sampleWidget);
+    const updated = updateElementPosition(widget, 'message', 'column', 99);
+
+    expect(updated.elements.find((candidate) => candidate.id === 'message')?.grid.column).toBe(0);
   });
 
   it('clamps element movement to the grid edges including its span', () => {
@@ -139,6 +154,25 @@ describe('editor state transformations', () => {
     const updated = updateElementPosition(widget, 'message', 'row', Number.NaN);
 
     expect(updated.elements.find((element) => element.id === 'message')?.grid.row).toBe(0);
+  });
+
+  it('assigns non-empty unique editor IDs while preserving valid IDs', () => {
+    const widget = structuredClone(sampleWidget);
+    widget.elements[0].id = 'preserved';
+    widget.elements[1].id = '';
+    widget.elements[2].id = 'duplicate';
+    widget.elements[3].id = 'duplicate';
+    delete (widget.elements[4] as { id?: string }).id;
+
+    const assigned = assignEditorIds(widget);
+    const ids = assigned.elements.map((element) => element.id);
+
+    expect(ids[0]).toBe('preserved');
+    expect(ids[2]).toBe('duplicate');
+    expect(ids[1]).not.toBe('');
+    expect(ids[3]).not.toBe('duplicate');
+    expect(ids[4]).not.toBe('');
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   it('leaves the widget unchanged for unknown operations', () => {

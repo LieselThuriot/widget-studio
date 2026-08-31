@@ -1,5 +1,5 @@
 @if (isProgress(element())) {
-  <widget-progress-element [element]="progress(element())" />
+  <widget-progress-element [element]="progress(element())" [sensitiveHidden]="sensitiveHidden()" />
 } @else {
-  <widget-echarts-element [element]="chart(element())" />
+  <widget-echarts-element [element]="chart(element())" [sensitiveHidden]="sensitiveHidden()" />
 }

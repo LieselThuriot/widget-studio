@@ -54,4 +54,54 @@ describe('ProgressElementRenderer', () => {
     expect(fixture.nativeElement.querySelector('[role="tooltip"]')).toBeNull();
     vi.useRealTimers();
   });
+
+  it('uses the exact range for sub-unit segment widths and accessibility', async () => {
+    fixture.componentRef.setInput('element', {
+      ...element,
+      data: {
+        min: 0.1,
+        max: 0.6,
+        items: [
+          { kind: 'segment', label: 'Done', value: 0.2, color: '#0a0', active: false },
+          { kind: 'gap', value: 0.3 },
+        ],
+      },
+    } as ProgressElement);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      (fixture.nativeElement.querySelector('.progress-segment') as HTMLElement).style.width,
+    ).toBe('40%');
+    expect(
+      fixture.nativeElement.querySelector('[role="progressbar"]')?.getAttribute('aria-valuemax'),
+    ).toBe('0.5');
+  });
+
+  it('uses effective sensitive-hidden state for accessibility and focus', async () => {
+    fixture.componentRef.setInput('element', { ...element, sensitive: true });
+    fixture.componentRef.setInput('sensitiveHidden', true);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('.progress-element').getAttribute('aria-hidden'),
+    ).toBe('true');
+    expect(fixture.nativeElement.querySelector('[role="progressbar"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.progress-segment').getAttribute('tabindex')).toBe(
+      '-1',
+    );
+
+    fixture.componentRef.setInput('sensitiveHidden', false);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('.progress-element').getAttribute('aria-hidden'),
+    ).toBeNull();
+    expect(fixture.nativeElement.querySelector('[role="progressbar"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.progress-segment').getAttribute('tabindex')).toBe(
+      '0',
+    );
+  });
 });
