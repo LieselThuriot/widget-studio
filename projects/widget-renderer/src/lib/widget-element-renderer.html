@@ -2,6 +2,7 @@
 <div
   class="widget-element"
   [attr.data-widget-element-id]="elementId(item)"
+  [attr.aria-hidden]="isSensitive(item) ? 'true' : null"
   [class.is-sensitive]="isSensitive(item)"
 >
   <div
