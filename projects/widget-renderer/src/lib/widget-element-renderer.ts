@@ -23,7 +23,7 @@ export class WidgetElementRenderer {
   readonly element = input.required<WidgetElement>();
   readonly sensitiveVisible = input(false);
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
-  private readonly failedImageSource = signal<string | null>(null);
+  private readonly failedImage = signal<{ element: ImageElement; source: string } | null>(null);
 
   protected isText(element: WidgetElement): element is TextElement {
     return element.type === 'text';
@@ -49,10 +49,11 @@ export class WidgetElementRenderer {
     return this.isSensitive(element) ? '' : element.alt;
   }
   protected imageFailed(element: ImageElement): boolean {
-    return this.failedImageSource() === element.source;
+    const failedImage = this.failedImage();
+    return failedImage?.element === element && failedImage.source === element.source;
   }
   protected imageLoadFailed(element: ImageElement): void {
-    this.failedImageSource.set(element.source);
+    this.failedImage.set({ element, source: element.source });
   }
   protected horizontalAnchor(anchor: string): string {
     return anchor.endsWith('left')
