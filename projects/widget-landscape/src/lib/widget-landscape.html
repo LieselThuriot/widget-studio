@@ -6,77 +6,20 @@
   [class.palette-on-left]="paletteSide() === 'left'"
   [class.is-dragging]="dragId() !== null || dragPaletteItem() !== null"
 >
-  <header class="landscape-toolbar">
-    @if (isEditing()) {
-      <div class="landscape-toolbar-heading">
-        <span class="landscape-kicker">Widget landscape</span>
-        @if (!columnsLocked()) {
-          <div class="landscape-column-control">
-            <label class="landscape-columns-field">
-              <span>Columns</span>
-              <input
-                type="number"
-                [min]="minimumColumns()"
-                [value]="activeState().columns"
-                aria-label="Landscape columns"
-                (input)="updateColumns($event)"
-              />
-            </label>
-            @if (responsive() === undefined) {
-              <label class="landscape-responsive-control">
-                <input
-                  type="checkbox"
-                  class="landscape-responsive-toggle"
-                  [checked]="activeState().responsive"
-                  aria-label="Responsive landscape"
-                  (change)="updateResponsive($event)"
-                />
-                <span class="landscape-responsive-slider" aria-hidden="true"></span>
-                <span class="landscape-responsive-label">Responsive</span>
-              </label>
-            }
-          </div>
-        } @else {
-          <strong>{{ activeState().columns }} columns</strong>
-        }
-      </div>
-    }
-    @if (paletteItems().length > 0) {
-      @if (!isEditing()) {
-        <div class="landscape-toolbar-actions">
-          <button
-            type="button"
-            class="landscape-icon-button"
-            aria-label="Edit landscape"
-            title="Edit landscape"
-            (click)="enterEdit()"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path
-                d="m15.5 5.5 3 3M4 20l3.5-.75L19.75 7a2.12 2.12 0 0 0-3-3L4.75 16.25 4 20Z"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.7"
-              />
-            </svg>
-          </button>
-        </div>
-      } @else {
-        <div class="landscape-toolbar-actions">
-          <button type="button" class="landscape-button" (click)="cancelEdit()">Cancel</button>
-          <button
-            type="button"
-            class="landscape-button landscape-button--primary"
-            (click)="confirmEdit()"
-          >
-            Confirm
-          </button>
-        </div>
-      }
-    }
-  </header>
+  <widget-landscape-toolbar
+    [editing]="isEditing()"
+    [hasPalette]="paletteItems().length > 0"
+    [columnsLocked]="columnsLocked()"
+    [responsiveControlled]="responsive() !== undefined"
+    [columns]="activeState().columns"
+    [minimumColumns]="minimumColumns()"
+    [responsive]="activeState().responsive"
+    (editRequested)="enterEdit()"
+    (editCancelled)="cancelEdit()"
+    (confirm)="confirmEdit()"
+    (columnsChanged)="updateColumns($event)"
+    (responsiveChanged)="updateResponsive($event)"
+  />
   <div class="landscape-body">
     <div
       #landscapeGrid
@@ -94,54 +37,22 @@
           aria-hidden="true"
         ></div>
       }
-      @for (item of renderedState().widgets; track item.id) {
-        <article
-          class="landscape-item"
-          [class.is-selected]="item.id === selectedId()"
-          [class.is-drag-source]="item.id === dragId()"
-          [style.grid-area]="
-            item.row +
-            1 +
-            ' / ' +
-            (item.column + 1) +
-            ' / ' +
-            (item.row + footprintFor(item).rowSpan + 1) +
-            ' / ' +
-            (item.column + footprintFor(item).columnSpan + 1)
-          "
-          [draggable]="isEditing()"
-          tabindex="0"
-          (dragstart)="startDrag($event, item.id)"
-          (dragend)="endDrag()"
-          (keydown)="widgetKeyDown(item.id, $event)"
-        >
-          @if (isEditing()) {
-            <div
-              class="landscape-interaction-shield"
-              role="button"
-              tabindex="0"
-              aria-label="Select widget"
-              (click)="selectWidget(item.id)"
-            ></div>
-            <div class="item-controls">
-              <button
-                type="button"
-                class="landscape-icon-button"
-                aria-label="Delete widget"
-                (click)="deleteWidget(item.id); $event.stopPropagation()"
-              >
-                ×
-              </button>
-            </div>
-          }
-          <widget-renderer
-            [widget]="item.widget"
-            [loading]="item.widget === null ? item.size : false"
-            [darkMode]="darkMode()"
-            (refreshRequested)="refresh(item.id)"
-            (actionRequested)="action(item.id, $event)"
-          />
-        </article>
+      @for (item of renderedState().widgets; track item.id; let index = $index) {
+        <widget-landscape-item
+          [item]="item"
+          [editing]="isEditing()"
+          [selected]="item.id === selectedId()"
+          [dragSource]="item.id === dragId()"
+          [alternate]="index % 2 === 0"
+          [darkMode]="darkMode()"
+          (dragStarted)="startDrag($event.event, $event.id)"
+          (dragEnded)="endDrag()"
+          (widgetSelected)="selectWidget($event)"
+          (deleted)="deleteWidget($event)"
+          (moved)="moveFromKeyboard($event)"
+          (refreshRequested)="refresh($event)"
+          (actionRequested)="action($event.id, $event)"
+        />
       }
       @if (dragTarget(); as target) {
         <div
@@ -171,45 +82,16 @@
       }
     </div>
     @if (isEditing()) {
-      <aside #landscapePalette class="landscape-palette" aria-label="Widgets">
-        <div class="landscape-palette-heading">
-          <span class="landscape-kicker">Add widget</span>
-          <button
-            type="button"
-            class="landscape-clear-button"
-            [disabled]="!activeState().widgets.length"
-            (click)="clearWidgets()"
-          >
-            Clear all
-          </button>
-        </div>
-        @for (item of paletteItems(); track item.id) {
-          <button
-            type="button"
-            class="palette-item"
-            [disabled]="invalidPaletteIds().includes(item.id)"
-            (click)="addFromPalette(item)"
-            (dragstart)="startPaletteDrag($event, item)"
-            (dragend)="endDrag()"
-            draggable="true"
-          >
-            <span class="palette-item-heading">
-              <strong>{{ item.label }}</strong>
-              @if (paletteFootprint(item); as footprint) {
-                <span
-                  class="palette-size"
-                  [attr.aria-label]="
-                    'Widget footprint: ' + footprint.columnSpan + ' × ' + footprint.rowSpan
-                  "
-                >
-                  {{ footprint.columnSpan }} × {{ footprint.rowSpan }}
-                </span>
-              }
-            </span>
-            <small>{{ item.description }}</small>
-          </button>
-        }
-      </aside>
+      <widget-landscape-palette
+        #landscapePalette
+        [items]="paletteItems()"
+        [invalidIds]="invalidPaletteIds()"
+        [hasWidgets]="activeState().widgets.length > 0"
+        (added)="addFromPalette($event)"
+        (cleared)="clearWidgets()"
+        (dragStarted)="startPaletteDrag($event.event, $event.item)"
+        (dragEnded)="endDrag()"
+      />
     }
   </div>
 </section>

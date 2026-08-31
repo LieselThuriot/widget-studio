@@ -1,0 +1,36 @@
+<aside #palette class="landscape-palette" aria-label="Widgets">
+  <div class="landscape-palette-heading">
+    <span class="landscape-kicker">Add widget</span>
+    <button
+      type="button"
+      class="landscape-clear-button"
+      [disabled]="!hasWidgets()"
+      (click)="cleared.emit()"
+    >
+      Clear all
+    </button>
+  </div>
+  @for (item of items(); track item.id) {
+    <button
+      type="button"
+      class="palette-item"
+      [disabled]="invalidIds().includes(item.id)"
+      (click)="added.emit(item)"
+      (dragstart)="dragStarted.emit({ event: $event, item })"
+      (dragend)="dragEnded.emit()"
+      draggable="true"
+    >
+      <span class="palette-item-heading">
+        <strong>{{ item.label }}</strong>
+        @if (footprint(item); as size) {
+          <span
+            class="palette-size"
+            [attr.aria-label]="'Widget footprint: ' + size.columnSpan + ' × ' + size.rowSpan"
+            >{{ size.columnSpan }} × {{ size.rowSpan }}</span
+          >
+        }
+      </span>
+      <small>{{ item.description }}</small>
+    </button>
+  }
+</aside>

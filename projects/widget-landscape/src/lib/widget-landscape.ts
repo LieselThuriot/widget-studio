@@ -10,7 +10,10 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { ButtonElement, WidgetRenderer } from 'widget-renderer';
+import { ButtonElement } from 'widget-renderer';
+import { LandscapeToolbar } from './landscape-toolbar';
+import { LandscapeItem } from './landscape-item';
+import { LandscapePalette } from './landscape-palette';
 import {
   addWidget,
   canFitWidget,
@@ -27,12 +30,11 @@ import {
   LandscapeState,
   LandscapeWidget,
   LandscapeRefreshEvent,
-  landscapeFootprintForSize,
 } from './landscape.model';
 
 @Component({
   selector: 'widget-landscape',
-  imports: [WidgetRenderer],
+  imports: [LandscapeToolbar, LandscapeItem, LandscapePalette],
   templateUrl: './widget-landscape.html',
   styleUrl: './widget-landscape.css',
   host: {
@@ -69,7 +71,7 @@ export class WidgetLandscape implements OnDestroy {
   protected readonly paletteSide = signal<'left' | 'right'>('right');
   private readonly responsiveColumns = signal<number | null>(null);
   private readonly gridElement = viewChild<ElementRef<HTMLElement>>('landscapeGrid');
-  private readonly paletteElement = viewChild<ElementRef<HTMLElement>>('landscapePalette');
+  private readonly paletteComponent = viewChild(LandscapePalette);
   private dragOrigin: LandscapeState | null = null;
   private wasInControlledEditMode = false;
   private hoverTimer: ReturnType<typeof setTimeout> | null = null;
@@ -146,10 +148,6 @@ export class WidgetLandscape implements OnDestroy {
   protected readonly isResponsive = computed(
     () => this.responsive() ?? this.activeState().responsive,
   );
-
-  protected paletteFootprint(item: LandscapePaletteItem) {
-    return item.size ? landscapeFootprintForSize(item.size) : null;
-  }
 
   protected columnBoundaryOffset(): number {
     const columns = this.renderedState().columns;
@@ -372,6 +370,10 @@ export class WidgetLandscape implements OnDestroy {
     return widget !== null && canFitWidget(widget, this.activeState().columns);
   }
 
+  protected footprintFor(widget: LandscapeWidget) {
+    return footprintFor(widget);
+  }
+
   private commitPreview(preview: LandscapeState): void {
     this.draft.set(preview);
   }
@@ -424,42 +426,15 @@ export class WidgetLandscape implements OnDestroy {
     this.widgetSelected.emit({ id });
   }
 
-  protected widgetKeyDown(id: string, event: KeyboardEvent): void {
-    if (['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT'].includes((event.target as HTMLElement).tagName)) {
-      return;
-    }
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.selectWidget(id);
-      return;
-    }
-
-    if (!this.isEditing()) return;
-
-    if (event.key === 'Delete' || event.key === 'Backspace') {
-      event.preventDefault();
-      this.deleteWidget(id);
-      return;
-    }
-
-    const direction = {
-      ArrowUp: { row: -1, column: 0 },
-      ArrowDown: { row: 1, column: 0 },
-      ArrowLeft: { row: 0, column: -1 },
-      ArrowRight: { row: 0, column: 1 },
-    }[event.key];
-    if (!direction) return;
-
-    event.preventDefault();
-    const movedState = moveWidget(this.activeState(), id, direction.row, direction.column);
+  protected moveFromKeyboard(event: { id: string; row: number; column: number }): void {
+    const movedState = moveWidget(this.activeState(), event.id, event.row, event.column);
     this.commitPreview(movedState);
-    this.updatePaletteSideForKeyboardMove(movedState, id);
+    this.updatePaletteSideForKeyboardMove(movedState, event.id);
   }
 
   private updatePaletteSideForKeyboardMove(state: LandscapeState, id: string): void {
     const grid = this.gridElement()?.nativeElement;
-    const palette = this.paletteElement()?.nativeElement;
+    const palette = this.paletteComponent()?.element()?.nativeElement;
     const widget = this.renderedState().widgets.find((item) => item.id === id);
     if (!grid || !palette || !widget || getComputedStyle(palette).position === 'static') return;
 
@@ -498,15 +473,6 @@ export class WidgetLandscape implements OnDestroy {
     );
     this.widgetDeleted.emit({ id });
     if (this.selectedId() === id) this.selectedId.set(null);
-  }
-
-  protected footprint(widget: LandscapeWidget): string {
-    const size = footprintFor(widget) ?? { columnSpan: 1, rowSpan: 1 };
-    return `span ${size.rowSpan} / span ${size.columnSpan}`;
-  }
-
-  protected footprintFor(widget: LandscapeWidget) {
-    return footprintFor(widget);
   }
 
   protected refresh(id: string): void {

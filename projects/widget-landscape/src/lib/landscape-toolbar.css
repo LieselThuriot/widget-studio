@@ -1,0 +1,182 @@
+.landscape-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.landscape-toolbar strong {
+  display: block;
+  font-size: 14px;
+  color: var(--widget-landscape-text);
+}
+.landscape-kicker {
+  display: block;
+  color: var(--widget-landscape-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.landscape-toolbar-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.landscape-column-control {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: fit-content;
+  min-height: 34px;
+  padding: 3px 4px 3px 10px;
+  border: 1px solid var(--widget-landscape-border);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--widget-landscape-panel) 76%, transparent);
+  box-shadow: 0 2px 6px -5px var(--widget-landscape-floating-shadow-color);
+  color: var(--widget-landscape-text-muted);
+  font-size: 12px;
+}
+.landscape-columns-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.landscape-column-control span {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.landscape-column-control input {
+  width: 52px;
+  min-height: 28px;
+  padding: 4px 7px;
+  border: 1px solid
+    color-mix(in srgb, var(--widget-landscape-accent) 24%, var(--widget-landscape-border));
+  border-radius: 6px;
+  background: var(--widget-landscape-control);
+  color: var(--widget-landscape-text);
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: inset 0 1px 2px #2536570d;
+}
+.landscape-column-control input:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--widget-landscape-accent) 48%, transparent);
+  outline-offset: 1px;
+}
+.landscape-responsive-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-inline-start: 12px;
+  padding-inline-start: 12px;
+  border-inline-start: 1px solid var(--widget-landscape-border);
+  color: var(--widget-landscape-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.landscape-responsive-control input {
+  accent-color: var(--widget-landscape-accent);
+}
+.landscape-responsive-toggle {
+  position: absolute;
+  width: 1px !important;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+.landscape-responsive-slider {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--widget-landscape-border);
+  transition: background 140ms ease;
+}
+.landscape-responsive-slider::after {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--widget-landscape-control);
+  box-shadow: 0 1px 2px #25365735;
+  content: '';
+  transition: transform 140ms ease;
+}
+.landscape-responsive-toggle:checked + .landscape-responsive-slider {
+  background: var(--widget-landscape-accent);
+}
+.landscape-responsive-toggle:checked + .landscape-responsive-slider::after {
+  transform: translateX(12px);
+}
+.landscape-responsive-toggle:focus-visible + .landscape-responsive-slider {
+  outline: 2px solid color-mix(in srgb, var(--widget-landscape-accent) 48%, transparent);
+  outline-offset: 2px;
+}
+.landscape-responsive-label {
+  white-space: nowrap;
+}
+.landscape-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.landscape-toolbar > .landscape-toolbar-actions {
+  margin-inline-start: auto;
+}
+.landscape-button,
+.landscape-icon-button {
+  border: 1px solid var(--widget-landscape-border);
+  border-radius: 7px;
+  background: var(--widget-landscape-control);
+  color: var(--widget-landscape-text);
+  cursor: pointer;
+}
+.landscape-icon-button svg {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+.landscape-button {
+  position: relative;
+  isolation: isolate;
+  min-height: 32px;
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.landscape-button--primary {
+  border-color: var(--widget-landscape-accent);
+  background: var(--widget-landscape-accent);
+  color: #fff;
+}
+.landscape-icon-button {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  font-size: 16px;
+  background: transparent;
+  opacity: 0.5;
+}
+.landscape-icon-button:hover {
+  background: var(--widget-landscape-control);
+  opacity: 1;
+}
+.landscape-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+@media (prefers-reduced-motion: reduce) {
+  .landscape-responsive-slider,
+  .landscape-responsive-slider::after {
+    transition: none;
+  }
+}

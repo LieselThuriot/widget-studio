@@ -132,7 +132,7 @@ describe('WidgetLandscape', () => {
   });
 
   it('keeps responsive mode disabled by default', () => {
-    expect(fixture.componentInstance.responsive()).toBe(false);
+    expect(fixture.componentInstance.responsive()).toBeUndefined();
     expect(fixture.nativeElement.querySelector('.landscape-shell.is-responsive')).toBeNull();
   });
 

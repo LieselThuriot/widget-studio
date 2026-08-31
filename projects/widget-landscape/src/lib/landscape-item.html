@@ -1,0 +1,39 @@
+<article
+  class="landscape-item"
+  [class.is-selected]="selected()"
+  [class.is-drag-source]="dragSource()"
+  [class.is-alternate]="alternate()"
+  [style.grid-area]="gridArea()"
+  [draggable]="editing()"
+  tabindex="0"
+  (dragstart)="dragStarted.emit({ event: $event, id: item().id })"
+  (dragend)="dragEnded.emit()"
+  (keydown)="keyDown($event)"
+>
+  @if (editing()) {
+    <div
+      class="landscape-interaction-shield"
+      role="button"
+      tabindex="0"
+      aria-label="Select widget"
+      (click)="widgetSelected.emit(item().id)"
+    ></div>
+    <div class="item-controls">
+      <button
+        type="button"
+        class="landscape-icon-button"
+        aria-label="Delete widget"
+        (click)="deleted.emit(item().id); $event.stopPropagation()"
+      >
+        ×
+      </button>
+    </div>
+  }
+  <widget-renderer
+    [widget]="item().widget"
+    [loading]="item().widget === null ? item().size : false"
+    [darkMode]="darkMode()"
+    (refreshRequested)="refreshRequested.emit(item().id)"
+    (actionRequested)="actionRequested.emit({ id: item().id, ...$event })"
+  />
+</article>

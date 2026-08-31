@@ -9,6 +9,7 @@
     "src/**/*.d.ts",
     "src/test-setup.ts",
     "src/**/*.spec.ts",
-    "projects/widget-renderer/src/**/*.spec.ts"
+    "projects/widget-renderer/src/**/*.spec.ts",
+    "projects/widget-landscape/src/**/*.spec.ts"
   ]
 }
