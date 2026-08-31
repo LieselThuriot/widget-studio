@@ -60,6 +60,19 @@ describe('WidgetRenderer', () => {
     ).not.toBeNull();
   });
 
+  it('keeps the tooltip layer outside the clipped viewport', () => {
+    const shell = fixture.nativeElement.querySelector('.widget-shell') as HTMLElement;
+    const viewport = fixture.nativeElement.querySelector('.widget-viewport') as HTMLElement;
+    const tooltipLayer = fixture.nativeElement.querySelector(
+      '.widget-tooltip-layer',
+    ) as HTMLElement;
+
+    expect(getComputedStyle(shell).overflow).toBe('visible');
+    expect(getComputedStyle(viewport).overflow).toBe('hidden');
+    expect(tooltipLayer.parentElement).toBe(shell);
+    expect(tooltipLayer.previousElementSibling).toBe(viewport);
+  });
+
   it('hides sensitive content when the widget input changes', async () => {
     fixture.nativeElement.querySelector('[aria-label="Show sensitive data"]').click();
     await fixture.whenStable();

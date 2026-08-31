@@ -184,12 +184,59 @@
 }
 .widget-shell {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
   border: 1px solid #10182c26;
   border-radius: var(--widget-renderer-radius);
   color: #f6f7fb;
   box-shadow: var(--widget-renderer-shadow);
+}
+.widget-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.widget-tooltip-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  overflow: visible;
+  pointer-events: none;
+}
+.progress-tooltip {
+  --tooltip-border: rgb(0 0 0 / 0.12);
+  position: absolute;
+  z-index: 4;
+  top: var(--tooltip-y);
+  left: var(--tooltip-x);
+  display: flex;
+  min-width: 104px;
+  align-items: center;
+  gap: 7px;
+  padding: 10px;
+  transform: translate(-50%, calc(-100% - 10px));
+  border: 1px solid var(--tooltip-border);
+  border-radius: var(--widget-renderer-radius, 4px);
+  background: var(--widget-renderer-control-hover-background, #fff);
+  box-shadow: 1px 2px 10px rgb(0 0 0 / 0.2);
+  color: #6e7079;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+}
+.progress-tooltip strong {
+  margin-inline-start: auto;
+  color: #464646;
+  font-size: 14px;
+  font-weight: 900;
+}
+.tooltip-marker {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
 }
 .widget-grid {
   position: absolute;

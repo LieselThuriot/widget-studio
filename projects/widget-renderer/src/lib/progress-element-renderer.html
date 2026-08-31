@@ -1,6 +1,7 @@
 <div
   class="progress-element"
   [style]="progressStyle(element())"
+  [style.pointer-events]="sensitiveHidden() ? 'none' : null"
   [attr.aria-hidden]="sensitiveHidden() ? 'true' : null"
 >
   @if (!sensitiveHidden()) {
@@ -34,7 +35,7 @@
             (pointermove)="moveTooltip(entry.index, $event)"
             (pointerleave)="hideTooltip(entry.index)"
             (pointerdown)="toggleTouchTooltip(entry.index, $event)"
-            (focus)="showTooltip(entry.index, entry.center)"
+            (focus)="showTooltip(entry.index, $event)"
             (blur)="hideTooltip(entry.index)"
             (keydown)="segmentKeyDown(entry.index, $event)"
           ></button>
@@ -43,20 +44,6 @@
         }
       }
     </span>
-    @for (entry of progressSegments(element()); track entry.index) {
-      @if (tooltipIndex() === entry.index) {
-        <span
-          class="progress-tooltip"
-          role="tooltip"
-          [style.--tooltip-x]="tooltipPosition().x"
-          [style.--tooltip-y]="tooltipPosition().y"
-          [style.--tooltip-border]="segment(entry.item).color"
-          ><span class="tooltip-marker" [style.background]="segment(entry.item).color"></span
-          ><span>{{ segment(entry.item).label }}</span
-          ><strong>{{ segment(entry.item).value }}</strong></span
-        >
-      }
-    }
   </span>
   @if (element().showLegend) {
     <span class="progress-legend" [style.justify-content]="progressTextAlign(element())">

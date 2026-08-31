@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, effect, input, viewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, effect, inject, input, viewChild } from '@angular/core';
 import { use, init, type ECharts } from 'echarts/core';
 import { BarChart, FunnelChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
 import {
@@ -11,6 +11,7 @@ import { SVGRenderer } from 'echarts/renderers';
 import { ChartElement } from './widget.model';
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
 import { chartOptions } from './chart-options';
+import { WidgetTooltip } from './widget-tooltip';
 
 use([
   BarChart,
@@ -32,6 +33,7 @@ use([
     [attr.aria-label]="ariaLabel(element())"
     [attr.aria-describedby]="sensitiveHidden() ? null : summaryId"
     [attr.aria-hidden]="sensitiveHidden() ? 'true' : null"
+    [style.pointer-events]="sensitiveHidden() ? 'none' : null"
     role="img"
   >
     <div #chartHost class="chart-host"></div>
@@ -49,6 +51,7 @@ export class EchartsElementRenderer implements OnDestroy {
   private chartHostElement: HTMLDivElement | null = null;
   private chartInstance: ECharts | null = null;
   private resizeObserver: ResizeObserver | null = null;
+  private readonly tooltip = inject(WidgetTooltip);
 
   constructor() {
     effect(() => {
@@ -66,7 +69,12 @@ export class EchartsElementRenderer implements OnDestroy {
           this.resizeObserver.observe(host);
         }
       }
-      this.chartInstance?.setOption(chartOptions(this.element()), true);
+      const tooltipEnabled = !this.sensitiveHidden();
+      if (!tooltipEnabled) this.chartInstance?.dispatchAction({ type: 'hideTip' });
+      this.chartInstance?.setOption(
+        chartOptions(this.element(), this.tooltip.overlayElement() ?? undefined, tooltipEnabled),
+        true,
+      );
     });
   }
 

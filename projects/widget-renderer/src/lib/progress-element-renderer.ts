@@ -1,6 +1,7 @@
-import { Component, OnDestroy, input, signal } from '@angular/core';
+import { Component, OnDestroy, effect, inject, input, signal } from '@angular/core';
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
 import { ProgressElement, ProgressItem, ProgressSegment } from './widget.model';
+import { WidgetTooltip } from './widget-tooltip';
 
 @Component({
   selector: 'widget-progress-element',
@@ -16,11 +17,21 @@ export class ProgressElementRenderer implements OnDestroy {
   readonly sensitiveHidden = input(false);
   protected readonly summaryId = `progress-summary-${crypto.randomUUID()}`;
   protected readonly tooltipIndex = signal<number | null>(null);
-  protected readonly tooltipPosition = signal<{ x: string; y: string }>({ x: '50%', y: '0px' });
+  private readonly widgetTooltip = inject(WidgetTooltip);
+  private readonly tooltipOwner = {};
   private tooltipHideTimer: ReturnType<typeof setTimeout> | null = null;
+
+  constructor() {
+    effect(() => {
+      this.element();
+      this.sensitiveHidden();
+      this.clearTooltip();
+    });
+  }
 
   ngOnDestroy(): void {
     this.cancelTooltipHide();
+    this.widgetTooltip.hideProgress(this.tooltipOwner);
   }
   protected progressStyle(element: ProgressElement): Record<string, string> {
     const radius = element.style.radius ?? { segment: 0, track: 999 };
@@ -64,33 +75,42 @@ export class ProgressElementRenderer implements OnDestroy {
       0,
     );
   }
-  protected showTooltip(index: number, center: number): void {
+  protected showTooltip(index: number, event: FocusEvent): void {
+    if (this.sensitiveHidden()) return;
     this.cancelTooltipHide();
-    this.tooltipPosition.set({ x: `${center}%`, y: '0px' });
-    this.tooltipIndex.set(index);
+    this.showTooltipAt(
+      index,
+      event.currentTarget instanceof HTMLElement
+        ? event.currentTarget
+        : event.target instanceof HTMLElement
+          ? event.target
+          : null,
+    );
   }
   protected hideTooltip(index: number): void {
     this.cancelTooltipHide();
     this.tooltipHideTimer = setTimeout(() => {
-      if (this.tooltipIndex() === index) this.tooltipIndex.set(null);
+      if (this.tooltipIndex() === index) {
+        this.tooltipIndex.set(null);
+        this.widgetTooltip.hideProgress(this.tooltipOwner);
+      }
       this.tooltipHideTimer = null;
     }, 100);
   }
   protected moveTooltip(index: number, event: PointerEvent): void {
-    if (event.pointerType === 'touch') return;
-    this.positionTooltip(event);
-    this.tooltipIndex.set(index);
+    if (this.sensitiveHidden() || event.pointerType === 'touch') return;
+    this.positionTooltip(index, event);
   }
   protected toggleTouchTooltip(index: number, event: PointerEvent): void {
-    if (event.pointerType === 'mouse') return;
+    if (this.sensitiveHidden() || event.pointerType === 'mouse') return;
     event.stopPropagation();
     this.cancelTooltipHide();
     if (this.tooltipIndex() === index) {
       this.tooltipIndex.set(null);
+      this.widgetTooltip.hideProgress(this.tooltipOwner);
       return;
     }
-    this.positionTooltip(event);
-    this.tooltipIndex.set(index);
+    this.positionTooltip(index, event);
   }
   protected segmentKeyDown(index: number, event: KeyboardEvent): void {
     if (event.key !== 'Escape') return;
@@ -98,23 +118,44 @@ export class ProgressElementRenderer implements OnDestroy {
     this.hideTooltip(index);
   }
   protected onDocumentPointerDown(event: PointerEvent): void {
-    if (!(event.target instanceof Element) || !event.target.closest('.progress-segment'))
+    if (!(event.target instanceof Element) || !event.target.closest('.progress-segment')) {
       this.tooltipIndex.set(null);
+      this.widgetTooltip.hideProgress(this.tooltipOwner);
+    }
   }
-  private positionTooltip(event: PointerEvent): void {
+  private positionTooltip(index: number, event: PointerEvent): void {
     const target = event.currentTarget;
-    if (!(target instanceof Element)) return;
-    const wrapper = target.closest('.progress-track-wrap');
-    if (!wrapper) return;
-    const bounds = wrapper.getBoundingClientRect();
-    this.tooltipPosition.set({
-      x: `${event.clientX - bounds.left}px`,
-      y: `${event.clientY - bounds.top}px`,
+    if (!(target instanceof HTMLElement)) return;
+    this.showTooltipAt(index, target, event.clientX, event.clientY);
+  }
+  private showTooltipAt(index: number, target: HTMLElement | null, x?: number, y?: number): void {
+    if (!target) return;
+    const shell = this.widgetTooltip.overlayElement()?.parentElement;
+    if (!shell) return;
+    const bounds = shell.getBoundingClientRect();
+    const targetBounds = target.getBoundingClientRect();
+    const entry = this.progressSegments(this.element()).find(
+      ({ index: entryIndex }) => entryIndex === index,
+    );
+    if (!entry) return;
+    const segment = this.segment(entry.item);
+    this.tooltipIndex.set(index);
+    this.widgetTooltip.showProgress(this.tooltipOwner, {
+      x: (x ?? targetBounds.left + targetBounds.width / 2) - bounds.left,
+      y: (y ?? targetBounds.top) - bounds.top,
+      label: segment.label,
+      value: segment.value,
+      color: segment.color,
     });
   }
   private cancelTooltipHide(): void {
     if (this.tooltipHideTimer) clearTimeout(this.tooltipHideTimer);
     this.tooltipHideTimer = null;
+  }
+  private clearTooltip(): void {
+    this.cancelTooltipHide();
+    this.tooltipIndex.set(null);
+    this.widgetTooltip.hideProgress(this.tooltipOwner);
   }
   protected progressTextAlign(element: ProgressElement): 'left' | 'center' | 'right' {
     return (element.grid.anchor ?? 'center').endsWith('left')

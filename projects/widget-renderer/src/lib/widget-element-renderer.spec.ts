@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { WidgetElementRenderer } from './widget-element-renderer';
 import { ChartElement, ImageElement } from './widget.model';
+import { WidgetTooltip } from './widget-tooltip';
 
 function image(source: string): ImageElement {
   return {
@@ -21,6 +22,7 @@ describe('WidgetElementRenderer', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [WidgetElementRenderer],
+      providers: [WidgetTooltip],
     }).compileComponents();
     fixture = TestBed.createComponent(WidgetElementRenderer);
   });
@@ -59,6 +61,9 @@ describe('WidgetElementRenderer', () => {
     expect(
       fixture.nativeElement.querySelector('.chart-chart').getAttribute('aria-describedby'),
     ).toBeNull();
+    expect(
+      (fixture.nativeElement.querySelector('.chart-chart') as HTMLElement).style.pointerEvents,
+    ).toBe('none');
 
     fixture.componentRef.setInput('sensitiveVisible', true);
     await fixture.whenStable();
@@ -71,5 +76,8 @@ describe('WidgetElementRenderer', () => {
       fixture.nativeElement.querySelector('.chart-chart').getAttribute('aria-describedby'),
     ).toMatch(/^chart-summary-/);
     expect(fixture.nativeElement.querySelector('.chart-chart .visually-hidden')).not.toBeNull();
+    expect(
+      (fixture.nativeElement.querySelector('.chart-chart') as HTMLElement).style.pointerEvents,
+    ).toBe('');
   });
 });

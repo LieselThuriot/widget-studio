@@ -1,7 +1,11 @@
 import type { EChartsCoreOption } from 'echarts/core';
 import { ChartElement } from './widget.model';
 
-export function chartOptions(element: ChartElement): EChartsCoreOption {
+export function chartOptions(
+  element: ChartElement,
+  tooltipLayer?: HTMLElement,
+  tooltipEnabled = true,
+): EChartsCoreOption {
   const base = {
     animation: false,
     title: element.title
@@ -20,10 +24,12 @@ export function chartOptions(element: ChartElement): EChartsCoreOption {
           }
         : undefined,
     tooltip: {
+      show: tooltipEnabled,
       trigger:
         element.type === 'pie' || element.type === 'donut' || element.type === 'funnel'
           ? 'item'
           : 'axis',
+      ...(tooltipLayer ? { appendToBody: false, appendTo: tooltipLayer } : {}),
     },
   } satisfies EChartsCoreOption;
 

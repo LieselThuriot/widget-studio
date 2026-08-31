@@ -8,32 +8,48 @@
     [style.height.px]="widgetHeight()"
     [style.background-color]="widget.background.color || 'transparent'"
   >
-    <widget-background
-      [background]="widget.background"
-      [sensitive]="backgroundSensitive()"
-      [image]="backgroundImage()"
-    />
-    @if (validationIssues().length > 0) {
-      <widget-validation-overlay [issues]="validationIssues()" />
-    }
-    <widget-toolbar
-      [refresh]="widget.refresh"
-      [hasSensitiveElements]="hasSensitiveElements()"
-      [sensitiveVisible]="sensitiveVisible()"
-      (refreshRequested)="refreshRequested.emit()"
-      (sensitiveToggled)="toggleSensitive()"
-    />
-    <div
-      class="widget-grid"
-      [style.grid-template-rows]="gridRows()"
-      [style.grid-template-columns]="gridColumns()"
-    >
-      @for (element of widget.elements; track $index) {
-        <widget-element-renderer
-          [element]="element"
-          [sensitiveVisible]="sensitiveVisible()"
-          (actionRequested)="actionRequested.emit($event)"
-        />
+    <div class="widget-viewport">
+      <widget-background
+        [background]="widget.background"
+        [sensitive]="backgroundSensitive()"
+        [image]="backgroundImage()"
+      />
+      @if (validationIssues().length > 0) {
+        <widget-validation-overlay [issues]="validationIssues()" />
+      }
+      <widget-toolbar
+        [refresh]="widget.refresh"
+        [hasSensitiveElements]="hasSensitiveElements()"
+        [sensitiveVisible]="sensitiveVisible()"
+        (refreshRequested)="refreshRequested.emit()"
+        (sensitiveToggled)="toggleSensitive()"
+      />
+      <div
+        class="widget-grid"
+        [style.grid-template-rows]="gridRows()"
+        [style.grid-template-columns]="gridColumns()"
+      >
+        @for (element of widget.elements; track $index) {
+          <widget-element-renderer
+            [element]="element"
+            [sensitiveVisible]="sensitiveVisible()"
+            (actionRequested)="actionRequested.emit($event)"
+          />
+        }
+      </div>
+    </div>
+    <div #tooltipLayer class="widget-tooltip-layer">
+      @if (tooltip.progress(); as progress) {
+        <span
+          class="progress-tooltip"
+          role="tooltip"
+          [style.--tooltip-x.px]="progress.x"
+          [style.--tooltip-y.px]="progress.y"
+          [style.--tooltip-border]="progress.color || 'rgb(0 0 0 / 0.12)'"
+          ><span class="tooltip-marker" [style.background]="progress.color"></span
+          ><span>{{ progress.label }}</span
+          ><strong>{{ progress.value }}</strong></span
+        >
       }
     </div>
   </section>

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ProgressElementRenderer } from './progress-element-renderer';
 import { ProgressElement } from './widget.model';
+import { WidgetTooltip } from './widget-tooltip';
 
 const element = {
   type: 'progress',
@@ -26,13 +27,19 @@ const element = {
 
 describe('ProgressElementRenderer', () => {
   let fixture: ComponentFixture<ProgressElementRenderer>;
+  let tooltipLayer: HTMLElement;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProgressElementRenderer],
+      providers: [WidgetTooltip],
     }).compileComponents();
     fixture = TestBed.createComponent(ProgressElementRenderer);
     fixture.componentRef.setInput('element', element);
     await fixture.whenStable();
+    const shell = document.createElement('section');
+    tooltipLayer = document.createElement('div');
+    shell.append(tooltipLayer);
+    TestBed.inject(WidgetTooltip).setOverlay(tooltipLayer);
   });
   it('renders accessible progress and legend content', () => {
     expect(
@@ -47,12 +54,78 @@ describe('ProgressElementRenderer', () => {
     const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
     segment.dispatchEvent(new FocusEvent('focus'));
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('[role="tooltip"]')?.textContent).toContain('Done');
+    expect(fixture.debugElement.injector.get(WidgetTooltip).progress()?.label).toBe('Done');
     segment.dispatchEvent(new FocusEvent('blur'));
     vi.advanceTimersByTime(100);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('[role="tooltip"]')).toBeNull();
+    expect(fixture.debugElement.injector.get(WidgetTooltip).progress()).toBeNull();
     vi.useRealTimers();
+  });
+
+  it('does not clear a tooltip owned by another progress element', async () => {
+    const otherFixture = TestBed.createComponent(ProgressElementRenderer);
+    otherFixture.componentRef.setInput('element', {
+      ...element,
+      data: {
+        ...element.data,
+        items: [
+          { kind: 'segment', label: 'Other', value: 6, color: '#00a', active: false },
+          { kind: 'gap', value: 4 },
+        ],
+      },
+    } as ProgressElement);
+    await otherFixture.whenStable();
+    vi.useFakeTimers();
+
+    const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
+    segment.dispatchEvent(new FocusEvent('focus'));
+    segment.dispatchEvent(new FocusEvent('blur'));
+    const otherSegment = otherFixture.nativeElement.querySelector(
+      '.progress-segment',
+    ) as HTMLButtonElement;
+    otherSegment.dispatchEvent(new FocusEvent('focus'));
+
+    vi.advanceTimersByTime(100);
+
+    expect(TestBed.inject(WidgetTooltip).progress()?.label).toBe('Other');
+    otherFixture.destroy();
+    vi.useRealTimers();
+  });
+
+  it('clears the tooltip when progress data changes', async () => {
+    const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
+    segment.dispatchEvent(new FocusEvent('focus'));
+    expect(TestBed.inject(WidgetTooltip).progress()?.label).toBe('Done');
+
+    fixture.componentRef.setInput('element', {
+      ...element,
+      data: {
+        ...element.data,
+        items: [
+          { kind: 'segment', label: 'Updated', value: 7, color: '#0a0', active: false },
+          { kind: 'gap', value: 3 },
+        ],
+      },
+    } as ProgressElement);
+    await fixture.whenStable();
+
+    expect(TestBed.inject(WidgetTooltip).progress()).toBeNull();
+  });
+
+  it('clears and suppresses tooltips while sensitive content is hidden', async () => {
+    const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
+    segment.dispatchEvent(new FocusEvent('focus'));
+    expect(TestBed.inject(WidgetTooltip).progress()?.label).toBe('Done');
+
+    fixture.componentRef.setInput('sensitiveHidden', true);
+    await fixture.whenStable();
+    expect(TestBed.inject(WidgetTooltip).progress()).toBeNull();
+
+    segment.dispatchEvent(new FocusEvent('focus'));
+    expect(TestBed.inject(WidgetTooltip).progress()).toBeNull();
+    expect(
+      (fixture.nativeElement.querySelector('.progress-element') as HTMLElement).style.pointerEvents,
+    ).toBe('none');
   });
 
   it('uses the exact range for sub-unit segment widths and accessibility', async () => {

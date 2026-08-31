@@ -1,4 +1,15 @@
-import { Component, computed, effect, input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { WidgetElementRenderer } from './widget-element-renderer';
 import { WidgetSkeleton } from './widget-skeleton';
 import { WidgetBackground } from './widget-background';
@@ -12,6 +23,7 @@ import {
   widgetHeight as getWidgetHeight,
   widgetWidth as getWidgetWidth,
 } from './widget-layout';
+import { WidgetTooltip } from './widget-tooltip';
 
 export type WidgetLoading = boolean | Widget['size'];
 
@@ -19,6 +31,7 @@ export type WidgetLoading = boolean | Widget['size'];
   selector: 'widget-renderer',
   templateUrl: './widget-renderer.html',
   styleUrl: './widget-renderer.css',
+  providers: [WidgetTooltip],
   imports: [
     WidgetElementRenderer,
     WidgetSkeleton,
@@ -27,13 +40,15 @@ export type WidgetLoading = boolean | Widget['size'];
     WidgetValidationOverlay,
   ],
 })
-export class WidgetRenderer {
+export class WidgetRenderer implements OnDestroy {
   readonly widget = input<WidgetInput | null>(null);
   readonly loading = input<WidgetLoading>(false);
   readonly darkMode = input(false);
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
+  protected readonly tooltip = inject(WidgetTooltip);
+  private readonly tooltipLayer = viewChild<ElementRef<HTMLElement>>('tooltipLayer');
   private readonly parsedWidget = computed(() => {
     const widget = this.widget();
     return widget === null ? { success: false as const, issues: [] } : safeParseWidgetInput(widget);
@@ -85,6 +100,14 @@ export class WidgetRenderer {
     effect(() => {
       if (this.loading() !== false) this.sensitiveVisible.set(false);
     });
+    effect(() => {
+      const layer = this.tooltipLayer()?.nativeElement;
+      if (layer) this.tooltip.setOverlay(layer);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.tooltip.clear();
   }
 
   protected toggleSensitive(): void {

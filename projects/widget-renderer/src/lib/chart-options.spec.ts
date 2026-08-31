@@ -77,4 +77,37 @@ describe('chartOptions', () => {
         .color,
     ).toBe('#f00');
   });
+
+  it('appends tooltips to the supplied widget layer', () => {
+    const layer = document.createElement('div');
+    const options = chartOptions(
+      {
+        ...base,
+        type: 'line',
+        data: [{ label: 'A', value: 4 }],
+        style: {
+          ...base.style,
+          color: { ...base.style.color, line: '#f00' },
+          axis: { label: '#111', line: '#222', grid: '#333' },
+        },
+      } as ChartElement,
+      layer,
+    );
+
+    expect(options['tooltip']).toMatchObject({ appendToBody: false, appendTo: layer });
+  });
+
+  it('disables tooltips for hidden sensitive charts', () => {
+    const options = chartOptions(
+      {
+        ...base,
+        type: 'pie',
+        data: [{ label: 'Secret', value: 4 }],
+      } as ChartElement,
+      document.createElement('div'),
+      false,
+    );
+
+    expect(options['tooltip']).toMatchObject({ show: false });
+  });
 });

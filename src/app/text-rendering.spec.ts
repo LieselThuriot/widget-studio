@@ -102,6 +102,9 @@ describe('text renderer whitespace', () => {
     expect(text.style.fontStyle).toBe('italic');
     expect(getComputedStyle(text).overflow).toBe('visible');
     expect(getComputedStyle(fixture.nativeElement.querySelector('.widget-shell')).overflow).toBe(
+      'visible',
+    );
+    expect(getComputedStyle(fixture.nativeElement.querySelector('.widget-viewport')).overflow).toBe(
       'hidden',
     );
   });
