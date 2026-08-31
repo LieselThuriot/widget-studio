@@ -15,7 +15,6 @@ import {
   styleUrl: './widget-element-renderer.css',
   imports: [ChartElementRenderer],
   host: {
-    class: 'widget-element',
     '[style.grid-row]': 'gridRow()',
     '[style.grid-column]': 'gridColumn()',
   },

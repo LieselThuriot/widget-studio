@@ -66,6 +66,7 @@ import { RefreshConfig } from './widget.model';
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        pointer-events: var(--widget-renderer-actions-pointer-events, auto);
         width: var(--widget-renderer-control-size, 28px);
         height: var(--widget-renderer-control-size, 28px);
         border: 1px solid var(--widget-renderer-control-border, #ffffff38);

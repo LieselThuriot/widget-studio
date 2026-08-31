@@ -63,12 +63,9 @@ describe('sensitive renderer content', () => {
     fixture.componentRef.setInput('widget', widget);
     await fixture.whenStable();
 
-    const sensitiveText = fixture.nativeElement.querySelector(
-      '.widget-element:nth-child(1) .element-content',
-    ) as HTMLElement;
-    const publicText = fixture.nativeElement.querySelector(
-      '.widget-element:nth-child(3) .element-content',
-    ) as HTMLElement;
+    const elements = fixture.nativeElement.querySelectorAll('.widget-element');
+    const sensitiveText = elements[0].querySelector('.element-content') as HTMLElement;
+    const publicText = elements[2].querySelector('.element-content') as HTMLElement;
 
     expect(sensitiveText.style.getPropertyValue('--sensitive-blur')).toBe('2.75px');
     expect(publicText.style.getPropertyValue('--sensitive-blur')).toBe('');

@@ -88,6 +88,7 @@ img {
   user-select: none;
 }
 .action-button {
+  pointer-events: var(--widget-renderer-actions-pointer-events, auto);
   min-height: 30px;
   border-radius: var(--widget-renderer-radius, 8px);
   padding: 6px 10px;
