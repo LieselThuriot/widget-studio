@@ -78,7 +78,8 @@
         [class.solid]="button.style === 'solid'"
         [class.outline]="button.style === 'outline'"
         [class.show-only-on-hover]="button.showOnlyOnHover"
-        (click)="actionRequested.emit({ element: button, event: $event })"
+        [disabled]="isSensitive(button)"
+        (click)="requestAction(button, $event)"
         [tabindex]="isSensitive(button) ? -1 : 0"
       >
         {{ button.label }}

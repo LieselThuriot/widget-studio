@@ -55,6 +55,10 @@ export class WidgetElementRenderer {
   protected imageLoadFailed(element: ImageElement): void {
     this.failedImage.set({ element, source: element.source });
   }
+  protected requestAction(element: ButtonElement, event: Event): void {
+    if (this.isSensitive(element)) return;
+    this.actionRequested.emit({ element, event });
+  }
   protected horizontalAnchor(anchor: string): string {
     return anchor.endsWith('left')
       ? 'flex-start'

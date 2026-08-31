@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { WidgetElementRenderer } from './widget-element-renderer';
-import { ChartElement, ImageElement } from './widget.model';
+import { ButtonElement, ChartElement, ImageElement } from './widget.model';
 import { WidgetTooltip } from './widget-tooltip';
 
 function image(source: string): ImageElement {
@@ -79,5 +79,40 @@ describe('WidgetElementRenderer', () => {
     expect(
       (fixture.nativeElement.querySelector('.chart-chart') as HTMLElement).style.pointerEvents,
     ).toBe('');
+  });
+
+  it('only emits sensitive button actions after the content is revealed', async () => {
+    const buttonElement: ButtonElement = {
+      type: 'button',
+      sensitive: true,
+      label: 'Secret action',
+      method: 'get',
+      url: '/secret',
+      requestRefresh: false,
+      showOnlyOnHover: false,
+      style: 'solid',
+      grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+    };
+    const actionRequested = vi.fn();
+    fixture.componentInstance.actionRequested.subscribe(actionRequested);
+    fixture.componentRef.setInput('element', buttonElement);
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('.action-button') as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    expect(button.tabIndex).toBe(-1);
+
+    button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(actionRequested).not.toHaveBeenCalled();
+
+    fixture.componentRef.setInput('sensitiveVisible', true);
+    await fixture.whenStable();
+
+    expect(button.disabled).toBe(false);
+    expect(button.tabIndex).toBe(0);
+
+    button.click();
+    expect(actionRequested).toHaveBeenCalledOnce();
+    expect(actionRequested.mock.calls[0][0].element).toBe(buttonElement);
   });
 });
