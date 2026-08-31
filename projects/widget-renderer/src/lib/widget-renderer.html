@@ -2,13 +2,11 @@
   <widget-skeleton [size]="loadingSize()" [darkMode]="darkMode()" />
 } @else {
   @let widget = renderWidget();
-  <section
-    class="widget-shell"
-    [style.width.px]="widgetWidth()"
-    [style.height.px]="widgetHeight()"
-    [style.background-color]="widget.background.color || 'transparent'"
-  >
-    <div class="widget-viewport">
+  <section class="widget-shell" [style.width.px]="widgetWidth()" [style.height.px]="widgetHeight()">
+    <div
+      class="widget-viewport"
+      [style.background-color]="widget.background.color || 'transparent'"
+    >
       <widget-background
         [background]="widget.background"
         [sensitive]="backgroundSensitive()"

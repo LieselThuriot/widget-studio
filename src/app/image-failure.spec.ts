@@ -56,10 +56,10 @@ describe('renderer image failures', () => {
     });
     await fixture.whenStable();
 
-    const shell = fixture.nativeElement.querySelector('.widget-shell') as HTMLElement;
+    const viewport = fixture.nativeElement.querySelector('.widget-viewport') as HTMLElement;
     const background = fixture.nativeElement.querySelector('.widget-background') as HTMLElement;
 
-    expect(shell.style.backgroundColor).toBe('rgb(16, 24, 39)');
+    expect(viewport.style.backgroundColor).toBe('rgb(16, 24, 39)');
     expect(background.style.backgroundImage).toBe('none');
   });
 });

@@ -30,7 +30,6 @@ import { WidgetValidationIssue } from './widget-validation';
         overflow: auto;
         padding: var(--widget-renderer-content-padding, 18px);
         border: 1px solid #e06a6a;
-        border-radius: var(--widget-renderer-radius, 8px);
         background: #fff4f4ef;
         color: #7f1d1d;
         pointer-events: auto;

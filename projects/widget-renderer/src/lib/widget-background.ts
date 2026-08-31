@@ -30,8 +30,6 @@ import { BackgroundConfig } from './widget.model';
       .widget-background {
         position: absolute;
         inset: 0;
-        overflow: hidden;
-        border-radius: var(--widget-renderer-radius, 8px);
       }
       .widget-background-image {
         position: absolute;
@@ -50,7 +48,6 @@ import { BackgroundConfig } from './widget.model';
       .widget-overlay {
         position: absolute;
         inset: 0;
-        border-radius: var(--widget-renderer-radius, 8px);
         pointer-events: none;
         z-index: 0;
       }

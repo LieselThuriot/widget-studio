@@ -66,9 +66,16 @@ describe('WidgetRenderer', () => {
     const tooltipLayer = fixture.nativeElement.querySelector(
       '.widget-tooltip-layer',
     ) as HTMLElement;
+    const background = fixture.nativeElement.querySelector('.widget-background') as HTMLElement;
+    const overlay = fixture.nativeElement.querySelector('.widget-overlay') as HTMLElement;
 
     expect(getComputedStyle(shell).overflow).toBe('visible');
     expect(getComputedStyle(viewport).overflow).toBe('hidden');
+    expect(getComputedStyle(viewport).borderRadius).toBe('var(--widget-renderer-radius)');
+    expect(getComputedStyle(background).overflow).toBe('');
+    expect(getComputedStyle(background).borderRadius).toBe('');
+    expect(getComputedStyle(overlay).borderRadius).toBe('');
+    expect(getComputedStyle(tooltipLayer).zIndex).toBe('6');
     expect(tooltipLayer.parentElement).toBe(shell);
     expect(tooltipLayer.previousElementSibling).toBe(viewport);
   });
