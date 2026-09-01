@@ -255,6 +255,42 @@ describe('WidgetLandscape', () => {
     ).toBe('1 / 1 / 3 / 5');
   });
 
+  it('preserves widget locations when responsive width has room for them', () => {
+    const responsiveState = {
+      ...structuredClone(state),
+      responsive: true,
+      widgets: [
+        { ...structuredClone(state.widgets[0]), id: 'first', row: 4, column: 1 },
+        { ...structuredClone(state.widgets[0]), id: 'second', row: 8, column: 0 },
+      ],
+    };
+    recreateResponsiveFixture(responsiveState);
+
+    const items = fixture.nativeElement.querySelectorAll('.landscape-item');
+    expect((items[0] as HTMLElement).style.gridArea).toBe('5 / 2 / 6 / 3');
+    expect((items[1] as HTMLElement).style.gridArea).toBe('9 / 1 / 10 / 2');
+    expect(responsiveState.widgets.map(({ row, column }) => ({ row, column }))).toEqual([
+      { row: 4, column: 1 },
+      { row: 8, column: 0 },
+    ]);
+  });
+
+  it('packs widgets only after one overflows the responsive width', () => {
+    const responsiveState = {
+      ...structuredClone(state),
+      responsive: true,
+      widgets: [
+        { ...structuredClone(state.widgets[0]), id: 'first', row: 4, column: 2 },
+        { ...structuredClone(state.widgets[0]), id: 'second', row: 8, column: 0 },
+      ],
+    };
+    recreateResponsiveFixture(responsiveState);
+
+    const items = fixture.nativeElement.querySelectorAll('.landscape-item');
+    expect((items[0] as HTMLElement).style.gridArea).toBe('1 / 1 / 2 / 2');
+    expect((items[1] as HTMLElement).style.gridArea).toBe('1 / 2 / 2 / 3');
+  });
+
   it('moves from visible responsive coordinates with the keyboard', () => {
     let change: LandscapeStateChange | undefined;
     recreateResponsiveFixture(
@@ -283,7 +319,7 @@ describe('WidgetLandscape', () => {
     expect(change?.columns).toBe(4);
     expect(change?.widgets.find(({ id }) => id === 'moving')).toMatchObject({
       row: 0,
-      column: 1,
+      column: 2,
     });
     expect(change?.widgets.find(({ id }) => id === 'first')).toMatchObject({ row: 0, column: 0 });
   });
@@ -326,6 +362,41 @@ describe('WidgetLandscape', () => {
       column: 0,
     });
     expect(change?.widgets.find(({ id }) => id === 'first')).toMatchObject({ row: 0, column: 1 });
+  });
+
+  it('previews responsive collision displacement using committed columns', () => {
+    vi.useFakeTimers();
+    recreateResponsiveFixture(
+      {
+        version: 1,
+        columns: 4,
+        responsive: true,
+        widgets: [
+          { ...structuredClone(state.widgets[0]), id: 'target', row: 0, column: 0 },
+          { ...structuredClone(state.widgets[0]), id: 'moving', row: 1, column: 1 },
+        ],
+      },
+      true,
+    );
+
+    const grid = fixture.nativeElement.querySelector('.landscape-grid') as HTMLElement;
+    const moving = fixture.nativeElement.querySelectorAll('.landscape-item')[1] as HTMLElement;
+    moving.dispatchEvent(new Event('dragstart', { bubbles: true, cancelable: true }));
+    grid.dispatchEvent(
+      new MouseEvent('dragover', {
+        clientX: 20,
+        clientY: 20,
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+
+    vi.advanceTimersByTime(350);
+    fixture.detectChanges();
+
+    const items = fixture.nativeElement.querySelectorAll('.landscape-item');
+    expect((items[0] as HTMLElement).style.gridArea).toBe('1 / 1 / 2 / 2');
+    expect((items[1] as HTMLElement).style.gridArea).toBe('1 / 2 / 2 / 3');
   });
 
   it('shows the responsive toggle only when the input is omitted', () => {
@@ -468,6 +539,78 @@ describe('WidgetLandscape', () => {
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     expect(boundary.style.left).toBe('574px');
+  });
+
+  it('keeps the column boundary tied to configured columns in responsive mode', () => {
+    recreateResponsiveFixture({ ...structuredClone(state), columns: 7 }, true);
+
+    const boundary = fixture.nativeElement.querySelector(
+      '.landscape-column-boundary',
+    ) as HTMLElement;
+    expect(boundary.style.left).toBe('997px');
+
+    const input = columnInput();
+    input.value = '4';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(boundary.style.left).toBe('574px');
+  });
+
+  it('keeps the column boundary fixed while a responsive drag preview is active', () => {
+    recreateResponsiveFixture(
+      {
+        ...structuredClone(state),
+        columns: 8,
+        responsive: true,
+        widgets: [{ ...structuredClone(state.widgets[0]), column: 7 }],
+      },
+      true,
+    );
+
+    const boundary = fixture.nativeElement.querySelector(
+      '.landscape-column-boundary',
+    ) as HTMLElement;
+    const grid = fixture.nativeElement.querySelector('.landscape-grid') as HTMLElement;
+    const moving = fixture.nativeElement.querySelector('.landscape-item') as HTMLElement;
+
+    expect(boundary.style.left).toBe('1138px');
+    moving.dispatchEvent(new Event('dragstart', { bubbles: true, cancelable: true }));
+    grid.dispatchEvent(
+      new MouseEvent('dragover', {
+        clientX: 20,
+        clientY: 20,
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+    fixture.detectChanges();
+
+    expect(boundary.style.left).toBe('1138px');
+  });
+
+  it('clamps responsive keyboard movement to the configured boundary', () => {
+    let change: LandscapeStateChange | undefined;
+    recreateResponsiveFixture(
+      {
+        ...structuredClone(state),
+        columns: 2,
+        responsive: true,
+        widgets: [{ ...structuredClone(state.widgets[0]), column: 1 }],
+      },
+      true,
+    );
+    fixture.componentInstance.stateChange.subscribe((value) => (change = value));
+
+    const moving = fixture.nativeElement.querySelector('.landscape-item') as HTMLElement;
+    moving.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }),
+    );
+    fixture.detectChanges();
+    (
+      fixture.nativeElement.querySelector('.landscape-button--primary') as HTMLButtonElement
+    ).click();
+
+    expect(change?.widgets[0]).toMatchObject({ row: 0, column: 1 });
   });
 
   it('uses the loaded widget size for the minimum column count', () => {

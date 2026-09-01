@@ -17,6 +17,16 @@ export function canFitWidget(widget: LandscapeWidget, columns: number): boolean 
   return footprintFor(widget).columnSpan <= Math.max(1, Math.floor(columns));
 }
 
+export function hasHorizontalOverflow(
+  widgets: readonly LandscapeWidget[],
+  columns: number,
+): boolean {
+  const availableColumns = Math.max(1, Math.floor(columns || 1));
+  return widgets.some(
+    (widget) => widget.column + footprintFor(widget).columnSpan > availableColumns,
+  );
+}
+
 export function firstAvailablePosition(
   widgets: readonly LandscapeWidget[],
   candidate: LandscapeWidget,
@@ -146,6 +156,23 @@ export function normalizeLandscapeState(state: LandscapeState): LandscapeState {
       result = { ...result, widgets: [...result.widgets, { ...requested, ...position }] };
   }
   return result;
+}
+
+/** Packs the current widget order into the earliest available responsive cells. */
+export function reflowLandscapeState(
+  state: LandscapeState,
+  requestedColumns: number,
+): LandscapeState {
+  const columns = Math.max(1, Math.floor(requestedColumns || 1));
+  const widgets: LandscapeWidget[] = [];
+
+  for (const widget of state.widgets) {
+    if (!canFitWidget(widget, columns)) continue;
+    const position = firstAvailablePosition(widgets, widget, columns);
+    if (position) widgets.push({ ...widget, ...position });
+  }
+
+  return { ...state, columns, widgets };
 }
 
 function firstAvailablePositionFrom(

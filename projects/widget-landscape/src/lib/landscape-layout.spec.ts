@@ -1,14 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
   footprintFor,
+  hasHorizontalOverflow,
   moveWidget,
   normalizeLandscapeState,
   placeWithPushDown,
   previewPlacement,
+  reflowLandscapeState,
 } from './landscape-layout';
 import { landscapeFootprintForSize, LandscapeState } from './landscape.model';
 
-const widget = (id: string, size: 'mini' | 'square' = 'mini') => ({
+const widget = (id: string, size: LandscapeState['widgets'][number]['size'] = 'mini') => ({
   id,
   size,
   row: 0,
@@ -88,6 +90,55 @@ describe('landscape layout', () => {
     expect(normalized.widgets.map(({ id, row, column }) => ({ id, row, column }))).toEqual([
       { id: 'first', row: 0, column: 0 },
       { id: 'second', row: 4, column: 5 },
+    ]);
+  });
+
+  it('detects overflow based on widget footprints instead of unused columns', () => {
+    expect(hasHorizontalOverflow([widget('first'), widget('second')], 2)).toBe(false);
+    expect(hasHorizontalOverflow([{ ...widget('wide', 'square'), column: 1 }], 2)).toBe(true);
+  });
+
+  it('packs widgets from the top-left for responsive layouts', () => {
+    const state = {
+      version: 1,
+      columns: 2,
+      responsive: true,
+      widgets: [
+        { ...widget('first'), row: 4, column: 1 },
+        { ...widget('second'), row: 8, column: 0 },
+      ],
+    } as LandscapeState;
+
+    const reflowed = reflowLandscapeState(state, 2);
+
+    expect(reflowed.widgets.map(({ id, row, column }) => ({ id, row, column }))).toEqual([
+      { id: 'first', row: 0, column: 0 },
+      { id: 'second', row: 0, column: 1 },
+    ]);
+    expect(state.widgets.map(({ id, row, column }) => ({ id, row, column }))).toEqual([
+      { id: 'first', row: 4, column: 1 },
+      { id: 'second', row: 8, column: 0 },
+    ]);
+  });
+
+  it('packs responsive widgets without overlapping their footprints', () => {
+    const state = {
+      version: 1,
+      columns: 8,
+      responsive: true,
+      widgets: [
+        { ...widget('wide', 'wide'), row: 6, column: 4 },
+        { ...widget('tall', 'tall'), row: 2, column: 0 },
+        { ...widget('square', 'square'), row: 10, column: 0 },
+      ],
+    } as LandscapeState;
+
+    const reflowed = reflowLandscapeState(state, 4);
+
+    expect(reflowed.widgets.map(({ id, row, column }) => ({ id, row, column }))).toEqual([
+      { id: 'wide', row: 0, column: 0 },
+      { id: 'tall', row: 2, column: 0 },
+      { id: 'square', row: 2, column: 1 },
     ]);
   });
 

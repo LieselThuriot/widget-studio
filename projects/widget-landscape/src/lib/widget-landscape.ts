@@ -20,9 +20,11 @@ import {
   effectiveSizeFor,
   footprintFor,
   hasCollisionAt,
+  hasHorizontalOverflow,
   moveWidget,
   normalizeLandscapeState,
   previewPlacement,
+  reflowLandscapeState,
 } from './landscape-layout';
 import {
   LandscapeActionEvent,
@@ -123,9 +125,10 @@ export class WidgetLandscape implements OnDestroy {
   protected readonly renderedState = computed(() => {
     const state = this.activeState();
     const columns = this.displayedColumns();
-    return this.isResponsive() && columns !== state.columns
-      ? normalizeLandscapeState({ ...state, columns })
-      : state;
+    if (!this.isResponsive() || columns === state.columns) return state;
+    return hasHorizontalOverflow(state.widgets, columns)
+      ? reflowLandscapeState(state, columns)
+      : { ...state, columns };
   });
   protected readonly isEditing = computed(() => this.editMode() || this.draft() !== null);
   protected readonly paletteItems = computed(() => this.palette() ?? []);
@@ -155,7 +158,7 @@ export class WidgetLandscape implements OnDestroy {
   );
 
   protected columnBoundaryOffset(): number {
-    const columns = this.renderedState().columns;
+    const columns = (this.draft() ?? this.state()).columns;
     return (
       WidgetLandscape.gridPadding +
       columns * WidgetLandscape.columnWidth +
@@ -276,7 +279,10 @@ export class WidgetLandscape implements OnDestroy {
     this.clearDragTimer();
     this.dragId.set(id);
     this.dragPaletteItem.set(item);
-    this.dragOrigin = structuredClone(this.renderedState());
+    this.dragOrigin = {
+      ...structuredClone(this.renderedState()),
+      columns: this.configuredColumns(),
+    };
     this.dragPreview.set(null);
     this.dragTarget.set(null);
   }
@@ -397,7 +403,7 @@ export class WidgetLandscape implements OnDestroy {
     moving: LandscapeWidget | null,
   ): { row: number; column: number } | null {
     const bounds = host.getBoundingClientRect();
-    const columns = this.renderedState().columns;
+    const columns = this.configuredColumns();
     if (!bounds.width || !columns || !moving) return null;
     const padding = WidgetLandscape.gridPadding;
     const column = Math.floor(
@@ -415,6 +421,10 @@ export class WidgetLandscape implements OnDestroy {
       ),
       column: Math.max(0, Math.min(maxColumn, column)),
     };
+  }
+
+  private configuredColumns(): number {
+    return Math.max(1, Math.floor((this.draft() ?? this.state()).columns || 1));
   }
 
   private updatePaletteSide(event: DragEvent, host: HTMLElement): void {
@@ -440,7 +450,12 @@ export class WidgetLandscape implements OnDestroy {
   }
 
   protected moveFromKeyboard(event: { id: string; row: number; column: number }): void {
-    const movedState = moveWidget(this.renderedState(), event.id, event.row, event.column);
+    const movedState = moveWidget(
+      { ...this.renderedState(), columns: this.configuredColumns() },
+      event.id,
+      event.row,
+      event.column,
+    );
     this.commitPreview(movedState);
     this.updatePaletteSideForKeyboardMove(movedState, event.id);
   }
