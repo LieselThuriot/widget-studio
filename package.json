@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "npm run build:app && npm run build:libraries",
+    "build": "npm run build:libraries && npm run build:app",
     "build:app": "ng build widget",
     "build:renderer": "ng build widget-renderer",
     "build:landscape": "ng build widget-landscape",

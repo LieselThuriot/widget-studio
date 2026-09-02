@@ -93,7 +93,7 @@ npm start
 # Build the editor
 npm run build:app
 
-# Build the editor and both Angular libraries
+# Build the renderer, landscape library, and editor
 npm run build
 
 # Check formatting
@@ -110,6 +110,8 @@ npm test -- --watch=false
 ```
 
 The production build applies bundle and component-style budgets. The test suite includes editor state, layout, hydration, validation, sharing, accessibility, sensitive content, loading, image failure, and rendering behavior.
+
+The full build runs in dependency order: `widget-renderer`, then `widget-landscape`, then the editor application. The editor resolves the libraries from workspace source aliases, while `widget-landscape` consumes the built renderer declarations.
 
 ### Library development
 
