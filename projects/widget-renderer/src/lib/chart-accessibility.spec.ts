@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
 import { ChartElement, ProgressElement } from './widget.model';
+import { frenchWidgetRendererLocale } from './widget-locale';
 
 const grid = { row: 0, column: 0, rowSpan: 1, columnSpan: 1 };
 
@@ -58,5 +59,27 @@ describe('chart accessibility', () => {
       data: { value: 0.35, min: 0.1, max: 0.6 },
     } as ChartElement;
     expect(chartAccessibilitySummary(element)).toContain('50 percent.');
+  });
+
+  it('uses localized chart accessibility terminology', () => {
+    const element = {
+      type: 'bar',
+      grid,
+      sensitive: false,
+      showLegend: false,
+      style: {
+        font: { size: 11 },
+        color: { legend: '#111', title: '#222', line: '#333' },
+        axis: { label: '#111', line: '#222', grid: '#ddd' },
+      },
+      data: [],
+    } as ChartElement;
+
+    expect(chartAriaLabel(element, frenchWidgetRendererLocale.aria.chart)).toBe(
+      'Graphique bar, 0 points de données.',
+    );
+    expect(chartAccessibilitySummary(element, frenchWidgetRendererLocale.aria.chart)).toBe(
+      'aucune donnée.',
+    );
   });
 });

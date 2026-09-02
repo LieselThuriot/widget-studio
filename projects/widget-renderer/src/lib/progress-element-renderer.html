@@ -30,7 +30,12 @@
             [class.is-active]="segment(entry.item).active"
             [style]="segmentStyle(entry.width, segment(entry.item).color)"
             [attr.tabindex]="sensitiveHidden() ? -1 : 0"
-            [attr.aria-label]="segment(entry.item).label + ': ' + segment(entry.item).value"
+            [attr.aria-label]="
+              locale().aria.chart.progressSegmentLabel(
+                segment(entry.item).label,
+                segment(entry.item).value.toString()
+              )
+            "
             (pointerenter)="moveTooltip(entry.index, $event)"
             (pointermove)="moveTooltip(entry.index, $event)"
             (pointerleave)="hideTooltip(entry.index)"

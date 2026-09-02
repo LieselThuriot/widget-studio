@@ -8,6 +8,7 @@ import {
   TextElement,
   WidgetElement,
 } from './widget.model';
+import { defaultWidgetRendererLocale, WidgetRendererLocale } from './widget-locale';
 
 @Component({
   selector: 'widget-element-renderer',
@@ -22,6 +23,7 @@ import {
 export class WidgetElementRenderer {
   readonly element = input.required<WidgetElement>();
   readonly sensitiveVisible = input(false);
+  readonly locale = input<WidgetRendererLocale>(defaultWidgetRendererLocale);
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   private readonly failedImage = signal<{ element: ImageElement; source: string } | null>(null);
 

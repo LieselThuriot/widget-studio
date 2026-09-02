@@ -1,4 +1,5 @@
 import { ChartElement, ProgressElement, ProgressSegment } from './widget.model';
+import { defaultWidgetRendererLocale, WidgetRendererChartLocale } from './widget-locale';
 
 const MAX_POINTS = 20;
 
@@ -8,12 +9,17 @@ function number(value: number): string {
     : value.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
 }
 
-function points(data: { label: string; value: number }[]): string {
+function points(
+  data: { label: string; value: number }[],
+  locale: WidgetRendererChartLocale,
+): string {
   const visible = data
     .slice(0, MAX_POINTS)
     .map((point) => `${point.label}: ${number(point.value)}`);
   const remaining = data.length - visible.length;
-  return remaining > 0 ? `${visible.join('; ')}; ${remaining} more points.` : visible.join('; ');
+  return remaining > 0
+    ? `${visible.join('; ')}; ${locale.morePoints(remaining)}`
+    : visible.join('; ');
 }
 
 function progressSegments(
@@ -34,23 +40,43 @@ function progressValue(element: ProgressElement): number {
   );
 }
 
-export function chartAriaLabel(element: ChartElement | ProgressElement): string {
+export function chartAriaLabel(
+  element: ChartElement | ProgressElement,
+  locale = defaultWidgetRendererLocale.aria.chart,
+): string {
   if (element.type === 'progress') {
-    return `${element.title || 'Progress'}, ${number(progressValue(element))} of ${number(element.data.max - element.data.min)}.`;
+    return locale.progressAriaLabel(
+      element.title,
+      number(progressValue(element)),
+      number(element.data.max - element.data.min),
+    );
   }
   if (element.type === 'gauge') {
-    return `${element.title || 'Gauge'}, ${number(element.data.value)} of ${number(element.data.max)}.`;
+    return locale.gaugeAriaLabel(
+      element.title,
+      number(element.data.value),
+      number(element.data.max),
+    );
   }
-  return `${element.title || element.type} chart, ${element.data.length} data points.`;
+  return locale.chartAriaLabel(element.title, element.type, element.data.length);
 }
 
-export function chartAccessibilitySummary(element: ChartElement | ProgressElement): string {
+export function chartAccessibilitySummary(
+  element: ChartElement | ProgressElement,
+  locale = defaultWidgetRendererLocale.aria.chart,
+): string {
   if (element.type === 'progress') {
     const segments = progressSegments(element);
     const breakdown = segments.length
-      ? ` ${segments.map(({ segment, start, end }) => `${segment.label}: ${number(start)} to ${number(end)}`).join('; ')}.`
-      : ' No segments.';
-    return `${element.title || 'Progress'}: ${number(progressValue(element))} of ${number(element.data.max - element.data.min)}; range ${number(element.data.min)} to ${number(element.data.max)}.${breakdown}`;
+      ? ` ${segments.map(({ segment, start, end }) => locale.progressBreakdown(segment.label, number(start), number(end))).join('; ')}.`
+      : locale.noSegmentsSummary;
+    return locale.progressSummary(
+      element.title,
+      number(progressValue(element)),
+      number(element.data.min),
+      number(element.data.max),
+      breakdown,
+    );
   }
   if (element.type === 'gauge') {
     const range = element.data.max - element.data.min;
@@ -58,9 +84,13 @@ export function chartAccessibilitySummary(element: ChartElement | ProgressElemen
       0,
       Math.min(100, ((element.data.value - element.data.min) / range) * 100),
     );
-    return `${element.title || 'Gauge'}: value ${number(element.data.value)} of ${number(element.data.max)}, ${number(percentage)} percent.`;
+    return locale.gaugeSummary(
+      element.title,
+      number(element.data.value),
+      number(element.data.max),
+      number(percentage),
+    );
   }
-  const title = element.title ? `${element.title}: ` : '';
-  if (!element.data.length) return `${title}no data.`;
-  return `${title}${points(element.data)}.`;
+  if (!element.data.length) return locale.noDataSummary(element.title);
+  return locale.dataSummary(element.title, points(element.data, locale));
 }

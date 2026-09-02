@@ -1,5 +1,5 @@
 @if (isLoading()) {
-  <widget-skeleton [size]="loadingSize()" [darkMode]="darkMode()" />
+  <widget-skeleton [size]="loadingSize()" [darkMode]="darkMode()" [locale]="resolvedLocale()" />
 } @else {
   @let widget = renderWidget();
   <section class="widget-shell" [style.width.px]="widgetWidth()" [style.height.px]="widgetHeight()">
@@ -19,6 +19,7 @@
         [refresh]="widget.refresh"
         [hasSensitiveElements]="hasSensitiveElements()"
         [sensitiveVisible]="sensitiveVisible()"
+        [locale]="resolvedLocale()"
         (refreshRequested)="refreshRequested.emit()"
         (sensitiveToggled)="toggleSensitive()"
       />
@@ -31,6 +32,7 @@
           <widget-element-renderer
             [element]="element"
             [sensitiveVisible]="sensitiveVisible()"
+            [locale]="resolvedLocale()"
             (actionRequested)="actionRequested.emit($event)"
           />
         }

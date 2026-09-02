@@ -46,7 +46,7 @@
         <div
           class="image-placeholder"
           role="img"
-          [attr.aria-label]="elementAlt(image) || 'Image unavailable'"
+          [attr.aria-label]="elementAlt(image) || locale().aria.imageUnavailable"
           [style.border-radius.px]="image.radius"
         >
           <svg aria-hidden="true" viewBox="0 0 64 48" focusable="false">
@@ -100,6 +100,7 @@
           [class.is-progress]="chart.type === 'progress'"
           [element]="chart"
           [sensitiveHidden]="isSensitive(chart)"
+          [locale]="locale()"
         />
       } @placeholder {
         <div class="chart-placeholder" aria-hidden="true"></div>

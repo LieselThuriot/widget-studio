@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { Widget } from './widget.model';
+import { defaultWidgetRendererLocale, WidgetRendererLocale } from './widget-locale';
 
 @Component({
   selector: 'widget-skeleton',
@@ -9,4 +10,5 @@ import { Widget } from './widget.model';
 export class WidgetSkeleton {
   readonly size = input.required<Widget['size']>();
   readonly darkMode = input(false);
+  readonly locale = input<WidgetRendererLocale>(defaultWidgetRendererLocale);
 }

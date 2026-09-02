@@ -2,6 +2,7 @@ import { Component, OnDestroy, effect, inject, input, signal } from '@angular/co
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
 import { ProgressElement, ProgressItem, ProgressSegment } from './widget.model';
 import { WidgetTooltip } from './widget-tooltip';
+import { defaultWidgetRendererLocale, WidgetRendererLocale } from './widget-locale';
 
 @Component({
   selector: 'widget-progress-element',
@@ -15,6 +16,7 @@ import { WidgetTooltip } from './widget-tooltip';
 export class ProgressElementRenderer implements OnDestroy {
   readonly element = input.required<ProgressElement>();
   readonly sensitiveHidden = input(false);
+  readonly locale = input<WidgetRendererLocale>(defaultWidgetRendererLocale);
   protected readonly summaryId = `progress-summary-${crypto.randomUUID()}`;
   protected readonly tooltipIndex = signal<number | null>(null);
   private readonly widgetTooltip = inject(WidgetTooltip);
@@ -165,9 +167,9 @@ export class ProgressElementRenderer implements OnDestroy {
         : 'center';
   }
   protected ariaLabel(element: ProgressElement): string {
-    return chartAriaLabel(element);
+    return chartAriaLabel(element, this.locale().aria.chart);
   }
   protected accessibilitySummary(element: ProgressElement): string {
-    return chartAccessibilitySummary(element);
+    return chartAccessibilitySummary(element, this.locale().aria.chart);
   }
 }

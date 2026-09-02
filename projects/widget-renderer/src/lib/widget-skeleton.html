@@ -9,7 +9,7 @@
   [class.is-hero]="size() === 'hero'"
   [class.is-dark]="darkMode()"
   role="status"
-  aria-label="Widget loading"
+  [attr.aria-label]="locale().aria.loading"
 >
   <div class="skeleton-toolbar"></div>
   <div class="skeleton-content">

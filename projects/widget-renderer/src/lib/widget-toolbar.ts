@@ -1,9 +1,10 @@
 import { Component, input, output } from '@angular/core';
 import { RefreshConfig } from './widget.model';
+import { defaultWidgetRendererLocale, WidgetRendererLocale } from './widget-locale';
 
 @Component({
   selector: 'widget-toolbar',
-  template: `<div class="widget-toolbar" aria-label="Widget actions">
+  template: `<div class="widget-toolbar" [attr.aria-label]="locale().aria.toolbarActions">
     @if (refresh()?.enabled) {
       <button
         type="button"
@@ -19,8 +20,12 @@ import { RefreshConfig } from './widget.model';
       <button
         type="button"
         class="icon-button"
-        [attr.aria-label]="sensitiveVisible() ? 'Hide sensitive data' : 'Show sensitive data'"
-        [title]="sensitiveVisible() ? 'Hide sensitive data' : 'Show sensitive data'"
+        [attr.aria-label]="
+          sensitiveVisible() ? locale().aria.hideSensitiveData : locale().aria.showSensitiveData
+        "
+        [title]="
+          sensitiveVisible() ? locale().aria.hideSensitiveData : locale().aria.showSensitiveData
+        "
         (click)="sensitiveToggled.emit()"
       >
         @if (sensitiveVisible()) {
@@ -97,6 +102,7 @@ export class WidgetToolbar {
   readonly refresh = input<RefreshConfig | null>(null);
   readonly hasSensitiveElements = input(false);
   readonly sensitiveVisible = input(false);
+  readonly locale = input<WidgetRendererLocale>(defaultWidgetRendererLocale);
   readonly refreshRequested = output<void>();
   readonly sensitiveToggled = output<void>();
 }

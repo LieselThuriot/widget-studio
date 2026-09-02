@@ -24,6 +24,11 @@ import {
   widgetWidth as getWidgetWidth,
 } from './widget-layout';
 import { WidgetTooltip } from './widget-tooltip';
+import {
+  defaultWidgetRendererLocale,
+  WidgetRendererLocale,
+  WidgetRendererLocaleOverrides,
+} from './widget-locale';
 
 export type WidgetLoading = boolean | Widget['size'];
 
@@ -44,6 +49,7 @@ export class WidgetRenderer implements OnDestroy {
   readonly widget = input<WidgetInput | null>(null);
   readonly loading = input<WidgetLoading>(false);
   readonly darkMode = input(false);
+  readonly locale = input<WidgetRendererLocaleOverrides>({});
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
@@ -54,6 +60,14 @@ export class WidgetRenderer implements OnDestroy {
     return widget === null ? { success: false as const, issues: [] } : safeParseWidgetInput(widget);
   });
   protected readonly isLoading = computed(() => this.loading() !== false);
+  protected readonly resolvedLocale = computed<WidgetRendererLocale>(() => ({
+    ...defaultWidgetRendererLocale,
+    aria: {
+      ...defaultWidgetRendererLocale.aria,
+      ...this.locale().aria,
+      chart: { ...defaultWidgetRendererLocale.aria.chart, ...this.locale().aria?.chart },
+    },
+  }));
   protected readonly loadingSize = computed<Widget['size']>(() => {
     const loading = this.loading();
     return typeof loading === 'string' ? loading : 'square';

@@ -1,5 +1,13 @@
 @if (isProgress(element())) {
-  <widget-progress-element [element]="progress(element())" [sensitiveHidden]="sensitiveHidden()" />
+  <widget-progress-element
+    [element]="progress(element())"
+    [sensitiveHidden]="sensitiveHidden()"
+    [locale]="locale()"
+  />
 } @else {
-  <widget-echarts-element [element]="chart(element())" [sensitiveHidden]="sensitiveHidden()" />
+  <widget-echarts-element
+    [element]="chart(element())"
+    [sensitiveHidden]="sensitiveHidden()"
+    [locale]="locale()"
+  />
 }

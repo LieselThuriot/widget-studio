@@ -28,19 +28,43 @@ describe('WidgetElementRenderer', () => {
   });
 
   it('does not carry an image failure to a replacement element with the same source', async () => {
-    fixture.componentRef.setInput('element', image('https://example.test/image.png'));
+    fixture.componentRef.setInput('element', {
+      ...image('https://example.test/image.png'),
+      alt: '',
+    });
     await fixture.whenStable();
 
     fixture.nativeElement.querySelector('img').dispatchEvent(new Event('error'));
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.image-placeholder')).not.toBeNull();
 
-    fixture.componentRef.setInput('element', image('https://example.test/image.png'));
+    fixture.componentRef.setInput('element', {
+      ...image('https://example.test/image.png'),
+      alt: '',
+    });
     await fixture.whenStable();
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('img')).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.image-placeholder')).toBeNull();
+  });
+
+  it('localizes the image failure fallback', async () => {
+    fixture.componentRef.setInput('locale', {
+      aria: { imageUnavailable: 'Image indisponible' },
+    });
+    fixture.componentRef.setInput('element', {
+      ...image('https://example.test/image.png'),
+      alt: '',
+    });
+    await fixture.whenStable();
+
+    fixture.nativeElement.querySelector('img').dispatchEvent(new Event('error'));
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('.image-placeholder').getAttribute('aria-label'),
+    ).toBe('Image indisponible');
   });
 
   it('makes a revealed sensitive chart accessible', async () => {

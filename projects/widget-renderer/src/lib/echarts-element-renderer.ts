@@ -12,6 +12,7 @@ import { ChartElement } from './widget.model';
 import { chartAccessibilitySummary, chartAriaLabel } from './chart-accessibility';
 import { chartOptions } from './chart-options';
 import { WidgetTooltip } from './widget-tooltip';
+import { defaultWidgetRendererLocale, WidgetRendererLocale } from './widget-locale';
 
 use([
   BarChart,
@@ -46,6 +47,7 @@ use([
 export class EchartsElementRenderer implements OnDestroy {
   readonly element = input.required<ChartElement>();
   readonly sensitiveHidden = input(false);
+  readonly locale = input<WidgetRendererLocale>(defaultWidgetRendererLocale);
   protected readonly summaryId = `chart-summary-${crypto.randomUUID()}`;
   private readonly chartHost = viewChild<ElementRef<HTMLDivElement>>('chartHost');
   private chartHostElement: HTMLDivElement | null = null;
@@ -82,10 +84,10 @@ export class EchartsElementRenderer implements OnDestroy {
     this.destroyChart();
   }
   protected ariaLabel(element: ChartElement): string {
-    return chartAriaLabel(element);
+    return chartAriaLabel(element, this.locale().aria.chart);
   }
   protected accessibilitySummary(element: ChartElement): string {
-    return chartAccessibilitySummary(element);
+    return chartAccessibilitySummary(element, this.locale().aria.chart);
   }
   private destroyChart(): void {
     this.resizeObserver?.disconnect();

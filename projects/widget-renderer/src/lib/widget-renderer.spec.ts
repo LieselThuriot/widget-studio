@@ -109,4 +109,45 @@ describe('WidgetRenderer', () => {
       fixture.nativeElement.querySelector('[aria-label="Show sensitive data"]'),
     ).not.toBeNull();
   });
+
+  it('renders and updates supplied locale labels', async () => {
+    fixture.componentRef.setInput('locale', {
+      aria: {
+        toolbarActions: 'Actions du widget',
+        showSensitiveData: 'Afficher les données sensibles',
+        hideSensitiveData: 'Masquer les données sensibles',
+      },
+    });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.widget-toolbar').getAttribute('aria-label')).toBe(
+      'Actions du widget',
+    );
+    expect(fixture.nativeElement.querySelector('.icon-button').getAttribute('aria-label')).toBe(
+      'Afficher les données sensibles',
+    );
+
+    fixture.componentRef.setInput('locale', {
+      aria: { showSensitiveData: 'Afficher les données privées' },
+    });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.icon-button').getAttribute('aria-label')).toBe(
+      'Afficher les données privées',
+    );
+    expect(fixture.nativeElement.querySelector('.widget-toolbar').getAttribute('aria-label')).toBe(
+      'Widget actions',
+    );
+  });
+
+  it('localizes the loading status', async () => {
+    fixture.componentRef.setInput('loading', true);
+    fixture.componentRef.setInput('locale', { aria: { loading: 'Chargement du widget' } });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[role="status"]').getAttribute('aria-label')).toBe(
+      'Chargement du widget',
+    );
+  });
 });

@@ -4,6 +4,42 @@ Reusable Angular components for rendering compact, grid-based widgets with text,
 
 The package is designed to receive a plain `WidgetContract` from an API or application. Consumers do not need to add editor-only element IDs or hydrate the data before rendering.
 
+### Localization
+
+Renderer-owned accessible labels use English defaults and can be localized with the optional `locale` input. The input accepts partial nested overrides, so users can provide a complete locale or change only the values they need. Widget content, labels, image alternative text, refresh labels, and validation diagnostics remain consumer-provided.
+
+```ts
+import {
+  germanWidgetRendererLocale,
+  WidgetRendererLocaleOverrides,
+} from 'widget-renderer';
+
+readonly rendererLocale: WidgetRendererLocaleOverrides = {
+  ...germanWidgetRendererLocale,
+};
+```
+
+Built-in `germanWidgetRendererLocale`, `frenchWidgetRendererLocale`, and `dutchWidgetRendererLocale` values are available. For a small customization, override only the required values:
+
+```ts
+import { WidgetRendererLocaleOverrides } from 'widget-renderer';
+
+readonly rendererLocale: WidgetRendererLocaleOverrides = {
+  aria: {
+    showSensitiveData: 'Afficher les données privées',
+    chart: {
+      noDataSummary: (title) => `${title ? `${title} : ` : ''}aucune donnée.`,
+    },
+  },
+};
+```
+
+```html
+<widget-renderer [widget]="widget" [locale]="rendererLocale" />
+```
+
+The `aria` locale covers the loading status, toolbar, sensitive-content controls, image failure fallback, chart and progress accessible names, generated chart summaries, and progress segment labels. Locale changes update the rendered labels without changing widget-provided content.
+
 ## Features
 
 - Render `mini`, `compact`, `tall`, `square`, `wide`, `mega`, `banner`, and `hero` widgets from a version 2 contract

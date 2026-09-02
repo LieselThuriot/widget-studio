@@ -3,6 +3,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ProgressElementRenderer } from './progress-element-renderer';
 import { ProgressElement } from './widget.model';
 import { WidgetTooltip } from './widget-tooltip';
+import {
+  defaultWidgetRendererLocale,
+  dutchWidgetRendererLocale,
+  frenchWidgetRendererLocale,
+  germanWidgetRendererLocale,
+} from './widget-locale';
 
 const element = {
   type: 'progress',
@@ -48,6 +54,38 @@ describe('ProgressElementRenderer', () => {
     expect(fixture.nativeElement.querySelector('.progress-label')?.textContent).toContain(
       'Done: 0–4',
     );
+  });
+
+  it('localizes the segment accessible label', async () => {
+    fixture.componentRef.setInput('locale', {
+      aria: {
+        ...defaultWidgetRendererLocale.aria,
+        chart: {
+          ...defaultWidgetRendererLocale.aria.chart,
+          progressSegmentLabel: (label: string, value: string) => `${label} : ${value}`,
+        },
+      },
+    });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('.progress-segment').getAttribute('aria-label'),
+    ).toBe('Done : 4');
+  });
+
+  it.each([
+    [germanWidgetRendererLocale, 'Done: 4'],
+    [frenchWidgetRendererLocale, 'Done : 4'],
+    [dutchWidgetRendererLocale, 'Done: 4'],
+  ])('uses the built-in locale for the segment accessible label', async (locale, expected) => {
+    fixture.componentRef.setInput('locale', locale);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('.progress-segment').getAttribute('aria-label'),
+    ).toBe(expected);
   });
   it('shows and hides a segment tooltip with focus and blur', () => {
     vi.useFakeTimers();
