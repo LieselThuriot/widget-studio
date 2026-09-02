@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LandscapeState, LandscapeStateChange } from './landscape.model';
+import { WidgetLandscapeLocale } from './landscape-locale';
 import { WidgetLandscape } from './widget-landscape';
 
 describe('WidgetLandscape', () => {
@@ -85,9 +86,7 @@ describe('WidgetLandscape', () => {
   }
 
   function enterEdit(): void {
-    (
-      fixture.nativeElement.querySelector('[aria-label="Edit landscape"]') as HTMLButtonElement
-    ).click();
+    (fixture.nativeElement.querySelector('.landscape-icon-button') as HTMLButtonElement).click();
     fixture.detectChanges();
   }
 
@@ -195,6 +194,102 @@ describe('WidgetLandscape', () => {
 
   it('shows the edit button when the palette has an item', () => {
     expect(fixture.nativeElement.querySelector('[aria-label="Edit landscape"]')).not.toBeNull();
+  });
+
+  it('renders the supplied locale for visible landscape UI', () => {
+    const locale: WidgetLandscapeLocale = {
+      landscape: 'Tableau',
+      columns: 'Colonnes',
+      responsive: 'Adaptatif',
+      cancel: 'Annuler',
+      confirm: 'Confirmer',
+      addWidget: 'Ajouter un widget',
+      clearAll: 'Tout effacer',
+      emptyEditMode: "Choisissez un widget dans la palette pour l'ajouter.",
+      emptyLandscape: 'Ouvrez le mode édition pour ajouter un widget.',
+      columnCount: (count) => `${count} colonnes`,
+      refreshFallback: 'Actualiser le widget',
+      aria: {
+        columns: 'Colonnes du tableau',
+        responsive: 'Tableau adaptatif',
+        edit: 'Modifier le tableau',
+        widgets: 'Widgets',
+        widgetFootprint: (columns, rows) => `Taille du widget : ${columns} × ${rows}`,
+        selectWidget: 'Sélectionner le widget',
+        deleteWidget: 'Supprimer le widget',
+      },
+    };
+
+    fixture.componentRef.setInput('locale', locale);
+    fixture.detectChanges();
+    enterEdit();
+
+    expect(fixture.nativeElement.querySelector('.landscape-kicker').textContent).toContain(
+      'Tableau',
+    );
+    expect(fixture.nativeElement.querySelector('.landscape-columns-field').textContent).toContain(
+      'Colonnes',
+    );
+    expect(
+      fixture.nativeElement.querySelector('.landscape-responsive-label').textContent,
+    ).toContain('Adaptatif');
+    expect(fixture.nativeElement.querySelector('.landscape-clear-button').textContent).toContain(
+      'Tout effacer',
+    );
+    expect(fixture.nativeElement.querySelector('.landscape-button').textContent).toContain(
+      'Annuler',
+    );
+    expect(fixture.nativeElement.querySelector('.landscape-button--primary').textContent).toContain(
+      'Confirmer',
+    );
+    expect(
+      fixture.nativeElement.querySelector('[aria-label="Colonnes du tableau"]'),
+    ).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('[aria-label="Tableau adaptatif"]')).not.toBeNull();
+  });
+
+  it('updates visible locale text when the locale changes', () => {
+    fixture.componentRef.setInput('state', { ...structuredClone(state), widgets: [] });
+    fixture.componentRef.setInput('editMode', true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.landscape-empty').textContent).toContain(
+      'Choose a widget',
+    );
+
+    fixture.componentRef.setInput('locale', {
+      ...fixture.componentInstance.locale(),
+      emptyEditMode: 'Ajoutez un widget depuis la palette.',
+    });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.landscape-empty').textContent).toContain(
+      'Ajoutez un widget depuis la palette.',
+    );
+  });
+
+  it('falls back to English for omitted locale values', () => {
+    fixture.componentRef.setInput('locale', { cancel: 'Abandonner' });
+    fixture.componentRef.setInput('editMode', true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.landscape-button').textContent).toContain(
+      'Abandonner',
+    );
+    expect(fixture.nativeElement.querySelector('.landscape-button--primary').textContent).toContain(
+      'Confirm',
+    );
+  });
+
+  it('merges partial ARIA overrides with the default locale', () => {
+    fixture.componentRef.setInput('locale', { aria: { deleteWidget: 'Supprimer le widget' } });
+    fixture.componentRef.setInput('editMode', true);
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('[aria-label="Supprimer le widget"]'),
+    ).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('[aria-label="Landscape columns"]')).not.toBeNull();
   });
 
   it('keeps responsive mode disabled by default', () => {

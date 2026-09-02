@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { defaultWidgetLandscapeLocale, WidgetLandscapeLocale } from './landscape-locale';
 
 @Component({
   selector: 'widget-landscape-toolbar',
@@ -14,6 +15,7 @@ export class LandscapeToolbar {
   readonly columns = input.required<number>();
   readonly minimumColumns = input.required<number>();
   readonly responsive = input(false);
+  readonly locale = input<WidgetLandscapeLocale>(defaultWidgetLandscapeLocale);
   readonly editRequested = output<void>();
   readonly editCancelled = output<void>();
   readonly confirm = output<void>();

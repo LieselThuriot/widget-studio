@@ -2,6 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { ButtonElement, WidgetRenderer } from 'widget-renderer';
 import { LandscapeWidget } from './landscape.model';
 import { footprintFor } from './landscape-layout';
+import { defaultWidgetLandscapeLocale, WidgetLandscapeLocale } from './landscape-locale';
 
 @Component({
   selector: 'widget-landscape-item',
@@ -17,6 +18,7 @@ export class LandscapeItem {
   readonly dragSource = input(false);
   readonly alternate = input(false);
   readonly darkMode = input(false);
+  readonly locale = input<WidgetLandscapeLocale>(defaultWidgetLandscapeLocale);
   readonly widgetSelected = output<string>();
   readonly deleted = output<string>();
   readonly dragStarted = output<{ event: DragEvent; id: string }>();

@@ -1,13 +1,13 @@
-<aside #palette class="landscape-palette" aria-label="Widgets">
+<aside #palette class="landscape-palette" [attr.aria-label]="locale().aria.widgets">
   <div class="landscape-palette-heading">
-    <span class="landscape-kicker">Add widget</span>
+    <span class="landscape-kicker">{{ locale().addWidget }}</span>
     <button
       type="button"
       class="landscape-clear-button"
       [disabled]="!hasWidgets()"
       (click)="cleared.emit()"
     >
-      Clear all
+      {{ locale().clearAll }}
     </button>
   </div>
   @for (item of items(); track item.id) {
@@ -25,7 +25,7 @@
         @if (footprint(item); as size) {
           <span
             class="palette-size"
-            [attr.aria-label]="'Widget footprint: ' + size.columnSpan + ' × ' + size.rowSpan"
+            [attr.aria-label]="locale().aria.widgetFootprint(size.columnSpan, size.rowSpan)"
             >{{ size.columnSpan }} × {{ size.rowSpan }}</span
           >
         }

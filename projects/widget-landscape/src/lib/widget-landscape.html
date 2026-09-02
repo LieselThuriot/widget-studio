@@ -14,6 +14,7 @@
     [columns]="activeState().columns"
     [minimumColumns]="minimumColumns()"
     [responsive]="activeState().responsive"
+    [locale]="resolvedLocale()"
     (editRequested)="enterEdit()"
     (editCancelled)="cancelEdit()"
     (confirm)="confirmEdit()"
@@ -45,6 +46,7 @@
           [dragSource]="item.id === dragId()"
           [alternate]="index % 2 === 0"
           [darkMode]="darkMode()"
+          [locale]="resolvedLocale()"
           (dragStarted)="startDrag($event.event, $event.id)"
           (dragEnded)="endDrag()"
           (widgetSelected)="selectWidget($event)"
@@ -73,11 +75,7 @@
       }
       @if (!renderedState().widgets.length) {
         <p class="landscape-empty">
-          {{
-            isEditing()
-              ? 'Choose a widget from the palette to add it.'
-              : 'Open edit mode to add a widget.'
-          }}
+          {{ isEditing() ? resolvedLocale().emptyEditMode : resolvedLocale().emptyLandscape }}
         </p>
       }
     </div>
@@ -87,6 +85,7 @@
         [items]="paletteItems()"
         [invalidIds]="invalidPaletteIds()"
         [hasWidgets]="activeState().widgets.length > 0"
+        [locale]="resolvedLocale()"
         (added)="addFromPalette($event)"
         (cleared)="clearWidgets()"
         (dragStarted)="startPaletteDrag($event.event, $event.item)"

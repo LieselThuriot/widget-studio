@@ -1,16 +1,16 @@
 <header class="landscape-toolbar">
   @if (editing()) {
     <div class="landscape-toolbar-heading">
-      <span class="landscape-kicker">Widget landscape</span>
+      <span class="landscape-kicker">{{ locale().landscape }}</span>
       @if (!columnsLocked()) {
         <div class="landscape-column-control">
           <label class="landscape-columns-field">
-            <span>Columns</span>
+            <span>{{ locale().columns }}</span>
             <input
               type="number"
               [min]="minimumColumns()"
               [value]="columns()"
-              aria-label="Landscape columns"
+              [attr.aria-label]="locale().aria.columns"
               (input)="columnsChanged.emit($event)"
             />
           </label>
@@ -20,16 +20,16 @@
                 type="checkbox"
                 class="landscape-responsive-toggle"
                 [checked]="responsive()"
-                aria-label="Responsive landscape"
+                [attr.aria-label]="locale().aria.responsive"
                 (change)="responsiveChanged.emit($event)"
               />
               <span class="landscape-responsive-slider" aria-hidden="true"></span>
-              <span class="landscape-responsive-label">Responsive</span>
+              <span class="landscape-responsive-label">{{ locale().responsive }}</span>
             </label>
           }
         </div>
       } @else {
-        <strong>{{ columns() }} columns</strong>
+        <strong>{{ locale().columnCount(columns()) }}</strong>
       }
     </div>
   }
@@ -39,8 +39,8 @@
         <button
           type="button"
           class="landscape-icon-button"
-          aria-label="Edit landscape"
-          title="Edit landscape"
+          [attr.aria-label]="locale().aria.edit"
+          [title]="locale().aria.edit"
           (click)="editRequested.emit()"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -58,14 +58,14 @@
     } @else {
       <div class="landscape-toolbar-actions">
         <button type="button" class="landscape-button" (click)="editCancelled.emit()">
-          Cancel
+          {{ locale().cancel }}
         </button>
         <button
           type="button"
           class="landscape-button landscape-button--primary"
           (click)="confirm.emit()"
         >
-          Confirm
+          {{ locale().confirm }}
         </button>
       </div>
     }

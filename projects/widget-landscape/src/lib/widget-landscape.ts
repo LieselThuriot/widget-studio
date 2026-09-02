@@ -34,6 +34,11 @@ import {
   LandscapeWidget,
   LandscapeRefreshEvent,
 } from './landscape.model';
+import {
+  defaultWidgetLandscapeLocale,
+  WidgetLandscapeLocale,
+  WidgetLandscapeLocaleOverrides,
+} from './landscape-locale';
 
 @Component({
   selector: 'widget-landscape',
@@ -58,6 +63,7 @@ export class WidgetLandscape implements OnDestroy {
   readonly columnsLocked = input(false);
   readonly darkMode = input(false);
   readonly responsive = input<boolean | undefined>();
+  readonly locale = input<WidgetLandscapeLocaleOverrides>({});
   readonly stateChange = output<LandscapeStateChange>();
   readonly editModeChange = output<boolean>();
   readonly widgetSelected = output<{ id: string }>();
@@ -122,6 +128,18 @@ export class WidgetLandscape implements OnDestroy {
   protected readonly activeState = computed(
     () => this.dragPreview() ?? this.draft() ?? this.state(),
   );
+  protected readonly resolvedLocale = computed<WidgetLandscapeLocale>(() => {
+    const locale = this.locale();
+
+    return {
+      ...defaultWidgetLandscapeLocale,
+      ...locale,
+      aria: {
+        ...defaultWidgetLandscapeLocale.aria,
+        ...locale.aria,
+      },
+    };
+  });
   protected readonly renderedState = computed(() => {
     const state = this.activeState();
     const columns = this.displayedColumns();
@@ -505,7 +523,10 @@ export class WidgetLandscape implements OnDestroy {
 
   protected refresh(id: string): void {
     const widget = this.activeState().widgets.find((item) => item.id === id)?.widget;
-    this.refreshRequested.emit({ id, label: widget?.refresh?.label ?? 'Refresh widget' });
+    this.refreshRequested.emit({
+      id,
+      label: widget?.refresh?.label ?? this.resolvedLocale().refreshFallback,
+    });
   }
 
   protected action(id: string, event: { element: ButtonElement; event: Event }): void {
