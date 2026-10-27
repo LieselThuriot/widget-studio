@@ -13,7 +13,7 @@ Build, preview, and share compact, data-driven widgets in the browser.
 
 **[Open Widget Studio](https://widget-studio.liesel.dev)**
 
-[Features](#features) • [Packages](#packages) • [Getting started](#getting-started) • [Using the editor](#using-the-editor) • [Development](#development) • [Releasing](#releasing) • [Project structure](#project-structure)
+[Features](#features) • [Packages](#packages) • [Getting started](#getting-started) • [Using the editor](#using-the-editor) • [Development](#development) • [Deployment](#deployment) • [Project structure](#project-structure)
 
 </div>
 
@@ -134,8 +134,8 @@ The editor imports both libraries through workspace TypeScript path aliases, so 
 # Build the renderer, then the landscape library
 npm run build:libraries
 
-# Build, pack, and install the renderer into a temporary consumer, then verify its public API
-npm run verify:renderer-package
+# Pack both libraries, install them into temporary consumer projects, and verify their public APIs
+npm run verify:packages
 
 # Create .tgz files for inspection in dist/
 npm run pack:libraries
@@ -157,28 +157,9 @@ dotnet test projects/widget-contracts/WidgetStudio.slnx
 dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj -c Release -o dist/nuget
 ```
 
-## Releasing
-
-### Editor
+## Deployment
 
 Every push to `main` runs [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml), which lints, tests, builds, and deploys the editor to GitHub Pages at [widget-studio.liesel.dev](https://widget-studio.liesel.dev).
-
-### Packages
-
-Packages are published manually. Keep the versions in the root `package.json`, both library `package.json` files, and `WidgetStudio.Contracts.csproj` in step, then run all checks and publish the renderer before the landscape library, because the landscape library depends on it:
-
-```bash
-npm run build:libraries
-npm run verify:renderer-package
-npm publish dist/widget-renderer
-npm publish dist/widget-landscape
-
-dotnet test projects/widget-contracts/WidgetStudio.slnx
-dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj -c Release -o dist/nuget
-dotnet nuget push dist/nuget/WidgetStudio.Contracts.<version>.nupkg --api-key <key> --source https://api.nuget.org/v3/index.json
-```
-
-Dependabot opens grouped weekly updates for npm, NuGet, and GitHub Actions. TypeScript minor and major updates are ignored because Angular pins the supported TypeScript range; upgrade TypeScript together with Angular.
 
 ## Project structure
 
