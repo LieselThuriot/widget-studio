@@ -1,0 +1,49 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    ignore:
+      # Angular pins TypeScript to a minor range; upgrade together with Angular.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major, version-update:semver-minor]
+    groups:
+      angular:
+        patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+          - ng-packagr
+      lint-format:
+        patterns:
+          - eslint
+          - '@eslint/*'
+          - angular-eslint
+          - typescript-eslint
+          - prettier
+      test:
+        patterns:
+          - vitest
+          - jsdom
+      other:
+        patterns:
+          - '*'
+
+  - package-ecosystem: nuget
+    directory: /projects/widget-contracts
+    schedule:
+      interval: weekly
+    groups:
+      nuget:
+        patterns:
+          - '*'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - '*'

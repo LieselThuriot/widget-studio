@@ -72,7 +72,7 @@ describe('WidgetRenderer', () => {
     expect(getComputedStyle(shell).overflow).toBe('visible');
     expect(getComputedStyle(viewport).overflow).toBe('hidden');
     expect(getComputedStyle(viewport).borderRadius).toBe('var(--widget-renderer-radius)');
-    expect(getComputedStyle(background).overflow).toBe('');
+    expect(getComputedStyle(background).overflow).toBe('visible');
     expect(getComputedStyle(background).borderRadius).toBe('');
     expect(getComputedStyle(overlay).borderRadius).toBe('');
     expect(getComputedStyle(tooltipLayer).zIndex).toBe('6');
