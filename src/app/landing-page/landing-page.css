@@ -69,6 +69,7 @@
 @media (min-width: 1441px) {
   .landing-hero,
   .landing-features,
+  .landing-packages,
   .landing-footer-cta {
     max-width: 1180px;
     margin-inline: auto;
@@ -188,6 +189,76 @@
   padding: 96px 0 72px;
 }
 
+.landing-packages {
+  padding: 0 0 72px;
+}
+
+.landing-packages .landing-feature-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.landing-section-heading__intro {
+  margin: 14px 0 0;
+  color: var(--editor-text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.landing-section-heading__intro a,
+.landing-package-card__links a {
+  color: var(--editor-accent-strong);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.landing-section-heading__intro a:focus-visible,
+.landing-package-card__links a:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 2px;
+}
+
+.landing-package-card {
+  --landing-registry-color: #cb3837;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 0;
+}
+
+.landing-package-card:has(.landing-package-card__registry--nuget) {
+  --landing-registry-color: #2f7bd8;
+}
+
+.landing-package-card__registry {
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, var(--landing-registry-color) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--landing-registry-color) 16%, transparent);
+  color: color-mix(in srgb, var(--landing-registry-color) 45%, var(--editor-text-primary));
+  font:
+    700 11px/1.4 'DM Mono',
+    monospace;
+}
+
+.landing-package-card h3 {
+  margin: 18px 0 10px;
+  overflow-wrap: anywhere;
+}
+
+.landing-package-card p {
+  margin-bottom: 18px;
+}
+
+.landing-package-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: auto;
+  font-size: 13px;
+}
+
 .landing-section-heading {
   max-width: 600px;
 }
@@ -272,6 +343,10 @@
 
   .landing-feature-grid {
     grid-template-columns: 1fr;
+  }
+
+  .landing-packages .landing-feature-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-footer-cta {

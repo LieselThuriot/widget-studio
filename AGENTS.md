@@ -15,7 +15,9 @@
 - For TypeScript, template, or CSS changes, run `npm run format`, `npm run lint`, and `npm test -- --watch=false`; use `npm run format:check` when formatting must not rewrite files.
 - Use `npm run build:app` for the editor, `npm run build:renderer` for `widget-renderer`, `npm run build:landscape` for an already-built renderer plus `widget-landscape`, `npm run build:libraries` for both libraries, and `npm run build` for all three projects in dependency order: renderer, landscape, then editor. The editor uses source path aliases; `widget-landscape` consumes the built renderer declarations.
 - For `widget-renderer` package changes, run `npm run verify:renderer-package` after the library build. It packs `dist/widget-renderer`, installs it into a temporary consumer, and checks the public validation/normalization API.
-- For C# contract or contract-test changes, run `dotnet test projects/widget-contracts/WidgetStudio.slnx` and `dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj`.
+- For C# contract or contract-test changes, run `dotnet test projects/widget-contracts/WidgetStudio.slnx` and `dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj`. The tests use xUnit v3 on Microsoft.Testing.Platform (selected in `global.json`); do not add VSTest packages such as `Microsoft.NET.Test.Sdk` or `xunit.runner.visualstudio`.
+- TypeScript stays on the minor range Angular supports (currently 6.0.x); upgrade it together with Angular.
+- Keep the versions of the root `package.json`, both library `package.json` files, and `WidgetStudio.Contracts.csproj` in step. Package READMEs are shown on npm and NuGet: use absolute URLs and avoid GitHub-only Markdown such as `> [!NOTE]` there.
 
 ## Contracts
 

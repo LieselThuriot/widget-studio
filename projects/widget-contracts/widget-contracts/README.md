@@ -1,23 +1,64 @@
 # WidgetStudio.Contracts
 
-`WidgetStudio.Contracts` contains the C# API contracts for the JSON consumed by the [`@lieselthuriot/widget-renderer`](https://www.npmjs.com/package/@lieselthuriot/widget-renderer) Angular library. The package targets `netstandard2.0` and is published as the `WidgetStudio.Contracts` NuGet package.
+C# contracts for the widget JSON rendered by the [`@lieselthuriot/widget-renderer`](https://www.npmjs.com/package/@lieselthuriot/widget-renderer) Angular package. Build widgets in a .NET API, serialize them with the included source-generated context, and render them in the browser.
 
-The package exposes the source-generated `WidgetJsonContext`, which is configured for the renderer wire format:
+- **Live editor:** [widget-studio.liesel.dev](https://widget-studio.liesel.dev). Design a widget visually and copy the generated C# code.
+- **Source and issues:** [github.com/LieselThuriot/widget-studio](https://github.com/LieselThuriot/widget-studio)
 
-```csharp
-using System.Text.Json;
-using WidgetStudio.Contracts;
+The package targets `netstandard2.0`.
 
-var json = JsonSerializer.Serialize(widget, WidgetJsonContext.Default.WidgetContract);
-```
-
-Install the package with:
+## Installation
 
 ```bash
 dotnet add package WidgetStudio.Contracts
 ```
 
-The generated context emits camel-case property names, lowercase enum values, space-separated anchor values such as `"top left"`, and the `type` discriminator required by the renderer's polymorphic element model. It also omits null properties. Do not use the default `JsonSerializerOptions` when producing widget payloads.
+## Usage
+
+```csharp
+using System.Text.Json;
+using WidgetStudio.Contracts;
+using WidgetStudio.Contracts.Elements;
+using WidgetStudio.Contracts.Enums;
+using WidgetStudio.Contracts.Styles;
+
+var widget = new WidgetContract
+{
+    Id = "hello-widget",
+    Size = WidgetSize.Square,
+    Rows = [GridTrack.Auto],
+    Columns = [GridTrack.Star()],
+    Background = new BackgroundConfig
+    {
+        Color = WidgetColor.Rgb(23, 32, 51),
+        Sensitive = false,
+        Repeat = false,
+        Size = BackgroundSize.Cover,
+        Anchor = ElementAnchor.Center,
+    },
+    Refresh = new RefreshConfig { Enabled = true, Label = "Refresh widget" },
+    Elements =
+    [
+        new TextElement
+        {
+            Grid = new ElementGrid { Row = 0, Column = 0, RowSpan = 1, ColumnSpan = 1, Anchor = ElementAnchor.Center },
+            Sensitive = false,
+            Text = "Hello from .NET",
+            Style = new TextStyle
+            {
+                Color = WidgetColor.White,
+                Font = new TextFontStyle { Size = 16, Bold = true },
+                Align = TextAlign.Center,
+                Wrap = true,
+            },
+        },
+    ],
+};
+
+var json = JsonSerializer.Serialize(widget, WidgetJsonContext.Default.WidgetContract);
+```
+
+Always serialize with `WidgetJsonContext`. It emits camel-case property names, lowercase enum values, space-separated anchor values such as `"top left"`, and the `type` discriminator required by the renderer's polymorphic element model. It also omits null properties. The default `JsonSerializerOptions` do not produce the renderer wire format.
 
 This package is primarily a serialization layer. When deserializing external JSON with `WidgetJsonContext`, put each polymorphic discriminator before the object's other properties: `type` first for widget elements and `kind` first for progress items. JSON produced by `WidgetJsonContext` already has this order.
 
@@ -36,17 +77,10 @@ var transparent = WidgetColor.Transparent;           // #00000000
 
 `Pastel` accepts `#RGB`, `#RRGGBB`, and `#RRGGBBAA` values, blends the color toward white, and preserves an input alpha channel. Its default blend amount is 50%; pass a value from `0` to `1` as the second argument to control the blend.
 
-Build or pack the package from the repository root:
+## Compatibility
 
-```bash
-dotnet build projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj
-dotnet pack projects/widget-contracts/widget-contracts/WidgetStudio.Contracts.csproj
-```
+The package and the npm renderer share the same JSON wire format, and the repository tests serialized contracts against the built renderer. Use matching versions of `WidgetStudio.Contracts` and `@lieselthuriot/widget-renderer`.
 
-Run the contract tests, including compatibility tests against the built renderer library, with:
+## License
 
-```bash
-dotnet test projects/widget-contracts/WidgetStudio.slnx
-```
-
-Contract changes in `projects/widget-renderer/` must be mirrored here and covered by the compatibility tests. The TypeScript renderer contract and this package intentionally share the same JSON wire format.
+[MIT](https://github.com/LieselThuriot/widget-studio/blob/main/LICENSE)

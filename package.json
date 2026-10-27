@@ -1,8 +1,19 @@
 {
-  "name": "widget",
-  "version": "0.0.0",
+  "name": "widget-studio",
+  "version": "0.1.0",
+  "description": "Browser editor for composing, previewing, and sharing data-driven dashboard widgets.",
+  "author": {
+    "name": "Liesel Thuriot"
+  },
   "license": "MIT",
   "homepage": "https://widget-studio.liesel.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LieselThuriot/widget-studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LieselThuriot/widget-studio/issues"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

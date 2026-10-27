@@ -44,6 +44,34 @@ describe('App', () => {
     ).toBe('/compose');
   });
 
+  it('should link to the published packages from the landing page', async () => {
+    const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const cards = Array.from(
+      fixture.nativeElement.querySelectorAll('.landing-package-card'),
+    ) as HTMLElement[];
+    expect(cards.map((card) => card.querySelector('h3')?.textContent?.trim())).toEqual([
+      '@lieselthuriot/widget-renderer',
+      '@lieselthuriot/widget-landscape',
+      'WidgetStudio.Contracts',
+    ]);
+    const [registryLink, docsLink] = Array.from(
+      cards[2].querySelectorAll('.landing-package-card__links a'),
+    ) as HTMLAnchorElement[];
+    const headingId = cards[2].querySelector('h3')?.id;
+    expect(registryLink.textContent?.trim()).toBe('View on NuGet');
+    expect(registryLink.getAttribute('href')).toBe(
+      'https://www.nuget.org/packages/WidgetStudio.Contracts',
+    );
+    expect(registryLink.getAttribute('rel')).toBe('noopener');
+    expect(registryLink.getAttribute('aria-describedby')).toBe(headingId);
+    expect(docsLink.textContent?.trim()).toBe('Documentation');
+    expect(docsLink.getAttribute('aria-describedby')).toBe(headingId);
+  });
+
   it('should toggle dark mode from the landing page', async () => {
     const fixture = TestBed.createComponent(App);
     await TestBed.inject(Router).navigateByUrl('/');

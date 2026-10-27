@@ -63,6 +63,47 @@
     </div>
   </section>
 
+  <section class="landing-packages" aria-labelledby="packages-title">
+    <div class="landing-section-heading">
+      <p class="landing-eyebrow">Take it to production</p>
+      <h2 id="packages-title">Published packages.</h2>
+      <p class="landing-section-heading__intro">
+        Render the widgets you design here in your own Angular app, and produce them from a .NET
+        API. The source lives on
+        <a [href]="repositoryUrl" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+    </div>
+    <div class="landing-feature-grid">
+      @for (pkg of packages; track pkg.name) {
+        <article class="landing-feature-card landing-package-card">
+          <span
+            class="landing-package-card__registry"
+            [class.landing-package-card__registry--nuget]="pkg.registry === 'NuGet'"
+            >{{ pkg.registry }}</span
+          >
+          <h3 [id]="'package-' + $index">{{ pkg.name }}</h3>
+          <p>{{ pkg.description }}</p>
+          <div class="landing-package-card__links">
+            <a
+              [href]="pkg.registryUrl"
+              target="_blank"
+              rel="noopener"
+              [attr.aria-describedby]="'package-' + $index"
+              >View on {{ pkg.registry }}</a
+            >
+            <a
+              [href]="pkg.docsUrl"
+              target="_blank"
+              rel="noopener"
+              [attr.aria-describedby]="'package-' + $index"
+              >Documentation</a
+            >
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
   <section class="landing-footer-cta" aria-labelledby="cta-title">
     <div>
       <p class="landing-eyebrow">Ready when you are</p>

@@ -4,17 +4,130 @@ Reusable Angular components for rendering compact, grid-based widgets with text,
 
 The package is designed to receive a plain `WidgetContract` from an API or application. Consumers do not need to add editor-only element IDs or hydrate the data before rendering.
 
-Try it in the live editor at [widget-studio.liesel.dev](https://widget-studio.liesel.dev).
+- **Live editor:** [widget-studio.liesel.dev](https://widget-studio.liesel.dev). Design a widget and copy its JSON.
+- **Dashboard grid:** [`@lieselthuriot/widget-landscape`](https://www.npmjs.com/package/@lieselthuriot/widget-landscape)
+- **C# contracts:** [`WidgetStudio.Contracts`](https://www.nuget.org/packages/WidgetStudio.Contracts) produces JSON in the same format from .NET.
 
 ## Installation
 
-```sh
-npm install @lieselthuriot/widget-renderer echarts
+```bash
+npm install @lieselthuriot/widget-renderer
+```
+
+`@angular/common`, `@angular/core`, and `echarts` are peer dependencies. The package supports Angular 21 and 22 and ECharts 6.x. npm, pnpm, and Bun install missing peer dependencies automatically; with Yarn, also add `echarts`.
+
+## Features
+
+- Render `mini`, `compact`, `tall`, `square`, `wide`, `mega`, `banner`, and `hero` widgets from a version 2 contract
+- Place elements with configurable rows, columns, spans, and anchors
+- Support text, images, buttons, dividers, pie, donut, funnel, gauge, bar, line, and progress elements
+- Render charts with ECharts using SVG output
+- Validate incoming data with structured paths and messages
+- Normalize optional contract fields such as button defaults and text padding
+- Blur sensitive backgrounds and elements until explicitly revealed
+- Emit refresh and button-action events without making network requests
+- Provide accessible names and text summaries for charts and progress bars
+- Respect reduced-motion preferences for loading and active progress animations
+- Localize renderer-owned accessible labels, with built-in German, French, and Dutch locales
+
+## Usage
+
+Import the standalone `WidgetRenderer` component into an Angular component and bind a `WidgetContract`:
+
+```ts
+import { Component } from '@angular/core';
+import { ButtonElement, WidgetContract, WidgetRenderer } from '@lieselthuriot/widget-renderer';
+
+@Component({
+  selector: 'app-dashboard-card',
+  imports: [WidgetRenderer],
+  template: `
+    <widget-renderer
+      [widget]="widget"
+      [darkMode]="darkMode"
+      [loading]="loading"
+      (refreshRequested)="refreshWidget()"
+      (actionRequested)="handleAction($event)"
+    />
+  `,
+})
+export class DashboardCard {
+  readonly darkMode = false;
+  readonly loading = false;
+
+  readonly widget: WidgetContract = {
+    version: 2,
+    id: 'hello-widget',
+    size: 'square',
+    rows: [{ unit: 'auto' }],
+    columns: [{ size: 1, unit: 'star' }],
+    background: {
+      color: '#172033',
+      sensitive: false,
+      repeat: false,
+      size: 'cover',
+      anchor: 'center',
+    },
+    refresh: { enabled: true, label: 'Refresh widget' },
+    elements: [
+      {
+        type: 'text',
+        grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'center' },
+        sensitive: false,
+        text: 'Hello from Widget Renderer',
+        style: {
+          color: '#ffffff',
+          font: { size: 16, bold: true },
+          align: 'center',
+          wrap: true,
+        },
+      },
+    ],
+  };
+
+  refreshWidget(): void {
+    // Fetch updated data in the consuming application.
+  }
+
+  handleAction(event: { element: ButtonElement; event: Event }): void {
+    // Handle the configured button request in the consuming application.
+    console.log(event);
+  }
+}
+```
+
+> **Important:** `WidgetRenderer` emits `refreshRequested` and `actionRequested`. It does not call the configured button URL or perform refresh requests itself.
+
+### Loading state
+
+Set `loading` to `true` for the default square skeleton, or to a widget size such as `'wide'` for a matching skeleton:
+
+```html
+<widget-renderer [loading]="'wide'" [darkMode]="true" />
+```
+
+### Dark mode
+
+Pass `darkMode` to style the loading state for a dark surface. The rendered widget itself uses the colors provided by its contract, so applications can control the surrounding theme and widget palette independently.
+
+### Outputs
+
+`refreshRequested` is emitted when the refresh control is clicked. `actionRequested` is emitted with the clicked `ButtonElement` and DOM event:
+
+```ts
+import { ButtonElement } from '@lieselthuriot/widget-renderer';
+
+handleAction(event: { element: ButtonElement; event: Event }): void {
+  event.event.preventDefault();
+  const { method, url, body, requestRefresh } = event.element;
+  // Perform the application-specific request here.
+  console.log(method, url, body, requestRefresh);
+}
 ```
 
 ### Localization
 
-Renderer-owned accessible labels use English defaults and can be localized with the optional `locale` input. The input accepts partial nested overrides, so users can provide a complete locale or change only the values they need. Widget content, labels, image alternative text, refresh labels, and validation diagnostics remain consumer-provided.
+Renderer-owned accessible labels use English defaults and can be localized with the optional `locale` input. The input accepts partial nested overrides, so you can provide a complete locale or change only the values you need. Widget content, labels, image alternative text, refresh labels, and validation diagnostics remain consumer-provided.
 
 ```ts
 import {
@@ -48,128 +161,13 @@ readonly rendererLocale: WidgetRendererLocaleOverrides = {
 
 The `aria` locale covers the loading status, toolbar, sensitive-content controls, image failure fallback, chart and progress accessible names, generated chart summaries, and progress segment labels. Locale changes update the rendered labels without changing widget-provided content.
 
-## Features
-
-- Render `mini`, `compact`, `tall`, `square`, `wide`, `mega`, `banner`, and `hero` widgets from a version 2 contract
-- Place elements with configurable rows, columns, spans, and anchors
-- Support text, images, buttons, dividers, pie, donut, funnel, gauge, bar, line, and progress elements
-- Render charts with ECharts using SVG output
-- Validate incoming data with structured paths and messages
-- Normalize optional contract fields such as button defaults and text padding
-- Blur sensitive backgrounds and elements until explicitly revealed
-- Emit refresh and button-action events without making network requests
-- Provide accessible names and text summaries for charts and progress bars
-- Respect reduced-motion preferences for loading and active progress animations
-
-## Installation
-
-```bash
-npm install widget-renderer @angular/common @angular/core echarts
-```
-
-`@angular/common`, `@angular/core`, and `echarts` are peer dependencies. Use Angular 21 or 22 and ECharts 6.x, as declared by the package metadata.
-
-## Usage
-
-Import the standalone `WidgetRenderer` component into an Angular component and bind a `WidgetContract`:
-
-```ts
-import { Component } from '@angular/core';
-import { WidgetContract, WidgetRenderer } from '@lieselthuriot/widget-renderer';
-
-@Component({
-  selector: 'app-dashboard-card',
-  imports: [WidgetRenderer],
-  template: `
-    <widget-renderer
-      [widget]="widget"
-      [darkMode]="darkMode"
-      [loading]="loading"
-      (refreshRequested)="refreshWidget()"
-      (actionRequested)="handleAction($event)"
-    />
-  `,
-})
-export class DashboardCard {
-  readonly darkMode = false;
-  readonly loading = false;
-
-  readonly widget: WidgetContract = {
-    version: 2,
-    size: 'square',
-    rows: [{ unit: 'auto' }],
-    columns: [{ size: 1, unit: 'star' }],
-    background: {
-      color: '#172033',
-      sensitive: false,
-      repeat: false,
-      size: 'cover',
-      anchor: 'center',
-    },
-    refresh: { enabled: true, label: 'Refresh widget' },
-    elements: [
-      {
-        type: 'text',
-        grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1, anchor: 'center' },
-        sensitive: false,
-        text: 'Hello from Widget Renderer',
-        style: {
-          color: '#ffffff',
-          font: { size: 16, bold: true },
-          align: 'center',
-          wrap: true,
-        },
-      },
-    ],
-  };
-
-  refreshWidget(): void {
-    // Fetch updated data in the consuming application.
-  }
-
-  handleAction(event: { element: unknown; event: Event }): void {
-    // Handle the configured button request in the consuming application.
-    console.log(event);
-  }
-}
-```
-
-> [!IMPORTANT]
-> `WidgetRenderer` emits `refreshRequested` and `actionRequested`; it does not call the configured button URL or perform refresh requests itself.
-
-### Loading state
-
-Set `loading` to `true` for the default square skeleton, or to a widget size such as `'wide'` for a matching skeleton:
-
-```html
-<widget-renderer [loading]="'wide'" [darkMode]="true" />
-```
-
-### Dark mode
-
-Pass `darkMode` to style the loading state for a dark surface. The rendered widget itself uses the colors provided by its contract, so applications can control the surrounding theme and widget palette independently.
-
-### Outputs
-
-`refreshRequested` is emitted when the refresh control is clicked. `actionRequested` is emitted with the clicked `ButtonElement` and DOM event:
-
-```ts
-import { ButtonElement } from '@lieselthuriot/widget-renderer';
-
-handleAction(event: { element: ButtonElement; event: Event }): void {
-  event.event.preventDefault();
-  const { method, url, body, requestRefresh } = event.element;
-  // Perform the application-specific request here.
-  console.log(method, url, body, requestRefresh);
-}
-```
-
 ## Widget contract
 
 Every input must use `version: 2` and include:
 
 | Field        | Description                                                                                                                                          |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`         | A stable identifier for the widget                                                                                                                   |
 | `size`       | `mini`, `compact`, `square`, `wide`, `mega`, `banner`, `hero`, or `tall`; dimensions include the 8px layout gap                                      |
 | `rows`       | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
 | `columns`    | Non-empty grid tracks using `pixel`, `auto`, or `star` units; `size` is required for `pixel` and `star` tracks and must be omitted for `auto` tracks |
@@ -196,15 +194,18 @@ Editor-only `id` fields are not required. The renderer accepts `WidgetContract` 
 
 Set `sensitive: true` on the background or an element to blur it and remove hidden content from the accessible tree. The renderer provides a local show/hide control when sensitive content is present.
 
-> [!WARNING]
-> Sensitive-content handling is a display and privacy feature, not encryption. Sensitive values remain in the JavaScript object supplied by the consuming application.
+> **Warning:** Sensitive-content handling is a display and privacy feature, not encryption. Sensitive values remain in the JavaScript object supplied by the consuming application.
 
 ## Validation and normalization
 
 Use the exported helpers when data enters your application:
 
 ```ts
-import { normalizeWidgetInput, parseWidgetInput, safeParseWidgetInput } from '@lieselthuriot/widget-renderer';
+import {
+  normalizeWidgetInput,
+  parseWidgetInput,
+  safeParseWidgetInput,
+} from '@lieselthuriot/widget-renderer';
 
 const result = safeParseWidgetInput(payload);
 
@@ -222,42 +223,22 @@ const parsed = parseWidgetInput(payload);
 
 ## Public API
 
-The package entry point exports:
+Import everything from `@lieselthuriot/widget-renderer`; internal file paths are not part of the public API. The entry point exports:
 
-- Widget model types, including `WidgetContract`, `WidgetInput`, and element types
-- `WidgetRenderer` and `WidgetLoading`
+- `WidgetRenderer`, the standalone rendering component, and its `WidgetLoading` input type. Element and chart implementation components are internal.
+- Widget model types, including `WidgetContract`, `WidgetInput`, `Widget`, and the element types
 - `normalizeWidgetInput`
-- `safeParseWidgetInput`, `parseWidgetInput`, `isWidgetContract`, `isWidget`, and validation types
-- Grid layout helpers and widget dimensions
-- `WidgetRenderer` is the supported rendering entry point; element and chart implementation components are internal.
+- `safeParseWidgetInput`, `parseWidgetInput`, `isWidgetContract`, `isWidget`, `WidgetValidationError`, and the validation result types
+- Grid layout helpers and widget dimensions, such as `widgetWidth`, `widgetHeight`, `gridTemplate`, and `elementGridStyle`
+- Locales: `defaultWidgetRendererLocale`, `germanWidgetRendererLocale`, `frenchWidgetRendererLocale`, `dutchWidgetRendererLocale`, `WidgetRendererLocale`, and `WidgetRendererLocaleOverrides`
 - `chartAriaLabel` and `chartAccessibilitySummary`
 
-Import from `widget-renderer` rather than reaching into internal source files. The complete export list is maintained in [`src/public-api.ts`](https://github.com/LieselThuriot/widget-studio/blob/main/projects/widget-renderer/src/public-api.ts). The package metadata is in [`package.json`](package.json); Angular and ECharts are peer dependencies.
+The complete export list is maintained in [`src/public-api.ts`](https://github.com/LieselThuriot/widget-studio/blob/main/projects/widget-renderer/src/public-api.ts).
 
-## Development
+## Contributing
 
-This library is part of the parent Angular workspace. Run these commands from the workspace root:
+The package is developed in the [widget-studio repository](https://github.com/LieselThuriot/widget-studio), together with the editor, the landscape package, and the C# contracts. See the repository README for build, test, and release instructions. Report problems in the [issue tracker](https://github.com/LieselThuriot/widget-studio/issues).
 
-```bash
-# Install the locked dependency tree
-npm ci
+## License
 
-# Build the renderer library
-npm run build:renderer
-
-# Build, pack, install into a temporary consumer, and verify the public API
-npm run verify:renderer-package
-
-# Check formatting, lint, and tests
-npm run format:check
-npm run lint
-npm test -- --watch=false
-```
-
-The package output is written to `dist/widget-renderer`. Its Angular entry point is `src/public-api.ts`, and the package is compiled in Angular partial compilation mode for downstream applications.
-
-## Related technologies
-
-- [Angular](https://angular.dev/)
-- [Angular Package Format](https://angular.dev/tools/libraries/creating-libraries)
-- [Apache ECharts](https://echarts.apache.org/)
+[MIT](https://github.com/LieselThuriot/widget-studio/blob/main/LICENSE)
