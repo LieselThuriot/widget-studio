@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { WidgetElementType } from 'widget-renderer';
-import { Widget as RendererWidget } from 'widget-renderer';
+import { WidgetElementType } from '@lieselthuriot/widget-renderer';
+import { Widget as RendererWidget } from '@lieselthuriot/widget-renderer';
 import { Widget, WidgetElement } from '../editor-model';
 import { GridTrackPatch } from '../editor-state';
 import { AnchorControl } from './anchor-control/anchor-control';

@@ -4,6 +4,7 @@
 
 - This is an Angular 22 workspace with three projects: the editor app is `src/`, the reusable `widget-renderer` library is `projects/widget-renderer/`, and the reusable `widget-landscape` library is `projects/widget-landscape/`.
 - The C# `WidgetStudio.Contracts` package and compatibility tests are under `projects/widget-contracts/`; its solution is `projects/widget-contracts/WidgetStudio.slnx`.
+- The libraries are published to npm as `@lieselthuriot/widget-renderer` and `@lieselthuriot/widget-landscape`; the C# package is published to NuGet as `WidgetStudio.Contracts`. Packages are published manually; the editor is deployed to GitHub Pages at `https://widget-studio.liesel.dev` by `.github/workflows/deploy-pages.yml`.
 - Library entrypoints are `projects/widget-renderer/src/public-api.ts` and `projects/widget-landscape/src/public-api.ts`. Add every consumer-facing export there and import package APIs through those entrypoints, not internal files.
 - The editor resolves both libraries through TypeScript path aliases in `tsconfig.json`, so an app build does not verify the packaged libraries.
 

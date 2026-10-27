@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, output, signal } from '@angular/core';
-import { WidgetInput, safeParseWidgetInput } from 'widget-renderer';
+import { WidgetInput, safeParseWidgetInput } from '@lieselthuriot/widget-renderer';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../dialog-focus';
 
 @Component({

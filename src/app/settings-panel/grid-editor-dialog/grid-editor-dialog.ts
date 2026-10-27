@@ -1,5 +1,5 @@
 import { Component, ElementRef, effect, inject, input, output, signal } from '@angular/core';
-import { GridTrack, Widget, gridTemplate } from 'widget-renderer';
+import { GridTrack, Widget, gridTemplate } from '@lieselthuriot/widget-renderer';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../../dialog-focus';
 import { GridTrackPatch, mergeTrack } from '../../editor-state';
 import { eventNumber, eventValue } from '../form-events';

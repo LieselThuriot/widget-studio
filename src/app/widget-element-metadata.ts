@@ -1,4 +1,4 @@
-import { WidgetElementType } from 'widget-renderer';
+import { WidgetElementType } from '@lieselthuriot/widget-renderer';
 import { WidgetElement } from './editor-model';
 
 export interface PaletteItem {

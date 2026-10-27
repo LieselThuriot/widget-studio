@@ -11,8 +11,8 @@ import { OutputContract } from './output-contract/output-contract';
 import { PreviewDialog } from './preview-dialog/preview-dialog';
 import { EventAlertDialog } from './event-alert-dialog/event-alert-dialog';
 import { SettingsPanel } from './settings-panel/settings-panel';
-import { ButtonElement } from 'widget-renderer';
-import { Widget as RendererWidget, WidgetInput } from 'widget-renderer';
+import { ButtonElement } from '@lieselthuriot/widget-renderer';
+import { Widget as RendererWidget, WidgetInput } from '@lieselthuriot/widget-renderer';
 import { WidgetElement } from './editor-model';
 import { GridTrackPatch } from './editor-state';
 import { widgetElementPalette } from './widget-element-metadata';
@@ -30,7 +30,7 @@ import {
   LandscapeWidget,
   LandscapeRefreshEvent,
   normalizeLandscapeState,
-} from 'widget-landscape';
+} from '@lieselthuriot/widget-landscape';
 
 @Component({
   selector: 'app-root',

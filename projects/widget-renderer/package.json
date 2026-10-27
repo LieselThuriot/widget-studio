@@ -1,5 +1,5 @@
 {
-  "name": "widget-renderer",
+  "name": "@lieselthuriot/widget-renderer",
   "version": "0.1.0",
   "description": "Reusable Angular components for rendering data-driven dashboard widgets.",
   "author": {

@@ -1,6 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { Widget } from '../../editor-model';
-import { widgetHeight, widgetWidth, WidgetSize } from 'widget-renderer';
+import { widgetHeight, widgetWidth, WidgetSize } from '@lieselthuriot/widget-renderer';
 import { removeTrack } from '../../editor-state';
 import { GridEditorDialog } from '../grid-editor-dialog/grid-editor-dialog';
 import { eventValue } from '../form-events';

@@ -1,5 +1,5 @@
 {
-  "name": "widget-landscape",
+  "name": "@lieselthuriot/widget-landscape",
   "version": "0.1.0",
   "description": "Reusable Angular component for arranging widgets in a configurable dashboard grid.",
   "author": {
@@ -33,7 +33,7 @@
   "peerDependencies": {
     "@angular/common": "^21.0.0 || ^22.0.0",
     "@angular/core": "^21.0.0 || ^22.0.0",
-    "widget-renderer": "^0.1.0"
+    "@lieselthuriot/widget-renderer": "^0.1.0"
   },
   "sideEffects": false
 }

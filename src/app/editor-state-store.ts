@@ -19,7 +19,12 @@ import {
 import { assignEditorIds, normalizeWidget } from './widget-normalization';
 import { sampleWidgets } from './sample-widget';
 import { Widget, WidgetElement } from './editor-model';
-import { ButtonElement, WidgetContract, WidgetInput, safeParseWidgetInput } from 'widget-renderer';
+import {
+  ButtonElement,
+  WidgetContract,
+  WidgetInput,
+  safeParseWidgetInput,
+} from '@lieselthuriot/widget-renderer';
 
 export class EditorStateStore {
   readonly widget = signal<Widget>(structuredClone(sampleWidgets[0].widget));
@@ -130,7 +135,7 @@ export class EditorStateStore {
     this.widget.update((widget) => updateElementRadius(widget, id, value));
   }
 
-  updateWidget(patch: Partial<import('widget-renderer').Widget>): void {
+  updateWidget(patch: Partial<import('@lieselthuriot/widget-renderer').Widget>): void {
     this.widget.update((widget) => patchWidget(widget, patch) as Widget);
   }
 

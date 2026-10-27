@@ -1,11 +1,11 @@
-import { GridTrack } from 'widget-renderer';
+import { GridTrack } from '@lieselthuriot/widget-renderer';
 import { Widget, WidgetElement } from './editor-model';
 
 export { normalizeWidget } from './widget-normalization';
 
 export function patchWidget(
   widget: Widget,
-  patch: Partial<import('widget-renderer').Widget>,
+  patch: Partial<import('@lieselthuriot/widget-renderer').Widget>,
 ): Widget {
   return { ...widget, ...patch } as Widget;
 }

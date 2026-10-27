@@ -1,6 +1,6 @@
 # WidgetStudio.Contracts
 
-`WidgetStudio.Contracts` contains the C# API contracts for the JSON consumed by the `widget-renderer` Angular library. The package targets `netstandard2.0` and is published as the `WidgetStudio.Contracts` NuGet package.
+`WidgetStudio.Contracts` contains the C# API contracts for the JSON consumed by the [`@lieselthuriot/widget-renderer`](https://www.npmjs.com/package/@lieselthuriot/widget-renderer) Angular library. The package targets `netstandard2.0` and is published as the `WidgetStudio.Contracts` NuGet package.
 
 The package exposes the source-generated `WidgetJsonContext`, which is configured for the renderer wire format:
 

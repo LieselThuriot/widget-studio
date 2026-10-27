@@ -1,4 +1,4 @@
-import { normalizeWidgetInput, WidgetContract } from 'widget-renderer';
+import { normalizeWidgetInput, WidgetContract } from '@lieselthuriot/widget-renderer';
 
 const contract: WidgetContract = {
   version: 2,

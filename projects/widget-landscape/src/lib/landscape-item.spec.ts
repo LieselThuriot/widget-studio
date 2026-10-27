@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { WidgetRenderer } from 'widget-renderer';
+import { WidgetRenderer } from '@lieselthuriot/widget-renderer';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { LandscapeItem } from './landscape-item';
 

@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { WidgetContract } from 'widget-renderer';
+import { WidgetContract } from '@lieselthuriot/widget-renderer';
 import { highlightJson } from './json-highlighting';
 
 @Component({

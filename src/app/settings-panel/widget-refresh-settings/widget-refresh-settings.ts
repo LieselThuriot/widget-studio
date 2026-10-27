@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { Widget } from 'widget-renderer';
+import { Widget } from '@lieselthuriot/widget-renderer';
 import { eventChecked, eventValue } from '../form-events';
 
 @Component({

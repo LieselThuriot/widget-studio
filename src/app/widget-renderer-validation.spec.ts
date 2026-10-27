@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { WidgetInput, WidgetRenderer } from 'widget-renderer';
+import { WidgetInput, WidgetRenderer } from '@lieselthuriot/widget-renderer';
 
 describe('widget renderer validation state', () => {
   beforeEach(async () => {

@@ -1,4 +1,4 @@
-import { gridTemplate, widgetHeight, widgetWidth } from 'widget-renderer';
+import { gridTemplate, widgetHeight, widgetWidth } from '@lieselthuriot/widget-renderer';
 import { trackAt } from './editor-canvas/editor-canvas-interaction';
 
 describe('gridTemplate', () => {

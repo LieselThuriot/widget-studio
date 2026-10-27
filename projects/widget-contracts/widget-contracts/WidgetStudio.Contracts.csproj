@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>WidgetStudio.Contracts</PackageId>
+    <Version>0.1.0</Version>
     <Title>WidgetStudio Contracts</Title>
     <Description>System.Text.Json contracts for widgets rendered by widget-renderer.</Description>
     <Authors>Liesel Thuriot</Authors>
@@ -15,7 +16,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/LieselThuriot/widget-studio</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/LieselThuriot/widget-studio</PackageProjectUrl>
+    <PackageProjectUrl>https://widget-studio.liesel.dev</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <IsPackable>true</IsPackable>
   </PropertyGroup>

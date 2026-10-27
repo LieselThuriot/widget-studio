@@ -3,8 +3,8 @@ import {
   normalizeWidgetInput,
   parseWidgetInput,
   safeParseWidgetInput,
-} from 'widget-renderer';
-import { WidgetContract } from 'widget-renderer';
+} from '@lieselthuriot/widget-renderer';
+import { WidgetContract } from '@lieselthuriot/widget-renderer';
 
 const validContract: WidgetContract = {
   version: 2,

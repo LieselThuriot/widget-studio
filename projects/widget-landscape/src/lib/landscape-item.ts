@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ButtonElement, WidgetRenderer } from 'widget-renderer';
+import { ButtonElement, WidgetRenderer } from '@lieselthuriot/widget-renderer';
 import { LandscapeWidget } from './landscape.model';
 import { footprintFor } from './landscape-layout';
 import { defaultWidgetLandscapeLocale, WidgetLandscapeLocale } from './landscape-locale';

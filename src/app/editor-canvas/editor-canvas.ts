@@ -17,7 +17,7 @@ import {
   WidgetRenderer,
   widgetHeight as getWidgetHeight,
   widgetWidth as getWidgetWidth,
-} from 'widget-renderer';
+} from '@lieselthuriot/widget-renderer';
 import { Widget, WidgetElement } from '../editor-model';
 import {
   ElementActionsMenu,

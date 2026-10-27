@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { WidgetRenderer, WidgetContract } from 'widget-renderer';
+import { WidgetRenderer, WidgetContract } from '@lieselthuriot/widget-renderer';
 
 const widget: WidgetContract = {
   version: 2,

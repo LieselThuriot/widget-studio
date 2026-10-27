@@ -1,5 +1,5 @@
 type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
-import { WidgetContract } from 'widget-renderer';
+import { WidgetContract } from '@lieselthuriot/widget-renderer';
 // The recursive object shape is local to the formatter and cannot use a named Record alias.
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 interface JsonObject {

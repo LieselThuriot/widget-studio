@@ -8,7 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { ChartDataPoint, ProgressItem } from 'widget-renderer';
+import { ChartDataPoint, ProgressItem } from '@lieselthuriot/widget-renderer';
 import { randomPastelColor } from '../../colors';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../../dialog-focus';
 import { eventChecked, eventNumber, eventValue } from '../form-events';

@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ElementAnchor } from 'widget-renderer';
+import { ElementAnchor } from '@lieselthuriot/widget-renderer';
 
 @Component({
   selector: 'app-anchor-control',

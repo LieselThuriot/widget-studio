@@ -1,5 +1,9 @@
 import { Component, input, output } from '@angular/core';
-import { widgetHeight, Widget as RendererWidget, widgetWidth } from 'widget-renderer';
+import {
+  widgetHeight,
+  Widget as RendererWidget,
+  widgetWidth,
+} from '@lieselthuriot/widget-renderer';
 import { Widget } from '../../editor-model';
 import { GridTrackPatch } from '../../editor-state';
 import { WidgetBackgroundSettings } from '../widget-background-settings/widget-background-settings';

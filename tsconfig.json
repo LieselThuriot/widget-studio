@@ -6,10 +6,10 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "widget-renderer": ["projects/widget-renderer/src/public-api.ts"],
-      "widget-renderer/*": ["projects/widget-renderer/src/*"],
-      "widget-landscape": ["projects/widget-landscape/src/public-api.ts"],
-      "widget-landscape/*": ["projects/widget-landscape/src/*"]
+      "@lieselthuriot/widget-renderer": ["projects/widget-renderer/src/public-api.ts"],
+      "@lieselthuriot/widget-renderer/*": ["projects/widget-renderer/src/*"],
+      "@lieselthuriot/widget-landscape": ["projects/widget-landscape/src/public-api.ts"],
+      "@lieselthuriot/widget-landscape/*": ["projects/widget-landscape/src/*"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

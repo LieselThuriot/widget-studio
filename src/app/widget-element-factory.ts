@@ -12,7 +12,7 @@ import {
   TextElement,
   WidgetElement,
 } from './editor-model';
-import { WidgetElementBase } from 'widget-renderer';
+import { WidgetElementBase } from '@lieselthuriot/widget-renderer';
 import { chartColors, randomPastelColor, readableTextColor } from './colors';
 
 export function createWidgetElement(

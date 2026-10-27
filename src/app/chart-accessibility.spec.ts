@@ -1,5 +1,5 @@
-import { chartAccessibilitySummary, chartAriaLabel } from 'widget-renderer';
-import { ChartElement, ProgressElement } from 'widget-renderer';
+import { chartAccessibilitySummary, chartAriaLabel } from '@lieselthuriot/widget-renderer';
+import { ChartElement, ProgressElement } from '@lieselthuriot/widget-renderer';
 
 const base = {
   grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },

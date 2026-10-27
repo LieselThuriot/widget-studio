@@ -1,4 +1,4 @@
-import { ButtonElement, WidgetInput, WidgetSize } from 'widget-renderer';
+import { ButtonElement, WidgetInput, WidgetSize } from '@lieselthuriot/widget-renderer';
 
 export interface LandscapeWidget {
   id: string;

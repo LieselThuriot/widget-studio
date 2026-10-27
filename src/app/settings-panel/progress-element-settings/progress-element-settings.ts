@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { ChartDataPoint, ProgressItem } from 'widget-renderer';
+import { ChartDataPoint, ProgressItem } from '@lieselthuriot/widget-renderer';
 import { ProgressElement } from '../../editor-model';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { ColorPicker } from '../../color-picker/color-picker';

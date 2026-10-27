@@ -2,6 +2,14 @@
 
 `widget-landscape` is a reusable Angular component for arranging `WidgetRenderer` instances in a configurable dashboard grid. It is published as a separate package and imports the renderer through its public package API.
 
+Try it in the live editor at [widget-studio.liesel.dev](https://widget-studio.liesel.dev).
+
+## Installation
+
+```sh
+npm install @lieselthuriot/widget-landscape @lieselthuriot/widget-renderer echarts
+```
+
 ## Features
 
 - Fixed widget footprints based on widget size
@@ -46,7 +54,7 @@ The component exposes `state`, `palette`, `editMode`, `columnsLocked`, `darkMode
 Visible landscape controls use English defaults and can be localized with the optional `locale` input. The input accepts partial overrides, so users can provide a complete locale or extend an existing locale with only the values they want to change. Widget content and palette labels remain consumer-provided values, so supply those in the language returned by your API or application translation layer.
 
 ```ts
-import { WidgetLandscapeLocaleOverrides } from 'widget-landscape';
+import { WidgetLandscapeLocaleOverrides } from '@lieselthuriot/widget-landscape';
 
 readonly landscapeLocale: WidgetLandscapeLocaleOverrides = {
   landscape: 'Widgetlandschap',
@@ -78,7 +86,7 @@ For a small customization, override only the values you need:
 import {
   frenchWidgetLandscapeLocale,
   WidgetLandscapeLocaleOverrides,
-} from 'widget-landscape';
+} from '@lieselthuriot/widget-landscape';
 
 readonly landscapeLocale: WidgetLandscapeLocaleOverrides = {
   ...frenchWidgetLandscapeLocale,

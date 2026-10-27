@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { WidgetContract, WidgetRenderer } from 'widget-renderer';
+import { WidgetContract, WidgetRenderer } from '@lieselthuriot/widget-renderer';
 
 function textWidget(wrap: boolean): WidgetContract {
   return {

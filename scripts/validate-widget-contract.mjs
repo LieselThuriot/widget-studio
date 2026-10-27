@@ -1,6 +1,6 @@
 import '@angular/compiler';
 import { readFileSync } from 'node:fs';
-import { safeParseWidgetInput } from '../dist/widget-renderer/fesm2022/widget-renderer.mjs';
+import { safeParseWidgetInput } from '../dist/widget-renderer/fesm2022/lieselthuriot-widget-renderer.mjs';
 
 try {
   const payload = JSON.parse(readFileSync(0, 'utf8'));

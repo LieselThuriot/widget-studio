@@ -1,6 +1,6 @@
 import { Component, ElementRef, effect, inject, input, output } from '@angular/core';
-import { ButtonElement } from 'widget-renderer';
-import { LandscapeStateChange } from 'widget-landscape';
+import { ButtonElement } from '@lieselthuriot/widget-renderer';
+import { LandscapeStateChange } from '@lieselthuriot/widget-landscape';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../dialog-focus';
 import { ActionAlertComponent } from './action-alert';
 import { RefreshAlertComponent } from './refresh-alert';

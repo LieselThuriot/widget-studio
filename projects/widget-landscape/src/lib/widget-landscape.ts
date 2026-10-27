@@ -10,7 +10,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { ButtonElement } from 'widget-renderer';
+import { ButtonElement } from '@lieselthuriot/widget-renderer';
 import { LandscapeToolbar } from './landscape-toolbar';
 import { LandscapeItem } from './landscape-item';
 import { LandscapePalette } from './landscape-palette';

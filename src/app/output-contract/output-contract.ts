@@ -1,5 +1,5 @@
 import { Component, input, signal } from '@angular/core';
-import { WidgetContract } from 'widget-renderer';
+import { WidgetContract } from '@lieselthuriot/widget-renderer';
 import { JsonOutput } from './json-output';
 import { CsharpOutput } from './csharp-output';
 import { generateCsharpContract } from './csharp-contract';

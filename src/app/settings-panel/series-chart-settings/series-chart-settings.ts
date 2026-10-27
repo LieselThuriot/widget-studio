@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { AxisChartStyle, ChartDataPoint, ProgressItem } from 'widget-renderer';
+import { AxisChartStyle, ChartDataPoint, ProgressItem } from '@lieselthuriot/widget-renderer';
 import { ChartElement } from '../../editor-model';
 import { eventChecked, eventNumber, eventValue } from '../form-events';
 import { DataPointsDialog } from '../data-points-dialog/data-points-dialog';

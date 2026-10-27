@@ -4,6 +4,14 @@ Reusable Angular components for rendering compact, grid-based widgets with text,
 
 The package is designed to receive a plain `WidgetContract` from an API or application. Consumers do not need to add editor-only element IDs or hydrate the data before rendering.
 
+Try it in the live editor at [widget-studio.liesel.dev](https://widget-studio.liesel.dev).
+
+## Installation
+
+```sh
+npm install @lieselthuriot/widget-renderer echarts
+```
+
 ### Localization
 
 Renderer-owned accessible labels use English defaults and can be localized with the optional `locale` input. The input accepts partial nested overrides, so users can provide a complete locale or change only the values they need. Widget content, labels, image alternative text, refresh labels, and validation diagnostics remain consumer-provided.
@@ -12,7 +20,7 @@ Renderer-owned accessible labels use English defaults and can be localized with 
 import {
   germanWidgetRendererLocale,
   WidgetRendererLocaleOverrides,
-} from 'widget-renderer';
+} from '@lieselthuriot/widget-renderer';
 
 readonly rendererLocale: WidgetRendererLocaleOverrides = {
   ...germanWidgetRendererLocale,
@@ -22,7 +30,7 @@ readonly rendererLocale: WidgetRendererLocaleOverrides = {
 Built-in `germanWidgetRendererLocale`, `frenchWidgetRendererLocale`, and `dutchWidgetRendererLocale` values are available. For a small customization, override only the required values:
 
 ```ts
-import { WidgetRendererLocaleOverrides } from 'widget-renderer';
+import { WidgetRendererLocaleOverrides } from '@lieselthuriot/widget-renderer';
 
 readonly rendererLocale: WidgetRendererLocaleOverrides = {
   aria: {
@@ -67,7 +75,7 @@ Import the standalone `WidgetRenderer` component into an Angular component and b
 
 ```ts
 import { Component } from '@angular/core';
-import { WidgetContract, WidgetRenderer } from 'widget-renderer';
+import { WidgetContract, WidgetRenderer } from '@lieselthuriot/widget-renderer';
 
 @Component({
   selector: 'app-dashboard-card',
@@ -146,7 +154,7 @@ Pass `darkMode` to style the loading state for a dark surface. The rendered widg
 `refreshRequested` is emitted when the refresh control is clicked. `actionRequested` is emitted with the clicked `ButtonElement` and DOM event:
 
 ```ts
-import { ButtonElement } from 'widget-renderer';
+import { ButtonElement } from '@lieselthuriot/widget-renderer';
 
 handleAction(event: { element: ButtonElement; event: Event }): void {
   event.event.preventDefault();
@@ -196,7 +204,7 @@ Set `sensitive: true` on the background or an element to blur it and remove hidd
 Use the exported helpers when data enters your application:
 
 ```ts
-import { normalizeWidgetInput, parseWidgetInput, safeParseWidgetInput } from 'widget-renderer';
+import { normalizeWidgetInput, parseWidgetInput, safeParseWidgetInput } from '@lieselthuriot/widget-renderer';
 
 const result = safeParseWidgetInput(payload);
 

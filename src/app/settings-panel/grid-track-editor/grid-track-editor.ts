@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { GridTrack } from 'widget-renderer';
+import { GridTrack } from '@lieselthuriot/widget-renderer';
 import { eventNumber, eventValue } from '../form-events';
 
 @Component({

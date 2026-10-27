@@ -27,7 +27,7 @@ try {
       '--yes',
       '--prefix',
       consumer,
-      join(temporaryRoot, `widget-renderer-${rendererVersion}.tgz`),
+      join(temporaryRoot, `lieselthuriot-widget-renderer-${rendererVersion}.tgz`),
       `@angular/compiler@${angularVersion}`,
       `@angular/core@${angularVersion}`,
       `@angular/common@${angularVersion}`,
@@ -37,7 +37,7 @@ try {
   writeFileSync(
     join(consumer, 'verify.mjs'),
     `import '@angular/compiler';
- import { normalizeWidgetInput, safeParseWidgetInput } from 'widget-renderer';
+ import { normalizeWidgetInput, safeParseWidgetInput } from '@lieselthuriot/widget-renderer';
  const payload = {
    version: 2,
    id: 'package-test-widget',

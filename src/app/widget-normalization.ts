@@ -4,7 +4,7 @@ import {
   ProgressElement,
   WidgetElement,
   WidgetInput,
-} from 'widget-renderer';
+} from '@lieselthuriot/widget-renderer';
 import { Widget } from './editor-model';
 
 const chartTypes = ['pie', 'donut', 'funnel', 'gauge', 'bar', 'line'] as const;

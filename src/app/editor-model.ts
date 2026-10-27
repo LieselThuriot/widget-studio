@@ -15,7 +15,7 @@ import {
   FillTrackStyle,
   ValueChartStyle,
   WidgetElementBase,
-} from 'widget-renderer';
+} from '@lieselthuriot/widget-renderer';
 
 export interface EditorElementBase {
   id: string;

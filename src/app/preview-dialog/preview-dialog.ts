@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, input, output, signal } from '@angular/core';
-import { ButtonElement, WidgetRenderer } from 'widget-renderer';
+import { ButtonElement, WidgetRenderer } from '@lieselthuriot/widget-renderer';
 import { Widget } from '../editor-model';
 import { focusFirstElement, focusableElements, trapTabFocus } from '../dialog-focus';
 
