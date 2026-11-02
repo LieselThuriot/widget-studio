@@ -3,6 +3,45 @@
     <span class="chip-icon">W</span><span>Widget</span
     ><span class="chip-id">{{ width() }} × {{ height() }}</span>
   </div>
+  <div class="layout-id">
+    <span class="layout-id__label">Layout ID</span>
+    @if (layoutId(); as id) {
+      <span class="layout-id__value" [title]="id" [attr.aria-label]="'Layout ID ' + id">{{
+        shortLayoutId()
+      }}</span>
+      <button
+        type="button"
+        class="layout-id__copy"
+        [class.is-copied]="layoutIdCopyStatus() === 'copied'"
+        aria-label="Copy layout ID"
+        title="Copy layout ID"
+        (click)="copyLayoutId()"
+      >
+        @if (layoutIdCopyStatus() === 'copied') {
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
+        } @else {
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+            <path
+              d="M10.5 3.5v-.5a1.5 1.5 0 00-1.5-1.5H4A1.5 1.5 0 002.5 3v5A1.5 1.5 0 004 9.5h.5"
+            />
+          </svg>
+        }
+      </button>
+    } @else {
+      <span class="layout-id__invalid">Unavailable – widget is invalid</span>
+    }
+    <span class="visually-hidden" role="status">
+      @switch (layoutIdCopyStatus()) {
+        @case ('copied') {
+          Layout ID copied
+        }
+        @case ('failed') {
+          Copy failed. Hover the layout ID to see the full value.
+        }
+      }
+    </span>
+  </div>
   <app-widget-grid-settings
     [widget]="widget()"
     (widgetChanged)="widgetChanged.emit($event)"

@@ -32,7 +32,10 @@ internal static class NpmRendererTestHost
             return new ValidationResult
             {
                 Success = root.GetProperty("success").GetBoolean(),
-                Issues = root.TryGetProperty("issues", out var issues) ? issues.ToString() : string.Empty
+                Issues = root.TryGetProperty("issues", out var issues) ? issues.ToString() : string.Empty,
+                Fingerprint = root.TryGetProperty("fingerprint", out var fingerprint) && fingerprint.ValueKind == JsonValueKind.String
+                  ? fingerprint.GetString()
+                  : null
             };
         }
 
@@ -99,6 +102,8 @@ internal static class NpmRendererTestHost
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
+                StandardInputEncoding = new System.Text.UTF8Encoding(false),
+                StandardOutputEncoding = System.Text.Encoding.UTF8,
                 CreateNoWindow = true
             }
         };
@@ -130,5 +135,6 @@ internal static class NpmRendererTestHost
     {
         public bool Success { get; init; }
         public string Issues { get; init; } = string.Empty;
+        public string? Fingerprint { get; init; }
     }
 }

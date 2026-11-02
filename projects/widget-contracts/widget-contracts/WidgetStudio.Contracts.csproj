@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>WidgetStudio.Contracts</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Title>WidgetStudio Contracts</Title>
     <Description>System.Text.Json contracts for widgets rendered by widget-renderer.</Description>
     <Authors>Liesel Thuriot</Authors>

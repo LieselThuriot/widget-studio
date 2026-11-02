@@ -13,4 +13,7 @@ public sealed class WidgetContract
     public required BackgroundConfig Background { get; set; }
     public RefreshConfig? Refresh { get; set; }
     public required List<WidgetElement> Elements { get; set; }
+
+    /// <summary>Computes the layout fingerprint. See <see cref="WidgetFingerprint"/>.</summary>
+    public string? ComputeFingerprint() => WidgetFingerprint.Compute(this);
 }

@@ -1,12 +1,17 @@
 import '@angular/compiler';
 import { readFileSync } from 'node:fs';
-import { safeParseWidgetInput } from '../dist/widget-renderer/fesm2022/lieselthuriot-widget-renderer.mjs';
+import {
+  computeWidgetFingerprint,
+  safeParseWidgetInput,
+} from '../dist/widget-renderer/fesm2022/lieselthuriot-widget-renderer.mjs';
 
 try {
   const payload = JSON.parse(readFileSync(0, 'utf8'));
   const result = safeParseWidgetInput(payload);
 
-  process.stdout.write(JSON.stringify(result));
+  process.stdout.write(
+    JSON.stringify({ ...result, fingerprint: computeWidgetFingerprint(payload) }),
+  );
   process.exitCode = result.success ? 0 : 1;
 } catch (error) {
   process.stderr.write(`${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);

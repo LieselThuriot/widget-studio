@@ -62,6 +62,17 @@ Always serialize with `WidgetJsonContext`. It emits camel-case property names, l
 
 This package is primarily a serialization layer. When deserializing external JSON with `WidgetJsonContext`, put each polymorphic discriminator before the object's other properties: `type` first for widget elements and `kind` first for progress items. JSON produced by `WidgetJsonContext` already has this order.
 
+## Layout fingerprints
+
+`WidgetFingerprint.Compute` returns a stable ID of a widget's look, such as `wfp:1:3f9c…`, and matches `computeWidgetFingerprint` from `@lieselthuriot/widget-renderer`. Use it to gate user-built widgets behind an approval step:
+
+```csharp
+var fingerprint = widget.ComputeFingerprint(); // or WidgetFingerprint.Compute(json)
+var approved = fingerprint is not null && approvedLayouts.Contains(fingerprint);
+```
+
+Content that can differ per visitor is ignored: the widget `Id`, text, button labels, image alt text, chart titles, chart and progress data, button URLs and bodies, and the refresh label. Only whether text, labels, alt text, and titles are empty is included. Styles, positions, element order, image sources, and the background are included. `Compute` returns `null` when the JSON cannot be deserialized or the widget has no rows or columns; validate payloads with the renderer for the full rule set.
+
 ## Colors
 
 Use `WidgetColor` to create renderer-compatible hexadecimal colors without formatting channel values by hand:

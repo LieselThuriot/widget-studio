@@ -19,6 +19,7 @@ import {
 import { assignEditorIds, normalizeWidget } from './widget-normalization';
 import { sampleWidgets } from './sample-widget';
 import { Widget, WidgetElement } from './editor-model';
+import { toWidgetContract } from './widget-contract';
 import {
   ButtonElement,
   WidgetContract,
@@ -34,19 +35,7 @@ export class EditorStateStore {
   readonly selectedElement = computed(
     () => this.widget().elements.find((element) => element.id === this.selectedId()) ?? null,
   );
-  readonly modelContract = computed<WidgetContract>(() => {
-    const { elements, ...publicWidget } = this.widget();
-    return {
-      ...publicWidget,
-      elements: elements.map(({ id: _id, ...element }) => {
-        if (element.type === 'divider') {
-          const { sensitive: _sensitive, ...publicDivider } = element;
-          return publicDivider;
-        }
-        return element;
-      }),
-    };
-  });
+  readonly modelContract = computed<WidgetContract>(() => toWidgetContract(this.widget()));
 
   loadSample(sampleId: string): void {
     const sample = sampleWidgets.find((candidate) => candidate.id === sampleId);

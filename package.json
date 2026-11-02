@@ -1,6 +1,6 @@
 {
   "name": "widget-studio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Browser editor for composing, previewing, and sharing data-driven dashboard widgets.",
   "author": {
     "name": "Liesel Thuriot"
@@ -29,7 +29,8 @@
     "verify:landscape-package": "node scripts/verify-landscape-package.mjs",
     "verify:packages": "npm run verify:renderer-package && npm run verify:landscape-package",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --watch=false",
+    "test:watch": "ng test",
     "format": "prettier --write \"src/**/*.{ts,css,html}\" \"projects/**/*.{ts,css,html}\"",
     "format:check": "prettier --check \"src/**/*.{ts,css,html}\" \"projects/**/*.{ts,css,html}\"",
     "lint": "ng lint"
@@ -37,23 +38,23 @@
   "private": true,
   "packageManager": "npm@12.0.2",
   "dependencies": {
-    "@angular/common": "^22.2.3",
-    "@angular/compiler": "^22.2.3",
-    "@angular/core": "^22.2.3",
-    "@angular/forms": "^22.2.3",
-    "@angular/platform-browser": "^22.2.3",
-    "@angular/router": "^22.2.3",
+    "@angular/common": "^22.2.4",
+    "@angular/compiler": "^22.2.4",
+    "@angular/core": "^22.2.4",
+    "@angular/forms": "^22.2.4",
+    "@angular/platform-browser": "^22.2.4",
+    "@angular/router": "^22.2.4",
     "echarts": "^6.1.0",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.9.1"
   },
   "devDependencies": {
-    "@angular/build": "^22.2.4",
-    "@angular/cli": "^22.2.4",
-    "@angular/compiler-cli": "^22.2.3",
+    "@angular/build": "^22.2.5",
+    "@angular/cli": "^22.2.5",
+    "@angular/compiler-cli": "^22.2.4",
     "@eslint/js": "^10.0.1",
     "angular-eslint": "22.6.0",
-    "eslint": "^10.13.0",
+    "eslint": "^10.14.0",
     "jsdom": "^30.1.3",
     "ng-packagr": "^22.2.5",
     "prettier": "^3.9.10",

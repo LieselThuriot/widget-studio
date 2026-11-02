@@ -24,6 +24,69 @@
   color: var(--editor-text-tertiary);
   font-size: 10px;
 }
+.selected-chip:has(+ .layout-id) {
+  margin-bottom: 6px;
+}
+.layout-id {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 22px;
+  margin: 0 0 16px 31px;
+  color: var(--editor-text-tertiary);
+  font-size: 10px;
+}
+.layout-id__value {
+  margin-inline-start: auto;
+  overflow: hidden;
+  font-family: var(--editor-font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.layout-id__invalid {
+  margin-inline-start: auto;
+}
+.layout-id__copy {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.layout-id__copy:hover {
+  background: var(--editor-surface-hover);
+  color: var(--editor-accent);
+}
+.layout-id__copy:focus-visible {
+  outline: 2px solid var(--editor-focus-ring);
+  outline-offset: 1px;
+}
+.layout-id__copy.is-copied {
+  color: var(--editor-accent);
+}
+.layout-id__copy svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .widget-setting-section {
   margin-top: 12px;
   padding-top: 12px;

@@ -221,6 +221,14 @@ const parsed = parseWidgetInput(payload);
 
 `WidgetValidationIssue` entries contain a `path` such as `elements[0].style.font.size` and a human-readable `message`. Invalid input supplied to `WidgetRenderer` produces a safe empty widget and exposes issues through `validationIssues`. `isWidgetContract` and `isWidget` are also available as type guards.
 
+## Layout fingerprints
+
+`computeWidgetFingerprint(payload)` returns a stable ID of the widget's look, such as `wfp:1:3f9c…`, or `null` for invalid input. Use it to approve a layout once and then accept any widget with the same fingerprint.
+
+The fingerprint covers the size, grid tracks, background (including its image), element types, positions, order, styles, image sources, and button method and behavior. It ignores content that can differ per visitor: the widget `id`, text, button labels, image alt text, chart titles, chart and progress data, button URLs and bodies, and the refresh label. Only whether text, labels, alt text, and titles are empty is included. Hex colors are compared case-insensitively, and omitted defaults match their explicit values.
+
+`WidgetStudio.Contracts` computes the same value with `WidgetFingerprint.Compute`, so a .NET backend can verify fingerprints itself. The version number after `wfp:` (`WIDGET_FINGERPRINT_VERSION`) changes whenever the rules change.
+
 ## Public API
 
 Import everything from `@lieselthuriot/widget-renderer`; internal file paths are not part of the public API. The entry point exports:
@@ -229,6 +237,7 @@ Import everything from `@lieselthuriot/widget-renderer`; internal file paths are
 - Widget model types, including `WidgetContract`, `WidgetInput`, `Widget`, and the element types
 - `normalizeWidgetInput`
 - `safeParseWidgetInput`, `parseWidgetInput`, `isWidgetContract`, `isWidget`, `WidgetValidationError`, and the validation result types
+- `computeWidgetFingerprint` and `WIDGET_FINGERPRINT_VERSION`
 - Grid layout helpers and widget dimensions, such as `widgetWidth`, `widgetHeight`, `gridTemplate`, and `elementGridStyle`
 - Locales: `defaultWidgetRendererLocale`, `germanWidgetRendererLocale`, `frenchWidgetRendererLocale`, `dutchWidgetRendererLocale`, `WidgetRendererLocale`, and `WidgetRendererLocaleOverrides`
 - `chartAriaLabel` and `chartAccessibilitySummary`

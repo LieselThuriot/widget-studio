@@ -118,8 +118,8 @@ npm run format
 # Run lint checks
 npm run lint
 
-# Run unit tests without watch mode
-npm test -- --watch=false
+# Run unit tests once (use npm run test:watch to watch for changes)
+npm test
 ```
 
 The production build applies bundle and component-style budgets. The test suite includes editor state, layout, hydration, validation, sharing, accessibility, sensitive content, loading, image failure, and rendering behavior.

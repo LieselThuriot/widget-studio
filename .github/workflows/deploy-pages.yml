@@ -31,7 +31,7 @@ jobs:
 
       - run: npm run lint
 
-      - run: npm test -- --watch=false
+      - run: npm test
 
       - run: npm run build:app
 
