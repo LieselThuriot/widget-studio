@@ -1,3 +1,8 @@
+// Spec files share workers, so leaked fake timers would stall Angular's scheduler in later files.
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 // ECharts probes canvas support even when configured to render SVG charts.
 Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
   configurable: true,

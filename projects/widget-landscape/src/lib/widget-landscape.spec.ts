@@ -40,6 +40,7 @@ describe('WidgetLandscape', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 
   function recreateResponsiveFixture(
