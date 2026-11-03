@@ -10,7 +10,11 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { ButtonElement } from '@lieselthuriot/widget-renderer';
+import {
+  ButtonElement,
+  WidgetRendererLocaleOverrides,
+  WidgetValidationRuleInput,
+} from '@lieselthuriot/widget-renderer';
 import { LandscapeToolbar } from './landscape-toolbar';
 import { LandscapeItem } from './landscape-item';
 import { LandscapePalette } from './landscape-palette';
@@ -64,6 +68,8 @@ export class WidgetLandscape implements OnDestroy {
   readonly darkMode = input(false);
   readonly responsive = input<boolean | undefined>();
   readonly locale = input<WidgetLandscapeLocaleOverrides>({});
+  readonly rendererLocale = input<WidgetRendererLocaleOverrides>({});
+  readonly validationRules = input<readonly WidgetValidationRuleInput[]>([]);
   readonly stateChange = output<LandscapeStateChange>();
   readonly editModeChange = output<boolean>();
   readonly widgetSelected = output<{ id: string }>();

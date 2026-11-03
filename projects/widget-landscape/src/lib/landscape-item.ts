@@ -1,5 +1,10 @@
 import { Component, input, output } from '@angular/core';
-import { ButtonElement, WidgetRenderer } from '@lieselthuriot/widget-renderer';
+import {
+  ButtonElement,
+  WidgetRenderer,
+  WidgetRendererLocaleOverrides,
+  WidgetValidationRuleInput,
+} from '@lieselthuriot/widget-renderer';
 import { LandscapeWidget } from './landscape.model';
 import { footprintFor } from './landscape-layout';
 import { defaultWidgetLandscapeLocale, WidgetLandscapeLocale } from './landscape-locale';
@@ -19,6 +24,8 @@ export class LandscapeItem {
   readonly alternate = input(false);
   readonly darkMode = input(false);
   readonly locale = input<WidgetLandscapeLocale>(defaultWidgetLandscapeLocale);
+  readonly rendererLocale = input<WidgetRendererLocaleOverrides>({});
+  readonly validationRules = input<readonly WidgetValidationRuleInput[]>([]);
   readonly widgetSelected = output<string>();
   readonly deleted = output<string>();
   readonly dragStarted = output<{ event: DragEvent; id: string }>();

@@ -47,6 +47,8 @@
           [alternate]="index % 2 === 0"
           [darkMode]="darkMode()"
           [locale]="resolvedLocale()"
+          [rendererLocale]="rendererLocale()"
+          [validationRules]="validationRules()"
           (dragStarted)="startDrag($event.event, $event.id)"
           (dragEnded)="endDrag()"
           (widgetSelected)="selectWidget($event)"

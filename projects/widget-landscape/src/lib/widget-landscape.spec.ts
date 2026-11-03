@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { WidgetRenderer } from '@lieselthuriot/widget-renderer';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LandscapeState, LandscapeStateChange } from './landscape.model';
 import { WidgetLandscapeLocale } from './landscape-locale';
@@ -754,5 +756,55 @@ describe('WidgetLandscape', () => {
     ).click();
 
     expect(change?.widgets[0].size).toBe('square');
+  });
+
+  it('passes validation rules to the widget renderer', async () => {
+    fixture.componentRef.setInput('state', {
+      ...structuredClone(state),
+      widgets: [
+        {
+          ...structuredClone(state.widgets[0]),
+          widget: {
+            version: 2,
+            id: 'mini',
+            size: 'mini',
+            rows: [{ size: 1, unit: 'star' }],
+            columns: [{ size: 1, unit: 'star' }],
+            background: { sensitive: false, repeat: false, size: 'auto', anchor: 'center' },
+            elements: [],
+          },
+        },
+      ],
+    });
+    fixture.componentRef.setInput('validationRules', [
+      () => [{ path: 'background', message: 'blocked' }],
+    ]);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const renderer = fixture.debugElement.query(By.directive(WidgetRenderer))
+      .componentInstance as WidgetRenderer;
+    expect(renderer.validationIssues()).toEqual([
+      { path: 'background', message: 'blocked', severity: 'block' },
+    ]);
+    expect(fixture.nativeElement.querySelector('.widget-validation-issues').textContent).toContain(
+      'blocked',
+    );
+  });
+
+  it('passes the renderer locale to the widget renderer', async () => {
+    fixture.componentRef.setInput('state', {
+      ...structuredClone(state),
+      widgets: [{ ...structuredClone(state.widgets[0]), widget: null }],
+    });
+    fixture.componentRef.setInput('rendererLocale', { aria: { loading: 'Chargement du widget' } });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement
+        .querySelector('widget-renderer [role="status"]')
+        .getAttribute('aria-label'),
+    ).toBe('Chargement du widget');
   });
 });

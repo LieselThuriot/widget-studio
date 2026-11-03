@@ -3,12 +3,19 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { platform } from 'node:process';
 
 const root = process.cwd();
-const npm = platform === 'win32' ? 'npm.cmd' : 'npm';
+const npmCli = process.env.npm_execpath;
+if (!npmCli) {
+  throw new Error('Run this script through npm, for example: npm run verify:packages');
+}
 const require = createRequire(join(root, 'package.json'));
-const commandOptions = { cwd: root, stdio: 'inherit', shell: platform === 'win32' };
+const commandOptions = { cwd: root, stdio: 'inherit' };
+
+// Runs the npm CLI with the current Node binary so no shell is needed on Windows.
+function npm(args, options = commandOptions) {
+  execFileSync(process.execPath, [npmCli, ...args], options);
+}
 
 /**
  * Builds the given libraries, packs them from dist/, installs the tarballs into a temporary
@@ -20,32 +27,26 @@ export function verifyInConsumer({ buildScript, libraries, dependencies = [], ve
   const angularVersion = require('@angular/core/package.json').version;
 
   try {
-    execFileSync(npm, ['run', buildScript], commandOptions);
+    npm(['run', buildScript]);
     const tarballs = libraries.map((library) => {
       const { name, version } = require(join(root, 'dist', library, 'package.json'));
-      execFileSync(npm, ['pack', `./dist/${library}`, '--pack-destination', temporaryRoot], {
-        ...commandOptions,
-      });
+      npm(['pack', `./dist/${library}`, '--pack-destination', temporaryRoot]);
       return join(temporaryRoot, `${name.replace('@', '').replace('/', '-')}-${version}.tgz`);
     });
-    execFileSync(npm, ['init', '--yes'], { ...commandOptions, cwd: temporaryRoot, stdio: 'ignore' });
-    execFileSync(
-      npm,
-      [
-        'install',
-        '--yes',
-        '--prefix',
-        consumer,
-        ...tarballs,
-        `@angular/compiler@${angularVersion}`,
-        `@angular/core@${angularVersion}`,
-        `@angular/common@${angularVersion}`,
-        ...dependencies.map((dependency) => `${dependency}@${require(`${dependency}/package.json`).version}`),
-      ],
-      commandOptions,
-    );
+    npm(['init', '--yes'], { ...commandOptions, cwd: temporaryRoot, stdio: 'ignore' });
+    npm([
+      'install',
+      '--yes',
+      '--prefix',
+      consumer,
+      ...tarballs,
+      `@angular/compiler@${angularVersion}`,
+      `@angular/core@${angularVersion}`,
+      `@angular/common@${angularVersion}`,
+      ...dependencies.map((dependency) => `${dependency}@${require(`${dependency}/package.json`).version}`),
+    ]);
     writeFileSync(join(consumer, 'verify.mjs'), `import '@angular/compiler';\n${verifyModule}`);
-    execFileSync('node', ['verify.mjs'], { cwd: consumer, stdio: 'inherit' });
+    execFileSync(process.execPath, ['verify.mjs'], { cwd: consumer, stdio: 'inherit' });
   } finally {
     rmSync(temporaryRoot, { recursive: true, force: true });
   }

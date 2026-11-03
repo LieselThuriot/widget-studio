@@ -84,7 +84,7 @@ export class Dashboard {
 
 The edit controls are shown when the palette has entries. Passing an empty array or `null` hides the edit controls, allowing consumers to provide a fixed layout without allowing widgets to be added, removed, or repositioned.
 
-The component exposes `state`, `palette`, `editMode`, `columnsLocked`, `darkMode`, `locale`, and optional `responsive` inputs. Its outputs are `stateChange`, `editModeChange`, `widgetSelected`, `widgetDeleted`, `refreshRequested`, and `actionRequested`. Like the renderer, the landscape emits refresh and button events and leaves the requests to your application.
+The component exposes `state`, `palette`, `editMode`, `columnsLocked`, `darkMode`, `locale`, `rendererLocale`, `validationRules`, and optional `responsive` inputs. `rendererLocale` (`WidgetRendererLocaleOverrides`) and `validationRules` (`WidgetValidationRuleInput[]`) are forwarded to every nested `WidgetRenderer`. Its outputs are `stateChange`, `editModeChange`, `widgetSelected`, `widgetDeleted`, `refreshRequested`, and `actionRequested`. Like the renderer, the landscape emits refresh and button events and leaves the requests to your application.
 
 ### Localization
 
@@ -145,7 +145,7 @@ const customLocale: WidgetLandscapeLocaleOverrides = {
 };
 ```
 
-ARIA labels from nested `WidgetRenderer` instances (localized through the renderer's own `locale` input) and validation diagnostics are outside this localization API. When the application language changes, replace the locale and refetch the localized widget contracts. State updates received while editing continue to follow the component's existing draft behavior.
+ARIA labels and other text from nested `WidgetRenderer` instances are localized separately through the landscape's `rendererLocale` input, which accepts the renderer's locale overrides (for example `frenchWidgetRendererLocale` from `@lieselthuriot/widget-renderer`). When the application language changes, replace the locale and refetch the localized widget contracts. State updates received while editing continue to follow the component's existing draft behavior.
 
 While editing, users can change the column count unless `columnsLocked` is `true`. Column changes are draft-only until confirmation; cancelling edit mode restores the original count and layout. The confirmed count is emitted as `stateChange.columns`.
 

@@ -33,6 +33,8 @@
     [widget]="item().widget"
     [loading]="item().widget === null ? item().size : false"
     [darkMode]="darkMode()"
+    [locale]="rendererLocale()"
+    [validationRules]="validationRules()"
     (refreshRequested)="refreshRequested.emit(item().id)"
     (actionRequested)="actionRequested.emit({ id: item().id, ...$event })"
   />
