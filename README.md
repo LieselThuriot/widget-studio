@@ -8,7 +8,7 @@ Build, preview, and share compact, data-driven widgets in the browser.
 
 [![Angular](https://img.shields.io/badge/Angular-22-dd0031?style=flat-square&logo=angular&logoColor=white)](https://angular.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![ECharts](https://img.shields.io/badge/ECharts-6-aa344d?style=flat-square)](https://echarts.apache.org/)
+[![d3](https://img.shields.io/badge/d3-shape%20%2B%20array-f68e56?style=flat-square)](https://d3js.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
 **[Open Widget Studio](https://widget-studio.liesel.dev)**
@@ -206,7 +206,7 @@ The editor uses internal element IDs for selection and layer operations. The ren
 
 - [Angular](https://angular.dev/) 22 standalone components and signals
 - [TypeScript](https://www.typescriptlang.org/)
-- [Apache ECharts](https://echarts.apache.org/) for chart rendering
+- [d3-shape](https://d3js.org/d3-shape) and [d3-array](https://d3js.org/d3-array) for chart geometry, rendered as SVG by Angular templates
 - [Vitest](https://vitest.dev/) for unit tests
 - [ng-packagr](https://github.com/ng-packagr/ng-packagr) for the library builds
 - [C#](https://learn.microsoft.com/en-us/dotnet/csharp/) contracts targeting `netstandard2.0`, tested with xUnit v3 on Microsoft.Testing.Platform
@@ -220,4 +220,4 @@ The editor uses internal element IDs for selection and layer operations. The ren
 - [Widget Landscape README](projects/widget-landscape/README.md)
 - [Widget Contracts README](projects/widget-contracts/widget-contracts/README.md)
 - [Angular documentation](https://angular.dev/)
-- [ECharts documentation](https://echarts.apache.org/en/option.html)
+- [d3-shape documentation](https://d3js.org/d3-shape)

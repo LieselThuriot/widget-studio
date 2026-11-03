@@ -39,16 +39,16 @@
       </div>
     </div>
     <div #tooltipLayer class="widget-tooltip-layer">
-      @if (tooltip.progress(); as progress) {
+      @if (tooltip.state(); as tip) {
         <span
-          class="progress-tooltip"
+          class="chart-tooltip"
           role="tooltip"
-          [style.--tooltip-x.px]="progress.x"
-          [style.--tooltip-y.px]="progress.y"
-          [style.--tooltip-border]="progress.color || 'rgb(0 0 0 / 0.12)'"
-          ><span class="tooltip-marker" [style.background]="progress.color"></span
-          ><span>{{ progress.label }}</span
-          ><strong>{{ progress.value }}</strong></span
+          [style.--tooltip-x.px]="tip.x"
+          [style.--tooltip-y.px]="tip.y"
+          [style.--tooltip-border]="tip.color || 'rgb(0 0 0 / 0.12)'"
+          ><span class="tooltip-marker" [style.background]="tip.color"></span
+          ><span>{{ tip.label }}</span
+          ><strong>{{ tip.value }}</strong></span
         >
       }
     </div>

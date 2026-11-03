@@ -83,7 +83,7 @@ describe('WidgetElementRenderer', () => {
       'true',
     );
     expect(
-      fixture.nativeElement.querySelector('.chart-chart').getAttribute('aria-describedby'),
+      fixture.nativeElement.querySelector('[role="img"]').getAttribute('aria-describedby'),
     ).toBeNull();
     expect(
       (fixture.nativeElement.querySelector('.chart-chart') as HTMLElement).style.pointerEvents,
@@ -97,7 +97,7 @@ describe('WidgetElementRenderer', () => {
       fixture.nativeElement.querySelector('.chart-chart').getAttribute('aria-hidden'),
     ).toBeNull();
     expect(
-      fixture.nativeElement.querySelector('.chart-chart').getAttribute('aria-describedby'),
+      fixture.nativeElement.querySelector('[role="img"]').getAttribute('aria-describedby'),
     ).toMatch(/^chart-summary-/);
     expect(fixture.nativeElement.querySelector('.chart-chart .visually-hidden')).not.toBeNull();
     expect(

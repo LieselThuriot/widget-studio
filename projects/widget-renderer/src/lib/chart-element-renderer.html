@@ -4,9 +4,21 @@
     [sensitiveHidden]="sensitiveHidden()"
     [locale]="locale()"
   />
+} @else if (isSeries(element())) {
+  <widget-series-chart
+    [element]="series(element())"
+    [sensitiveHidden]="sensitiveHidden()"
+    [locale]="locale()"
+  />
+} @else if (isPart(element())) {
+  <widget-part-chart
+    [element]="part(element())"
+    [sensitiveHidden]="sensitiveHidden()"
+    [locale]="locale()"
+  />
 } @else {
-  <widget-echarts-element
-    [element]="chart(element())"
+  <widget-gauge-chart
+    [element]="gauge(element())"
     [sensitiveHidden]="sensitiveHidden()"
     [locale]="locale()"
   />

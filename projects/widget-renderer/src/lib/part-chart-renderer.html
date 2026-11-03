@@ -1,0 +1,71 @@
+<div
+  class="chart-chart chart-stack"
+  [attr.aria-hidden]="sensitiveHidden() ? 'true' : null"
+  [style.pointer-events]="sensitiveHidden() ? 'none' : null"
+  [style.font-size.px]="element().style.font.size"
+>
+  @if (element().title) {
+    <span class="chart-title" [style.color]="element().style.color.title">{{
+      element().title
+    }}</span>
+  }
+  <div #chartHost class="chart-host">
+    <svg
+      class="chart-svg part-chart"
+      role="img"
+      [attr.aria-label]="ariaLabel(element())"
+      [attr.aria-describedby]="sensitiveHidden() ? null : summaryId"
+      [attr.tabindex]="sensitiveHidden() || !element().data.length ? -1 : 0"
+      [attr.width]="size().width"
+      [attr.height]="size().height"
+      (focus)="focus()"
+      (blur)="pointerLeave()"
+      (keydown)="keyDown($event)"
+    >
+      @if (pie(); as chart) {
+        <g [attr.transform]="'translate(' + chart.centerX + ',' + chart.centerY + ')'">
+          @for (slice of chart.slices; track slice.index) {
+            <path
+              class="chart-shape"
+              [class.is-dimmed]="activeIndex() !== null && activeIndex() !== slice.index"
+              [attr.d]="activeIndex() === slice.index ? slice.activePath : slice.path"
+              [attr.fill]="slice.color"
+              (pointerenter)="pointerMove(slice.index, $event)"
+              (pointermove)="pointerMove(slice.index, $event)"
+              (pointerdown)="pointerMove(slice.index, $event)"
+              (pointerleave)="pointerLeave()"
+            />
+          }
+        </g>
+      }
+      @if (funnel(); as segments) {
+        @for (segment of segments; track segment.index) {
+          <polygon
+            class="chart-shape"
+            [class.is-dimmed]="activeIndex() !== null && activeIndex() !== segment.index"
+            [attr.points]="segment.points"
+            [attr.fill]="segment.color"
+            (pointerenter)="pointerMove(segment.index, $event)"
+            (pointermove)="pointerMove(segment.index, $event)"
+            (pointerdown)="pointerMove(segment.index, $event)"
+            (pointerleave)="pointerLeave()"
+          />
+        }
+      }
+    </svg>
+  </div>
+  @if (element().showLegend) {
+    <div class="chart-legend" [style.color]="element().style.color.legend" aria-hidden="true">
+      @for (item of legend(); track item.index) {
+        <span class="chart-legend-item"
+          ><span class="chart-legend-marker" [style.background]="item.color"></span
+          >{{ item.label }}</span
+        >
+      }
+    </div>
+  }
+  @if (!sensitiveHidden()) {
+    <span class="visually-hidden" [id]="summaryId">{{ accessibilitySummary(element()) }}</span>
+    <span class="visually-hidden" aria-live="polite">{{ announcement() }}</span>
+  }
+</div>

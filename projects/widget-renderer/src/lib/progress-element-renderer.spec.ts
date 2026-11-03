@@ -92,11 +92,11 @@ describe('ProgressElementRenderer', () => {
     const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
     segment.dispatchEvent(new FocusEvent('focus'));
     fixture.detectChanges();
-    expect(fixture.debugElement.injector.get(WidgetTooltip).progress()?.label).toBe('Done');
+    expect(fixture.debugElement.injector.get(WidgetTooltip).state()?.label).toBe('Done');
     segment.dispatchEvent(new FocusEvent('blur'));
     vi.advanceTimersByTime(100);
     fixture.detectChanges();
-    expect(fixture.debugElement.injector.get(WidgetTooltip).progress()).toBeNull();
+    expect(fixture.debugElement.injector.get(WidgetTooltip).state()).toBeNull();
     vi.useRealTimers();
   });
 
@@ -125,7 +125,7 @@ describe('ProgressElementRenderer', () => {
 
     vi.advanceTimersByTime(100);
 
-    expect(TestBed.inject(WidgetTooltip).progress()?.label).toBe('Other');
+    expect(TestBed.inject(WidgetTooltip).state()?.label).toBe('Other');
     otherFixture.destroy();
     vi.useRealTimers();
   });
@@ -133,7 +133,7 @@ describe('ProgressElementRenderer', () => {
   it('clears the tooltip when progress data changes', async () => {
     const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
     segment.dispatchEvent(new FocusEvent('focus'));
-    expect(TestBed.inject(WidgetTooltip).progress()?.label).toBe('Done');
+    expect(TestBed.inject(WidgetTooltip).state()?.label).toBe('Done');
 
     fixture.componentRef.setInput('element', {
       ...element,
@@ -147,20 +147,20 @@ describe('ProgressElementRenderer', () => {
     } as ProgressElement);
     await fixture.whenStable();
 
-    expect(TestBed.inject(WidgetTooltip).progress()).toBeNull();
+    expect(TestBed.inject(WidgetTooltip).state()).toBeNull();
   });
 
   it('clears and suppresses tooltips while sensitive content is hidden', async () => {
     const segment = fixture.nativeElement.querySelector('.progress-segment') as HTMLButtonElement;
     segment.dispatchEvent(new FocusEvent('focus'));
-    expect(TestBed.inject(WidgetTooltip).progress()?.label).toBe('Done');
+    expect(TestBed.inject(WidgetTooltip).state()?.label).toBe('Done');
 
     fixture.componentRef.setInput('sensitiveHidden', true);
     await fixture.whenStable();
-    expect(TestBed.inject(WidgetTooltip).progress()).toBeNull();
+    expect(TestBed.inject(WidgetTooltip).state()).toBeNull();
 
     segment.dispatchEvent(new FocusEvent('focus'));
-    expect(TestBed.inject(WidgetTooltip).progress()).toBeNull();
+    expect(TestBed.inject(WidgetTooltip).state()).toBeNull();
     expect(
       (fixture.nativeElement.querySelector('.progress-element') as HTMLElement).style.pointerEvents,
     ).toBe('none');

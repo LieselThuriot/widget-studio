@@ -19,7 +19,8 @@
     "dashboard",
     "widget",
     "widget-renderer",
-    "echarts"
+    "charts",
+    "svg"
   ],
   "publishConfig": {
     "access": "public"
@@ -32,8 +33,11 @@
   ],
   "peerDependencies": {
     "@angular/common": "^21.0.0 || ^22.0.0",
-    "@angular/core": "^21.0.0 || ^22.0.0",
-    "echarts": "^6.1.0"
+    "@angular/core": "^21.0.0 || ^22.0.0"
+  },
+  "dependencies": {
+    "d3-array": "^3.2.5",
+    "d3-shape": "^3.2.1"
   },
   "sideEffects": false
 }

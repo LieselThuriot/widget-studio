@@ -1,0 +1,143 @@
+<div
+  class="chart-chart"
+  [attr.aria-hidden]="sensitiveHidden() ? 'true' : null"
+  [style.pointer-events]="sensitiveHidden() ? 'none' : null"
+>
+  <div #chartHost class="chart-host">
+    <svg
+      class="chart-svg series-chart"
+      role="img"
+      [attr.aria-label]="ariaLabel(element())"
+      [attr.aria-describedby]="sensitiveHidden() ? null : summaryId"
+      [attr.tabindex]="sensitiveHidden() || !element().data.length ? -1 : 0"
+      [attr.width]="layout()?.width ?? 0"
+      [attr.height]="layout()?.height ?? 0"
+      [attr.viewBox]="layout() ? '0 0 ' + layout()!.width + ' ' + layout()!.height : null"
+      [style.font-size.px]="element().style.font.size"
+      (focus)="focus()"
+      (blur)="pointerLeave()"
+      (keydown)="keyDown($event)"
+    >
+      @if (layout(); as chart) {
+        @if (chart.title) {
+          <text
+            class="series-title"
+            text-anchor="middle"
+            [attr.x]="chart.title.x"
+            [attr.y]="chart.title.y"
+            [attr.fill]="element().style.color.title"
+          >
+            {{ element().title }}
+          </text>
+        }
+        @for (tick of chart.ticks; track tick.value) {
+          <line
+            [attr.x1]="chart.plot.left"
+            [attr.x2]="chart.plot.right"
+            [attr.y1]="tick.y"
+            [attr.y2]="tick.y"
+            [attr.stroke]="element().style.axis.grid"
+          />
+          <text
+            text-anchor="end"
+            dominant-baseline="middle"
+            [attr.x]="chart.plot.left - 8"
+            [attr.y]="tick.y"
+            [attr.fill]="element().style.axis.label"
+          >
+            {{ tick.label }}
+          </text>
+        }
+        @if (activeIndex() !== null && chart.categories[activeIndex()!]; as active) {
+          @if (element().type === 'bar') {
+            <rect
+              class="series-pointer"
+              [attr.x]="active.x"
+              [attr.y]="chart.plot.top"
+              [attr.width]="active.width"
+              [attr.height]="chart.plot.bottom - chart.plot.top"
+            />
+          } @else {
+            <line
+              class="series-pointer-line"
+              [attr.x1]="active.center"
+              [attr.x2]="active.center"
+              [attr.y1]="chart.plot.top"
+              [attr.y2]="chart.plot.bottom"
+            />
+          }
+        }
+        @if (element().type === 'bar') {
+          @for (category of chart.categories; track category.index) {
+            <rect
+              [attr.x]="category.center - chart.barWidth / 2"
+              [attr.y]="category.barY"
+              [attr.width]="chart.barWidth"
+              [attr.height]="category.barHeight"
+              [attr.fill]="category.color"
+            />
+          }
+        } @else {
+          @if (chart.linePath) {
+            <path class="series-line" [attr.d]="chart.linePath" [attr.stroke]="lineColor()" />
+          }
+          @for (category of chart.categories; track category.index) {
+            <circle
+              class="series-point"
+              [attr.cx]="category.center"
+              [attr.cy]="category.pointY"
+              [attr.r]="activeIndex() === category.index ? 5 : 3"
+              [attr.fill]="category.color"
+            />
+          }
+        }
+        <line
+          [attr.x1]="chart.plot.left"
+          [attr.x2]="chart.plot.right"
+          [attr.y1]="chart.zeroY"
+          [attr.y2]="chart.zeroY"
+          [attr.stroke]="element().style.axis.line"
+        />
+        @for (category of chart.categories; track category.index) {
+          <line
+            [attr.x1]="category.x"
+            [attr.x2]="category.x"
+            [attr.y1]="chart.plot.bottom"
+            [attr.y2]="chart.plot.bottom + 5"
+            [attr.stroke]="element().style.axis.line"
+          />
+          @if (category.showLabel) {
+            <text
+              text-anchor="middle"
+              dominant-baseline="hanging"
+              [attr.x]="category.center"
+              [attr.y]="chart.plot.bottom + 8"
+              [attr.fill]="element().style.axis.label"
+            >
+              {{ category.label }}
+            </text>
+          }
+        }
+        @if (!sensitiveHidden()) {
+          @for (category of chart.categories; track category.index) {
+            <rect
+              class="series-hit"
+              [attr.x]="category.x"
+              [attr.y]="chart.plot.top"
+              [attr.width]="category.width"
+              [attr.height]="chart.plot.bottom - chart.plot.top"
+              (pointerenter)="pointerMove(category.index, $event)"
+              (pointermove)="pointerMove(category.index, $event)"
+              (pointerdown)="pointerMove(category.index, $event)"
+              (pointerleave)="pointerLeave()"
+            />
+          }
+        }
+      }
+    </svg>
+  </div>
+  @if (!sensitiveHidden()) {
+    <span class="visually-hidden" [id]="summaryId">{{ accessibilitySummary(element()) }}</span>
+    <span class="visually-hidden" aria-live="polite">{{ announcement() }}</span>
+  }
+</div>

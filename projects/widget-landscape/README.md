@@ -11,7 +11,7 @@
 npm install @lieselthuriot/widget-landscape
 ```
 
-`@angular/common`, `@angular/core`, and `@lieselthuriot/widget-renderer` are peer dependencies. ECharts is a peer dependency of the renderer. The package supports Angular 21 and 22. npm, pnpm, and Bun install missing peer dependencies automatically; with Yarn, also add `@lieselthuriot/widget-renderer` and `echarts`.
+`@angular/common`, `@angular/core`, and `@lieselthuriot/widget-renderer` are peer dependencies. The package supports Angular 21 and 22. npm, pnpm, and Bun install missing peer dependencies automatically; with Yarn, also add `@lieselthuriot/widget-renderer`.
 
 ## Features
 

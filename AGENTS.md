@@ -30,5 +30,5 @@
 
 - Follow the existing standalone Angular/signal patterns and keep the strict compiler settings in `tsconfig.json`; do not add `standalone: true`.
 - Angular ESLint includes template accessibility rules. Preserve focus behavior, accessible chart summaries, loading behavior, and sensitive-content behavior when changing renderer or editor UI.
-- ECharts is a `widget-renderer` peer dependency. Tests load `src/test-setup.ts`, which stubs `HTMLCanvasElement.getContext` because ECharts probes canvas even for SVG charts.
+- Charts are package-owned SVG: d3 (`d3-array`, `d3-shape`) is used only for geometry, and Angular templates render every element. Do not add a charting library, `d3-selection`, or d3 transitions. Chart components extend `InteractiveChart` for sizing, tooltips, and keyboard navigation. Tests load `src/test-setup.ts`, which gives `.chart-host` elements a size because jsdom does not compute layout.
 - Editor shared tokens live in `src/styles/`; renderer and landscape styles must remain package-owned and must not depend on editor tokens. Preserve the editor's explicit light/dark theme support.

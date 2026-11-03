@@ -1,0 +1,87 @@
+<div
+  class="chart-chart chart-stack"
+  [attr.aria-hidden]="sensitiveHidden() ? 'true' : null"
+  [style.pointer-events]="sensitiveHidden() ? 'none' : null"
+  [style.font-size.px]="element().style.font.size"
+>
+  <div #chartHost class="chart-host">
+    <svg
+      class="chart-svg gauge-chart"
+      role="img"
+      [attr.aria-label]="ariaLabel(element())"
+      [attr.aria-describedby]="sensitiveHidden() ? null : summaryId"
+      [attr.tabindex]="sensitiveHidden() ? -1 : 0"
+      [attr.width]="size().width"
+      [attr.height]="size().height"
+      (focus)="focus()"
+      (blur)="pointerLeave()"
+      (keydown)="keyDown($event)"
+    >
+      @if (layout(); as gauge) {
+        <g
+          class="chart-shape"
+          (pointerenter)="pointerMove(0, $event)"
+          (pointermove)="pointerMove(0, $event)"
+          (pointerdown)="pointerMove(0, $event)"
+          (pointerleave)="pointerLeave()"
+        >
+          <g [attr.transform]="'translate(' + gauge.centerX + ',' + gauge.centerY + ')'">
+            <path [attr.d]="gauge.track" [attr.fill]="element().style.color.track" />
+            @if (gauge.fill) {
+              <path [attr.d]="gauge.fill" [attr.fill]="element().style.color.fill" />
+            }
+          </g>
+          @for (tick of gauge.ticks; track $index) {
+            <line
+              [attr.x1]="tick.x1"
+              [attr.y1]="tick.y1"
+              [attr.x2]="tick.x2"
+              [attr.y2]="tick.y2"
+              [attr.stroke]="element().style.color.legend"
+              [attr.stroke-width]="tick.major ? 2 : 1"
+            />
+          }
+          @for (label of gauge.labels; track $index) {
+            <text
+              text-anchor="middle"
+              dominant-baseline="middle"
+              [attr.x]="label.x"
+              [attr.y]="label.y"
+              [attr.fill]="element().style.color.legend"
+            >
+              {{ label.text }}
+            </text>
+          }
+          <polygon [attr.points]="gauge.pointer" [attr.fill]="element().style.color.legend" />
+          <circle
+            [attr.cx]="gauge.centerX"
+            [attr.cy]="gauge.centerY"
+            r="4"
+            [attr.fill]="element().style.color.legend"
+          />
+          @if (element().showLegend) {
+            <text
+              class="gauge-value"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              [attr.x]="gauge.centerX"
+              [attr.y]="gauge.valueY"
+              [attr.fill]="element().style.color.legend"
+            >
+              {{ roundedValue(element()) }}
+            </text>
+          }
+        </g>
+      }
+    </svg>
+  </div>
+  @if (element().title) {
+    <span class="chart-title" [style.color]="element().style.color.title">{{
+      element().title
+    }}</span>
+  }
+  @if (!sensitiveHidden()) {
+    <span class="visually-hidden" [id]="summaryId">{{ accessibilitySummary(element()) }}</span>
+    <span class="visually-hidden" aria-live="polite">{{ announcement() }}</span>
+  }
+</div>

@@ -71,10 +71,10 @@ describe('WidgetRenderer', () => {
 
     expect(getComputedStyle(shell).overflow).toBe('visible');
     expect(getComputedStyle(viewport).overflow).toBe('hidden');
-    expect(getComputedStyle(viewport).borderRadius).toBe('var(--widget-renderer-radius)');
+    expect(getComputedStyle(viewport).borderRadius).toBe('8px');
     expect(getComputedStyle(background).overflow).toBe('visible');
-    expect(getComputedStyle(background).borderRadius).toBe('');
-    expect(getComputedStyle(overlay).borderRadius).toBe('');
+    expect(getComputedStyle(background).borderRadius).toBe('0px');
+    expect(getComputedStyle(overlay).borderRadius).toBe('0px');
     expect(getComputedStyle(tooltipLayer).zIndex).toBe('6');
     expect(tooltipLayer.parentElement).toBe(shell);
     expect(tooltipLayer.previousElementSibling).toBe(viewport);

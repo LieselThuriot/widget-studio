@@ -14,14 +14,25 @@ The package is designed to receive a plain `WidgetContract` from an API or appli
 npm install @lieselthuriot/widget-renderer
 ```
 
-`@angular/common`, `@angular/core`, and `echarts` are peer dependencies. The package supports Angular 21 and 22 and ECharts 6.x. npm, pnpm, and Bun install missing peer dependencies automatically; with Yarn, also add `echarts`.
+`@angular/common` and `@angular/core` are peer dependencies. The package supports Angular 21 and 22. Charts are drawn as SVG by the package itself, with [`d3-array`](https://www.npmjs.com/package/d3-array) and [`d3-shape`](https://www.npmjs.com/package/d3-shape) installed automatically as regular dependencies for the chart geometry.
+
+### Upgrading from 0.1
+
+Version 0.2 no longer uses ECharts. Remove `echarts` from your dependencies if nothing else in your application needs it. The widget contract is unchanged, but charts look slightly different:
+
+- Pie, donut, gauge, and funnel charts stack their title, chart, and legend, so the chart uses the available space and never overlaps the legend.
+- Bar and line axes, ticks, and labels are laid out by the renderer; crowded category labels are thinned out automatically.
+- Clicking a legend entry no longer hides the matching data point.
+- Every chart can be focused with the keyboard. Arrow keys, Home, and End move between data points, Escape hides the tooltip, and the selected point is announced to screen readers.
+- The keyboard focus ring can be themed with the `--widget-renderer-focus-ring` and `--widget-renderer-focus-ring-contrast` CSS custom properties.
+- Custom locales can set the new `dataPointLabel` and `gaugeValueLabel` chart entries; English values are used when they are omitted from overrides.
 
 ## Features
 
 - Render `mini`, `compact`, `tall`, `square`, `wide`, `mega`, `banner`, and `hero` widgets from a version 2 contract
 - Place elements with configurable rows, columns, spans, and anchors
 - Support text, images, buttons, dividers, pie, donut, funnel, gauge, bar, line, and progress elements
-- Render charts with ECharts using SVG output
+- Render charts as lightweight, keyboard-accessible SVG without a charting library
 - Validate incoming data with structured paths and messages
 - Normalize optional contract fields such as button defaults and text padding
 - Blur sensitive backgrounds and elements until explicitly revealed
@@ -159,7 +170,7 @@ readonly rendererLocale: WidgetRendererLocaleOverrides = {
 <widget-renderer [widget]="widget" [locale]="rendererLocale" />
 ```
 
-The `aria` locale covers the loading status, toolbar, sensitive-content controls, image failure fallback, chart and progress accessible names, generated chart summaries, and progress segment labels. Locale changes update the rendered labels without changing widget-provided content.
+The `aria` locale covers the loading status, toolbar, sensitive-content controls, image failure fallback, chart and progress accessible names, generated chart summaries, chart data point announcements, and progress segment labels. Locale changes update the rendered labels without changing widget-provided content.
 
 ## Widget contract
 

@@ -3,7 +3,6 @@ import { sampleWidget, verifyInConsumer } from './package-consumer.mjs';
 verifyInConsumer({
   buildScript: 'build:libraries',
   libraries: ['widget-renderer', 'widget-landscape'],
-  dependencies: ['echarts'],
   verifyModule: `import {
   WidgetLandscape,
   landscapeFootprintForSize,

@@ -3,13 +3,7 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-// ECharts probes canvas support even when configured to render SVG charts.
-Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
-  configurable: true,
-  value: () => null,
-});
-
-// jsdom does not compute layout, so give ECharts hosts a size to avoid zero-size warnings.
+// jsdom does not compute layout, so give chart hosts a size so charts render their shapes.
 for (const [property, size] of [
   ['clientWidth', 300],
   ['clientHeight', 150],

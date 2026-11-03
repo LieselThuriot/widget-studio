@@ -1,6 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, untracked } from '@angular/core';
 
-export interface ProgressTooltipState {
+export interface ChartTooltipState {
   x: number;
   y: number;
   label: string;
@@ -10,9 +10,10 @@ export interface ProgressTooltipState {
 
 @Injectable()
 export class WidgetTooltip {
-  readonly progress = signal<ProgressTooltipState | null>(null);
+  readonly state = signal<ChartTooltipState | null>(null);
   private readonly overlay = signal<HTMLElement | null>(null);
-  private progressOwner: object | null = null;
+  private readonly currentOwner = signal<object | null>(null);
+  readonly owner = this.currentOwner.asReadonly();
 
   setOverlay(overlay: HTMLElement): void {
     this.overlay.set(overlay);
@@ -22,20 +23,20 @@ export class WidgetTooltip {
     return this.overlay();
   }
 
-  showProgress(owner: object, state: ProgressTooltipState): void {
-    this.progressOwner = owner;
-    this.progress.set(state);
+  show(owner: object, state: ChartTooltipState): void {
+    this.currentOwner.set(owner);
+    this.state.set(state);
   }
 
-  hideProgress(owner: object): void {
-    if (this.progressOwner !== owner) return;
-    this.progressOwner = null;
-    this.progress.set(null);
+  hide(owner: object): void {
+    if (untracked(this.currentOwner) !== owner) return;
+    this.currentOwner.set(null);
+    this.state.set(null);
   }
 
   clear(): void {
-    this.progressOwner = null;
-    this.progress.set(null);
+    this.currentOwner.set(null);
+    this.state.set(null);
     this.overlay.set(null);
   }
 }

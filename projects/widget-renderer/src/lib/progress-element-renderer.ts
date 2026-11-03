@@ -33,7 +33,7 @@ export class ProgressElementRenderer implements OnDestroy {
 
   ngOnDestroy(): void {
     this.cancelTooltipHide();
-    this.widgetTooltip.hideProgress(this.tooltipOwner);
+    this.widgetTooltip.hide(this.tooltipOwner);
   }
   protected progressStyle(element: ProgressElement): Record<string, string> {
     const radius = element.style.radius ?? { segment: 0, track: 999 };
@@ -94,7 +94,7 @@ export class ProgressElementRenderer implements OnDestroy {
     this.tooltipHideTimer = setTimeout(() => {
       if (this.tooltipIndex() === index) {
         this.tooltipIndex.set(null);
-        this.widgetTooltip.hideProgress(this.tooltipOwner);
+        this.widgetTooltip.hide(this.tooltipOwner);
       }
       this.tooltipHideTimer = null;
     }, 100);
@@ -109,7 +109,7 @@ export class ProgressElementRenderer implements OnDestroy {
     this.cancelTooltipHide();
     if (this.tooltipIndex() === index) {
       this.tooltipIndex.set(null);
-      this.widgetTooltip.hideProgress(this.tooltipOwner);
+      this.widgetTooltip.hide(this.tooltipOwner);
       return;
     }
     this.positionTooltip(index, event);
@@ -122,7 +122,7 @@ export class ProgressElementRenderer implements OnDestroy {
   protected onDocumentPointerDown(event: PointerEvent): void {
     if (!(event.target instanceof Element) || !event.target.closest('.progress-segment')) {
       this.tooltipIndex.set(null);
-      this.widgetTooltip.hideProgress(this.tooltipOwner);
+      this.widgetTooltip.hide(this.tooltipOwner);
     }
   }
   private positionTooltip(index: number, event: PointerEvent): void {
@@ -142,7 +142,7 @@ export class ProgressElementRenderer implements OnDestroy {
     if (!entry) return;
     const segment = this.segment(entry.item);
     this.tooltipIndex.set(index);
-    this.widgetTooltip.showProgress(this.tooltipOwner, {
+    this.widgetTooltip.show(this.tooltipOwner, {
       x: (x ?? targetBounds.left + targetBounds.width / 2) - bounds.left,
       y: (y ?? targetBounds.top) - bounds.top,
       label: segment.label,
@@ -157,7 +157,7 @@ export class ProgressElementRenderer implements OnDestroy {
   private clearTooltip(): void {
     this.cancelTooltipHide();
     this.tooltipIndex.set(null);
-    this.widgetTooltip.hideProgress(this.tooltipOwner);
+    this.widgetTooltip.hide(this.tooltipOwner);
   }
   protected progressTextAlign(element: ProgressElement): 'left' | 'center' | 'right' {
     return (element.grid.anchor ?? 'center').endsWith('left')

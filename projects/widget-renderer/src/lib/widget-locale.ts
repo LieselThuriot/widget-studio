@@ -20,6 +20,8 @@ export interface WidgetRendererChartLocale {
   noSegmentsSummary: string;
   morePoints: (count: number) => string;
   progressSegmentLabel: (label: string, value: string) => string;
+  dataPointLabel: (label: string, value: string) => string;
+  gaugeValueLabel: string;
   progressBreakdown: (label: string, start: string, end: string) => string;
 }
 
@@ -64,6 +66,8 @@ const chart = {
   noSegmentsSummary: ' No segments.',
   morePoints: (count: number) => `${count} more points.`,
   progressSegmentLabel: (label: string, value: string) => `${label}: ${value}`,
+  dataPointLabel: (label: string, value: string) => `${label}: ${value}`,
+  gaugeValueLabel: 'Value',
   progressBreakdown: (label: string, start: string, end: string) => `${label}: ${start} to ${end}`,
 } satisfies WidgetRendererChartLocale;
 
@@ -105,6 +109,7 @@ export const germanWidgetRendererLocale = locale(
     noDataSummary: (title) => `${title ? `${title}: ` : ''}keine Daten.`,
     noSegmentsSummary: ' Keine Segmente.',
     morePoints: (count) => `${count} weitere Datenpunkte.`,
+    gaugeValueLabel: 'Wert',
     progressSegmentLabel: (label, value) => `${label}: ${value}`,
     progressBreakdown: (label, start, end) => `${label}: ${start} bis ${end}`,
   },
@@ -132,6 +137,8 @@ export const frenchWidgetRendererLocale = locale(
     noSegmentsSummary: ' Aucun segment.',
     morePoints: (count) => `${count} points de données supplémentaires.`,
     progressSegmentLabel: (label, value) => `${label} : ${value}`,
+    dataPointLabel: (label, value) => `${label} : ${value}`,
+    gaugeValueLabel: 'Valeur',
     progressBreakdown: (label, start, end) => `${label} : de ${start} à ${end}`,
   },
 );
@@ -157,6 +164,7 @@ export const dutchWidgetRendererLocale = locale(
     noDataSummary: (title) => `${title ? `${title}: ` : ''}geen gegevens.`,
     noSegmentsSummary: ' Geen segmenten.',
     morePoints: (count) => `${count} extra gegevenspunten.`,
+    gaugeValueLabel: 'Waarde',
     progressSegmentLabel: (label, value) => `${label}: ${value}`,
     progressBreakdown: (label, start, end) => `${label}: ${start} tot ${end}`,
   },

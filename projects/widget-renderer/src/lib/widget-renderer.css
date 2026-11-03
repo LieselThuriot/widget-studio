@@ -212,7 +212,7 @@
   overflow: visible;
   pointer-events: none;
 }
-.progress-tooltip {
+.chart-tooltip {
   --tooltip-border: rgb(0 0 0 / 0.12);
   position: absolute;
   z-index: 4;
@@ -234,7 +234,7 @@
   line-height: 1;
   white-space: nowrap;
 }
-.progress-tooltip strong {
+.chart-tooltip strong {
   margin-inline-start: auto;
   color: #464646;
   font-size: 14px;
