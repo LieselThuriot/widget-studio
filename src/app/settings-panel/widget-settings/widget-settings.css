@@ -24,10 +24,10 @@
   color: var(--editor-text-tertiary);
   font-size: 10px;
 }
-.selected-chip:has(+ .layout-id) {
+.selected-chip:has(+ .fingerprint) {
   margin-bottom: 6px;
 }
-.layout-id {
+.fingerprint {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -36,17 +36,17 @@
   color: var(--editor-text-tertiary);
   font-size: 10px;
 }
-.layout-id__value {
+.fingerprint__value {
   margin-inline-start: auto;
   overflow: hidden;
   font-family: var(--editor-font-mono);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.layout-id__invalid {
+.fingerprint__invalid {
   margin-inline-start: auto;
 }
-.layout-id__copy {
+.fingerprint__copy {
   display: grid;
   flex-shrink: 0;
   place-items: center;
@@ -59,18 +59,18 @@
   color: inherit;
   cursor: pointer;
 }
-.layout-id__copy:hover {
+.fingerprint__copy:hover {
   background: var(--editor-surface-hover);
   color: var(--editor-accent);
 }
-.layout-id__copy:focus-visible {
+.fingerprint__copy:focus-visible {
   outline: 2px solid var(--editor-focus-ring);
   outline-offset: 1px;
 }
-.layout-id__copy.is-copied {
+.fingerprint__copy.is-copied {
   color: var(--editor-accent);
 }
-.layout-id__copy svg {
+.fingerprint__copy svg {
   width: 13px;
   height: 13px;
   fill: none;

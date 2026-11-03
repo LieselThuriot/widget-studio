@@ -32,38 +32,38 @@ export class WidgetSettings {
   readonly trackRemoved = output<{ kind: 'rows' | 'columns'; index: number }>();
   protected readonly width = () => widgetWidth(this.widget().size);
   protected readonly height = () => widgetHeight(this.widget().size);
-  protected readonly layoutId = computed(() =>
+  protected readonly fingerprint = computed(() =>
     computeWidgetFingerprint(toWidgetContract(this.widget())),
   );
-  protected readonly shortLayoutId = computed(() => {
-    const id = this.layoutId();
+  protected readonly shortFingerprint = computed(() => {
+    const id = this.fingerprint();
     return id && id.length > 24 ? `${id.slice(0, 12)}…${id.slice(-6)}` : id;
   });
-  protected readonly layoutIdCopyStatus = signal<'copied' | 'failed' | null>(null);
-  private layoutIdCopyStatusTimer: ReturnType<typeof setTimeout> | undefined;
+  protected readonly fingerprintCopyStatus = signal<'copied' | 'failed' | null>(null);
+  private fingerprintCopyStatusTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => clearTimeout(this.layoutIdCopyStatusTimer));
+    inject(DestroyRef).onDestroy(() => clearTimeout(this.fingerprintCopyStatusTimer));
   }
 
-  protected async copyLayoutId(): Promise<void> {
-    const layoutId = this.layoutId();
-    if (!layoutId) return;
+  protected async copyFingerprint(): Promise<void> {
+    const fingerprint = this.fingerprint();
+    if (!fingerprint) return;
     try {
       if (!navigator.clipboard) throw new Error('Clipboard is unavailable.');
-      await navigator.clipboard.writeText(layoutId);
-      this.showLayoutIdCopyStatus('copied');
+      await navigator.clipboard.writeText(fingerprint);
+      this.showFingerprintCopyStatus('copied');
     } catch {
-      this.showLayoutIdCopyStatus('failed');
+      this.showFingerprintCopyStatus('failed');
     }
   }
 
-  private showLayoutIdCopyStatus(status: 'copied' | 'failed'): void {
-    if (this.layoutIdCopyStatusTimer) clearTimeout(this.layoutIdCopyStatusTimer);
-    this.layoutIdCopyStatus.set(status);
-    this.layoutIdCopyStatusTimer = setTimeout(() => {
-      this.layoutIdCopyStatus.set(null);
-      this.layoutIdCopyStatusTimer = undefined;
+  private showFingerprintCopyStatus(status: 'copied' | 'failed'): void {
+    if (this.fingerprintCopyStatusTimer) clearTimeout(this.fingerprintCopyStatusTimer);
+    this.fingerprintCopyStatus.set(status);
+    this.fingerprintCopyStatusTimer = setTimeout(() => {
+      this.fingerprintCopyStatus.set(null);
+      this.fingerprintCopyStatusTimer = undefined;
     }, 2000);
   }
 }

@@ -3,21 +3,21 @@
     <span class="chip-icon">W</span><span>Widget</span
     ><span class="chip-id">{{ width() }} × {{ height() }}</span>
   </div>
-  <div class="layout-id">
-    <span class="layout-id__label">Layout ID</span>
-    @if (layoutId(); as id) {
-      <span class="layout-id__value" [title]="id" [attr.aria-label]="'Layout ID ' + id">{{
-        shortLayoutId()
+  <div class="fingerprint">
+    <span class="fingerprint__label">Fingerprint</span>
+    @if (fingerprint(); as id) {
+      <span class="fingerprint__value" [title]="id" [attr.aria-label]="'Fingerprint ' + id">{{
+        shortFingerprint()
       }}</span>
       <button
         type="button"
-        class="layout-id__copy"
-        [class.is-copied]="layoutIdCopyStatus() === 'copied'"
-        aria-label="Copy layout ID"
-        title="Copy layout ID"
-        (click)="copyLayoutId()"
+        class="fingerprint__copy"
+        [class.is-copied]="fingerprintCopyStatus() === 'copied'"
+        aria-label="Copy fingerprint"
+        title="Copy fingerprint"
+        (click)="copyFingerprint()"
       >
-        @if (layoutIdCopyStatus() === 'copied') {
+        @if (fingerprintCopyStatus() === 'copied') {
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
         } @else {
           <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -29,15 +29,15 @@
         }
       </button>
     } @else {
-      <span class="layout-id__invalid">Unavailable – widget is invalid</span>
+      <span class="fingerprint__invalid">Unavailable – widget is invalid</span>
     }
     <span class="visually-hidden" role="status">
-      @switch (layoutIdCopyStatus()) {
+      @switch (fingerprintCopyStatus()) {
         @case ('copied') {
-          Layout ID copied
+          Fingerprint copied
         }
         @case ('failed') {
-          Copy failed. Hover the layout ID to see the full value.
+          Copy failed. Hover the fingerprint to see the full value.
         }
       }
     </span>
