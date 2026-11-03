@@ -150,4 +150,48 @@ describe('WidgetRenderer', () => {
       'Chargement du widget',
     );
   });
+
+  describe('validation rules', () => {
+    const blocked = { path: 'background', message: 'blocked' };
+    const reported = { path: 'elements[0]', message: 'reported' };
+    const query = (selector: string) => fixture.nativeElement.querySelectorAll(selector);
+
+    it('renders normally without rules', () => {
+      expect(fixture.componentInstance.validationIssues()).toEqual([]);
+      expect(query('widget-validation-overlay').length).toBe(0);
+    });
+
+    it('blocks rendering for blocking rules', async () => {
+      fixture.componentRef.setInput('validationRules', [() => [blocked]]);
+      await fixture.whenStable();
+
+      expect(query('widget-element-renderer').length).toBe(0);
+      expect(query('.widget-validation-issues li').length).toBe(1);
+    });
+
+    it('renders the widget and reports issues for report rules', async () => {
+      fixture.componentRef.setInput('validationRules', [
+        { mode: 'report', validate: () => [reported] },
+      ]);
+      await fixture.whenStable();
+
+      expect(query('widget-element-renderer').length).toBe(1);
+      expect(query('widget-validation-overlay').length).toBe(0);
+      expect(fixture.componentInstance.validationIssues()).toEqual([
+        { ...reported, severity: 'report' },
+      ]);
+    });
+
+    it('only shows blocking issues in the overlay for mixed modes', async () => {
+      fixture.componentRef.setInput('validationRules', [
+        { mode: 'report', validate: () => [reported] },
+        { validate: () => [blocked] },
+      ]);
+      await fixture.whenStable();
+
+      expect(fixture.componentInstance.validationIssues().length).toBe(2);
+      expect(query('.widget-validation-issues li').length).toBe(1);
+      expect(query('.widget-validation-issues')[0].textContent).toContain('blocked');
+    });
+  });
 });

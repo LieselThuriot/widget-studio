@@ -17,7 +17,7 @@ import { WidgetToolbar } from './widget-toolbar';
 import { WidgetValidationOverlay } from './widget-validation-overlay';
 import { ButtonElement, Widget, WidgetInput } from './widget.model';
 import { normalizeWidgetInput } from './widget-hydration';
-import { safeParseWidgetInput, WidgetValidationIssue } from './widget-validation';
+import { safeParseWidgetInput, WidgetValidationRuleInput } from './widget-validation';
 import {
   gridTemplate,
   widgetHeight as getWidgetHeight,
@@ -50,6 +50,7 @@ export class WidgetRenderer implements OnDestroy {
   readonly loading = input<WidgetLoading>(false);
   readonly darkMode = input(false);
   readonly locale = input<WidgetRendererLocaleOverrides>({});
+  readonly validationRules = input<readonly WidgetValidationRuleInput[]>([]);
   readonly refreshRequested = output<void>();
   readonly actionRequested = output<{ element: ButtonElement; event: Event }>();
   readonly sensitiveVisible = signal(false);
@@ -57,7 +58,9 @@ export class WidgetRenderer implements OnDestroy {
   private readonly tooltipLayer = viewChild<ElementRef<HTMLElement>>('tooltipLayer');
   private readonly parsedWidget = computed(() => {
     const widget = this.widget();
-    return widget === null ? { success: false as const, issues: [] } : safeParseWidgetInput(widget);
+    return widget === null
+      ? { success: false as const, issues: [] }
+      : safeParseWidgetInput(widget, { rules: this.validationRules() });
   });
   protected readonly isLoading = computed(() => this.loading() !== false);
   protected readonly resolvedLocale = computed<WidgetRendererLocale>(() => ({
@@ -72,10 +75,10 @@ export class WidgetRenderer implements OnDestroy {
     const loading = this.loading();
     return typeof loading === 'string' ? loading : 'square';
   });
-  readonly validationIssues = computed<WidgetValidationIssue[]>(() => {
-    const result = this.parsedWidget();
-    return result.success ? [] : result.issues;
-  });
+  readonly validationIssues = computed(() => this.parsedWidget().issues);
+  protected readonly blockingIssues = computed(() =>
+    this.validationIssues().filter((issue) => issue.severity !== 'report'),
+  );
   protected readonly renderWidget = computed<Widget>(() => {
     const result = this.parsedWidget();
     if (!result.success) {

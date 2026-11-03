@@ -9,5 +9,9 @@ const payload = ${JSON.stringify(sampleWidget)};
 if (!safeParseWidgetInput(payload).success || normalizeWidgetInput(payload).elements.length !== 0) process.exit(1);
 if (!safeParseWidgetInput({ ...payload, rows: [{ unit: 'auto' }] }).success) process.exit(1);
 if (safeParseWidgetInput({ ...payload, rows: [{ size: 1, unit: 'auto' }] }).success) process.exit(1);
+const issue = { path: 'background', message: 'rule' };
+if (safeParseWidgetInput(payload, { rules: [() => [issue]] }).success) process.exit(1);
+const reported = safeParseWidgetInput(payload, { rules: [{ mode: 'report', validate: () => [issue] }] });
+if (!reported.success || reported.issues[0]?.severity !== 'report') process.exit(1);
 `,
 });

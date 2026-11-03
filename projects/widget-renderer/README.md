@@ -221,6 +221,41 @@ const parsed = parseWidgetInput(payload);
 
 `WidgetValidationIssue` entries contain a `path` such as `elements[0].style.font.size` and a human-readable `message`. Invalid input supplied to `WidgetRenderer` produces a safe empty widget and exposes issues through `validationIssues`. `isWidgetContract` and `isWidget` are also available as type guards.
 
+### External validation rules
+
+Add your own checks with `validationRules`. Rules run only after the built-in validation passes and receive the typed widget. Each rule returns `WidgetValidationIssue` entries; return an empty array when the widget is allowed.
+
+```ts
+import { WidgetValidationRuleInput } from '@lieselthuriot/widget-renderer';
+
+const allowedColors = new Set(['#ffffff', '#1f2937']);
+
+export const rules: WidgetValidationRuleInput[] = [
+  // A plain function is a blocking rule.
+  (widget) =>
+    widget.background.image
+      ? [{ path: 'background.image', message: 'Background images are not allowed' }]
+      : [],
+  // Report-only rules let the widget render and only expose their issues.
+  {
+    mode: 'report',
+    validate: (widget) =>
+      widget.background.color && !allowedColors.has(widget.background.color.toLowerCase())
+        ? [{ path: 'background.color', message: 'Color is not allowed' }]
+        : [],
+  },
+];
+```
+
+```html
+<widget-renderer [widget]="widget" [validationRules]="rules" />
+```
+
+- `mode: 'block'` (the default): the renderer shows the safe empty widget and the validation overlay.
+- `mode: 'report'`: the widget renders normally; the issue is only exposed through `validationIssues`.
+- Rule issues get a `severity` of `block` or `report`. A rule that throws produces one issue with its own mode.
+- The same rules work outside the component: `safeParseWidgetInput(payload, { rules })` fails only on blocking issues and returns report-only issues in `result.issues`. `parseWidgetInput(payload, { rules })` throws only on blocking issues.
+
 ## Layout fingerprints
 
 `computeWidgetFingerprint(payload)` returns a stable ID of the widget's look, such as `wfp:1:3f9c…`, or `null` for invalid input. Use it to approve a layout once and then accept any widget with the same fingerprint.

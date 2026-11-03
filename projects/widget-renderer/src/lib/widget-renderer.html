@@ -12,8 +12,8 @@
         [sensitive]="backgroundSensitive()"
         [image]="backgroundImage()"
       />
-      @if (validationIssues().length > 0) {
-        <widget-validation-overlay [issues]="validationIssues()" />
+      @if (blockingIssues().length > 0) {
+        <widget-validation-overlay [issues]="blockingIssues()" />
       }
       <widget-toolbar
         [refresh]="widget.refresh"

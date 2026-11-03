@@ -21,7 +21,7 @@ describe('widget contract validation', () => {
   it('accepts a valid API contract', () => {
     const result = safeParseWidgetInput(validContract);
 
-    expect(result).toEqual({ success: true, data: validContract });
+    expect(result).toEqual({ success: true, data: validContract, issues: [] });
   });
 
   it.each([undefined, null])('accepts a missing or null refresh configuration', (refresh) => {

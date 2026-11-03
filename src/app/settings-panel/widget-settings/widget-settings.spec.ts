@@ -6,7 +6,12 @@ import { WidgetSettings } from './widget-settings';
 describe('WidgetSettings layout ID', () => {
   let writeText: ReturnType<typeof vi.fn>;
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   beforeEach(async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'clipboard', {
       configurable: true,
@@ -33,11 +38,15 @@ describe('WidgetSettings layout ID', () => {
     expect(value.textContent?.trim()).toBe(`${fullId.slice(0, 12)}…${fullId.slice(-6)}`);
 
     (element.querySelector('.layout-id__copy') as HTMLButtonElement).click();
-    await fixture.whenStable();
+    await vi.waitFor(() => expect(writeText).toHaveBeenCalledWith(fullId));
+    await Promise.resolve();
     fixture.detectChanges();
 
-    expect(writeText).toHaveBeenCalledWith(fullId);
     expect(element.querySelector('[role="status"]')?.textContent).toContain('Layout ID copied');
+
+    vi.advanceTimersByTime(2000);
+    fixture.detectChanges();
+    expect(element.querySelector('[role="status"]')?.textContent).not.toContain('Layout ID copied');
   });
 
   it('explains that invalid widgets have no layout ID', () => {

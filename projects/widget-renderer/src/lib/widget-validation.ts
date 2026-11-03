@@ -7,14 +7,30 @@ import {
   WidgetElementType,
 } from './widget.model';
 
+export type WidgetValidationRuleMode = 'block' | 'report';
+
 export interface WidgetValidationIssue {
   path: string;
   message: string;
+  severity?: WidgetValidationRuleMode;
+}
+
+export interface WidgetValidationRule {
+  validate(widget: WidgetInput): readonly WidgetValidationIssue[];
+  mode?: WidgetValidationRuleMode;
+}
+
+export type WidgetValidationRuleInput =
+  WidgetValidationRule | ((widget: WidgetInput) => readonly WidgetValidationIssue[]);
+
+export interface WidgetParseOptions {
+  rules?: readonly WidgetValidationRuleInput[];
 }
 
 export interface WidgetParseSuccess {
   success: true;
   data: WidgetInput;
+  issues: WidgetValidationIssue[];
 }
 
 export interface WidgetParseFailure {
@@ -489,13 +505,32 @@ function validateWidget(value: unknown): WidgetValidationIssue[] {
   return issues;
 }
 
-export function safeParseWidgetInput(value: unknown): WidgetParseResult {
-  const issues = validateWidget(value);
-  return issues.length ? { success: false, issues } : { success: true, data: value as WidgetInput };
+function runRule(rule: WidgetValidationRuleInput, widget: WidgetInput): WidgetValidationIssue[] {
+  const mode = typeof rule === 'function' ? 'block' : (rule.mode ?? 'block');
+  try {
+    const issues = typeof rule === 'function' ? rule(widget) : rule.validate(widget);
+    return issues.map((issue) => ({ ...issue, severity: mode }));
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    return [{ path: '', message: `Validation rule failed: ${reason}`, severity: mode }];
+  }
 }
 
-export function parseWidgetInput(value: unknown): WidgetInput {
-  const result = safeParseWidgetInput(value);
+export function safeParseWidgetInput(
+  value: unknown,
+  options: WidgetParseOptions = {},
+): WidgetParseResult {
+  const builtInIssues = validateWidget(value);
+  if (builtInIssues.length) return { success: false, issues: builtInIssues };
+  const data = value as WidgetInput;
+  const issues = (options.rules ?? []).flatMap((rule) => runRule(rule, data));
+  return issues.some((issue) => issue.severity === 'block')
+    ? { success: false, issues }
+    : { success: true, data, issues };
+}
+
+export function parseWidgetInput(value: unknown, options: WidgetParseOptions = {}): WidgetInput {
+  const result = safeParseWidgetInput(value, options);
   if (!result.success) throw new WidgetValidationError(result.issues);
   return result.data;
 }

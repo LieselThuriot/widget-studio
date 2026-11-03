@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, output, signal } from '@angular/core';
 import {
   computeWidgetFingerprint,
   widgetHeight,
@@ -41,6 +41,10 @@ export class WidgetSettings {
   });
   protected readonly layoutIdCopyStatus = signal<'copied' | 'failed' | null>(null);
   private layoutIdCopyStatusTimer: ReturnType<typeof setTimeout> | undefined;
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => clearTimeout(this.layoutIdCopyStatusTimer));
+  }
 
   protected async copyLayoutId(): Promise<void> {
     const layoutId = this.layoutId();

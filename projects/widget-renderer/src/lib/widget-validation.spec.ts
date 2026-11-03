@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { safeParseWidgetInput } from './widget-validation';
+import { describe, expect, it, vi } from 'vitest';
+import { parseWidgetInput, safeParseWidgetInput, WidgetValidationError } from './widget-validation';
 
 function widgetWithElement(element: Record<string, unknown>) {
   return {
@@ -87,5 +87,77 @@ describe('widget validation', () => {
     );
 
     expect(result).toMatchObject({ success: true });
+  });
+});
+
+describe('external validation rules', () => {
+  const valid = widgetWithElement({
+    type: 'divider',
+    grid: { row: 0, column: 0, rowSpan: 1, columnSpan: 1 },
+    orientation: 'horizontal',
+    style: { color: '#ccc' },
+  });
+  const issue = { path: 'background.image', message: 'not allowed' };
+
+  it('skips rules when built-in validation fails', () => {
+    const rule = vi.fn(() => []);
+    const result = safeParseWidgetInput({ ...valid, elements: 'x' }, { rules: [rule] });
+
+    expect(result.success).toBe(false);
+    expect(rule).not.toHaveBeenCalled();
+  });
+
+  it('treats function rules as blocking', () => {
+    const result = safeParseWidgetInput(valid, { rules: [() => [issue]] });
+
+    expect(result).toEqual({ success: false, issues: [{ ...issue, severity: 'block' }] });
+  });
+
+  it('succeeds with report-only issues', () => {
+    const result = safeParseWidgetInput(valid, {
+      rules: [{ mode: 'report', validate: () => [issue] }],
+    });
+
+    expect(result).toEqual({
+      success: true,
+      data: valid,
+      issues: [{ ...issue, severity: 'report' }],
+    });
+  });
+
+  it('collects issues from every rule and blocks on mixed modes', () => {
+    const result = safeParseWidgetInput(valid, {
+      rules: [{ mode: 'report', validate: () => [issue] }, { validate: () => [issue] }],
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.issues.map((item) => item.severity)).toEqual(['report', 'block']);
+  });
+
+  it('turns throwing rules into issues with the rule mode', () => {
+    const result = safeParseWidgetInput(valid, {
+      rules: [
+        {
+          mode: 'report',
+          validate: () => {
+            throw new Error('boom');
+          },
+        },
+      ],
+    });
+
+    expect(result).toMatchObject({
+      success: true,
+      issues: [{ path: '', message: 'Validation rule failed: boom', severity: 'report' }],
+    });
+  });
+
+  it('parseWidgetInput throws only on blocking issues', () => {
+    expect(() => parseWidgetInput(valid, { rules: [() => [issue]] })).toThrow(
+      WidgetValidationError,
+    );
+    expect(parseWidgetInput(valid, { rules: [{ mode: 'report', validate: () => [issue] }] })).toBe(
+      valid,
+    );
   });
 });
